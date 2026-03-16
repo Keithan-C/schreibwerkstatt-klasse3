@@ -1,3 +1,5 @@
+Index Code
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -401,6 +403,90 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
   #app-screen>*:not(.lernpass-print-wrap){display:none!important;}
   .lernpass-print-wrap{display:block!important;}
 }
+/* ── WRITING CHECK ── */
+.check-btn{
+  width:100%;padding:13px;border:2px solid var(--sun3);border-radius:var(--radius-sm);
+  background:var(--sun);color:var(--sun3);font-family:var(--font-head);font-size:13px;
+  font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:.9rem;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.check-btn:hover{background:var(--sun2);border-color:var(--sun3);}
+.check-btn:disabled{opacity:.5;cursor:not-allowed;}
+.check-btn.running{background:var(--lavender);border-color:var(--lavender2);color:var(--lavender3);}
+
+.check-panel{
+  border-radius:var(--radius-sm);border:2px solid var(--border);
+  margin-bottom:.9rem;overflow:hidden;display:none;
+}
+.check-panel.on{display:block;}
+.check-panel-header{
+  background:var(--sun);padding:10px 14px;
+  font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--sun3);
+  display:flex;align-items:center;gap:8px;
+}
+.check-highlighted{
+  padding:14px;font-size:15px;line-height:2;background:var(--white);
+  white-space:pre-wrap;word-break:break-word;
+}
+.err-spell{
+  background:#fff0b3;border-bottom:2px solid var(--sun3);
+  border-radius:3px;cursor:pointer;position:relative;
+  transition:background .15s;
+}
+.err-spell:hover{background:#ffe066;}
+.err-grammar{
+  background:#ffe0d6;border-bottom:2px solid var(--coral2);
+  border-radius:3px;cursor:pointer;position:relative;
+  transition:background .15s;
+}
+.err-grammar:hover{background:#ffb8a0;}
+.err-style{
+  background:#e8f4fd;border-bottom:2px solid var(--sky2);
+  border-radius:3px;cursor:pointer;
+  transition:background .15s;
+}
+.err-style:hover{background:#c8e6f8;}
+
+/* Suggestion cards */
+.suggestions-panel{padding:12px 14px;background:var(--offwhite);border-top:1.5px solid var(--border);}
+.suggestions-title{font-family:var(--font-head);font-size:10px;font-weight:700;color:var(--ink);margin-bottom:8px;display:block;}
+.suggestion-card{
+  background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .15s,box-shadow .15s;
+}
+.suggestion-card:hover{border-color:var(--lavender2);box-shadow:0 2px 8px rgba(124,77,255,.12);}
+.suggestion-card:last-child{margin-bottom:0;}
+.sug-type{
+  font-family:var(--font-head);font-size:9px;font-weight:700;
+  padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:5px;
+}
+.sug-type-spell{background:var(--sun);color:var(--sun3);}
+.sug-type-grammar{background:var(--coral);color:var(--coral3);}
+.sug-type-style{background:var(--sky);color:#1a4a7a;}
+.sug-original{font-size:13px;color:var(--muted);margin-bottom:3px;text-decoration:line-through;}
+.sug-fix{font-size:14px;font-weight:700;color:var(--grass3);margin-bottom:4px;}
+.sug-explain{font-size:12.5px;color:var(--ink2);line-height:1.6;}
+.sug-apply{
+  margin-top:6px;padding:5px 12px;border:1.5px solid var(--grass2);border-radius:6px;
+  background:var(--grass);color:var(--grass3);font-family:var(--font-head);font-size:9px;
+  cursor:pointer;transition:background .15s;
+}
+.sug-apply:hover{background:var(--grass2);color:#fff;}
+
+.check-legend{
+  display:flex;gap:10px;flex-wrap:wrap;padding:8px 14px;
+  border-top:1px solid var(--border);background:var(--offwhite);
+  font-size:11px;color:var(--muted);align-items:center;
+}
+.legend-dot{
+  display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:3px;vertical-align:middle;
+}
+.no-errors{
+  padding:16px 14px;text-align:center;
+  font-family:var(--font-head);font-size:11px;color:var(--grass3);
+  background:var(--grass);
+}
+
 @media(max-width:480px){.wrap{padding:1rem .7rem 5rem;}}
 </style>
 </head>
@@ -1178,13 +1264,45 @@ function renderRevise(){
   const goodStems=T[l].goodStems.map((s,i)=>`<button class="fb-stem-btn" onclick="appendRev('rev-good','good',${i})">${s}</button>`).join('');
   const improveStems=T[l].improveStems.map((s,i)=>`<button class="fb-stem-btn" onclick="appendRev('rev-improve','improve',${i})">${s}</button>`).join('');
 
+  const checkBtnLabel=l==='de'
+    ?'🔎 Mein Schreiben prüfen lassen'
+    :'🔎 Check My Writing';
+  const checkBtnSub=l==='de'
+    ?'KI prüft Rechtschreibung, Grammatik und Satzbau'
+    :'AI checks spelling, grammar and sentences';
+
   return`
     <div class="card">
       <div class="card-header"><div class="card-icon">🔍</div>
         <div><div class="card-title">${lang==='both'?'Überarbeiten / Revise':T[l].confLabel}</div>
         <div class="card-sub">${T[l].confText}</div></div>
       </div>
-      <div class="my-text-display">${textDisp}</div>
+      <div class="my-text-display" id="text-display-plain">${textDisp}</div>
+
+      <!-- ── WRITING CHECK BUTTON ── -->
+      <button class="check-btn" id="check-btn" onclick="checkWriting()">
+        <span>${checkBtnLabel}</span>
+        <span style="font-size:11px;font-weight:400;opacity:.7;">${checkBtnSub}</span>
+      </button>
+
+      <!-- ── CHECK OUTPUT PANEL ── -->
+      <div class="check-panel" id="check-panel">
+        <div class="check-panel-header">
+          <span>📝</span>
+          <span id="check-panel-title">${l==='de'?'Dein Text – Fehler markiert':'Your text – errors marked'}</span>
+        </div>
+        <div class="check-highlighted" id="check-highlighted"></div>
+        <div class="check-legend">
+          <span><span class="legend-dot" style="background:#fff0b3;border:1.5px solid #e6b800;"></span>${l==='de'?'Rechtschreibung':'Spelling'}</span>
+          <span><span class="legend-dot" style="background:#ffe0d6;border:1.5px solid #ff7043;"></span>${l==='de'?'Grammatik':'Grammar'}</span>
+          <span><span class="legend-dot" style="background:#e8f4fd;border:1.5px solid #c8e6f8;"></span>${l==='de'?'Satzbau / Stil':'Style / Sentence'}</span>
+        </div>
+        <div class="suggestions-panel" id="suggestions-panel">
+          <span class="suggestions-title" id="suggestions-title">${l==='de'?'💡 Verbesserungsvorschläge':'💡 Suggestions'}</span>
+          <div id="suggestions-list"></div>
+        </div>
+      </div>
+
       <div class="rev-box good">
         <span class="rev-label">${T[l].revGoodLabel}</span>
         <div class="fb-stems">${goodStems}</div>
@@ -1465,6 +1583,178 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(e.key==='Enter')startApp();
   });
 });
+
+// ═══════════════════════════════════════════════════════════
+// WRITING CHECK
+// ═══════════════════════════════════════════════════════════
+let lastCheckErrors=[];
+
+async function checkWriting(){
+  const l=lang==='both'?'de':lang;
+  const text=answers[part];
+  if(!text||!text.trim())return;
+
+  const btn=document.getElementById('check-btn');
+  btn.disabled=true;
+  btn.classList.add('running');
+  btn.innerHTML=`<span>⏳ ${l==='de'?'Wird geprüft …':'Checking …'}</span>
+    <div class="dot-pulse" style="display:flex;gap:4px;margin-left:6px;">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--lavender2);animation:pulse 1.2s ease-in-out infinite;display:inline-block;"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--lavender2);animation:pulse 1.2s ease-in-out infinite;animation-delay:.2s;display:inline-block;"></span>
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--lavender2);animation:pulse 1.2s ease-in-out infinite;animation-delay:.4s;display:inline-block;"></span>
+    </div>`;
+
+  const partLabel=T[l].partLabels[part];
+
+  const systemPrompt=l==='de'
+    ?`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern, LehrplanPLUS). Prüfe den deutschen Text auf Rechtschreibfehler, Grammatikfehler und Satzbauproblemen. Das Thema ist: "${theme}". Abschnitt: ${partLabel}.
+
+Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
+Format:
+[{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fix":"Korrektur","explain":"Kindgerechte Erklärung auf Deutsch, max. 2 Sätze, ermutigend","explainEN":"same in simple English"}]
+
+Regeln:
+- Maximal 6 Fehler, wichtigste zuerst
+- "original" muss exakt so im Text vorkommen
+- Erkläre wie ein netter Lehrer – ermutigend, nie kritisch
+- Platzhalter wie "…" ignorieren
+- Keine Fehler → leeres Array []`
+    :`You are a kind writing coach for Year 3 children (Bavaria, LehrplanPLUS). Check the child's text for spelling, grammar and sentence issues. Theme: "${theme}". Section: ${partLabel}.
+
+Reply ONLY with a JSON array. No other text, no markdown backticks.
+Format:
+[{"type":"spell"|"grammar"|"style","original":"exact text from original","fix":"corrected version","explain":"Kind explanation in simple German, max 2 sentences, encouraging","explainEN":"same in simple English, max 2 sentences"}]
+
+Rules:
+- Maximum 6 errors, most important first
+- "original" must appear exactly in the text
+- Explain like a kind teacher – never harsh
+- Ignore placeholder text like "…"
+- No errors → empty array []`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:systemPrompt,
+        messages:[{role:'user',content:text}]
+      })
+    });
+    const data=await res.json();
+    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
+    raw=raw.replace(/```json|```/g,'').trim();
+    let errors=[];
+    try{errors=JSON.parse(raw);}catch(e){errors=[];}
+    lastCheckErrors=errors;
+    renderCheckResults(text,errors,l);
+  }catch(e){
+    const panel=document.getElementById('check-panel');
+    panel.classList.add('on');
+    document.getElementById('check-highlighted').innerHTML=
+      `<em style="color:var(--muted);padding:12px;display:block;">${l==='de'?'Fehler beim Prüfen – bitte erneut versuchen.':'Could not check – please try again.'}</em>`;
+    document.getElementById('suggestions-panel').style.display='none';
+  }
+
+  btn.disabled=false;
+  btn.classList.remove('running');
+  btn.innerHTML=`<span>${l==='de'?'🔎 Nochmal prüfen':'🔎 Check Again'}</span>`;
+}
+
+function escHtml(s){
+  if(!s)return'';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function renderCheckResults(text,errors,l){
+  const panel=document.getElementById('check-panel');
+  const highlighted=document.getElementById('check-highlighted');
+  const sugList=document.getElementById('suggestions-list');
+  const sugTitle=document.getElementById('suggestions-title');
+  const sugPanel=document.getElementById('suggestions-panel');
+  panel.classList.add('on');
+
+  const activeErrors=errors.filter(e=>e&&e.original);
+
+  if(!activeErrors.length){
+    highlighted.innerHTML=
+      `<div class="no-errors">🌟 ${l==='de'?'Sehr gut! Keine Fehler gefunden. Dein Text ist toll!':'Amazing! No errors found. Your text is great!'}</div>`
+      +`<div style="padding:12px 14px;font-size:15px;line-height:2;">${escHtml(text)}</div>`;
+    sugPanel.style.display='none';
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+
+  // Build highlighted text — replace each error's first occurrence with a marked span
+  let displayText=escHtml(text);
+  activeErrors.forEach((err,i)=>{
+    const cls=err.type==='spell'?'err-spell':err.type==='grammar'?'err-grammar':'err-style';
+    const escapedOriginal=escHtml(err.original);
+    displayText=displayText.replace(
+      escapedOriginal,
+      `<span class="${cls}" onclick="scrollToSuggestion(${i})" title="${l==='de'?'Tipp anzeigen':'Show tip'}">${escapedOriginal}</span>`
+    );
+  });
+  highlighted.innerHTML=displayText;
+
+  // Build suggestion cards
+  const count=activeErrors.length;
+  sugTitle.textContent=`💡 ${l==='de'
+    ?`${count} Verbesserungsvorschlag${count>1?'e':''}`
+    :`${count} suggestion${count>1?'s':''}`}`;
+
+  sugList.innerHTML=activeErrors.map((err,i)=>{
+    const typeLabel=err.type==='spell'
+      ?(l==='de'?'Rechtschreibung':'Spelling')
+      :err.type==='grammar'
+      ?(l==='de'?'Grammatik':'Grammar')
+      :(l==='de'?'Satzbau':'Style');
+    const typeCls=`sug-type-${err.type}`;
+    const explain=(l==='de'?err.explain:err.explainEN)||err.explain||'';
+    return`
+      <div class="suggestion-card" id="sug-${i}">
+        <span class="sug-type ${typeCls}">${typeLabel}</span>
+        <div class="sug-original">${escHtml(err.original)}</div>
+        <div class="sug-fix">✓ ${escHtml(err.fix||'')}</div>
+        <div class="sug-explain">${escHtml(explain)}</div>
+        <button class="sug-apply" onclick="applyFix(${i})">${l==='de'?'✓ Korrektur übernehmen':'✓ Apply fix'}</button>
+      </div>`;
+  }).join('');
+
+  sugPanel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function scrollToSuggestion(i){
+  const el=document.getElementById('sug-'+i);
+  if(!el)return;
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  el.style.borderColor='var(--lavender2)';
+  el.style.boxShadow='0 0 0 3px rgba(124,77,255,.2)';
+  setTimeout(()=>{el.style.borderColor='';el.style.boxShadow='';},1800);
+}
+
+function applyFix(i){
+  const l=lang==='both'?'de':lang;
+  const err=lastCheckErrors[i];
+  if(!err||!err.original||!err.fix)return;
+  // Apply correction to stored answer
+  answers[part]=answers[part].replace(err.original,err.fix);
+  // Nullify this error so it won't be re-highlighted
+  lastCheckErrors[i]={...err,original:null};
+  // Fade the card
+  const card=document.getElementById('sug-'+i);
+  if(card){card.style.opacity='.35';card.style.pointerEvents='none';}
+  // Re-render highlights with remaining errors
+  const remaining=lastCheckErrors.filter(e=>e&&e.original);
+  renderCheckResults(answers[part],remaining,l);
+}
 </script>
 </body>
 </html>
