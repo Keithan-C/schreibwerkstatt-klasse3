@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bayern Minecraft Abenteuer – Schreibwerkstatt Klasse 3</title>
+<title>Bayern Blockwelt Abenteuer – Schreibwerkstatt Klasse 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -202,6 +202,8 @@ button:active{transform:scale(.97);}
 button:disabled{opacity:.4;cursor:not-allowed;}
 
 /* ── CELEBRATION overlay ── */
+/* FIX 1: Removed conflicting inline style="display:none" from HTML.
+   The overlay is hidden by default (display:none) and shown via .show class (display:flex). */
 .celebrate{
   position:fixed;inset:0;background:rgba(0,0,0,.55);
   display:none;align-items:center;justify-content:center;
@@ -278,7 +280,9 @@ button:disabled{opacity:.4;cursor:not-allowed;}
 <body>
 
 <!-- Celebration overlay -->
-<div class="celebrate" id="celebrate" style="display:none">
+<!-- FIX 1: Removed inline style="display:none" — it overrides the CSS .show class,
+     preventing the overlay from ever displaying. Visibility is now handled by CSS only. -->
+<div class="celebrate" id="celebrate">
   <div class="cel-card" id="cel-card">
     <span class="cel-emoji" id="cel-emoji">🌟</span>
     <div class="cel-title" id="cel-title">Kapitel fertig!</div>
@@ -292,7 +296,7 @@ button:disabled{opacity:.4;cursor:not-allowed;}
 <div class="wrap">
 
 <header class="site-header">
-  <h1>⛏ Bayern Minecraft Abenteuer ⛏<br>Das Geheimnis des Berges</h1>
+  <h1>⛏ Bayern Blockwelt Abenteuer ⛏<br>Das Geheimnis des Berges</h1>
   <div class="badge">LehrplanPLUS Deutsch · Klasse 3/4 · Schreiben &amp; Sprachgestaltung</div>
 </header>
 
@@ -401,14 +405,14 @@ Hinter einem gewaltigen Felsblock: eine dunkle Höhle. Aus der Tiefe drang ein <
 Max' Herz hämmerte. Er trat einen Schritt zurück, dann einen nach vorn.`,
     planFields:[
       {key:'ereignis',    label:'Das überraschende Ereignis – was passiert?'},
-      {key:'gefuehl',     label:'Max' Gefühl – wie zeigt er es durch Handeln?'},
-      {key:'entscheidung',label:'Max' Entscheidung – was tut er?'},
+      {key:'gefuehl',     label:'Max\' Gefühl – wie zeigt er es durch Handeln?'},
+      {key:'entscheidung',label:'Max\' Entscheidung – was tut er?'},
       {key:'dialog',      label:'Wörtliche Rede: Was sagt Max? (mit „…")'}
     ],
     planMin:2,
     task:'Schreib <strong>5–7 Sätze</strong>: Beschreibe das überraschende Ereignis spannend. Nutze <strong>wörtliche Rede</strong> (mindestens 1×). Zeige Max\' Gefühle durch sein Verhalten.',
     lpRef:'LP+: Ereignis als Erzählanlass · wörtliche Rede mit Anführungszeichen · Gefühle durch Handeln',
-    stems:['Plötzlich …','Urplötzlich blieb er stehen, denn …','Max starrte … an. Sein Herz …','„…", flüsterte er.','Er fasste sich ein Herz und …'],
+    stems:['Plötzlich …','Urplötzlich blieb er stehen, denn …','Max starrte … an. Sein Herz …','Er fasste sich ein Herz und …'],
     wortfelder:[
       {title:'Spannungswörter',      words:['plötzlich','urplötzlich','auf einmal','wie angewurzelt','atemlos']},
       {title:'Geräusche beschreiben',words:['dumpf','grollend','knisternd','hallend','kaum hörbar']}
@@ -426,7 +430,7 @@ Max' Herz hämmerte. Er trat einen Schritt zurück, dann einen nach vorn.`,
     celebEmoji:'🕳️',celebTitle:'Spannung aufgebaut!',
     celebMsg:'Toll! Du hast ein überraschendes Ereignis in die Geschichte gebracht und Spannung aufgebaut.',
     celebEarned:'✓ Ereignis beschrieben &nbsp;·&nbsp; ✓ Wörtliche Rede &nbsp;·&nbsp; ✓ Spannungswörter',
-    goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine wörtliche Rede klingt sehr …','Das Spannungswort „…" wirkt sehr gut.'],
+    goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine wörtliche Rede klingt sehr …','Das Spannungswort wirkt sehr gut.'],
     improveStems:['Die wörtliche Rede könnte noch … sein.','Du könntest das Gefühl von Max noch zeigen, indem …','Ein weiteres Spannungswort wäre zum Beispiel …']
   },
   {
@@ -447,7 +451,7 @@ Lange Zeit geschah nichts. Dann schnupperte der Bär.`,
     planMin:2,
     task:'Schreib <strong>5–7 Sätze</strong>: Beschreibe den Bären nach <strong>Äußerem UND Wesen</strong>. Zeige, wie die Beziehung entsteht. Nutze wörtliche Rede.',
     lpRef:'LP+: Figur nach Äußerem, Wesen, Handeln und Beziehungen · Dialog als Handlungselement',
-    stems:['Der Bär hatte … Fell und … Augen.','Er wirkte … aber auch …','Max flüsterte: „…"','Langsam … Schließlich …','Zum ersten Mal …'],
+    stems:['Der Bär hatte … Fell und … Augen.','Er wirkte … aber auch …','Langsam … Schließlich …','Zum ersten Mal …'],
     wortfelder:[
       {title:'Körpersprache',   words:['schnuppern','zögernd','behutsam','vorsichtig','zutraulich']},
       {title:'Tier beschreiben',words:['struppig','bernsteinfarben','tapsig','kräftig','sanft']}
@@ -465,8 +469,8 @@ Lange Zeit geschah nichts. Dann schnupperte der Bär.`,
     celebEmoji:'🐾',celebTitle:'Neue Freundschaft!',
     celebMsg:'Wunderbar! Du hast den Bären so beschrieben, dass der Leser ihn genau vor Augen hat — und die Freundschaft gespürt.',
     celebEarned:'✓ Figur beschrieben &nbsp;·&nbsp; ✓ Beziehung gezeigt &nbsp;·&nbsp; ✓ Dialog',
-    goodStems:['Ich finde gut, dass du den Bären so … beschrieben hast.','Deine Beschreibung des … klingt sehr lebendig.','Die Beziehung zwischen Max und dem Bären wird durch … deutlich.'],
-    improveStems:['Du könntest das Wesen des Bären noch zeigen, indem …','Ein Adjektiv vor „Bär" würde den Satz lebendiger machen, zum Beispiel …','Die Beziehung könnte noch klarer werden, wenn …']
+    goodStems:['Ich finde gut, dass du den Bären so beschrieben hast.','Deine Beschreibung klingt sehr lebendig.','Die Beziehung zwischen Max und dem Bären wird deutlich.'],
+    improveStems:['Du könntest das Wesen des Bären noch zeigen, indem …','Ein Adjektiv würde den Satz lebendiger machen.','Die Beziehung könnte noch klarer werden, wenn …']
   },
   {
     id:4,char:'🏔️',
@@ -503,8 +507,8 @@ Max verschlug es den Atem. Unter ihm lag ganz Bayern: blaue Seen wie Spiegel, du
     celebEmoji:'🏆',celebTitle:'Gipfel erreicht!',
     celebMsg:'Fantastisch! Du hast den Leser mit auf den Gipfel genommen — er sieht, hört und fühlt alles mit!',
     celebEarned:'✓ Sinneseindrücke &nbsp;·&nbsp; ✓ Vergleich &nbsp;·&nbsp; ✓ Ort lebendig beschrieben',
-    goodStems:['Ich finde gut, dass du … mit Sinneseindrücken beschrieben hast.','Dein Vergleich „… wie …" ist sehr treffend.','Der Satz über … wirkt sehr lebendig.'],
-    improveStems:['Du könntest noch einen weiteren Sinneseindruck ergänzen, zum Beispiel …','Im Satz „…" könnte ein Vergleich die Beschreibung lebendiger machen.','Ein Adjektiv vor … würde den Satz noch anschaulicher machen.']
+    goodStems:['Ich finde gut, dass du … mit Sinneseindrücken beschrieben hast.','Dein Vergleich ist sehr treffend.','Der Satz wirkt sehr lebendig.'],
+    improveStems:['Du könntest noch einen weiteren Sinneseindruck ergänzen, zum Beispiel …','Ein Vergleich könnte die Beschreibung lebendiger machen.','Ein Adjektiv würde den Satz noch anschaulicher machen.']
   },
   {
     id:5,char:'🚩',
@@ -523,7 +527,7 @@ Im Dorf warteten schon die Dorfbewohner. Sie staunten. Ein Junge. Ein Bär. Und 
     planMin:2,
     task:'Schreib <strong>5–7 Sätze</strong>: Beende die Geschichte wirkungsvoll. Nutze eine <strong>Schlussformel</strong>. Zeige, wie sich Max verändert hat.',
     lpRef:'LP+: Ausgang der Erzählung · Schlussformeln · Wirkung der Sprache reflektieren',
-    stems:['Von da an …','Und so geschah es, dass …','Niemals vergaß Max …','Seitdem …','Max lächelte und dachte: „…"'],
+    stems:['Von da an …','Und so geschah es, dass …','Niemals vergaß Max …','Seitdem …'],
     wortfelder:[
       {title:'Schlussformeln',    words:['Von da an …','Und so …','Niemals vergaß er …','Seitdem …']},
       {title:'Gefühle ausdrücken',words:['stolz','dankbar','überwältigt','ruhig und glücklich','sprachlos']}
@@ -541,8 +545,8 @@ Im Dorf warteten schon die Dorfbewohner. Sie staunten. Ein Junge. Ein Bär. Und 
     celebEmoji:'🎉',celebTitle:'Geschichte fertig!',
     celebMsg:'Du hast es geschafft! Deine ganze Geschichte ist fertig — von der Einleitung bis zum Schluss!',
     celebEarned:'✓ Schlussformel &nbsp;·&nbsp; ✓ Botschaft &nbsp;·&nbsp; ✓ Wirkungsvoller Abschluss',
-    goodStems:['Ich finde gut, dass du die Geschichte mit … abgeschlossen hast.','Dein letzter Satz ist sehr …','Die Botschaft deiner Geschichte ist klar: …'],
-    improveStems:['Du könntest die Schlussformel noch … machen.','Was hat Max gelernt? Das könnte noch deutlicher werden, wenn …','Ein stärkerer letzter Satz könnte zum Beispiel sein: …']
+    goodStems:['Ich finde gut, dass du die Geschichte gut abgeschlossen hast.','Dein letzter Satz ist sehr wirkungsvoll.','Die Botschaft deiner Geschichte ist klar.'],
+    improveStems:['Du könntest die Schlussformel noch ausbauen.','Was hat Max gelernt? Das könnte noch deutlicher werden, wenn …','Ein stärkerer letzter Satz könnte zum Beispiel so klingen: …']
   }
 ];
 
@@ -729,8 +733,10 @@ function renderWrite(ch){
       <div class="cbox">${checkedCrit[cur][i]?'✓':''}</div><span>${c}</span>
     </div>`).join('');
 
+  // FIX 2: Stems with quotes/apostrophes in onclick strings break HTML attribute parsing.
+  // Use data-index attribute + JS lookup instead of inline string interpolation.
   const stemsHtml=ch.stems.map((s,i)=>`
-    <div class="stem-item" onclick="insertStem('${s.replace(/'/g,"\\'")}')">
+    <div class="stem-item" data-stem-index="${i}" onclick="insertStemByIndex(${i})">
       <span class="stem-arrow">➜</span>
       <span>${s}</span>
     </div>`).join('');
@@ -796,8 +802,10 @@ function renderRevise(ch){
   let good='',improve='';
   try{const n=JSON.parse(revNotes[cur]);good=n.good||'';improve=n.improve||'';}catch(e){}
 
-  const goodStems=ch.goodStems.map(s=>`<button class="fb-stem-btn" onclick="appendRevision('rev-good','${s.replace(/'/g,"\\'")}')">➜ ${s}</button>`).join('');
-  const improveStems=ch.improveStems.map(s=>`<button class="fb-stem-btn" onclick="appendRevision('rev-improve','${s.replace(/'/g,"\\'")}')">➜ ${s}</button>`).join('');
+  // FIX 3: Revision feedback stems also used unsafe inline string interpolation.
+  // Use data-index attributes + JS lookup to avoid quote/apostrophe breakage.
+  const goodStems=ch.goodStems.map((s,i)=>`<button class="fb-stem-btn" data-rev-target="rev-good" data-stem-rev-index="${i}" data-rev-type="good" onclick="appendRevisionByIndex('rev-good','good',${i})">${s}</button>`).join('');
+  const improveStems=ch.improveStems.map((s,i)=>`<button class="fb-stem-btn" data-rev-target="rev-improve" data-stem-rev-index="${i}" data-rev-type="improve" onclick="appendRevisionByIndex('rev-improve','improve',${i})">${s}</button>`).join('');
 
   return`
     <div class="panel"><div class="stripe c"></div><div class="pi">
@@ -898,7 +906,10 @@ function toggleHint(){
   if(b)b.classList.toggle('on',hintsShown[cur]);
 }
 
-function insertStem(stem){
+// FIX 2: Safe stem insertion using index lookup instead of inline string in onclick
+function insertStemByIndex(index){
+  const stem=CHS[cur].stems[index];
+  if(stem===undefined)return;
   const ta=document.getElementById('answer-box');
   if(!ta)return;
   const sep=ta.value&&!ta.value.endsWith('\n')?'\n':'';
@@ -909,7 +920,11 @@ function insertStem(stem){
   liveUpdate(ta.value,CHS[cur]);
 }
 
-function appendRevision(id,stem){
+// FIX 3: Safe revision stem insertion using index lookup
+function appendRevisionByIndex(id,type,index){
+  const stems=type==='good'?CHS[cur].goodStems:CHS[cur].improveStems;
+  const stem=stems[index];
+  if(stem===undefined)return;
   const el=document.getElementById(id);
   if(!el)return;
   el.value=(el.value.trim()?el.value.trim()+'\n':'')+stem+' ';
@@ -1061,7 +1076,7 @@ function buildLernpass(totalW,stars){
     <div class="lp-card lp-page">
       <div class="lp-header">
         <h2>⛏ Lernpass – Schreibwerkstatt Klasse 3</h2>
-        <p>LehrplanPLUS Deutsch · Bayern Minecraft Abenteuer</p>
+        <p>LehrplanPLUS Deutsch · Bayern Blockwelt Abenteuer</p>
       </div>
       <div class="lp-field"><label>Name</label>_________________________________</div>
       <div class="lp-field"><label>Klasse</label>_________________________________</div>
