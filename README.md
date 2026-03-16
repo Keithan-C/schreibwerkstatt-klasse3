@@ -1,19 +1,23 @@
 # ⛏ Schreibwerkstatt Klasse 3 – Bayern Blockwelt Abenteuer
 
-Interaktive Schreibwerkstatt für Klasse 3 – Bayern LehrplanPLUS Deutsch –
-Erzählendes Schreiben mit Blockwelt-Abenteuer-Kontext, Satzbausteine, Schreibkriterien
-und druckbarem Lernpass.
+Interaktive Schreibwerkstatt für Klasse 3 – Bayern LehrplanPLUS Deutsch – Erzählendes Schreiben mit Blockwelt-Abenteuer-Kontext, Satzbausteine, Schreibkriterien und druckbarem Lernpass.
 
-🔗 **Live:** https://keithan-c.github.io/schreibwerkstatt-klasse3
+🔗 **Live:** [https://keithan-c.github.io/schreibwerkstatt-klasse3](https://keithan-c.github.io/schreibwerkstatt-klasse3)
 
 ---
 
 ## Was ist das?
 
-Eine browserbasierte Schreibwerkstatt für Kinder der 3. Klasse (Bayern),
-die kreatives Schreiben durch einen Blockwelt-Abenteuer-Kontext motiviert.
-Entwickelt für Kinder mit unterschiedlichen Lernbedürfnissen,
-einschließlich Kinder mit Asperger-Syndrom.
+Eine browserbasierte Schreibwerkstatt für Kinder der 3. Klasse (Bayern), die kreatives Schreiben durch einen Blockwelt-Abenteuer-Kontext motiviert. Entwickelt für Kinder mit unterschiedlichen Lernbedürfnissen, einschließlich Kinder mit Asperger-Syndrom.
+
+---
+
+## 📄 Seiten
+
+| Datei | Beschreibung |
+|---|---|
+| [`index.html`](./index.html) | ⛏ Blockwelt Abenteuer – „Das Geheimnis des Berges" (5-Kapitel-Schreibwerkstatt) |
+| [`story.html`](./story.html) | 📖 Freie Schreibwerkstatt – Lehrkraft oder Elternteil setzt das Thema, Kind schreibt Erzählsituation → Ereignis → Ausgang mit KI-Schreibhilfe |
 
 ---
 
@@ -21,8 +25,8 @@ einschließlich Kinder mit Asperger-Syndrom.
 
 | Kompetenz | Umsetzung |
 |---|---|
-| Erzählsituation → Ereignis → Ausgang | 5-Kapitel-Struktur |
-| Figur nach Äußerem, Wesen, Handeln | Kapitel 1 + 3 |
+| Erzählsituation → Ereignis → Ausgang | 5-Kapitel-Struktur (`index.html`) / 3-Phasen-Struktur (`story.html`) |
+| Figur nach Äußerem, Wesen, Handeln | Kapitel 1 + 3 / Erzählsituation-Phase |
 | Wörtliche Rede mit Anführungszeichen | Live-Feedback-Pill |
 | Räume und Orte beschreiben | Kapitel 4 mit Vergleichen |
 | Stichwortzettel vor dem Schreiben | Planungsphase pro Kapitel |
@@ -30,7 +34,7 @@ einschließlich Kinder mit Asperger-Syndrom.
 
 ---
 
-## Features
+## ✨ Features
 
 - **3-Phasen-Workflow** pro Kapitel: Planen → Schreiben → Überarbeiten
 - **Phasengating** – nächste Phase wird erst freigeschaltet wenn bereit
@@ -39,11 +43,14 @@ einschließlich Kinder mit Asperger-Syndrom.
 - **Live-Qualitätspillen** – Großbuchstabe, Satzzeichen, Wörtliche Rede, Wortanzahl
 - **Selbstbewertungs-Kriterien** (LP+-aligned, anklickbar)
 - **Feier-Moment** nach jedem Kapitel mit Konfetti
-- **Druckbarer Lernpass** – Portfolio + Urkunde mit Unterschriftszeilen
+- **Druckbarer Lernpass** – Portfolio + Urkunde mit Unterschriftszeilen (`index.html`)
+- **KI-Schreibhilfe** (🤖) – kontextbewusst, LP+-ausgerichtet, themenspezifisch (`story.html`)
+- **Lehrkraft- & Eltern-Setup** – Thema und Name vor dem Start eingeben (`story.html`)
+- **Zweisprachig** – Deutsch / Englisch / Beide (`story.html`)
 
 ---
 
-## Für wen
+## 👥 Für wen
 
 - Grundschullehrkräfte in Bayern (Klasse 3/4)
 - Eltern die zuhause üben möchten
@@ -52,19 +59,19 @@ einschließlich Kinder mit Asperger-Syndrom.
 
 ---
 
-## Technisch
+## 🛠 Technisch
 
 - Reines HTML/CSS/JavaScript – keine Dependencies, kein Build-Schritt
 - Läuft vollständig im Browser, keine Daten werden gesendet
-- GitHub Pages ready – einfach `index.html` in ein Repo legen
+- GitHub Pages ready – einfach Dateien in ein Repo legen
 
 ---
 
-## Deployment
+## 🚀 Deployment
 
 1. Repo erstellen (z.B. `schreibwerkstatt-klasse3`)
-2. `index.html` in den Root-Ordner legen
-3. GitHub Pages aktivieren: Settings → Pages → Branch: main → / (root)
+2. `index.html` und `story.html` in den Root-Ordner legen
+3. GitHub Pages aktivieren: **Settings → Pages → Branch: main → / (root)**
 4. Live unter `https://yourname.github.io/schreibwerkstatt-klasse3`
 
 ---
@@ -72,7 +79,3 @@ einschließlich Kinder mit Asperger-Syndrom.
 ## Lizenz
 
 MIT – frei verwendbar für Bildungszwecke.
-
----
-
-*Entwickelt mit ❤️ in Ingolstadt, Bayern.*
