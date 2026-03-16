@@ -1,18 +1,18 @@
-# ⛏ Schreibwerkstatt Klasse 3 – Bayern Minecraft Abenteuer
+# ⛏ Schreibwerkstatt Klasse 3 – Bayern Blockwelt Abenteuer
 
-Interaktive Schreibwerkstatt für Klasse 3 – Bayern LehrplanPLUS Deutsch – 
-Erzählendes Schreiben mit Minecraft-Kontext, Satzbausteine, Schreibkriterien 
+Interaktive Schreibwerkstatt für Klasse 3 – Bayern LehrplanPLUS Deutsch –
+Erzählendes Schreiben mit Blockwelt-Abenteuer-Kontext, Satzbausteine, Schreibkriterien
 und druckbarem Lernpass.
 
-🔗 **Live:** https://yourname.github.io/schreibwerkstatt-klasse3
+🔗 **Live:** https://keithan-c.github.io/schreibwerkstatt-klasse3
 
 ---
 
 ## Was ist das?
 
-Eine browserbasierte Schreibwerkstatt für Kinder der 3. Klasse (Bayern), 
-die kreatives Schreiben durch einen Minecraft-Abenteuer-Kontext motiviert. 
-Entwickelt für Kinder mit unterschiedlichen Lernbedürfnissen, 
+Eine browserbasierte Schreibwerkstatt für Kinder der 3. Klasse (Bayern),
+die kreatives Schreiben durch einen Blockwelt-Abenteuer-Kontext motiviert.
+Entwickelt für Kinder mit unterschiedlichen Lernbedürfnissen,
 einschließlich Kinder mit Asperger-Syndrom.
 
 ---
@@ -57,6 +57,8 @@ einschließlich Kinder mit Asperger-Syndrom.
 - Reines HTML/CSS/JavaScript – keine Dependencies, kein Build-Schritt
 - Läuft vollständig im Browser, keine Daten werden gesendet
 - GitHub Pages ready – einfach `index.html` in ein Repo legen
+
+---
 
 ## Deployment
 
