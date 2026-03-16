@@ -485,7 +485,136 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
   background:var(--grass);
 }
 
+/* ══ GRAMMAR PRACTICE MODAL ══ */
+.gram-modal-bg{
+  position:fixed;inset:0;background:rgba(26,26,46,.55);backdrop-filter:blur(3px);
+  display:none;align-items:flex-end;justify-content:center;z-index:700;
+}
+.gram-modal-bg.open{display:flex;}
+.gram-modal{
+  background:var(--white);border-radius:24px 24px 0 0;width:100%;max-width:680px;
+  padding:1.2rem 1.4rem 1.8rem;max-height:88vh;overflow-y:auto;
+  animation:gramSlide .32s cubic-bezier(.34,1.3,.64,1) both;
+}
+@keyframes gramSlide{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.gram-modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto .9rem;}
+.gram-header{display:flex;align-items:center;gap:8px;margin-bottom:.3rem;}
+.gram-badge{
+  font-family:var(--font-head);font-size:9px;font-weight:700;
+  padding:3px 9px;border-radius:6px;
+}
+.gram-badge-rede   {background:#ffd966;color:#7a4200;}
+.gram-badge-prät   {background:#ede7f6;color:#4527a0;}
+.gram-badge-adj    {background:#ffe0d6;color:#d84315;}
+.gram-badge-satz   {background:#d4edda;color:#2d6a1b;}
+.gram-badge-binde  {background:#e8f4fd;color:#1a4a7a;}
+.gram-badge-komma  {background:#fff3cd;color:#7a4200;}
+.gram-title{font-family:var(--font-head);font-size:14px;font-weight:800;color:var(--ink);}
+.gram-sub{font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:.9rem;}
+
+/* Rule card */
+.gram-rule-wrap{margin-bottom:.9rem;}
+.gram-rule-toggle{
+  font-family:var(--font-head);font-size:10px;color:var(--muted);
+  background:var(--offwhite);border:1.5px solid var(--border);border-radius:8px;
+  padding:6px 12px;cursor:pointer;transition:all .2s;width:100%;text-align:left;
+}
+.gram-rule-toggle:hover{background:var(--border);}
+.gram-rule{
+  background:var(--offwhite);border:1.5px solid var(--border);border-radius:0 0 8px 8px;
+  padding:10px 14px;font-size:13px;line-height:1.75;color:var(--ink2);
+  border-top:none;
+}
+.gram-rule strong{color:var(--ink);font-weight:700;}
+.gram-rule code{
+  background:var(--lavender);color:var(--lavender3);padding:1px 6px;
+  border-radius:4px;font-family:var(--font-head);font-size:11px;
+}
+
+/* Exercise area */
+.gram-exercise{margin-bottom:.9rem;}
+.gram-q{font-size:15px;font-weight:700;color:var(--ink);line-height:1.6;margin-bottom:.75rem;}
+.gram-q em{color:var(--lavender3);font-style:normal;font-weight:800;}
+
+/* Fill-in */
+.gram-fill-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:15px;color:var(--ink);line-height:2;}
+.gram-fill-input{
+  border:none;border-bottom:2.5px solid var(--lavender2);background:transparent;
+  font-family:var(--font-body);font-size:15px;color:var(--ink);outline:none;
+  min-width:90px;padding:2px 4px;transition:border .2s;
+}
+.gram-fill-input:focus{border-bottom-color:var(--lavender3);}
+
+/* Multiple choice */
+.gram-choices{display:flex;flex-direction:column;gap:7px;}
+.gram-choice{
+  padding:10px 14px;border:2px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--white);font-size:14px;color:var(--ink2);cursor:pointer;
+  transition:all .2s;text-align:left;font-family:var(--font-body);
+}
+.gram-choice:hover{border-color:var(--lavender2);background:var(--lavender);}
+.gram-choice.selected{border-color:var(--lavender2);background:var(--lavender);color:var(--lavender3);font-weight:700;}
+.gram-choice.correct{border-color:var(--grass2);background:var(--grass);color:var(--grass3);font-weight:700;}
+.gram-choice.wrong{border-color:var(--coral2);background:var(--coral);color:var(--coral3);}
+
+/* Free text */
+.gram-free-textarea{
+  width:100%;border:2px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;font-family:var(--font-body);font-size:14px;
+  line-height:1.7;resize:vertical;min-height:80px;outline:none;
+  background:#fffef9;color:var(--ink);transition:border .2s;
+}
+.gram-free-textarea:focus{border-color:var(--lavender2);}
+
+/* Feedback */
+.gram-feedback{
+  border-radius:var(--radius-sm);padding:12px 14px;font-size:13.5px;line-height:1.7;
+  margin-bottom:.8rem;
+}
+.gram-feedback.correct{background:var(--grass);color:var(--grass3);border:1.5px solid var(--grass2);}
+.gram-feedback.partial{background:var(--sun);color:#7a4200;border:1.5px solid var(--sun3);}
+.gram-feedback.incorrect{background:var(--coral);color:var(--coral3);border:1.5px solid var(--coral2);}
+.gram-feedback strong{font-weight:700;}
+
+/* Buttons */
+.gram-btn-row{display:flex;gap:8px;}
+.gram-btn{
+  font-family:var(--font-head);font-size:11px;font-weight:700;
+  padding:11px 16px;border-radius:var(--radius-sm);border:2px solid;cursor:pointer;
+  transition:all .15s;flex:1;
+}
+.gram-btn-skip{background:var(--offwhite);color:var(--muted);border-color:var(--border);}
+.gram-btn-skip:hover{background:var(--border);}
+.gram-btn-check{
+  background:linear-gradient(135deg,var(--lavender2),var(--lavender3));
+  color:#fff;border-color:var(--lavender3);
+  box-shadow:0 3px 12px rgba(124,77,255,.3);
+}
+.gram-btn-check:hover{box-shadow:0 5px 18px rgba(124,77,255,.4);}
+.gram-btn-check:disabled{opacity:.5;cursor:not-allowed;}
+
+/* XP toast */
+.gram-xp{
+  text-align:center;font-family:var(--font-head);font-size:11px;
+  color:var(--grass3);background:var(--grass);border:1.5px solid var(--grass2);
+  border-radius:8px;padding:7px;margin-top:.7rem;
+  animation:xpPop .4s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes xpPop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* XP bar */
+.gram-bar-wrap{
+  position:fixed;bottom:92px;right:16px;z-index:199;
+  background:var(--white);border:1.5px solid var(--border);
+  border-radius:12px;padding:7px 12px;box-shadow:var(--shadow);min-width:160px;
+}
+.gram-bar-inner{display:flex;flex-direction:column;gap:4px;}
+.gram-bar-label{font-family:var(--font-head);font-size:8px;color:var(--muted);}
+.gram-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.gram-bar-fill{height:100%;background:linear-gradient(90deg,var(--grass2),var(--lavender2));border-radius:3px;transition:width .4s;}
+
 @media(max-width:480px){.wrap{padding:1rem .7rem 5rem;}}
+
 </style>
 </head>
 <body>
@@ -1607,8 +1736,471 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 // ═══════════════════════════════════════════════════════════
-// WRITING CHECK
+// GRAMMAR PRACTICE ENGINE
 // ═══════════════════════════════════════════════════════════
+const GRAM_TOPICS={
+  rede:{
+    id:'rede',
+    badgeClass:'gram-badge-rede',
+    label:'Wörtliche Rede',
+    labelEN:'Direct Speech',
+    rule:`<strong>Wörtliche Rede</strong> zeigt genau, was jemand sagt.<br><br>
+      Aufbau: <code>„Gesagtes", sagte er/sie.</code> oder <code>Er/Sie sagte: „Gesagtes."</code><br><br>
+      ✓ Anführungszeichen: <code>„</code> am Anfang, <code>"</code> am Ende<br>
+      ✓ Komma <em>vor</em> den Anführungszeichen (wenn danach Redebegleitsatz)<br>
+      ✓ Redebegleitsatz: <em>sagte er, rief sie, flüsterte er …</em>`,
+    ruleEN:`<strong>Direct speech</strong> shows exactly what someone says.<br><br>
+      Pattern: <code>"What they said," they said.</code><br><br>
+      ✓ Opening <code>"</code> and closing <code>"</code> speech marks<br>
+      ✓ Comma before closing speech mark (when followed by reporting clause)<br>
+      ✓ Reporting clause: <em>she said, he cried, they whispered …</em>`,
+    triggers:[/„|sagte|rief|flüsterte|fragte|schrie|sprach/i],
+    exercises:[
+      {
+        type:'fill',
+        qDE:'Setze die fehlenden Satzzeichen ein:<br><em class="gram-fill-sentence">___ Ich bin mutig ___ sagte Max.</em>',
+        qEN:'Add the missing punctuation:<br><em class="gram-fill-sentence">___ I am brave ___ said Max.</em>',
+        sentence:'„ Ich bin mutig " sagte Max.',
+        blanks:['„','",'],
+        hintDE:'Tipp: Wörtliche Rede beginnt mit „ und endet mit " — dann kommt ein Komma.',
+        hintEN:'Hint: Speech starts with " and ends with ," before the reporting clause.'
+      },
+      {
+        type:'free',
+        qDE:'Schreib einen Satz mit wörtlicher Rede. Dein Held sagt etwas Mutiges!<br><span style="font-size:12px;color:var(--muted);">Denke an: „…", sagte er/sie.</span>',
+        qEN:'Write a sentence with direct speech. Your hero says something brave!<br><span style="font-size:12px;color:var(--muted);">Remember: "…", they said.</span>',
+        checkPromptDE:'Prüfe diesen Satz auf korrekte wörtliche Rede (Anführungszeichen „", Komma, Redebegleitsatz). Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check this sentence for correct direct speech (speech marks, comma, reporting clause). Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  },
+  prät:{
+    id:'prät',
+    badgeClass:'gram-badge-prät',
+    label:'Präteritum',
+    labelEN:'Simple Past',
+    rule:`<strong>Präteritum</strong> = Vergangenheitsform beim Erzählen.<br><br>
+      Regelmäßig: <code>laufen → lief</code>, <code>sagen → sagte</code>, <code>stehen → stand</code><br>
+      Unregelmäßig: <code>gehen → ging</code>, <code>sehen → sah</code>, <code>kommen → kam</code>, <code>sein → war</code>, <code>haben → hatte</code><br><br>
+      ✓ In Erzählungen benutzen wir das Präteritum, nicht das Perfekt.`,
+    ruleEN:`<strong>Simple past</strong> = past tense for storytelling.<br><br>
+      Regular: <code>walk → walked</code>, <code>say → said</code><br>
+      Irregular: <code>go → went</code>, <code>see → saw</code>, <code>come → came</code>, <code>be → was</code>, <code>have → had</code><br><br>
+      ✓ In stories we use simple past tense.`,
+    triggers:[/plötzlich|auf einmal|dann|daraufhin|urplötzlich/i],
+    exercises:[
+      {
+        type:'choice',
+        qDE:'Welche Form ist richtig für eine Erzählung?',
+        qEN:'Which form is correct for a story?',
+        sentence:'Max ___ in die Höhle.',
+        choices:['geht','ging','ist gegangen','wird gehen'],
+        correct:1,
+        explainDE:'In Erzählungen verwenden wir das Präteritum: „ging" (nicht „geht" oder „ist gegangen").',
+        explainEN:'In stories we use simple past: "went" (not "goes" or "has gone").'
+      },
+      {
+        type:'choice',
+        qDE:'Welche Form passt in diese Geschichte?',
+        qEN:'Which form fits this story?',
+        sentence:'Das Bärenjunge ___ ihn neugierig an.',
+        choices:['schaut','schaute','hat geschaut','wird schauen'],
+        correct:1,
+        explainDE:'Präteritum: „schaute" — das ist die Erzählform für Geschichten.',
+        explainEN:'Simple past: "looked" — this is the storytelling form.'
+      },
+      {
+        type:'free',
+        qDE:'Schreib 2 Sätze über deine Geschichte im Präteritum (Vergangenheit).<br><span style="font-size:12px;color:var(--muted);">z.B. Max ging … Er sah …</span>',
+        qEN:'Write 2 sentences about your story in the simple past.<br><span style="font-size:12px;color:var(--muted);">e.g. Max went … He saw …</span>',
+        checkPromptDE:'Prüfe ob diese Sätze im Präteritum (Erzählvergangenheit) stehen. Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check if these sentences use simple past tense correctly. Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  },
+  adj:{
+    id:'adj',
+    badgeClass:'gram-badge-adj',
+    label:'Adjektiv vor Nomen',
+    labelEN:'Adjective Before Noun',
+    rule:`<strong>Adjektiv vor Nomen</strong> = Eigenschaftswort vor dem Namenwort.<br><br>
+      <code>der Berg</code> → <code>der <em>hohe</em> Berg</code><br>
+      <code>die Höhle</code> → <code>die <em>dunkle</em> Höhle</code><br>
+      <code>das Bärenjunge</code> → <code>das <em>kleine</em> Bärenjunge</code><br><br>
+      ✓ Adjektive machen deine Geschichte lebendiger!`,
+    ruleEN:`<strong>Adjectives before nouns</strong> describe things.<br><br>
+      <code>the mountain</code> → <code>the <em>tall</em> mountain</code><br>
+      <code>the cave</code> → <code>the <em>dark</em> cave</code><br><br>
+      ✓ Adjectives make your story more vivid!`,
+    triggers:[/mutig|neugierig|ängstlich|dunkel|still|groß|klein|schön|alt|jung/i],
+    exercises:[
+      {
+        type:'fill',
+        qDE:'Füge ein passendes Adjektiv ein:<br><em>Die ___ Höhle war ganz still.</em>',
+        qEN:'Add a suitable adjective:<br><em>The ___ cave was very quiet.</em>',
+        blanks:['dunkel / dunkle'],
+        hintDE:'Mögliche Adjektive: dunkel, tief, geheimnissvoll, alte …',
+        hintEN:'Possible adjectives: dark, deep, mysterious, old …'
+      },
+      {
+        type:'free',
+        qDE:'Schreib einen Satz, in dem du eine Person oder einen Ort mit mindestens 2 Adjektiven beschreibst.<br><span style="font-size:12px;color:var(--muted);">z.B. Der mutige, neugierige Max …</span>',
+        qEN:'Write a sentence describing a person or place with at least 2 adjectives.<br><span style="font-size:12px;color:var(--muted);">e.g. The brave, curious Max …</span>',
+        checkPromptDE:'Prüfe ob in diesen Sätzen Adjektive sinnvoll vor Nomen stehen. Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check if adjectives are used well before nouns in these sentences. Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  },
+  satz:{
+    id:'satz',
+    badgeClass:'gram-badge-satz',
+    label:'Satzanfänge variieren',
+    labelEN:'Varied Sentence Starters',
+    rule:`<strong>Abwechslungsreiche Satzanfänge</strong> machen eine Geschichte lebendig.<br><br>
+      Statt immer „Er …" oder „Sie …":<br>
+      <code>Plötzlich …</code> · <code>Mit klopfendem Herzen …</code> · <code>Langsam …</code><br>
+      <code>Voller Mut …</code> · <code>Erschrocken …</code> · <code>Im nächsten Moment …</code><br><br>
+      ✓ Versuche, jeden Satz anders anzufangen!`,
+    ruleEN:`<strong>Varied sentence starters</strong> make a story come alive.<br><br>
+      Instead of always "He …" or "She …":<br>
+      <code>Suddenly …</code> · <code>With a pounding heart …</code> · <code>Slowly …</code><br>
+      <code>Full of courage …</code> · <code>Shocked …</code> · <code>In the next moment …</code><br><br>
+      ✓ Try to start each sentence differently!`,
+    triggers:[/er |sie |er\.|sie\./i],
+    exercises:[
+      {
+        type:'choice',
+        qDE:'Welcher Satzanfang ist am abwechslungsreichsten?',
+        qEN:'Which sentence starter is most varied?',
+        sentence:'___ betrat Max die Höhle.',
+        choices:['Er …','Und er …','Mit zitternden Knien …','Max er …'],
+        correct:2,
+        explainDE:'„Mit zitternden Knien" ist ein lebendiger Satzanfang — er zeigt auch gleich, wie Max sich fühlt!',
+        explainEN:'"With trembling knees" is a vivid starter — it also shows how Max feels!'
+      },
+      {
+        type:'free',
+        qDE:'Schreib denselben Satz 3 Mal — aber jedes Mal mit einem anderen Anfang.<br><span style="font-size:12px;color:var(--muted);">Grundsatz: „Max ging in die Höhle." → Variiere den Anfang!</span>',
+        qEN:'Write the same sentence 3 times — but each time with a different starter.<br><span style="font-size:12px;color:var(--muted);">Base sentence: "Max went into the cave." → Vary the start!</span>',
+        checkPromptDE:'Prüfe ob diese Sätze wirklich verschiedene Satzanfänge haben und ob sie lebendig klingen. Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check if these sentences have genuinely varied starters and sound vivid. Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  },
+  binde:{
+    id:'binde',
+    badgeClass:'gram-badge-binde',
+    label:'Bindewörter',
+    labelEN:'Connectives',
+    rule:`<strong>Bindewörter</strong> verbinden Sätze und zeigen Zusammenhänge.<br><br>
+      <code>weil</code> = Grund · <em>Er zitterte, weil er Angst hatte.</em><br>
+      <code>obwohl</code> = Gegensatz · <em>Er ging weiter, obwohl er Angst hatte.</em><br>
+      <code>deshalb</code> = Folge · <em>Er hatte Angst, deshalb blieb er stehen.</em><br>
+      <code>damit</code> = Zweck · <em>Er leuchtete, damit er den Weg sah.</em><br><br>
+      ✓ Nach <code>weil</code> und <code>obwohl</code> kommt das Verb ans Ende!`,
+    ruleEN:`<strong>Connectives</strong> link sentences and show relationships.<br><br>
+      <code>because</code> = reason · <em>He trembled because he was scared.</em><br>
+      <code>although</code> = contrast · <em>He went on although he was scared.</em><br>
+      <code>therefore</code> = result · <em>He was scared, therefore he stopped.</em><br>
+      <code>so that</code> = purpose · <em>He lit the torch so that he could see.</em>`,
+    triggers:[/weil|obwohl|deshalb|damit|denn|aber|und dann/i],
+    exercises:[
+      {
+        type:'choice',
+        qDE:'Welches Bindewort passt am besten?',
+        qEN:'Which connective fits best?',
+        sentence:'Max lächelte, ___ er den Bären endlich gefunden hatte.',
+        choices:['deshalb','obwohl','weil','damit'],
+        correct:2,
+        explainDE:'„weil" gibt den Grund an — und danach kommt das Verb ans Ende: „gefunden hatte".',
+        explainEN:'"because" gives the reason — the verb moves to the end after it.'
+      },
+      {
+        type:'free',
+        qDE:'Schreib 2 Sätze über deine Geschichte — benutze einmal „weil" und einmal „obwohl".<br><span style="font-size:12px;color:var(--muted);">Denke daran: Verb kommt nach weil/obwohl ans Satzende!</span>',
+        qEN:'Write 2 sentences about your story — use "because" once and "although" once.',
+        checkPromptDE:'Prüfe ob die Bindewörter weil/obwohl korrekt verwendet werden (Verb ans Satzende nach weil/obwohl). Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check if "because/although" connectives are used correctly. Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  },
+  komma:{
+    id:'komma',
+    badgeClass:'gram-badge-komma',
+    label:'Komma-Regeln',
+    labelEN:'Comma Rules',
+    rule:`<strong>Komma-Regeln</strong> für Klasse 3:<br><br>
+      1. Bei Aufzählungen: <em>mutig, neugierig und stark</em><br>
+      2. Vor <code>aber, denn, sondern, oder, doch</code>: <em>Er wollte gehen, aber er blieb.</em><br>
+      3. Bei wörtlicher Rede: <em>„Hallo!", rief Max.</em><br>
+      4. Vor <code>weil, obwohl, damit, wenn</code>: <em>Er zitterte, weil er Angst hatte.</em>`,
+    ruleEN:`<strong>Comma rules</strong> for Year 3:<br><br>
+      1. In lists: <em>brave, curious and strong</em><br>
+      2. Before <code>but, because, or, yet</code>: <em>He wanted to go, but he stayed.</em><br>
+      3. With direct speech: <em>"Hello!" Max called.</em><br>
+      4. Before <code>because, although, so that, when</code>: <em>He trembled, because he was scared.</em>`,
+    triggers:[/weil|obwohl|aber|denn|wenn|,/],
+    exercises:[
+      {
+        type:'choice',
+        qDE:'Wo fehlt das Komma?',
+        qEN:'Where is the comma missing?',
+        sentence:'Max war mutig_ obwohl er Angst hatte.',
+        choices:['Kein Komma nötig','Nach „mutig" → mutig,','Nach „obwohl"','Am Satzende'],
+        correct:1,
+        explainDE:'Vor „obwohl" (Nebensatz-Einleitung) muss ein Komma stehen: „mutig, obwohl er …"',
+        explainEN:'A comma is needed before "although" (subordinate clause): "brave, although he …"'
+      },
+      {
+        type:'free',
+        qDE:'Schreib einen Satz mit einer Aufzählung (mind. 3 Dinge) — setze die Kommas richtig.<br><span style="font-size:12px;color:var(--muted);">z.B. In seinem Rucksack waren ein Schwert, eine Fackel und ein Apfel.</span>',
+        qEN:'Write a sentence with a list (at least 3 things) — use commas correctly.<br><span style="font-size:12px;color:var(--muted);">e.g. In his bag were a sword, a torch and an apple.</span>',
+        checkPromptDE:'Prüfe ob die Kommas in diesem Satz korrekt gesetzt sind (Aufzählung oder Nebensatz). Gib ermutigende Rückmeldung auf Deutsch für ein Kind der 3. Klasse. Max. 3 Sätze. Beginne mit ✓ wenn richtig oder ✗ wenn falsch:',
+        checkPromptEN:'Check if the commas are correctly placed (list or subordinate clause). Give encouraging feedback in English for a Year 3 child. Max 3 sentences. Start with ✓ if correct or ✗ if incorrect:'
+      }
+    ]
+  }
+};
+
+// ── State ─────────────────────────────────────────────────
+let gramXP=0;
+let gramShownThisSession=new Set(); // track which topics shown this session
+let gramCurrentExercise=null;
+let gramSelectedChoice=null;
+let gramCheckTimer=null;
+const GRAM_COOLDOWN=60000; // 60s min between same topic
+let gramLastShown={};
+
+// ── Detection ─────────────────────────────────────────────
+function detectGrammarTopic(text){
+  if(!text||text.length<20)return null;
+  // Get last 80 chars typed (where the action is)
+  const recent=text.slice(-80).toLowerCase();
+  // Priority order — check all topics, pick highest priority match not shown recently
+  const order=['rede','prät','adj','satz','binde','komma'];
+  for(const id of order){
+    const topic=GRAM_TOPICS[id];
+    const now=Date.now();
+    const lastShown=gramLastShown[id]||0;
+    if(now-lastShown<GRAM_COOLDOWN)continue; // cooldown
+    for(const re of topic.triggers){
+      if(re.test(recent))return topic;
+    }
+  }
+  return null;
+}
+
+// Hook into liveUpdate — debounced detection
+let gramDetectTimer=null;
+const _origLiveUpdate=liveUpdate;
+function liveUpdate(text){
+  _origLiveUpdate(text);
+  // Debounce detection — wait 1.5s after typing stops
+  clearTimeout(gramDetectTimer);
+  gramDetectTimer=setTimeout(()=>{
+    // Only trigger if modal not already open and text long enough
+    if(document.getElementById('gram-modal-bg').classList.contains('open'))return;
+    if(text.length<40)return;
+    // Only trigger occasionally (every ~50 chars of new content)
+    const topic=detectGrammarTopic(text);
+    if(topic)openGramModal(topic);
+  },1500);
+}
+
+// ── Open modal ────────────────────────────────────────────
+function openGramModal(topic){
+  const l=lang==='both'?'de':lang;
+  gramLastShown[topic.id]=Date.now();
+  gramShownThisSession.add(topic.id);
+
+  // Pick a random exercise from this topic
+  const ex=topic.exercises[Math.floor(Math.random()*topic.exercises.length)];
+  gramCurrentExercise={topic,ex};
+  gramSelectedChoice=null;
+
+  // Badge
+  const badge=document.getElementById('gram-badge');
+  badge.className='gram-badge '+topic.badgeClass;
+  badge.textContent=l==='de'?topic.label:topic.labelEN;
+
+  // Title
+  document.getElementById('gram-modal-title').textContent=
+    l==='de'?'⚡ Kurze Grammatik-Übung!':'⚡ Quick Grammar Practice!';
+
+  // Sub
+  document.getElementById('gram-sub').textContent=
+    l==='de'
+      ?'Du hast gerade etwas Passendes geschrieben — übe kurz diese Grammatik-Regel!'
+      :'You just used something relevant — take a moment to practise this grammar rule!';
+
+  // Rule
+  document.getElementById('gram-rule').innerHTML=l==='de'?topic.rule:topic.ruleEN;
+  document.getElementById('gram-rule').style.display='none';
+  document.getElementById('gram-rule-toggle').textContent=
+    l==='de'?'📖 Regel anzeigen':'📖 Show rule';
+
+  // Exercise
+  renderGramExercise(ex,l);
+
+  // Reset feedback
+  const fb=document.getElementById('gram-feedback');
+  fb.style.display='none';fb.className='gram-feedback';fb.innerHTML='';
+  document.getElementById('gram-xp').style.display='none';
+
+  // Check btn
+  const cb=document.getElementById('gram-check-btn');
+  cb.disabled=false;
+  document.getElementById('gram-check-lbl').textContent=l==='de'?'Antwort prüfen':'Check answer';
+  document.getElementById('gram-skip-lbl').textContent=l==='de'?'Überspringen':'Skip';
+
+  document.getElementById('gram-modal-bg').classList.add('open');
+}
+
+function renderGramExercise(ex,l){
+  const wrap=document.getElementById('gram-exercise');
+  const q=l==='de'?ex.qDE:ex.qEN;
+
+  if(ex.type==='choice'){
+    const sentence=ex.sentence;
+    wrap.innerHTML=`
+      <div class="gram-q">${q}</div>
+      <div style="background:var(--offwhite);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-size:15px;margin-bottom:.9rem;line-height:1.8;">
+        ${esc(sentence)}
+      </div>
+      <div class="gram-choices">
+        ${ex.choices.map((c,i)=>`
+          <button class="gram-choice" data-idx="${i}" onclick="selectGramChoice(this,${i})">
+            ${esc(c)}
+          </button>`).join('')}
+      </div>`;
+
+  }else if(ex.type==='fill'){
+    wrap.innerHTML=`
+      <div class="gram-q">${q}</div>
+      <div class="gram-fill-wrap">
+        <span>${l==='de'?'Lücke ausfüllen:':'Fill in the blank:'}</span>
+        <input class="gram-fill-input" id="gram-fill-answer" type="text"
+          placeholder="${l==='de'?'Antwort …':'Answer …'}" maxlength="40"
+          onkeydown="if(event.key==='Enter')checkGramAnswer()">
+      </div>
+      ${ex.hintDE?`<p style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;">${l==='de'?ex.hintDE:ex.hintEN}</p>`:''}`;
+
+  }else{ // free
+    wrap.innerHTML=`
+      <div class="gram-q">${q}</div>
+      <textarea class="gram-free-textarea" id="gram-free-answer" rows="3"
+        placeholder="${l==='de'?'Schreib hier …':'Write here …'}"></textarea>`;
+  }
+}
+
+function selectGramChoice(btn,idx){
+  document.querySelectorAll('.gram-choice').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  gramSelectedChoice=idx;
+}
+
+function toggleGramRule(){
+  const rule=document.getElementById('gram-rule');
+  const btn=document.getElementById('gram-rule-toggle');
+  const l=lang==='both'?'de':lang;
+  const isHidden=rule.style.display==='none';
+  rule.style.display=isHidden?'block':'none';
+  btn.textContent=isHidden
+    ?(l==='de'?'📖 Regel ausblenden':'📖 Hide rule')
+    :(l==='de'?'📖 Regel anzeigen':'📖 Show rule');
+}
+
+function closeGramModal(){
+  document.getElementById('gram-modal-bg').classList.remove('open');
+  gramCurrentExercise=null;gramSelectedChoice=null;
+}
+
+// ── Check answer ──────────────────────────────────────────
+async function checkGramAnswer(){
+  if(!gramCurrentExercise)return;
+  const {topic,ex}=gramCurrentExercise;
+  const l=lang==='both'?'de':lang;
+  const fb=document.getElementById('gram-feedback');
+  const cb=document.getElementById('gram-check-btn');
+  cb.disabled=true;
+  document.getElementById('gram-check-lbl').textContent=l==='de'?'Prüfe …':'Checking …';
+
+  if(ex.type==='choice'){
+    // Instant local check
+    if(gramSelectedChoice===null){
+      cb.disabled=false;
+      document.getElementById('gram-check-lbl').textContent=l==='de'?'Antwort prüfen':'Check answer';
+      fb.innerHTML=l==='de'?'👆 Bitte wähle eine Antwort aus.':'👆 Please select an answer.';
+      fb.className='gram-feedback partial';fb.style.display='block';return;
+    }
+    const correct=gramSelectedChoice===ex.correct;
+    document.querySelectorAll('.gram-choice').forEach((b,i)=>{
+      if(i===ex.correct)b.classList.add('correct');
+      else if(i===gramSelectedChoice&&!correct)b.classList.add('wrong');
+    });
+    fb.innerHTML=correct
+      ?`✓ <strong>${l==='de'?'Richtig!':'Correct!'}</strong> ${l==='de'?ex.explainDE:ex.explainEN}`
+      :`✗ <strong>${l==='de'?'Fast!':'Almost!'}</strong> ${l==='de'?ex.explainDE:ex.explainEN}`;
+    fb.className='gram-feedback '+(correct?'correct':'partial');
+    fb.style.display='block';
+    if(correct)awardGramXP();
+    document.getElementById('gram-check-lbl').textContent=l==='de'?'✓ Fertig!':'✓ Done!';
+
+  }else{
+    // AI-checked (fill or free)
+    let answer='';
+    if(ex.type==='fill'){
+      answer=(document.getElementById('gram-fill-answer')||{}).value||'';
+    }else{
+      answer=(document.getElementById('gram-free-answer')||{}).value||'';
+    }
+    if(!answer.trim()){
+      cb.disabled=false;
+      document.getElementById('gram-check-lbl').textContent=l==='de'?'Antwort prüfen':'Check answer';
+      fb.innerHTML=l==='de'?'✏️ Bitte schreib zuerst eine Antwort.':'✏️ Please write an answer first.';
+      fb.className='gram-feedback partial';fb.style.display='block';return;
+    }
+
+    const prompt=l==='de'?ex.checkPromptDE:ex.checkPromptEN;
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:200,
+          system:`Du bist ein freundlicher Deutschlehrer für Klasse 3 (Bayern, LehrplanPLUS). Grammatik-Thema: ${topic.label}. Antworte kurz, ermutigend, max. 3 Sätze.`,
+          messages:[{role:'user',content:`${prompt}\n\nAntwort des Kindes: ${answer}`}]
+        })
+      });
+      const data=await res.json();
+      const reply=data.content&&data.content[0]?data.content[0].text:'…';
+      const isCorrect=reply.startsWith('✓');
+      fb.innerHTML=reply;
+      fb.className='gram-feedback '+(isCorrect?'correct':reply.includes('✗')?'partial':'partial');
+      fb.style.display='block';
+      if(isCorrect)awardGramXP();
+    }catch(e){
+      fb.innerHTML=l==='de'?'Ups — Verbindungsfehler. Versuch es nochmal.':'Oops — connection error. Try again.';
+      fb.className='gram-feedback partial';fb.style.display='block';
+    }
+    document.getElementById('gram-check-lbl').textContent=l==='de'?'✓ Fertig!':'✓ Done!';
+  }
+
+  // After feedback, change skip button to "close"
+  document.getElementById('gram-skip-lbl').textContent=lang==='de'||lang==='both'?'Schließen':'Close';
+}
+
+function awardGramXP(){
+  gramXP++;
+  const xpEl=document.getElementById('gram-xp');
+  xpEl.style.display='block';
+  const bar=document.getElementById('gram-bar-wrap');
+  bar.style.display='block';
+  document.getElementById('gram-bar-label').textContent=`⭐ ${gramXP} Grammatik-${gramXP===1?'Stern':'Sterne'}`;
+  document.getElementById('gram-bar-fill').style.width=Math.min(gramXP*10,100)+'%';
+}
+
 let lastCheckErrors=[];
 
 async function checkWriting(){
@@ -1778,5 +2370,51 @@ function applyFix(i){
   renderCheckResults(answers[part],remaining,l);
 }
 </script>
-</body>
-</html>
+<!-- ══ GRAMMAR PRACTICE MODAL ══ -->
+<div class="gram-modal-bg" id="gram-modal-bg">
+  <div class="gram-modal" id="gram-modal" role="dialog" aria-modal="true" aria-labelledby="gram-modal-title">
+    <div class="gram-modal-handle"></div>
+
+    <!-- Badge + title -->
+    <div class="gram-header">
+      <span class="gram-badge" id="gram-badge">Grammatik</span>
+      <span class="gram-title" id="gram-modal-title">Übung</span>
+    </div>
+    <p class="gram-sub" id="gram-sub"></p>
+
+    <!-- Rule card (collapsible) -->
+    <div class="gram-rule-wrap" id="gram-rule-wrap">
+      <button class="gram-rule-toggle" onclick="toggleGramRule()" id="gram-rule-toggle">
+        📖 Regel anzeigen / Show rule
+      </button>
+      <div class="gram-rule" id="gram-rule" style="display:none"></div>
+    </div>
+
+    <!-- Exercise -->
+    <div class="gram-exercise" id="gram-exercise"></div>
+
+    <!-- AI feedback area -->
+    <div class="gram-feedback" id="gram-feedback" style="display:none"></div>
+
+    <!-- Buttons -->
+    <div class="gram-btn-row">
+      <button class="gram-btn gram-btn-skip" onclick="closeGramModal()">
+        ✕ <span id="gram-skip-lbl">Überspringen</span>
+      </button>
+      <button class="gram-btn gram-btn-check" id="gram-check-btn" onclick="checkGramAnswer()">
+        ✓ <span id="gram-check-lbl">Antwort prüfen</span>
+      </button>
+    </div>
+
+    <!-- XP earned toast -->
+    <div class="gram-xp" id="gram-xp" style="display:none">⭐ +1 Grammatik-Stern!</div>
+  </div>
+</div>
+
+<!-- Grammar XP bar (fixed, above FAB) -->
+<div class="gram-bar-wrap" id="gram-bar-wrap" style="display:none">
+  <div class="gram-bar-inner">
+    <span class="gram-bar-label" id="gram-bar-label">⭐ 0 Grammatik-Sterne</span>
+    <div class="gram-bar-track"><div class="gram-bar-fill" id="gram-bar-fill"></div></div>
+  </div>
+</div>
