@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bayern Minecraft Abenteuer – Schreibwerkstatt Klasse 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green-dark:#2d5a1b;--green-mid:#4a8a2a;--green-light:#c8e6a0;--green-pale:#eaf3de;
+  --blue-dark:#1a4a7a;--blue-mid:#2e7ab8;--blue-pale:#e6f1fb;
+  --amber-dark:#7a4200;--amber-mid:#d4840a;--amber-light:#fac775;--amber-pale:#faeeda;
+  --purple-dark:#3c3489;--purple-mid:#534ab7;--purple-pale:#eeedfe;
+  --coral-dark:#993c1d;--coral-mid:#d85a30;--coral-pale:#faece7;
+  --gray-dark:#2a2a28;--gray-mid:#5f5e5a;--gray-light:#d3d1c7;--gray-pale:#f5f4f0;
+  --surface:#fff;--bg:#f0ede6;--text:#1e1e1c;--muted:#5f5e5a;
+  --pb:3px solid var(--gray-dark);
+  --fp:'Press Start 2P',monospace;--fb:'Nunito',sans-serif;
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);min-height:100vh;}
+.wrap{max-width:740px;margin:0 auto;padding:1.5rem 1rem 5rem;}
+
+/* ── Header ── */
+.site-header{text-align:center;margin-bottom:1.25rem;}
+.site-header h1{font-family:var(--fp);font-size:clamp(7px,2vw,10px);color:var(--green-dark);line-height:2;background:var(--green-pale);border:var(--pb);border-color:var(--green-dark);padding:12px 18px;display:inline-block;max-width:100%;}
+.badge{display:inline-block;font-family:var(--fp);font-size:5.5px;color:var(--blue-dark);background:var(--blue-pale);border:2px solid var(--blue-mid);padding:6px 12px;margin-top:8px;line-height:2;}
+
+/* ── Scene ── */
+.scene{width:100%;height:120px;border:var(--pb);border-color:var(--gray-dark);position:relative;overflow:hidden;margin-bottom:1rem;transition:background .7s;}
+.cloud{position:absolute;background:#fff;width:28px;height:14px;box-shadow:10px 0 0 #fff,-10px 0 0 #fff,0 -10px 0 #fff,10px -10px 0 #fff;opacity:.9;}
+.mtn{position:absolute;bottom:38%;left:50%;transform:translateX(-50%);width:0;height:0;border-left:60px solid transparent;border-right:60px solid transparent;border-bottom:72px solid #888070;}
+.mtn::after{content:'';position:absolute;bottom:-72px;left:-42px;width:0;height:0;border-left:42px solid transparent;border-right:42px solid transparent;border-bottom:48px solid #e8f4ff;}
+.mtn-sm{position:absolute;bottom:38%;left:16%;width:0;height:0;border-left:38px solid transparent;border-right:38px solid transparent;border-bottom:50px solid #706860;}
+.mtn-sm2{position:absolute;bottom:38%;right:12%;width:0;height:0;border-left:44px solid transparent;border-right:44px solid transparent;border-bottom:58px solid #7a7060;}
+.char{position:absolute;font-size:26px;bottom:39%;right:20%;animation:bob 1.4s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.flag{position:absolute;font-size:18px;bottom:59%;left:50%;display:none;}
+
+/* ── Progress ── */
+.prog-wrap{margin-bottom:.6rem;}
+.prog-label{font-family:var(--fp);font-size:6px;color:var(--muted);text-align:center;display:block;margin-bottom:4px;}
+.prog-track{height:14px;background:var(--gray-light);border:var(--pb);border-color:var(--gray-dark);}
+.prog-fill{height:100%;background:repeating-linear-gradient(90deg,var(--green-mid) 0,var(--green-mid) 10px,var(--green-dark) 10px,var(--green-dark) 20px);transition:width .5s;}
+.star-row{display:flex;justify-content:center;gap:8px;margin:6px 0 .9rem;}
+.star{font-size:22px;filter:grayscale(1) brightness(1.3);transition:filter .4s;}
+.star.lit{filter:grayscale(0);}
+
+/* ── Lernziel banner ── */
+.lernziel{
+  background:var(--blue-pale);border:2px solid var(--blue-mid);
+  padding:10px 14px;margin-bottom:1rem;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.lernziel .lz-icon{font-size:22px;line-height:1;}
+.lernziel-body{}
+.lernziel-body .lz-label{font-family:var(--fp);font-size:6px;color:var(--blue-dark);display:block;margin-bottom:5px;}
+.lernziel-body p{font-size:13.5px;line-height:1.6;color:var(--blue-dark);}
+.lernziel-body strong{font-weight:700;}
+
+/* ── Phase tabs ── */
+.phase-tabs{display:flex;gap:4px;margin-bottom:1rem;flex-wrap:wrap;}
+.ptab{font-family:var(--fp);font-size:5.5px;padding:7px 10px;border:var(--pb);border-color:var(--gray-mid);cursor:pointer;background:var(--gray-pale);color:var(--muted);line-height:1.6;flex:1;text-align:center;position:relative;transition:background .2s;}
+.ptab.active{background:var(--green-mid);color:#fff;border-color:var(--green-dark);}
+.ptab.done{background:var(--green-pale);color:var(--green-dark);border-color:var(--green-mid);}
+.ptab.locked{opacity:.45;cursor:not-allowed;}
+.ptab .lock-icon{font-size:8px;margin-left:3px;}
+
+/* ── Gate notice ── */
+.gate-notice{background:var(--amber-pale);border:2px solid var(--amber-mid);padding:8px 12px;font-size:13px;color:var(--amber-dark);margin-bottom:.75rem;display:none;line-height:1.6;}
+.gate-notice.visible{display:block;}
+
+/* ── Panels ── */
+.panel{background:var(--surface);border:var(--pb);border-color:var(--gray-dark);margin-bottom:1rem;}
+.stripe{height:5px;background:repeating-linear-gradient(90deg,var(--green-mid) 0,var(--green-mid) 8px,var(--green-dark) 8px,var(--green-dark) 16px);}
+.stripe.a{background:repeating-linear-gradient(90deg,var(--amber-mid) 0,var(--amber-mid) 8px,var(--amber-dark) 8px,var(--amber-dark) 16px);}
+.stripe.b{background:repeating-linear-gradient(90deg,var(--blue-mid) 0,var(--blue-mid) 8px,var(--blue-dark) 8px,var(--blue-dark) 16px);}
+.stripe.p{background:repeating-linear-gradient(90deg,var(--purple-mid) 0,var(--purple-mid) 8px,var(--purple-dark) 8px,var(--purple-dark) 16px);}
+.stripe.c{background:repeating-linear-gradient(90deg,var(--coral-mid) 0,var(--coral-mid) 8px,var(--coral-dark) 8px,var(--coral-dark) 16px);}
+.pi{padding:1rem 1.2rem;}
+.plabel{font-family:var(--fp);font-size:6.5px;display:block;margin-bottom:10px;letter-spacing:.3px;color:var(--green-dark);}
+.plabel.a{color:var(--amber-dark);}
+.plabel.b{color:var(--blue-dark);}
+.plabel.p{color:var(--purple-dark);}
+.plabel.c{color:var(--coral-dark);}
+
+/* ── Story text ── */
+.story{font-size:15.5px;line-height:1.9;color:var(--text);}
+.story strong{color:var(--blue-dark);font-weight:700;}
+.story em{color:var(--gray-mid);font-style:italic;}
+
+/* ── Planning grid ── */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+@media(max-width:480px){.plan-grid{grid-template-columns:1fr;}}
+.pcell{background:var(--gray-pale);border:2px solid var(--gray-light);padding:8px 10px;}
+.pcell label{font-family:var(--fp);font-size:5.5px;color:var(--muted);display:block;margin-bottom:5px;}
+.pcell input{width:100%;border:none;border-bottom:2px solid var(--gray-light);background:transparent;font-family:var(--fb);font-size:13.5px;color:var(--text);padding:3px 0;outline:none;}
+.pcell input:focus{border-bottom-color:var(--green-mid);}
+.plan-progress{height:6px;background:var(--gray-light);border:1px solid var(--gray-light);margin-top:10px;}
+.plan-progress-fill{height:100%;background:var(--amber-mid);transition:width .3s;}
+.plan-hint{font-size:12px;color:var(--amber-dark);font-family:var(--fp);font-size:6px;margin-top:6px;display:block;}
+
+/* ── Word fields ── */
+.wf-wrap{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.wf-group{flex:1;min-width:130px;}
+.wf-title{font-family:var(--fp);font-size:5.5px;color:var(--muted);display:block;margin-bottom:5px;}
+.wf-chips{display:flex;flex-wrap:wrap;gap:4px;}
+
+/* ── Chips ── */
+.chip{padding:4px 10px;font-size:13px;font-weight:700;border:2px solid;cursor:default;line-height:1.4;}
+.cn{background:var(--purple-pale);color:var(--purple-dark);border-color:var(--purple-mid);}
+.cv{background:var(--green-pale);color:var(--green-dark);border-color:var(--green-mid);}
+.ca{background:var(--coral-pale);color:var(--coral-dark);border-color:var(--coral-mid);}
+.cp{background:var(--amber-pale);color:var(--amber-dark);border-color:var(--amber-mid);}
+.cs{background:var(--blue-pale);color:var(--blue-dark);border-color:var(--blue-mid);font-size:12px;}
+
+/* ── Task box ── */
+.task-box{background:var(--blue-pale);border-left:4px solid var(--blue-mid);padding:10px 14px;margin-bottom:10px;}
+.task-box .tlabel{font-family:var(--fp);font-size:6px;color:var(--blue-dark);display:block;margin-bottom:6px;}
+.task-box p{font-size:14px;line-height:1.7;color:var(--blue-dark);}
+.task-box .lp{font-size:11px;color:var(--blue-mid);margin-top:6px;display:block;}
+
+/* ── SENTENCE STEM scaffold ── */
+.stem-box{background:#fffef0;border:2px dashed var(--amber-mid);padding:10px 14px;margin-bottom:8px;}
+.stem-label{font-family:var(--fp);font-size:6px;color:var(--amber-dark);display:block;margin-bottom:7px;}
+.stem-list{display:flex;flex-direction:column;gap:5px;}
+.stem-item{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface);border:1.5px solid var(--amber-light);
+  padding:6px 10px;cursor:pointer;font-size:13.5px;color:var(--amber-dark);
+  line-height:1.5;transition:background .15s;user-select:none;
+}
+.stem-item:hover{background:var(--amber-pale);}
+.stem-item .stem-arrow{font-size:11px;opacity:.6;}
+
+/* ── Hint ── */
+.hint-box{background:#fffbe6;border:2px dashed var(--amber-mid);padding:10px 14px;margin:8px 0;font-size:13px;color:var(--amber-dark);line-height:1.7;display:none;}
+.hint-box.on{display:block;}
+.hint-box strong{font-weight:700;}
+
+/* ── Textarea wrapper ── */
+.ta-wrap{position:relative;margin-bottom:6px;}
+textarea{
+  width:100%;min-height:120px;border:var(--pb);border-color:var(--gray-dark);
+  padding:10px 12px;font-family:var(--fb);font-size:15px;line-height:1.85;
+  resize:vertical;background:#fffef9;color:var(--text);border-radius:0;outline:none;
+}
+textarea:focus{border-color:var(--green-mid);box-shadow:0 0 0 2px var(--green-light);}
+.ta-placeholder-hint{
+  position:absolute;top:11px;left:13px;
+  font-size:14px;line-height:1.85;color:#c8b898;pointer-events:none;
+  font-style:italic;display:none;
+}
+
+/* ── Feedback strip ── */
+.fb-strip{display:flex;justify-content:space-between;align-items:center;margin:4px 0 8px;font-family:var(--fp);font-size:6px;color:var(--muted);}
+.wc-good{color:var(--green-dark)!important;}
+
+/* ── Quality pills ── */
+.qrow{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.qpill{font-size:11px;font-weight:600;padding:3px 9px;border:1.5px solid;opacity:.3;transition:opacity .3s;}
+.qpill.on{opacity:1;}
+.qg{background:var(--green-pale);color:var(--green-dark);border-color:var(--green-mid);}
+.qb{background:var(--blue-pale);color:var(--blue-dark);border-color:var(--blue-mid);}
+.qp{background:var(--purple-pale);color:var(--purple-dark);border-color:var(--purple-mid);}
+
+/* ── Criteria ── */
+.crit-list{margin:8px 0;}
+.crit-item{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5;padding:5px 0;border-bottom:1px solid var(--gray-pale);color:var(--muted);cursor:pointer;user-select:none;}
+.crit-item:last-child{border-bottom:none;}
+.crit-item .cbox{width:18px;height:18px;min-width:18px;border:2px solid var(--gray-light);background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--green-dark);margin-top:1px;}
+.crit-item.ck{color:var(--text);}
+.crit-item.ck .cbox{background:var(--green-pale);border-color:var(--green-mid);}
+
+/* ── Revision ── */
+.peer-box{background:var(--purple-pale);border:2px solid var(--purple-mid);padding:10px 14px;margin-bottom:10px;}
+.peer-box p{font-size:13px;color:var(--purple-dark);line-height:1.65;}
+.peer-box strong{font-weight:700;}
+.rev-box{background:var(--amber-pale);border-left:4px solid var(--amber-mid);padding:10px 14px;margin-bottom:8px;}
+.rev-box .rlabel{font-family:var(--fp);font-size:6px;color:var(--amber-dark);display:block;margin-bottom:6px;}
+/* Feedback sentence stems in revision */
+.fb-stems{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.fb-stem-btn{
+  background:var(--surface);border:1.5px solid var(--purple-mid);
+  color:var(--purple-dark);font-size:12.5px;line-height:1.5;
+  padding:6px 10px;cursor:pointer;text-align:left;font-family:var(--fb);
+  transition:background .15s;
+}
+.fb-stem-btn:hover{background:var(--purple-pale);}
+
+/* ── Buttons ── */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+button{font-family:var(--fp);font-size:6.5px;padding:11px 14px;border:var(--pb);border-color:var(--gray-dark);cursor:pointer;line-height:1.5;background:var(--surface);color:var(--text);transition:transform .1s,background .1s;}
+button:active{transform:scale(.97);}
+.bp{background:var(--green-mid);color:#fff;border-color:var(--green-dark);flex:1;}
+.bp:hover{background:var(--green-dark);}
+.bh{background:var(--amber-pale);color:var(--amber-dark);border-color:var(--amber-dark);}
+.bh:hover{background:var(--amber-light);}
+.bk{background:var(--gray-pale);color:var(--text);border-color:var(--gray-mid);}
+.bk:hover{background:var(--gray-light);}
+button:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── CELEBRATION overlay ── */
+.celebrate{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:999;opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.celebrate.show{opacity:1;pointer-events:all;}
+.cel-card{
+  background:var(--surface);border:4px solid var(--green-dark);
+  padding:2rem 2rem 1.5rem;max-width:420px;width:90%;text-align:center;
+  animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes popIn{from{transform:scale(.7)}to{transform:scale(1)}}
+.cel-emoji{font-size:52px;display:block;margin-bottom:.75rem;}
+.cel-title{font-family:var(--fp);font-size:9px;color:var(--green-dark);line-height:1.8;margin-bottom:.75rem;}
+.cel-msg{font-size:15px;line-height:1.7;color:var(--text);margin-bottom:1rem;}
+.cel-earned{font-family:var(--fp);font-size:7px;color:var(--amber-dark);background:var(--amber-pale);border:2px solid var(--amber-mid);padding:8px 12px;display:inline-block;margin-bottom:1rem;line-height:1.7;}
+.cel-next{background:var(--green-mid);color:#fff;border-color:var(--green-dark);width:100%;font-size:7px;}
+.cel-next:hover{background:var(--green-dark);}
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:998;}
+.confetti-dot{position:absolute;width:8px;height:8px;border-radius:2px;animation:confettiFall linear both;}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+/* ── LERNPASS (print) ── */
+.lernpass{display:none;}
+@media print{
+  body{background:#fff;}
+  .wrap>*:not(.lernpass){display:none!important;}
+  .lernpass{display:block!important;}
+  .lp-page{page-break-after:always;}
+}
+.lernpass-btn{
+  display:block;width:100%;font-family:var(--fp);font-size:7px;
+  padding:12px;border:var(--pb);border-color:var(--green-dark);
+  background:var(--green-pale);color:var(--green-dark);cursor:pointer;
+  text-align:center;margin-bottom:1rem;
+}
+/* Lernpass card */
+.lp-card{background:var(--surface);border:3px solid var(--green-dark);padding:1.5rem;}
+.lp-header{text-align:center;border-bottom:3px solid var(--green-dark);padding-bottom:1rem;margin-bottom:1rem;}
+.lp-header h2{font-family:var(--fp);font-size:10px;color:var(--green-dark);line-height:1.8;}
+.lp-header p{font-size:13px;color:var(--muted);margin-top:6px;}
+.lp-field{border-bottom:2px solid var(--gray-light);padding:4px 0 8px;margin-bottom:8px;font-size:14px;}
+.lp-field label{font-family:var(--fp);font-size:5.5px;color:var(--muted);display:block;margin-bottom:3px;}
+.lp-chapter{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:2px dashed var(--gray-light);}
+.lp-chapter h4{font-family:var(--fp);font-size:7px;color:var(--green-dark);margin-bottom:.5rem;}
+.lp-chapter p{font-size:13px;line-height:1.75;color:var(--text);}
+.lp-stars{font-size:20px;margin:.25rem 0;}
+.lp-kompetenz{background:var(--green-pale);border:2px solid var(--green-mid);padding:10px 14px;font-size:12px;line-height:1.8;color:var(--green-dark);margin-top:1rem;}
+.lp-kompetenz strong{font-family:var(--fp);font-size:5.5px;display:block;margin-bottom:6px;}
+.lp-cert{border:4px solid var(--amber-mid);padding:1.5rem;text-align:center;margin-top:1.5rem;background:var(--amber-pale);}
+.lp-cert h3{font-family:var(--fp);font-size:8px;color:var(--amber-dark);line-height:1.8;margin-bottom:.75rem;}
+.lp-cert p{font-size:13px;line-height:1.7;color:var(--amber-dark);}
+.lp-sig{display:flex;gap:2rem;margin-top:1.5rem;justify-content:center;flex-wrap:wrap;}
+.lp-sig-line{border-top:2px solid var(--gray-dark);padding-top:6px;font-size:12px;color:var(--muted);min-width:140px;text-align:center;}
+
+/* ── Complete screen ── */
+.complete-wrap{text-align:center;padding:1.5rem 1rem;}
+.complete-wrap h2{font-family:var(--fp);font-size:9px;color:var(--green-dark);line-height:1.8;margin-bottom:1rem;}
+.complete-wrap p{font-size:15px;line-height:1.7;margin-bottom:.5rem;}
+.big-emoji{font-size:44px;margin:.75rem 0;}
+.story-out{text-align:left;background:var(--gray-pale);border:2px solid var(--gray-light);padding:1rem 1.2rem;margin:1rem 0;font-size:14px;line-height:1.85;}
+.story-out h3{font-family:var(--fp);font-size:6.5px;color:var(--green-dark);margin-bottom:10px;}
+.sch{margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:1px dashed var(--gray-light);}
+.sch:last-child{border-bottom:none;}
+.sch .ct{font-weight:700;color:var(--green-dark);display:block;margin-bottom:4px;font-size:13px;}
+
+@media(max-width:480px){
+  .wrap{padding:1rem .6rem 4rem;}
+  .story{font-size:15px;}
+  textarea{font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Celebration overlay -->
+<div class="celebrate" id="celebrate">
+  <div class="cel-card" id="cel-card">
+    <span class="cel-emoji" id="cel-emoji">🌟</span>
+    <div class="cel-title" id="cel-title">Kapitel fertig!</div>
+    <p class="cel-msg" id="cel-msg"></p>
+    <div class="cel-earned" id="cel-earned"></div>
+    <button class="bp cel-next" onclick="closeCelebration()">Weiter ▶</button>
+  </div>
+</div>
+<div class="confetti-wrap" id="confetti-wrap"></div>
+
+<div class="wrap">
+
+<header class="site-header">
+  <h1>⛏ Bayern Minecraft Abenteuer ⛏<br>Das Geheimnis des Berges</h1>
+  <div class="badge">LehrplanPLUS Deutsch · Klasse 3/4 · Schreiben &amp; Sprachgestaltung</div>
+</header>
+
+<div class="scene" id="scene">
+  <div class="cloud" style="top:10px;left:10%"></div>
+  <div class="cloud" style="top:20px;left:58%"></div>
+  <div class="mtn-sm"></div><div class="mtn-sm2"></div><div class="mtn"></div>
+  <div class="char" id="scene-char">🧱</div>
+  <div class="flag" id="scene-flag">🚩</div>
+</div>
+
+<div class="prog-wrap">
+  <span class="prog-label" id="prog-label">Kapitel 1 von 5</span>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:20%"></div></div>
+</div>
+<div class="star-row">
+  <div class="star" id="s1">⭐</div><div class="star" id="s2">⭐</div>
+  <div class="star" id="s3">⭐</div><div class="star" id="s4">⭐</div>
+  <div class="star" id="s5">⭐</div>
+</div>
+
+<!-- Lernziel banner (dynamic) -->
+<div class="lernziel" id="lernziel-banner">
+  <div class="lz-icon">🎯</div>
+  <div class="lernziel-body">
+    <span class="lz-label">Mein Lernziel heute</span>
+    <p id="lernziel-text"></p>
+  </div>
+</div>
+
+<!-- Gate notice -->
+<div class="gate-notice" id="gate-notice"></div>
+
+<!-- Phase tabs -->
+<div class="phase-tabs">
+  <div class="ptab active" id="tab-plan"   onclick="tryPhase('plan')">📋 1. Planen</div>
+  <div class="ptab locked" id="tab-write"  onclick="tryPhase('write')">✏️ 2. Schreiben <span class="lock-icon">🔒</span></div>
+  <div class="ptab locked" id="tab-revise" onclick="tryPhase('revise')">🔍 3. Überarbeiten <span class="lock-icon">🔒</span></div>
+</div>
+
+<div id="story-container"></div>
+
+<!-- Lernpass (print only) -->
+<div class="lernpass" id="lernpass"></div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────────────────────────────────────
+const SCENES=[
+  'linear-gradient(180deg,#7ab8e8 0%,#a8d4f0 44%,#88c057 44%,#6aaa38 60%,#8a8070 60%,#706860 100%)',
+  'linear-gradient(180deg,#5a8ab8 0%,#7aaad0 38%,#78aa47 38%,#5a9028 55%,#7a7060 55%,#605850 100%)',
+  'linear-gradient(180deg,#3a5070 0%,#4a6a90 32%,#4a4441 32%,#38342e 100%)',
+  'linear-gradient(180deg,#b5d4f4 0%,#c8e0f8 48%,#a8a8b8 48%,#9090a0 100%)',
+  'linear-gradient(180deg,#f5c060 0%,#f8d880 28%,#c0c8d8 28%,#a8b0c0 100%)'
+];
+
+const CHS=[
+  {
+    id:1,char:'🧱',
+    label:'Kapitel 1 – Erzählsituation',
+    lernziel:'Ich lerne heute, <strong>meinen Helden vorzustellen</strong> — sein Aussehen, seinen Charakter und den Ort, an dem die Geschichte beginnt.',
+    story:`Es war ein wolkiger Herbstmorgen in Bayern.<br><br>
+Max – ein <strong>abenteuerlustiger Junge aus Ingolstadt</strong> – stand am Rand des Dorfes und blickte in Richtung Zugspitze. Der Gipfel war kaum zu sehen, denn dichte Wolken hingen tief über dem Berg. 🌫️<br><br>
+In seinem Inventar: ein Diamantschwert, drei Äpfel, eine Fackel und eine alte Karte. 🗺️<br><br>
+<em>„Heute ist der Tag"</em>, flüsterte Max entschlossen und zog seinen Rucksack enger.`,
+    planFields:[
+      {key:'figur',   label:'Figur – Äußeres (Haare, Augen, Kleidung)'},
+      {key:'charakter',label:'Charakter – Wie ist Max? (mutig, neugierig …)'},
+      {key:'ort',     label:'Ort – Was sieht Max? (3 Details)'},
+      {key:'spannung',label:'Spannung – Was könnte schiefgehen?'}
+    ],
+    planMin:2,
+    task:'Schreib <strong>4–6 Sätze</strong>: Stelle Max und den Ort lebhaft vor. Beschreibe Max nach seinem <strong>Äußeren UND Wesen</strong>. Nutze eine Einleitungsformel.',
+    lpRef:'LP+: Erzählsituation · Figur nach Äußerem und Wesen · Adjektive',
+    stems:['Es war ein … Morgen, als …','Max hatte … Haare und … Augen. Er war …','Sein Charakter: Er ist sehr …, weil …','Ringsherum sah er …'],
+    wortfelder:[
+      {title:'Synonyme für „gehen"',words:['schreiten','eilen','stapfen','marschieren','wandern']},
+      {title:'Einleitungsformeln', words:['Es war …','An einem … Morgen …','Eines Tages …','Kaum war … als …']}
+    ],
+    vocab:[{word:'entschlossen',t:'ca'},{word:'abenteuerlustig',t:'ca'},{word:'das Inventar',t:'cn'},{word:'dicht',t:'ca'},{word:'der Gipfel',t:'cn'}],
+    criteria:[
+      'Ich habe Max nach seinem Äußeren beschrieben (Haare, Kleidung …).',
+      'Ich habe Max\' Charakter beschrieben (mutig, neugierig …).',
+      'Ich habe den Ort mit mindestens 2 Details beschrieben.',
+      'Ich habe eine Einleitungsformel benutzt.',
+      'Meine Sätze haben Großbuchstaben und Satzzeichen.'
+    ],
+    hint:'<strong>Hilfe:</strong> Max hat … Haare und wirkt sehr …<br>Der Berg: Die Zugspitze ragt … in den … Himmel. Ringsherum …',
+    minWords:35,
+    celebEmoji:'🌄',celebTitle:'Einleitung geschrieben!',
+    celebMsg:'Super! Du hast Max und seinen Ort so beschrieben, dass der Leser sich alles vorstellen kann.',
+    celebEarned:'✓ Figur beschrieben &nbsp;·&nbsp; ✓ Ort eingeführt &nbsp;·&nbsp; ✓ Einleitungsformel',
+    goodStems:['Ich finde gut, dass du … beschrieben hast.','Ich finde gut, dass deine Einleitung … ist.','Der Satz über … klingt sehr lebendig.'],
+    improveStems:['Du könntest noch … beschreiben.','Im Satz „…" könntest du ein Adjektiv ergänzen.','Die Einleitung würde noch besser, wenn du …']
+  },
+  {
+    id:2,char:'🧗',
+    label:'Kapitel 2 – Das Ereignis',
+    lernziel:'Ich lerne heute, ein <strong>überraschendes Ereignis spannend zu beschreiben</strong> — mit Spannungswörtern und wörtlicher Rede.',
+    story:`Max folgte dem Pfad, der sich steil zwischen moosbewachsenen Felsen hindurchschlängelte.<br><br>
+<strong>Plötzlich</strong> blieb er wie angewurzelt stehen.<br><br>
+Hinter einem gewaltigen Felsblock: eine dunkle Höhle. Aus der Tiefe drang ein <strong>dumpfes Grollen</strong> ans Tageslicht – tief, regelmäßig, bedrohlich. 🕳️<br><br>
+Max' Herz hämmerte. Er trat einen Schritt zurück, dann einen nach vorn.`,
+    planFields:[
+      {key:'ereignis',    label:'Das überraschende Ereignis – was passiert?'},
+      {key:'gefuehl',     label:'Max' Gefühl – wie zeigt er es durch Handeln?'},
+      {key:'entscheidung',label:'Max' Entscheidung – was tut er?'},
+      {key:'dialog',      label:'Wörtliche Rede: Was sagt Max? (mit „…")'}
+    ],
+    planMin:2,
+    task:'Schreib <strong>5–7 Sätze</strong>: Beschreibe das überraschende Ereignis spannend. Nutze <strong>wörtliche Rede</strong> (mindestens 1×). Zeige Max\' Gefühle durch sein Verhalten.',
+    lpRef:'LP+: Ereignis als Erzählanlass · wörtliche Rede mit Anführungszeichen · Gefühle durch Handeln',
+    stems:['Plötzlich …','Urplötzlich blieb er stehen, denn …','Max starrte … an. Sein Herz …','„…", flüsterte er.','Er fasste sich ein Herz und …'],
+    wortfelder:[
+      {title:'Spannungswörter',      words:['plötzlich','urplötzlich','auf einmal','wie angewurzelt','atemlos']},
+      {title:'Geräusche beschreiben',words:['dumpf','grollend','knisternd','hallend','kaum hörbar']}
+    ],
+    vocab:[{word:'das Grollen',t:'cn'},{word:'bedrohlich',t:'ca'},{word:'hämmern',t:'cv'},{word:'„…", sagte er.',t:'cp'},{word:'„…!", rief er.',t:'cp'}],
+    criteria:[
+      'Ich habe das Ereignis klar beschrieben (Was? Wo? Wie?).',
+      'Ich habe mindestens eine wörtliche Rede mit korrekten „Anführungszeichen" geschrieben.',
+      'Ich habe Max\' Gefühle durch sein Verhalten gezeigt.',
+      'Ich habe Spannungswörter eingesetzt (plötzlich, urplötzlich …).',
+      'Ich habe verschiedene Satzanfänge benutzt (nicht immer „Er …").'
+    ],
+    hint:'<strong>Hilfe:</strong> Plötzlich hörte Max … Das Geräusch klang wie …<br>Sein Herz … Er dachte: <strong>„…"</strong><br>Er fasste sich ein Herz und …',
+    minWords:45,
+    celebEmoji:'🕳️',celebTitle:'Spannung aufgebaut!',
+    celebMsg:'Toll! Du hast ein überraschendes Ereignis in die Geschichte gebracht und Spannung aufgebaut.',
+    celebEarned:'✓ Ereignis beschrieben &nbsp;·&nbsp; ✓ Wörtliche Rede &nbsp;·&nbsp; ✓ Spannungswörter',
+    goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine wörtliche Rede klingt sehr …','Das Spannungswort „…" wirkt sehr gut.'],
+    improveStems:['Die wörtliche Rede könnte noch … sein.','Du könntest das Gefühl von Max noch zeigen, indem …','Ein weiteres Spannungswort wäre zum Beispiel …']
+  },
+  {
+    id:3,char:'🐻',
+    label:'Kapitel 3 – Figuren &amp; Beziehung',
+    lernziel:'Ich lerne heute, <strong>eine neue Figur vollständig vorzustellen</strong> — Äußeres, Wesen, Handeln — und ihre Beziehung zu Max zu beschreiben.',
+    story:`In der Höhle saß ein <strong>Bärenjunges</strong>. 🐻<br><br>
+Es war nicht größer als ein Schulranzen, hatte struppiges braunes Fell und bernsteinfarbene Augen, die Max neugierig anblinkten.<br><br>
+Der Bär war allein. Keine Mutter weit und breit.<br><br>
+Max kniete sich hin. Langsam, ohne ruckartige Bewegungen. Er streckte die Hand aus – in der lag ein Apfel.<br><br>
+Lange Zeit geschah nichts. Dann schnupperte der Bär.`,
+    planFields:[
+      {key:'beschreibung',label:'Bär – Äußeres (Fell, Augen, Größe)'},
+      {key:'wesen',       label:'Bär – Wesen (ängstlich, neugierig …)'},
+      {key:'beziehung',   label:'Beziehung – Wie verändert sie sich?'},
+      {key:'dialog2',     label:'Was sagt Max? (wörtliche Rede mit „…")'}
+    ],
+    planMin:2,
+    task:'Schreib <strong>5–7 Sätze</strong>: Beschreibe den Bären nach <strong>Äußerem UND Wesen</strong>. Zeige, wie die Beziehung entsteht. Nutze wörtliche Rede.',
+    lpRef:'LP+: Figur nach Äußerem, Wesen, Handeln und Beziehungen · Dialog als Handlungselement',
+    stems:['Der Bär hatte … Fell und … Augen.','Er wirkte … aber auch …','Max flüsterte: „…"','Langsam … Schließlich …','Zum ersten Mal …'],
+    wortfelder:[
+      {title:'Körpersprache',   words:['schnuppern','zögernd','behutsam','vorsichtig','zutraulich']},
+      {title:'Tier beschreiben',words:['struppig','bernsteinfarben','tapsig','kräftig','sanft']}
+    ],
+    vocab:[{word:'zutraulich',t:'ca'},{word:'behutsam',t:'ca'},{word:'die Beziehung',t:'cn'},{word:'der Wendepunkt',t:'cn'},{word:'langsam nähern',t:'cv'}],
+    criteria:[
+      'Ich habe den Bären nach seinem Äußeren beschrieben (Fell, Augen, Größe).',
+      'Ich habe das Wesen des Bären beschrieben (ängstlich, neugierig …).',
+      'Ich habe gezeigt, wie sich die Beziehung zwischen Max und dem Bären verändert.',
+      'Ich habe mindestens eine wörtliche Rede benutzt.',
+      'Ich habe abwechslungsreiche Satzanfänge benutzt.'
+    ],
+    hint:'<strong>Hilfe:</strong> Der Bär hatte … Fell und … Augen. Er wirkte …<br>Max flüsterte: <strong>„…"</strong><br>Langsam … Schließlich … Der Bär …',
+    minWords:45,
+    celebEmoji:'🐾',celebTitle:'Neue Freundschaft!',
+    celebMsg:'Wunderbar! Du hast den Bären so beschrieben, dass der Leser ihn genau vor Augen hat — und die Freundschaft gespürt.',
+    celebEarned:'✓ Figur beschrieben &nbsp;·&nbsp; ✓ Beziehung gezeigt &nbsp;·&nbsp; ✓ Dialog',
+    goodStems:['Ich finde gut, dass du den Bären so … beschrieben hast.','Deine Beschreibung des … klingt sehr lebendig.','Die Beziehung zwischen Max und dem Bären wird durch … deutlich.'],
+    improveStems:['Du könntest das Wesen des Bären noch zeigen, indem …','Ein Adjektiv vor „Bär" würde den Satz lebendiger machen, zum Beispiel …','Die Beziehung könnte noch klarer werden, wenn …']
+  },
+  {
+    id:4,char:'🏔️',
+    label:'Kapitel 4 – Ort &amp; Höhepunkt',
+    lernziel:'Ich lerne heute, <strong>einen Ort mit allen Sinnen zu beschreiben</strong> — was ich sehe, höre und fühle — und einen Vergleich zu verwenden.',
+    story:`Gemeinsam erklommen Max und der Bär – den er inzwischen <strong>Bruno</strong> nannte – den Gipfel.<br><br>
+Der Weg war steil und mit Schnee bedeckt. Der Wind pfiff so scharf, dass Max die Augen zusammenkniff.<br><br>
+Dann – die letzten Schritte. Dann der <strong>Gipfel</strong>. 🏔️<br><br>
+Max verschlug es den Atem. Unter ihm lag ganz Bayern: blaue Seen wie Spiegel, dunkle Wälder, das silberne Band der Donau. Die Welt wirkte kleiner und gleichzeitig unendlich weit.`,
+    planFields:[
+      {key:'sehen',    label:'Was sieht Max? (3 Details)'},
+      {key:'hoeren',   label:'Was hört und fühlt er?'},
+      {key:'vergleich',label:'Dein Vergleich: Die Seen sind wie …'},
+      {key:'bedeutung',label:'Was bedeutet dieser Moment für Max?'}
+    ],
+    planMin:2,
+    task:'Schreib <strong>5–8 Sätze</strong>: Beschreibe den Gipfel lebendig. Nutze <strong>Sinneseindrücke</strong> (sehen, hören, fühlen) und mindestens <strong>einen Vergleich</strong> (wie …).',
+    lpRef:'LP+: Räume und Orte beschreiben · Sinneseindrücke · Vergleiche als Gestaltungsmittel',
+    stems:['Von hier oben sah Max …','Der Wind … wie …','Die Seen glitzerten wie …','Max fühlte, wie …','Es war so still, dass …'],
+    wortfelder:[
+      {title:'Sinneseindrücke',    words:['pfeifen (Wind)','glitzern','rauschen','eisig kalt','atemlos']},
+      {title:'Vergleiche / Bilder',words:['wie Spiegel (Seen)','silbernes Band (Fluss)','winzig wie Spielzeug','zart wie Watte (Wolken)']}
+    ],
+    vocab:[{word:'es verschlug ihm den Atem',t:'cp'},{word:'unendlich weit',t:'ca'},{word:'glitzern',t:'cv'},{word:'der Sinneseindruck',t:'cn'},{word:'pfeifen',t:'cv'}],
+    criteria:[
+      'Ich habe den Ort mit mindestens 3 Details beschrieben.',
+      'Ich habe Sinneseindrücke benutzt (sehen, hören, fühlen).',
+      'Ich habe mindestens einen Vergleich benutzt (wie …, als ob …).',
+      'Ich habe die Bedeutung des Gipfels für Max gezeigt.',
+      'Ich habe Adjektive vor Nomen gestellt (der blaue See …).'
+    ],
+    hint:'<strong>Hilfe:</strong> Auf dem Gipfel war alles … Der Wind … wie …<br>Max sah: … Seen, … Wälder, das … Band der Donau.<br>Er fühlte sich …, weil …',
+    minWords:50,
+    celebEmoji:'🏆',celebTitle:'Gipfel erreicht!',
+    celebMsg:'Fantastisch! Du hast den Leser mit auf den Gipfel genommen — er sieht, hört und fühlt alles mit!',
+    celebEarned:'✓ Sinneseindrücke &nbsp;·&nbsp; ✓ Vergleich &nbsp;·&nbsp; ✓ Ort lebendig beschrieben',
+    goodStems:['Ich finde gut, dass du … mit Sinneseindrücken beschrieben hast.','Dein Vergleich „… wie …" ist sehr treffend.','Der Satz über … wirkt sehr lebendig.'],
+    improveStems:['Du könntest noch einen weiteren Sinneseindruck ergänzen, zum Beispiel …','Im Satz „…" könnte ein Vergleich die Beschreibung lebendiger machen.','Ein Adjektiv vor … würde den Satz noch anschaulicher machen.']
+  },
+  {
+    id:5,char:'🚩',
+    label:'Kapitel 5 – Ausgang',
+    lernziel:'Ich lerne heute, <strong>meine Geschichte wirkungsvoll abzuschließen</strong> — mit einer Schlussformel und einem Satz, der den Leser noch lange beschäftigt.',
+    story:`Max baute einen kleinen Turm aus Steinblöcken und setzte eine Fahne darauf. 🚩<br><br>
+Bruno brummte zufrieden.<br><br>
+Auf dem Weg zurück ins Dorf – die Sonne sank bereits hinter den Bergen – sprach Max kein Wort. Er musste nicht. Manche Abenteuer sind lauter, wenn man schweigt.<br><br>
+Im Dorf warteten schon die Dorfbewohner. Sie staunten. Ein Junge. Ein Bär. Und beide <strong>lächelten</strong>.`,
+    planFields:[
+      {key:'schluss',      label:'Wie endet die Geschichte?'},
+      {key:'botschaft',    label:'Was hat Max gelernt?'},
+      {key:'letzterSatz',  label:'Dein letzter Satz (wirkungsvoll!)'},
+      {key:'verbesserung', label:'Was möchte ich noch überarbeiten?'}
+    ],
+    planMin:2,
+    task:'Schreib <strong>5–7 Sätze</strong>: Beende die Geschichte wirkungsvoll. Nutze eine <strong>Schlussformel</strong>. Zeige, wie sich Max verändert hat.',
+    lpRef:'LP+: Ausgang der Erzählung · Schlussformeln · Wirkung der Sprache reflektieren',
+    stems:['Von da an …','Und so geschah es, dass …','Niemals vergaß Max …','Seitdem …','Max lächelte und dachte: „…"'],
+    wortfelder:[
+      {title:'Schlussformeln',    words:['Von da an …','Und so …','Niemals vergaß er …','Seitdem …']},
+      {title:'Gefühle ausdrücken',words:['stolz','dankbar','überwältigt','ruhig und glücklich','sprachlos']}
+    ],
+    vocab:[{word:'überwältigt',t:'ca'},{word:'dankbar',t:'ca'},{word:'von da an',t:'cp'},{word:'niemals vergaß er',t:'cp'},{word:'staunen',t:'cv'}],
+    criteria:[
+      'Ich habe einen klaren Ausgang geschrieben.',
+      'Ich habe gezeigt, was Max gelernt oder erlebt hat.',
+      'Ich habe eine Schlussformel oder einen wirkungsvollen letzten Satz benutzt.',
+      'Mein Schluss passt zur Stimmung der Geschichte.',
+      'Ich habe meinen Text auf Rechtschreibung geprüft.'
+    ],
+    hint:'<strong>Hilfe:</strong> Von da an … Niemals vergaß Max …<br>Max dachte: <strong>„…"</strong><br>Und so endete … das größte Abenteuer seines Lebens.',
+    minWords:45,
+    celebEmoji:'🎉',celebTitle:'Geschichte fertig!',
+    celebMsg:'Du hast es geschafft! Deine ganze Geschichte ist fertig — von der Einleitung bis zum Schluss!',
+    celebEarned:'✓ Schlussformel &nbsp;·&nbsp; ✓ Botschaft &nbsp;·&nbsp; ✓ Wirkungsvoller Abschluss',
+    goodStems:['Ich finde gut, dass du die Geschichte mit … abgeschlossen hast.','Dein letzter Satz ist sehr …','Die Botschaft deiner Geschichte ist klar: …'],
+    improveStems:['Du könntest die Schlussformel noch … machen.','Was hat Max gelernt? Das könnte noch deutlicher werden, wenn …','Ein stärkerer letzter Satz könnte zum Beispiel sein: …']
+  }
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────────────────────────
+let cur=0, phase='plan';
+let planData=CHS.map(ch=>{const o={};ch.planFields.forEach(f=>o[f.key]='');return o;});
+let answers=Array(CHS.length).fill('');
+let checkedCrit=CHS.map(ch=>Array(ch.criteria.length).fill(false));
+let hintsShown=Array(CHS.length).fill(false);
+let revNotes=Array(CHS.length).fill('');
+// Gate state
+let writeUnlocked=Array(CHS.length).fill(false);
+let reviseUnlocked=Array(CHS.length).fill(false);
+let celebCallback=null;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UTILITY
+// ─────────────────────────────────────────────────────────────────────────────
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function wc(text){return text.trim().split(/\s+/).filter(Boolean).length;}
+function planFilled(idx){return Object.values(planData[idx]).filter(v=>v.trim().length>0).length;}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PHASE GATING
+// ─────────────────────────────────────────────────────────────────────────────
+function tryPhase(p){
+  const notice=document.getElementById('gate-notice');
+  notice.classList.remove('visible');
+
+  if(p==='write'&&!writeUnlocked[cur]){
+    const ch=CHS[cur];
+    const filled=planFilled(cur);
+    if(filled<ch.planMin){
+      notice.innerHTML='🔒 Fülle zuerst mindestens <strong>'+ch.planMin+' Planungsfelder</strong> aus, dann wird das Schreiben freigeschaltet!';
+      notice.classList.add('visible');return;
+    }
+  }
+  if(p==='revise'&&!reviseUnlocked[cur]){
+    const ch=CHS[cur];
+    if(wc(answers[cur])<ch.minWords){
+      notice.innerHTML='🔒 Schreib noch etwas mehr — du brauchst mindestens <strong>'+ch.minWords+' Wörter</strong>, um die Überarbeitung freizuschalten.';
+      notice.classList.add('visible');return;
+    }
+  }
+  switchPhase(p);
+}
+
+function switchPhase(p){
+  phase=p;
+  ['plan','write','revise'].forEach(id=>{
+    const el=document.getElementById('tab-'+id);
+    el.classList.remove('active');
+  });
+  document.getElementById('tab-'+p).classList.add('active');
+  updateTabStates();
+  document.getElementById('gate-notice').classList.remove('visible');
+  render();
+}
+
+function updateTabStates(){
+  const ch=CHS[cur];
+  // Write tab
+  const wt=document.getElementById('tab-write');
+  const planOk=planFilled(cur)>=ch.planMin;
+  if(planOk){writeUnlocked[cur]=true;}
+  wt.classList.toggle('locked',!writeUnlocked[cur]);
+  wt.innerHTML=writeUnlocked[cur]?'✏️ 2. Schreiben':'✏️ 2. Schreiben <span class="lock-icon">🔒</span>';
+
+  // Revise tab
+  const rt=document.getElementById('tab-revise');
+  const writeOk=wc(answers[cur])>=ch.minWords;
+  if(writeOk){reviseUnlocked[cur]=true;}
+  rt.classList.toggle('locked',!reviseUnlocked[cur]);
+  rt.innerHTML=reviseUnlocked[cur]?'🔍 3. Überarbeiten':'🔍 3. Überarbeiten <span class="lock-icon">🔒</span>';
+
+  // Done styling
+  ['plan','write','revise'].forEach(id=>{
+    const el=document.getElementById('tab-'+id);
+    if(!el.classList.contains('active')){
+      if(id==='plan'&&planFilled(cur)>=ch.planMin)el.classList.add('done');
+      if(id==='write'&&wc(answers[cur])>=ch.minWords)el.classList.add('done');
+    }
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────────────────────
+function render(){
+  const ch=CHS[cur];
+  const pct=((cur+1)/CHS.length)*100;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-label').textContent='Kapitel '+(cur+1)+' von '+CHS.length;
+  document.getElementById('scene').style.background=SCENES[cur];
+  document.getElementById('scene-char').textContent=ch.char;
+  document.getElementById('scene-flag').style.display=cur===CHS.length-1?'block':'none';
+
+  // Lernziel
+  document.getElementById('lernziel-text').innerHTML=ch.lernziel;
+
+  // Stars
+  for(let i=0;i<CHS.length;i++){
+    document.getElementById('s'+(i+1)).classList.toggle('lit',wc(answers[i])>=CHS[i].minWords);
+  }
+
+  updateTabStates();
+
+  document.getElementById('story-container').innerHTML=
+    phase==='plan'?renderPlan(ch):
+    phase==='write'?renderWrite(ch):
+    renderRevise(ch);
+
+  bindAll(ch);
+}
+
+// ── PLAN ──────────────────────────────────────────────────────────────────────
+function renderPlan(ch){
+  const data=planData[cur];
+  const filled=planFilled(cur);
+  const pct=Math.min(100,Math.round((filled/4)*100));
+  const fields=ch.planFields.map(f=>`
+    <div class="pcell">
+      <label>${f.label}</label>
+      <input type="text" data-key="${f.key}" value="${esc(data[f.key])}" placeholder="Stichwörter …">
+    </div>`).join('');
+  const wf=ch.wortfelder.map(w=>`
+    <div class="wf-group">
+      <span class="wf-title">${w.title}</span>
+      <div class="wf-chips">${w.words.map(x=>`<span class="chip cs">${x}</span>`).join('')}</div>
+    </div>`).join('');
+  const vc=ch.vocab.map(v=>`<span class="chip ${v.t}">${esc(v.word)}</span>`).join('');
+  const back=cur>0?'<button class="bk" onclick="goBack()">◀ Zurück</button>':'';
+  return`
+    <div class="panel"><div class="stripe"></div><div class="pi">
+      <span class="plabel">📖 ${ch.label}</span>
+      <div class="story">${ch.story}</div>
+    </div></div>
+
+    <div class="panel"><div class="stripe a"></div><div class="pi">
+      <span class="plabel a">📋 Stichwortzettel / Mindmap</span>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:8px;">Sammle Ideen in Stichwörtern — mindestens <strong>${ch.planMin} Felder</strong> ausfüllen, um zum Schreiben zu kommen.</p>
+      <div class="plan-grid">${fields}</div>
+      <div class="plan-progress" style="margin-top:10px;"><div class="plan-progress-fill" id="plan-prog" style="width:${pct}%"></div></div>
+      <span class="plan-hint" id="plan-hint">${filled>=ch.planMin?'✓ Bereit zum Schreiben!':'Noch '+(ch.planMin-filled)+' Feld(er) ausfüllen …'}</span>
+    </div></div>
+
+    <div class="panel"><div class="stripe b"></div><div class="pi">
+      <span class="plabel b">🔤 Wortmaterial</span>
+      <div class="wf-wrap">${wf}</div>
+      <div style="margin-top:10px;">
+        <span class="plabel b" style="margin-bottom:6px;">Fachwörter</span>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">${vc}</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted);">
+          <span class="chip cn" style="font-size:10px;padding:2px 6px;">Nomen</span>
+          <span class="chip cv" style="font-size:10px;padding:2px 6px;">Verb</span>
+          <span class="chip ca" style="font-size:10px;padding:2px 6px;">Adjektiv</span>
+          <span class="chip cp" style="font-size:10px;padding:2px 6px;">Redewendung</span>
+          <span class="chip cs" style="font-size:10px;padding:2px 6px;">Synonym</span>
+        </div>
+      </div>
+    </div></div>
+
+    <div class="btn-row">
+      ${back}
+      <button class="bp" id="btn-to-write" onclick="tryPhase('write')">✏️ Jetzt schreiben ▶</button>
+    </div>`;
+}
+
+// ── WRITE ─────────────────────────────────────────────────────────────────────
+function renderWrite(ch){
+  const text=answers[cur];
+  const count=wc(text);
+  const wcGood=count>=ch.minWords;
+  const fc=text.trimStart()[0]||'';
+  const hasCap=fc&&fc===fc.toUpperCase()&&fc!==fc.toLowerCase();
+  const lc=text.trimEnd().slice(-1);
+  const hasPunct=['.','!','?','"'].includes(lc);
+  const hasRede=/„/.test(text);
+
+  const crit=ch.criteria.map((c,i)=>`
+    <div class="crit-item ${checkedCrit[cur][i]?'ck':''}" data-ci="${i}" onclick="toggleCrit(${i})">
+      <div class="cbox">${checkedCrit[cur][i]?'✓':''}</div><span>${c}</span>
+    </div>`).join('');
+
+  const stemsHtml=ch.stems.map((s,i)=>`
+    <div class="stem-item" onclick="insertStem('${s.replace(/'/g,"\\'")}')">
+      <span class="stem-arrow">➜</span>
+      <span>${s}</span>
+    </div>`).join('');
+
+  return`
+    <div class="panel"><div class="stripe"></div><div class="pi">
+      <span class="plabel">📖 ${ch.label}</span>
+      <div class="story">${ch.story}</div>
+    </div></div>
+
+    <div class="panel"><div class="stripe b"></div><div class="pi">
+      <span class="plabel b">✏️ Dein Text</span>
+
+      <div class="task-box">
+        <span class="tlabel">Schreibauftrag (LP+ Klasse 3)</span>
+        <p>${ch.task}</p>
+        <span class="lp">📚 ${ch.lpRef}</span>
+      </div>
+
+      <!-- SENTENCE STEMS -->
+      <div class="stem-box">
+        <span class="stem-label">✏️ Textbausteine — tippe drauf, um sie einzufügen:</span>
+        <div class="stem-list">${stemsHtml}</div>
+      </div>
+
+      <div class="hint-box ${hintsShown[cur]?'on':''}" id="hint-box">${ch.hint}</div>
+
+      <div class="ta-wrap">
+        <textarea id="answer-box" rows="7" placeholder=" " spellcheck="true" lang="de">${esc(text)}</textarea>
+      </div>
+
+      <div class="fb-strip">
+        <span id="wc-el" class="${wcGood?'wc-good':''}">Wörter: ${count} / ${ch.minWords}</span>
+        <span id="wc-ok" style="${wcGood?'':'display:none'};color:var(--green-dark)">✓ Wortanzahl erreicht!</span>
+      </div>
+
+      <div class="qrow">
+        <span class="qpill qg ${hasCap?'on':''}">✓ Großbuchstabe</span>
+        <span class="qpill qg ${hasPunct?'on':''}">✓ Satzzeichen</span>
+        <span class="qpill qb ${wcGood?'on':''}">✓ ${ch.minWords}+ Wörter</span>
+        <span class="qpill qp ${hasRede?'on':''}">✓ Wörtliche Rede</span>
+      </div>
+
+      <div class="panel" style="margin-bottom:10px;border:1.5px solid var(--gray-light);">
+        <div class="pi" style="padding:.75rem 1rem;">
+          <span class="plabel" style="margin-bottom:6px;">✅ Schreibkriterien (selbst prüfen)</span>
+          <div class="crit-list">${crit}</div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="bk" onclick="switchPhase('plan')">◀ Planen</button>
+        <button class="bh" onclick="toggleHint()">💡 Tipp</button>
+        <button class="bp" onclick="tryGoRevise()">🔍 Überarbeiten ▶</button>
+      </div>
+    </div></div>`;
+}
+
+// ── REVISE ────────────────────────────────────────────────────────────────────
+function renderRevise(ch){
+  const count=wc(answers[cur]);
+  const textDisp=esc(answers[cur])||'<em style="color:var(--muted)">Noch kein Text — geh zurück.</em>';
+  let good='',improve='';
+  try{const n=JSON.parse(revNotes[cur]);good=n.good||'';improve=n.improve||'';}catch(e){}
+
+  const goodStems=ch.goodStems.map(s=>`<button class="fb-stem-btn" onclick="appendRevision('rev-good','${s.replace(/'/g,"\\'")}')">➜ ${s}</button>`).join('');
+  const improveStems=ch.improveStems.map(s=>`<button class="fb-stem-btn" onclick="appendRevision('rev-improve','${s.replace(/'/g,"\\'")}')">➜ ${s}</button>`).join('');
+
+  return`
+    <div class="panel"><div class="stripe c"></div><div class="pi">
+      <span class="plabel c">🔍 Überarbeiten — Dein Text (${count} Wörter)</span>
+      <div style="background:var(--gray-pale);border:2px solid var(--gray-light);padding:12px 14px;margin-bottom:10px;font-size:14px;line-height:1.85;white-space:pre-wrap;">${textDisp}</div>
+
+      <div class="peer-box">
+        <p><strong>📣 Schreibkonferenz (LP+: Texte überarbeiten)</strong><br>
+        Lies deinen Text laut vor. Was klingt gut? Was ist unklar?<br>
+        Nutze die Satzanfänge unten, um Feedback zu geben.</p>
+      </div>
+
+      <div class="rev-box">
+        <span class="rlabel">👍 Was ist besonders gut gelungen?</span>
+        <div class="fb-stems">${goodStems}</div>
+        <textarea id="rev-good" placeholder="Schreib dein Feedback hier …" rows="2" style="min-height:55px;">${esc(good)}</textarea>
+      </div>
+
+      <div class="rev-box" style="background:var(--blue-pale);border-left-color:var(--blue-mid);">
+        <span class="rlabel" style="color:var(--blue-dark);">✏️ Konkreter Überarbeitungshinweis</span>
+        <div class="fb-stems">${improveStems}</div>
+        <textarea id="rev-improve" placeholder="Schreib deinen Hinweis hier …" rows="2" style="min-height:55px;">${esc(improve)}</textarea>
+      </div>
+
+      <div class="btn-row" style="margin-top:10px;">
+        <button class="bk" onclick="switchPhase('write')">◀ Text bearbeiten</button>
+        <button class="bp" onclick="finishChapter()">${cur<CHS.length-1?'Kapitel abschließen ▶':'Geschichte abschließen 🎉'}</button>
+      </div>
+    </div></div>`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BIND EVENTS
+// ─────────────────────────────────────────────────────────────────────────────
+function bindAll(ch){
+  // Plan inputs
+  document.querySelectorAll('[data-key]').forEach(inp=>{
+    inp.addEventListener('input',()=>{
+      planData[cur][inp.dataset.key]=inp.value;
+      const filled=planFilled(cur);
+      const pct=Math.min(100,Math.round((filled/4)*100));
+      const bar=document.getElementById('plan-prog');
+      const hint=document.getElementById('plan-hint');
+      if(bar)bar.style.width=pct+'%';
+      if(hint)hint.textContent=filled>=ch.planMin?'✓ Bereit zum Schreiben!':'Noch '+(ch.planMin-filled)+' Feld(er) ausfüllen …';
+      updateTabStates();
+    });
+  });
+
+  // Write textarea
+  const ta=document.getElementById('answer-box');
+  if(ta){
+    ta.addEventListener('input',()=>{
+      answers[cur]=ta.value;
+      liveUpdate(ta.value,ch);
+    });
+  }
+
+  // Revision
+  const rg=document.getElementById('rev-good'),ri=document.getElementById('rev-improve');
+  function saveRev(){revNotes[cur]=JSON.stringify({good:rg?rg.value:'',improve:ri?ri.value:''});}
+  if(rg)rg.addEventListener('input',saveRev);
+  if(ri)ri.addEventListener('input',saveRev);
+}
+
+function liveUpdate(text,ch){
+  const count=wc(text);
+  const wcGood=count>=ch.minWords;
+  const wcEl=document.getElementById('wc-el');
+  const okEl=document.getElementById('wc-ok');
+  if(wcEl){wcEl.textContent='Wörter: '+count+' / '+ch.minWords;wcEl.className=wcGood?'wc-good':'';}
+  if(okEl)okEl.style.display=wcGood?'inline':'none';
+  const fc=text.trimStart()[0]||'';
+  const hasCap=fc&&fc===fc.toUpperCase()&&fc!==fc.toLowerCase();
+  const lc=text.trimEnd().slice(-1);
+  const hasPunct=['.','!','?','"'].includes(lc);
+  const hasRede=/„/.test(text);
+  const qp=document.querySelectorAll('.qpill');
+  if(qp[0])qp[0].classList.toggle('on',hasCap);
+  if(qp[1])qp[1].classList.toggle('on',hasPunct);
+  if(qp[2])qp[2].classList.toggle('on',wcGood);
+  if(qp[3])qp[3].classList.toggle('on',hasRede);
+  updateTabStates();
+  for(let i=0;i<CHS.length;i++)document.getElementById('s'+(i+1)).classList.toggle('lit',wc(answers[i])>=CHS[i].minWords);
+}
+
+function toggleCrit(i){
+  checkedCrit[cur][i]=!checkedCrit[cur][i];
+  const el=document.querySelector('[data-ci="'+i+'"]');
+  if(!el)return;
+  el.classList.toggle('ck',checkedCrit[cur][i]);
+  el.querySelector('.cbox').textContent=checkedCrit[cur][i]?'✓':'';
+}
+
+function toggleHint(){
+  hintsShown[cur]=!hintsShown[cur];
+  const b=document.getElementById('hint-box');
+  if(b)b.classList.toggle('on',hintsShown[cur]);
+}
+
+function insertStem(stem){
+  const ta=document.getElementById('answer-box');
+  if(!ta)return;
+  const sep=ta.value&&!ta.value.endsWith('\n')?'\n':'';
+  ta.value+=sep+stem+' ';
+  answers[cur]=ta.value;
+  ta.focus();
+  ta.selectionStart=ta.selectionEnd=ta.value.length;
+  liveUpdate(ta.value,CHS[cur]);
+}
+
+function appendRevision(id,stem){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.value=(el.value.trim()?el.value.trim()+'\n':'')+stem+' ';
+  el.focus();
+  const rg=document.getElementById('rev-good'),ri=document.getElementById('rev-improve');
+  revNotes[cur]=JSON.stringify({good:rg?rg.value:'',improve:ri?ri.value:''});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────────────────────────────────────
+function tryGoRevise(){
+  const ta=document.getElementById('answer-box');
+  if(ta)answers[cur]=ta.value;
+  const ch=CHS[cur];
+  if(wc(answers[cur])<ch.minWords){
+    document.getElementById('gate-notice').innerHTML='🔒 Schreib noch etwas mehr — du brauchst mindestens <strong>'+ch.minWords+' Wörter</strong>!';
+    document.getElementById('gate-notice').classList.add('visible');
+    return;
+  }
+  reviseUnlocked[cur]=true;
+  switchPhase('revise');
+}
+
+function finishChapter(){
+  // Save revision notes
+  const rg=document.getElementById('rev-good'),ri=document.getElementById('rev-improve');
+  if(rg||ri)revNotes[cur]=JSON.stringify({good:rg?rg.value:'',improve:ri?ri.value:''});
+
+  const ch=CHS[cur];
+  showCelebration(ch,()=>{
+    if(cur<CHS.length-1){
+      cur++;
+      phase='plan';
+      writeUnlocked[cur]=false;reviseUnlocked[cur]=false;
+      ['plan','write','revise'].forEach(id=>{
+        const el=document.getElementById('tab-'+id);
+        if(el)el.classList.remove('active','done');
+      });
+      document.getElementById('tab-plan').classList.add('active');
+      render();window.scrollTo({top:0,behavior:'smooth'});
+    }else{
+      showComplete();
+    }
+  });
+}
+
+function goBack(){
+  if(cur>0){cur--;phase='write';render();window.scrollTo({top:0,behavior:'smooth'});}
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CELEBRATION
+// ─────────────────────────────────────────────────────────────────────────────
+function showCelebration(ch,cb){
+  celebCallback=cb;
+  document.getElementById('cel-emoji').textContent=ch.celebEmoji;
+  document.getElementById('cel-title').textContent=ch.celebTitle;
+  document.getElementById('cel-msg').textContent=ch.celebMsg;
+  document.getElementById('cel-earned').innerHTML=ch.celebEarned;
+  document.getElementById('celebrate').classList.add('show');
+  launchConfetti();
+}
+
+function closeCelebration(){
+  document.getElementById('celebrate').classList.remove('show');
+  document.getElementById('confetti-wrap').innerHTML='';
+  if(celebCallback){const cb=celebCallback;celebCallback=null;cb();}
+}
+
+function launchConfetti(){
+  const wrap=document.getElementById('confetti-wrap');
+  wrap.innerHTML='';
+  const colors=['#4a8a2a','#d4840a','#2e7ab8','#d85a30','#534ab7','#fac775','#c8e6a0'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    d.className='confetti-dot';
+    d.style.cssText=`
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1.5+Math.random()*2}s;
+      animation-delay:${Math.random()*.5}s;
+      transform:rotate(${Math.random()*360}deg);
+      width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;
+    `;
+    wrap.appendChild(d);
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COMPLETE + LERNPASS
+// ─────────────────────────────────────────────────────────────────────────────
+function showComplete(){
+  const totalW=answers.reduce((s,a)=>s+wc(a),0);
+  const stars=answers.filter((a,i)=>wc(a)>=CHS[i].minWords).length;
+  for(let i=1;i<=CHS.length;i++){const s=document.getElementById('s'+i);if(s)s.classList.add('lit');}
+  document.getElementById('scene-char').textContent='🎉';
+  document.getElementById('scene-flag').style.display='block';
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('lernziel-banner').style.display='none';
+
+  const storyHtml=CHS.map((ch,i)=>`
+    <div class="sch">
+      <span class="ct">${ch.label}</span>
+      <p>${esc(answers[i].trim())||'<em>nicht geschrieben</em>'}</p>
+    </div>`).join('');
+
+  document.getElementById('story-container').innerHTML=`
+    <div class="panel"><div class="stripe"></div><div class="pi complete-wrap">
+      <h2>🏆 Geschichte fertig! 🏆</h2>
+      <div class="big-emoji">${'⭐'.repeat(stars)}${'☆'.repeat(CHS.length-stars)}</div>
+      <p>Du hast <strong>${totalW} Wörter</strong> geschrieben!<br>${stars} von ${CHS.length} Kapiteln vollständig.</p>
+      <div class="story-out">
+        <h3>📖 Meine Geschichte: „Das Geheimnis des Berges"</h3>${storyHtml}
+      </div>
+      <div style="background:var(--green-pale);border:2px solid var(--green-mid);padding:10px 14px;text-align:left;font-size:12px;line-height:1.9;color:var(--green-dark);margin:1rem 0;">
+        <strong style="font-family:var(--fp);font-size:5.5px;display:block;margin-bottom:6px;">✅ LehrplanPLUS Deutsch Klasse 3/4 — geübte Kompetenzen:</strong>
+        ✓ Erzählsituation → Ereignis → Ausgang &nbsp;·&nbsp; ✓ Figur nach Äußerem, Wesen, Handeln und Beziehungen<br>
+        ✓ Räume und Orte mit Sinneseindrücken beschreiben &nbsp;·&nbsp; ✓ Wörtliche Rede mit Anführungszeichen<br>
+        ✓ Sprachliche Mittel: Adjektive, Synonyme, Vergleiche, Spannungswörter &nbsp;·&nbsp; ✓ Stichwortzettel vor dem Schreiben<br>
+        ✓ Texte überarbeiten: Gelungenes benennen + Verbesserungshinweis (Schreibkonferenz)
+      </div>
+      <div class="btn-row" style="justify-content:center;gap:10px;margin-top:1rem;flex-wrap:wrap;">
+        <button class="bk" onclick="restart()">🔄 Nochmal</button>
+        <button class="bh" onclick="printLernpass()">🖨️ Lernpass drucken</button>
+      </div>
+    </div></div>`;
+
+  buildLernpass(totalW,stars);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LERNPASS
+// ─────────────────────────────────────────────────────────────────────────────
+function buildLernpass(totalW,stars){
+  const date=new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const chaptersHtml=CHS.map((ch,i)=>{
+    const w=wc(answers[i]);
+    const starStr=w>=ch.minWords?'⭐':'☆';
+    const rev=revNotes[i]?JSON.parse(revNotes[i]):{good:'',improve:''};
+    return`<div class="lp-chapter">
+      <h4>${starStr} ${ch.label}</h4>
+      <p><strong>Mein Text:</strong><br>${esc(answers[i].trim())||'<em>nicht geschrieben</em>'}</p>
+      ${rev.good?`<p style="margin-top:6px;"><strong>👍 Gelungenes:</strong> ${esc(rev.good)}</p>`:''}
+      ${rev.improve?`<p><strong>✏️ Verbesserung:</strong> ${esc(rev.improve)}</p>`:''}
+    </div>`;}).join('');
+
+  document.getElementById('lernpass').innerHTML=`
+    <div class="lp-card lp-page">
+      <div class="lp-header">
+        <h2>⛏ Lernpass – Schreibwerkstatt Klasse 3</h2>
+        <p>LehrplanPLUS Deutsch · Bayern Minecraft Abenteuer</p>
+      </div>
+      <div class="lp-field"><label>Name</label>_________________________________</div>
+      <div class="lp-field"><label>Klasse</label>_________________________________</div>
+      <div class="lp-field"><label>Datum</label>${date}</div>
+      <div class="lp-field"><label>Gesamtwörter</label>${totalW} Wörter</div>
+      <div class="lp-field"><label>Kapitel abgeschlossen</label>${stars} / ${CHS.length} ⭐</div>
+      <div class="lp-kompetenz">
+        <strong>✅ Geübte LP+ Kompetenzen:</strong>
+        ✓ Erzählsituation → Ereignis → Ausgang strukturieren<br>
+        ✓ Figur nach Äußerem, Wesen, Handeln und Beziehungen beschreiben<br>
+        ✓ Räume und Orte mit Sinneseindrücken und Vergleichen beschreiben<br>
+        ✓ Wörtliche Rede mit korrekten Anführungszeichen<br>
+        ✓ Stichwortzettel vor dem Schreiben nutzen<br>
+        ✓ Texte überarbeiten: Gelungenes + Verbesserungshinweis (Schreibkonferenz)
+      </div>
+    </div>
+
+    <div class="lp-card lp-page">
+      <div class="lp-header"><h2>📖 Meine Geschichte</h2><p>„Das Geheimnis des Berges"</p></div>
+      ${chaptersHtml}
+    </div>
+
+    <div class="lp-card">
+      <div class="lp-cert">
+        <h3>🏆 Urkunde 🏆</h3>
+        <p style="font-size:16px;font-weight:700;margin-bottom:.5rem;">______________________________</p>
+        <p>hat die Schreibwerkstatt<br><strong>„Das Geheimnis des Berges"</strong><br>erfolgreich abgeschlossen.</p>
+        <p style="margin-top:.75rem;">⭐ ${stars} von ${CHS.length} Kapiteln &nbsp;·&nbsp; ${totalW} Wörter</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:.5rem;">${date}</p>
+        <div class="lp-sig">
+          <div class="lp-sig-line">Lehrkraft</div>
+          <div class="lp-sig-line">Schüler/in</div>
+          <div class="lp-sig-line">Elternteil</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function printLernpass(){
+  window.print();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RESTART
+// ─────────────────────────────────────────────────────────────────────────────
+function restart(){
+  cur=0;phase='plan';
+  answers=Array(CHS.length).fill('');
+  planData=CHS.map(ch=>{const o={};ch.planFields.forEach(f=>o[f.key]='');return o;});
+  checkedCrit=CHS.map(ch=>Array(ch.criteria.length).fill(false));
+  hintsShown=Array(CHS.length).fill(false);
+  revNotes=Array(CHS.length).fill('');
+  writeUnlocked=Array(CHS.length).fill(false);
+  reviseUnlocked=Array(CHS.length).fill(false);
+  document.getElementById('lernziel-banner').style.display='flex';
+  document.getElementById('lernpass').innerHTML='';
+  ['plan','write','revise'].forEach(id=>{
+    const el=document.getElementById('tab-'+id);
+    if(el)el.classList.remove('active','done','locked');
+  });
+  document.getElementById('tab-plan').classList.add('active');
+  document.getElementById('tab-write').classList.add('locked');
+  document.getElementById('tab-revise').classList.add('locked');
+  render();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
