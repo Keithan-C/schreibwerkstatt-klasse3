@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 Geschichte Baukasten – Klasse 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#2d7a1b;--green2:#4aaa2a;--green3:#c8f0a0;--green4:#eafade;
+  --blue:#1a3a7a;--blue2:#2e6ab8;--blue3:#e0f0ff;
+  --amber:#7a4000;--amber2:#e09010;--amber3:#ffd070;--amber4:#fff5d8;
+  --purple:#3a1a8a;--purple2:#6a4adf;--purple3:#ede0ff;
+  --coral:#8a2010;--coral2:#e05030;--coral3:#ffe0d8;
+  --teal:#0a5a50;--teal2:#14a090;--teal3:#d0f5f0;
+  --ink:#1a1a18;--ink2:#3a3a35;--muted:#7a7870;
+  --surface:#fff;--bg:#f2efe8;--border:#d8d4c8;
+  --fp:'Press Start 2P',monospace;--fb:'Nunito',sans-serif;
+  --r:12px;--r2:8px;--sh:0 4px 24px rgba(0,0,0,.10);
+}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+.wrap{max-width:740px;margin:0 auto;padding:0 1rem 6rem;}
+
+/* ── HEADER ── */
+.site-header{background:linear-gradient(180deg,#1a2a0a 0%,#2a4a15 60%,#3a6a20 100%);padding:0 0 1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.header-sky{height:80px;background:linear-gradient(180deg,#1a3060 0%,#2a5090 50%,#4a80c0 100%);position:relative;}
+.header-stars{position:absolute;top:0;left:0;right:0;bottom:0;}
+.star-px{position:absolute;width:2px;height:2px;background:#fff;border-radius:0;}
+.header-sun{position:absolute;bottom:-10px;right:15%;width:40px;height:40px;background:#ffd060;border-radius:50%;box-shadow:0 0 20px #ffd060,0 0 40px rgba(255,208,96,.4);}
+.header-mountains{position:relative;height:48px;background:linear-gradient(180deg,transparent 0%,#3a6a20 100%);}
+.pixel-mountain{position:absolute;bottom:0;}
+.pm1{left:5%;border-left:36px solid transparent;border-right:36px solid transparent;border-bottom:48px solid #5a7a40;}
+.pm2{left:18%;border-left:28px solid transparent;border-right:28px solid transparent;border-bottom:38px solid #4a6a30;}
+.pm3{right:8%;border-left:44px solid transparent;border-right:44px solid transparent;border-bottom:52px solid #506038;}
+.pm4{right:22%;border-left:30px solid transparent;border-right:30px solid transparent;border-bottom:40px solid #607040;}
+.header-ground{height:16px;background:repeating-linear-gradient(90deg,#5a8a30 0,#5a8a30 16px,#4a7a25 16px,#4a7a25 32px);}
+.header-content{padding:1rem 1.5rem 0;text-align:center;position:relative;}
+.header-char{font-size:32px;animation:bob 1.6s ease-in-out infinite;display:inline-block;margin-bottom:.5rem;}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.header-title{font-family:var(--fp);font-size:clamp(7px,2.5vw,13px);color:#ffd060;line-height:2.2;text-shadow:2px 2px 0 #2a4a00;display:block;}
+.header-sub{font-family:var(--fp);font-size:5px;color:#a8d860;line-height:2;margin-top:4px;display:block;letter-spacing:.3px;}
+.header-links{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap;}
+.hlink{font-family:var(--fp);font-size:5px;padding:5px 12px;border:1.5px solid;line-height:1.8;text-decoration:none;transition:opacity .2s;}
+.hlink:hover{opacity:.75;}
+.hlink-story{background:#2a500a;color:#80e040;border-color:#3a7015;}
+.hlink-free{background:#1a3a60;color:#80c0ff;border-color:#2a5a90;}
+
+/* ── PROGRESS STEPPER ── */
+.step-progress{display:grid;grid-template-columns:repeat(5,1fr);margin-bottom:1.5rem;background:var(--surface);border:3px solid var(--ink);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.sp-step{padding:10px 4px;text-align:center;border-right:2px solid var(--border);cursor:pointer;transition:background .2s;position:relative;}
+.sp-step:last-child{border-right:none;}
+.sp-icon{font-size:20px;display:block;margin-bottom:3px;}
+.sp-label{font-family:var(--fp);font-size:4.5px;color:var(--muted);line-height:1.6;display:block;}
+.sp-step.active{background:var(--amber4);}
+.sp-step.active .sp-icon,.sp-step.active .sp-label{filter:none;}
+.sp-step.active .sp-label{color:var(--amber);}
+.sp-step.done{background:#f0fff4;}
+.sp-step.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:9px;color:var(--green);font-weight:900;}
+.sp-step.locked{opacity:.38;cursor:default;}
+
+/* ── GATE NOTICE ── */
+.gate-notice{background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);padding:10px 14px;font-size:13px;color:var(--amber);margin-bottom:.9rem;display:none;line-height:1.6;}
+.gate-notice.on{display:block;}
+
+/* ── STEP PANEL ── */
+.step-panel{display:none;}
+.step-panel.active{display:block;animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.step-card{background:var(--surface);border:2.5px solid var(--ink);border-radius:var(--r);margin-bottom:1rem;overflow:hidden;box-shadow:var(--sh);}
+.step-stripe{height:6px;}
+.ss-amber{background:repeating-linear-gradient(90deg,var(--amber2) 0,var(--amber2) 8px,var(--amber) 8px,var(--amber) 16px);}
+.ss-blue{background:repeating-linear-gradient(90deg,var(--blue2) 0,var(--blue2) 8px,var(--blue) 8px,var(--blue) 16px);}
+.ss-coral{background:repeating-linear-gradient(90deg,var(--coral2) 0,var(--coral2) 8px,var(--coral) 8px,var(--coral) 16px);}
+.ss-green{background:repeating-linear-gradient(90deg,var(--green2) 0,var(--green2) 8px,var(--green) 8px,var(--green) 16px);}
+.ss-purple{background:repeating-linear-gradient(90deg,var(--purple2) 0,var(--purple2) 8px,var(--purple) 8px,var(--purple) 16px);}
+.step-body{padding:1rem 1.2rem .8rem;}
+.step-number{font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:5px;}
+.step-title{font-family:var(--fp);font-size:clamp(8px,2.5vw,13px);color:var(--ink);display:block;margin-bottom:.4rem;line-height:1.8;}
+.step-sub{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── ICON GRID ── */
+.icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.2rem;}
+@media(min-width:500px){.icon-grid{grid-template-columns:repeat(6,1fr);}}
+
+.icon-card{
+  background:var(--surface);border:3px solid var(--border);border-radius:var(--r2);
+  padding:10px 4px 8px;text-align:center;cursor:pointer;
+  transition:transform .15s,border-color .15s,background .15s,box-shadow .15s;
+  position:relative;-webkit-tap-highlight-color:transparent;
+  user-select:none;
+}
+.icon-card:hover{transform:scale(1.07);border-color:var(--amber2);box-shadow:0 4px 12px rgba(224,144,16,.25);}
+.icon-card:active{transform:scale(.96);}
+.icon-card.selected{border-color:var(--green2);background:var(--green4);box-shadow:0 0 0 3px rgba(74,170,42,.2);}
+.icon-card.selected::after{content:'✓';position:absolute;top:3px;right:5px;font-size:10px;color:var(--green);font-weight:900;}
+.ic-emoji{font-size:clamp(26px,6vw,34px);display:block;margin-bottom:4px;line-height:1;}
+.ic-label{font-family:var(--fp);font-size:4px;color:var(--ink2);line-height:1.8;display:block;}
+
+/* ── NAV BUTTONS ── */
+.step-nav{display:flex;gap:10px;justify-content:flex-end;margin-bottom:1.5rem;}
+.nav-btn{padding:10px 20px;border-radius:var(--r2);border:3px solid var(--ink);font-family:var(--fp);font-size:7px;cursor:pointer;transition:all .15s;line-height:1.6;}
+.nav-back{background:var(--bg);color:var(--ink);}
+.nav-back:hover{background:var(--border);}
+.nav-next{background:var(--green);color:#c8f0a0;}
+.nav-next:hover{background:var(--green2);}
+.nav-next:disabled{opacity:.4;cursor:not-allowed;background:var(--muted);}
+
+/* ── RESULT PANEL ── */
+.result-panel{display:none;}
+.result-panel.active{display:block;animation:fadeIn .4s ease;}
+
+.result-hero{background:linear-gradient(135deg,#1a3060,#2a5a20);border:3px solid var(--ink);border-radius:var(--r);padding:1.4rem 1.5rem;margin-bottom:1.2rem;text-align:center;box-shadow:var(--sh);}
+.rh-eyebrow{font-family:var(--fp);font-size:6px;color:rgba(255,208,96,.7);display:block;margin-bottom:.6rem;letter-spacing:1px;}
+.rh-title{font-family:var(--fp);font-size:clamp(8px,3vw,15px);color:#ffd060;text-shadow:2px 2px 0 #1a3a00;line-height:2;display:block;margin-bottom:1rem;}
+.rh-emojis{font-size:clamp(28px,6vw,40px);display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+.choices-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1.3rem;}
+@media(max-width:480px){.choices-summary{grid-template-columns:repeat(3,1fr);}}
+.cs-card{background:var(--surface);border:2.5px solid var(--ink);border-radius:var(--r2);padding:10px 6px;text-align:center;box-shadow:var(--sh);}
+.cs-cat{font-family:var(--fp);font-size:4px;color:var(--muted);display:block;margin-bottom:4px;}
+.cs-emoji{font-size:clamp(22px,5vw,28px);display:block;margin-bottom:4px;}
+.cs-lbl{font-family:var(--fp);font-size:4.5px;color:var(--ink);display:block;line-height:1.8;}
+
+.prompt-section-title{font-family:var(--fp);font-size:8px;color:var(--ink);margin:1.2rem 0 .7rem;}
+.prompt-cards{display:flex;flex-direction:column;gap:10px;margin-bottom:1.4rem;}
+.prompt-card{background:var(--surface);border:2.5px solid var(--ink);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);}
+.pc-stripe{height:6px;}
+.pc-body{padding:.9rem 1.1rem;}
+.pc-tag{font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:6px;}
+.pc-text{font-size:14px;color:var(--ink);line-height:1.75;}
+
+.action-section-title{font-family:var(--fp);font-size:7px;color:var(--muted);margin-bottom:.7rem;}
+.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.action-btn{
+  flex:1;min-width:200px;padding:13px 16px;border-radius:var(--r2);border:3px solid var(--ink);
+  font-family:var(--fp);font-size:6px;cursor:pointer;transition:all .2s;
+  text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px;
+  line-height:1.8;
+}
+.ab-free{background:var(--blue3);color:var(--blue);}
+.ab-free:hover{background:var(--blue2);color:#fff;}
+.ab-blockwelt{background:var(--green4);color:var(--green);}
+.ab-blockwelt:hover{background:var(--green2);color:#c8f0a0;}
+.ab-reset{background:var(--bg);color:var(--ink);border-style:dashed;}
+.ab-reset:hover{background:var(--border);}
+@media(max-width:480px){.action-row{flex-direction:column;}}
+
+/* ── CONFETTI ── */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden;}
+.conf-piece{position:absolute;top:-10px;width:10px;height:14px;border-radius:2px;opacity:0;animation:confFall linear forwards;}
+@keyframes confFall{
+  0%{transform:translateY(0) rotate(0deg);opacity:1;}
+  100%{transform:translateY(110vh) rotate(720deg);opacity:.1;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="site-header">
+  <div class="header-sky">
+    <div class="header-stars" id="header-stars"></div>
+    <div class="header-sun"></div>
+  </div>
+  <div class="header-mountains">
+    <div class="pixel-mountain pm1"></div>
+    <div class="pixel-mountain pm2"></div>
+    <div class="pixel-mountain pm3"></div>
+    <div class="pixel-mountain pm4"></div>
+  </div>
+  <div class="header-ground"></div>
+  <div class="header-content">
+    <span class="header-char">📖</span>
+    <span class="header-title">Geschichte Baukasten</span>
+    <span class="header-sub">Wähle deine Figuren · Baue deine Geschichte · Fang an zu schreiben!</span>
+    <div class="header-links">
+      <a class="hlink hlink-free" href="story.html">📖 Schreibwerkstatt</a>
+      <a class="hlink hlink-story" href="index.html">⛏ Blockwelt</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── CONFETTI LAYER ── -->
+<div class="confetti-wrap" id="confetti-wrap"></div>
+
+<div class="wrap">
+
+<!-- ── PROGRESS STEPPER ── -->
+<div class="step-progress" id="step-progress"></div>
+
+<!-- ── GATE NOTICE ── -->
+<div class="gate-notice" id="gate-notice"></div>
+
+<!-- ── STEP PANELS (rendered by JS) ── -->
+<div id="step-panels"></div>
+
+<!-- ── RESULT PANEL ── -->
+<div class="result-panel" id="result-panel">
+
+  <div class="result-hero" id="result-hero">
+    <span class="rh-eyebrow">⭐ DEINE GESCHICHTE IST FERTIG! ⭐</span>
+    <span class="rh-title" id="rh-title"></span>
+    <div class="rh-emojis" id="rh-emojis"></div>
+  </div>
+
+  <div class="choices-summary" id="choices-summary"></div>
+
+  <div class="prompt-section-title">📝 Deine Schreibaufgaben</div>
+  <div class="prompt-cards" id="prompt-cards"></div>
+
+  <div class="action-section-title">▶ Jetzt schreiben!</div>
+  <div class="action-row">
+    <button class="action-btn ab-free" onclick="launchApp('free')">📖 Schreibwerkstatt<br><span style="font-size:4px;opacity:.7">Meine Geschichte (Klasse 3)</span></button>
+    <button class="action-btn ab-blockwelt" onclick="launchApp('blockwelt')">⛏ Blockwelt Abenteuer<br><span style="font-size:4px;opacity:.7">Spiel → Geschichte → Text</span></button>
+    <button class="action-btn ab-reset" onclick="resetBuilder()">↩️ Neu bauen</button>
+  </div>
+
+</div><!-- /result-panel -->
+</div><!-- /wrap -->
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// ICON DATA
+// ═══════════════════════════════════════════════════════════
+const CATEGORIES = [
+  {
+    id:'character', label:'Deine Figur', icon:'🧑',
+    stripe:'ss-amber',
+    question:'Wer ist dein Held?',
+    desc:'Wähle die Hauptfigur — sie erlebt das Abenteuer.',
+    choices:[
+      {e:'🧙',l:'Zauberer'}, {e:'🦸',l:'Superheld'}, {e:'👧',l:'Mädchen'},  {e:'👦',l:'Junge'},
+      {e:'🐱',l:'Katze'},    {e:'🐶',l:'Hund'},       {e:'🤖',l:'Roboter'}, {e:'🦊',l:'Fuchs'},
+      {e:'🐉',l:'Drachen'},  {e:'🧜',l:'Nixe'},        {e:'🦄',l:'Einhorn'}, {e:'🧝',l:'Elfe'},
+    ]
+  },
+  {
+    id:'place', label:'Der Ort', icon:'🗺️',
+    stripe:'ss-blue',
+    question:'Wo spielt die Geschichte?',
+    desc:'Wähle den Ort, wo dein Held lebt und das Abenteuer beginnt.',
+    choices:[
+      {e:'🌲',l:'Wald'},      {e:'🏰',l:'Burg'},     {e:'🏖️',l:'Strand'},   {e:'🏙️',l:'Stadt'},
+      {e:'🌋',l:'Vulkan'},    {e:'🏔️',l:'Gebirge'},  {e:'🌊',l:'Ozean'},    {e:'🏠',l:'Zuhause'},
+      {e:'🌌',l:'Weltraum'},  {e:'🧊',l:'Eisland'},   {e:'🌿',l:'Dschungel'},{e:'🏕️',l:'Zeltlager'},
+    ]
+  },
+  {
+    id:'problem', label:'Das Problem', icon:'⚠️',
+    stripe:'ss-coral',
+    question:'Was ist das Problem?',
+    desc:'Wähle das Problem, das dein Held lösen muss — das ist das Herzstück der Geschichte.',
+    choices:[
+      {e:'🦹',l:'Bösewicht'},    {e:'💎',l:'Gestohlener Schatz'},{e:'🌪️',l:'Sturm'},     {e:'🗺️',l:'Verirrt'},
+      {e:'💤',l:'Zauberschlaf'}, {e:'🌊',l:'Überschwemmung'},    {e:'🕳️',l:'Falle'},     {e:'🔒',l:'Eingesperrt'},
+      {e:'🐍',l:'Große Gefahr'}, {e:'🌑',l:'Dunkelheit'},        {e:'🧨',l:'Explosion'}, {e:'🔮',l:'Zauberpech'},
+    ]
+  },
+  {
+    id:'event', label:'Das Ereignis', icon:'⚡',
+    stripe:'ss-green',
+    question:'Was hilft deinem Helden?',
+    desc:'Wähle das entscheidende Ereignis — es dreht die Geschichte.',
+    choices:[
+      {e:'⚡',l:'Blitz!'},       {e:'🧪',l:'Zaubertrank'},  {e:'👥',l:'Neuer Freund'},{e:'🗝️',l:'Schlüssel'},
+      {e:'📜',l:'Geheimbrief'},  {e:'💡',l:'Tolle Idee!'},  {e:'🤝',l:'Teamarbeit'},  {e:'🎭',l:'Verkleidung'},
+      {e:'🏃',l:'Verfolgung'},   {e:'🎯',l:'Treffer!'},     {e:'🌟',l:'Sternschnuppe'},{e:'🌈',l:'Regenbogen'},
+    ]
+  },
+  {
+    id:'ending', label:'Das Ende', icon:'🏆',
+    stripe:'ss-purple',
+    question:'Wie endet die Geschichte?',
+    desc:'Wähle das Ende — was erreicht dein Held am Schluss?',
+    choices:[
+      {e:'🏆',l:'Sieg!'},         {e:'🏠',l:'Sicher zuhause'}, {e:'🤝',l:'Neue Freunde'},     {e:'💎',l:'Schatz gefunden'},
+      {e:'🌟',l:'Held geworden'}, {e:'🕊️',l:'Frieden'},       {e:'🎉',l:'Großes Fest'},      {e:'📖',l:'Lektion gelernt'},
+      {e:'🦋',l:'Verwandlung'},   {e:'🌱',l:'Neuanfang'},      {e:'👑',l:'König/Königin'},    {e:'🌈',l:'Glücklich!'},
+    ]
+  }
+];
+
+const CAT_LABELS = ['Figur','Ort','Problem','Ereignis','Ende'];
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let currentStep = 0;   // 0-4: step panels; 5: result
+let choices = {};      // { character:{e,l}, place:{e,l}, ... }
+
+// ═══════════════════════════════════════════════════════════
+// RENDER PROGRESS
+// ═══════════════════════════════════════════════════════════
+function renderProgress(){
+  const prog = document.getElementById('step-progress');
+  prog.innerHTML = CATEGORIES.map((cat,i) => {
+    let cls = 'sp-step';
+    if(currentStep === 5)       cls += ' done';
+    else if(i === currentStep)  cls += ' active';
+    else if(choices[cat.id])    cls += ' done';
+    else                        cls += ' locked';
+    return `<div class="${cls}" onclick="goToStep(${i})">
+      <span class="sp-icon">${choices[cat.id] ? choices[cat.id].e : cat.icon}</span>
+      <span class="sp-label">${cat.label}</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER STEP PANELS
+// ═══════════════════════════════════════════════════════════
+function renderSteps(){
+  const panels = document.getElementById('step-panels');
+  panels.innerHTML = CATEGORIES.map((cat, i) => {
+    const isActive = i === currentStep && currentStep < 5;
+    const sel = choices[cat.id];
+    const grid = cat.choices.map((c, j) => {
+      const selected = sel && sel.e === c.e;
+      return `<div class="icon-card${selected?' selected':''}" onclick="selectChoice('${cat.id}',${j})">
+        <span class="ic-emoji">${c.e}</span>
+        <span class="ic-label">${c.l}</span>
+      </div>`;
+    }).join('');
+
+    return `<div class="step-panel${isActive?' active':''}" id="panel-${i}">
+      <div class="step-card">
+        <div class="step-stripe ${cat.stripe}"></div>
+        <div class="step-body">
+          <span class="step-number">SCHRITT ${i+1} VON 5</span>
+          <span class="step-title">${cat.icon} ${cat.question}</span>
+          <span class="step-sub">${cat.desc}</span>
+        </div>
+      </div>
+      <div class="icon-grid">${grid}</div>
+      <div class="step-nav">
+        ${i > 0 ? `<button class="nav-btn nav-back" onclick="prevStep()">◀ Zurück</button>` : ''}
+        <button class="nav-btn nav-next" id="next-${i}" onclick="nextStep()" ${sel ? '' : 'disabled'}>
+          ${i < 4 ? 'Weiter ▶' : '🎉 Geschichte fertig!'}
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// GENERATE PROMPTS
+// ═══════════════════════════════════════════════════════════
+function generatePrompts(ch){
+  return {
+    begin:`Stelle deine Figur vor: ${ch.character.e} <strong>${ch.character.l}</strong>. Wie sieht sie aus? Was kann sie besonders gut? Dann beschreibe den Ort: ${ch.place.e} <strong>${ch.place.l}</strong>. Was sieht, hört und fühlt deine Figur dort? Benutze eine <em>Einleitungsformel</em>!`,
+    middle:`Plötzlich passiert etwas Schlimmes: ${ch.problem.e} <strong>${ch.problem.l}</strong>! Dann kommt die Wende: ${ch.event.e} <strong>${ch.event.l}</strong>. Wie fühlt sich die Figur? Was tut sie genau? Benutze ein Spannungswort wie <em>„urplötzlich"</em> und schreib <em>wörtliche Rede</em> mit Anführungszeichen!`,
+    end:`Am Ende kommt: ${ch.ending.e} <strong>${ch.ending.l}</strong>. Wie hat <strong>${ch.character.l}</strong> das Problem gelöst? Was hat sie dabei gelernt oder gefühlt? Beende deine Geschichte mit einer <em>Schlussformel</em>!`
+  };
+}
+
+function promptsPlain(ch){
+  const p = generatePrompts(ch);
+  const strip = s => s.replace(/<[^>]+>/g,'');
+  return { begin:strip(p.begin), middle:strip(p.middle), end:strip(p.end) };
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER RESULT
+// ═══════════════════════════════════════════════════════════
+function renderResult(){
+  const ch = choices;
+
+  // Hero banner
+  document.getElementById('rh-title').textContent =
+    `${ch.character.l} · ${ch.place.l} · ${ch.problem.l}`;
+  document.getElementById('rh-emojis').innerHTML =
+    CATEGORIES.map(c => `<span title="${ch[c.id].l}">${ch[c.id].e}</span>`).join('');
+
+  // Summary cards
+  document.getElementById('choices-summary').innerHTML =
+    CATEGORIES.map((cat,i) => `
+      <div class="cs-card">
+        <span class="cs-cat">${CAT_LABELS[i]}</span>
+        <span class="cs-emoji">${ch[cat.id].e}</span>
+        <span class="cs-lbl">${ch[cat.id].l}</span>
+      </div>`).join('');
+
+  // Prompt cards
+  const p = generatePrompts(ch);
+  const sections = [
+    {tag:'1. ERZÄHLSITUATION (Anfang)', stripe:'ss-green',  text:p.begin},
+    {tag:'2. EREIGNIS (Mitte)',          stripe:'ss-amber',  text:p.middle},
+    {tag:'3. AUSGANG (Ende)',            stripe:'ss-purple', text:p.end},
+  ];
+  document.getElementById('prompt-cards').innerHTML = sections.map(s => `
+    <div class="prompt-card">
+      <div class="pc-stripe ${s.stripe}"></div>
+      <div class="pc-body">
+        <span class="pc-tag">${s.tag}</span>
+        <div class="pc-text">${s.text}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+function goToStep(i){
+  if(i >= 5) return;
+  if(i > 0 && !choices[CATEGORIES[i-1].id]) return;
+  currentStep = i;
+  document.getElementById('gate-notice').classList.remove('on');
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectChoice(catId, choiceIdx){
+  choices[catId] = CATEGORIES.find(c => c.id === catId).choices[choiceIdx];
+  render();
+}
+
+function nextStep(){
+  const cat = CATEGORIES[currentStep];
+  if(!choices[cat.id]){
+    const n = document.getElementById('gate-notice');
+    n.textContent = `Bitte wähle zuerst: ${cat.question}`;
+    n.classList.add('on');
+    return;
+  }
+  document.getElementById('gate-notice').classList.remove('on');
+  if(currentStep < 4){
+    currentStep++;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    currentStep = 5;
+    render();
+    launchConfetti();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function prevStep(){
+  if(currentStep > 0) currentStep--;
+  document.getElementById('gate-notice').classList.remove('on');
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetBuilder(){
+  choices = {};
+  currentStep = 0;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════
+function render(){
+  renderProgress();
+  const result = document.getElementById('result-panel');
+  const panels = document.getElementById('step-panels');
+  if(currentStep === 5){
+    panels.innerHTML = '';
+    result.classList.add('active');
+    renderResult();
+  } else {
+    result.classList.remove('active');
+    renderSteps();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// LAUNCH APP
+// ═══════════════════════════════════════════════════════════
+function launchApp(target){
+  const ch = choices;
+  const theme = `${ch.character.e} ${ch.character.l} in ${ch.place.e} ${ch.place.l}`;
+  const plain = promptsPlain(ch);
+
+  localStorage.setItem('builder-theme', theme);
+  localStorage.setItem('builder-data', JSON.stringify({
+    theme, choices: ch,
+    prompts: plain
+  }));
+
+  window.location.href = target === 'free' ? 'story.html' : 'index.html';
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONFETTI
+// ═══════════════════════════════════════════════════════════
+function launchConfetti(){
+  const wrap = document.getElementById('confetti-wrap');
+  wrap.innerHTML = '';
+  const colors = ['#ffd060','#4aaa2a','#e05030','#6a4adf','#2e6ab8','#e09010','#c8f0a0','#ffe0d8'];
+  for(let i = 0; i < 80; i++){
+    const p = document.createElement('div');
+    p.className = 'conf-piece';
+    p.style.cssText = `
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*8}px;
+      height:${10+Math.random()*10}px;
+      animation-duration:${2+Math.random()*2}s;
+      animation-delay:${Math.random()*.8}s;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+    `;
+    wrap.appendChild(p);
+  }
+  setTimeout(()=>{ wrap.innerHTML=''; }, 4000);
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+function buildStars(){
+  const wrap = document.getElementById('header-stars');
+  for(let i = 0; i < 30; i++){
+    const d = document.createElement('div');
+    d.className = 'star-px';
+    d.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${.3+Math.random()*.7};`;
+    wrap.appendChild(d);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildStars();
+  render();
+});
+</script>
+</body>
+</html>

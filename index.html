@@ -701,11 +701,28 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
     <span class="setup-sublabel">KI-Funktionen benötigen einen API-Key · AI features require an API key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--lavender2);">console.anthropic.com</a>)</span>
     <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off">
 
+    <!-- Builder banner (shown when launched from builder.html) -->
+    <div id="builder-banner" style="display:none;background:var(--grass);border:2px solid var(--grass2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--grass3);margin-bottom:.8rem;line-height:1.6;">
+      ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
+      <span id="builder-banner-text" style="font-size:12px;opacity:.9;"></span>
+    </div>
+
     <button class="setup-btn" id="start-btn" onclick="startApp()">✏️ Für Schüler öffnen / Open for Students</button>
 
-    <div style="text-align:center;margin-top:1rem;">
+    <div style="text-align:center;margin-top:1rem;display:flex;flex-direction:column;gap:8px;">
+      <a href="builder.html" style="
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;
+        font-family:var(--font-head);font-size:11px;font-weight:700;
+        color:var(--grass3);text-decoration:none;
+        background:var(--grass);border:2px solid var(--grass2);
+        padding:8px 16px;border-radius:var(--radius-sm);
+        transition:background .2s;
+      " onmouseover="this.style.background='var(--grass2)';this.style.color='#fff'"
+         onmouseout="this.style.background='var(--grass)';this.style.color='var(--grass3)'">
+        📖 Geschichte Baukasten / Story Builder
+      </a>
       <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" style="
-        display:inline-flex;align-items:center;gap:7px;
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;
         font-family:var(--font-head);font-size:11px;font-weight:700;
         color:var(--lavender3);text-decoration:none;
         background:var(--lavender);border:2px solid var(--lavender2);
@@ -1788,6 +1805,23 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   const saved=localStorage.getItem('anthropic-api-key');
   if(saved)document.getElementById('api-key-input').value=saved;
+
+  // Pre-fill theme from Story Builder if launched from builder.html
+  const builderRaw=localStorage.getItem('builder-data');
+  if(builderRaw){
+    try{
+      const bd=JSON.parse(builderRaw);
+      const ti=document.getElementById('theme-input');
+      if(ti&&!ti.value)ti.value=bd.theme||'';
+      const banner=document.getElementById('builder-banner');
+      const bannerText=document.getElementById('builder-banner-text');
+      if(banner&&bd.choices){
+        const ch=bd.choices;
+        bannerText.textContent=`${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l} · ${ch.event.e} ${ch.event.l} · ${ch.ending.e} ${ch.ending.l}`;
+        banner.style.display='block';
+      }
+    }catch(e){}
+  }
 });
 
 // ═══════════════════════════════════════════════════════════
