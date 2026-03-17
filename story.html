@@ -1961,7 +1961,7 @@ function renderRevise(){
         <!-- SENTENCE ASSESSOR -->
         <button class="sent-btn" id="sent-btn" onclick="assessSentences()">
           🧩 Satzstruktur prüfen
-          <span style="font-size:10px;font-weight:400;opacity:.7;">KI prüft jeden Satz einzeln auf Grammatik &amp; Satzbau</span>
+          <span style="font-size:10px;font-weight:400;opacity:.7;">prüft jeden Satz auf Großschreibung, Satzzeichen &amp; Grammatik</span>
         </button>
         <div class="sent-panel" id="sent-panel">
           <div class="sent-panel-hdr">🧩 Satzstruktur — Satz für Satz</div>
@@ -2314,7 +2314,7 @@ function renderCheckResults(text,errors){
 }
 
 // ═══════════════════════════════════════════════════════════
-// SENTENCE ASSESSOR
+// SENTENCE ASSESSOR  (free – uses LanguageTool public API)
 // ═══════════════════════════════════════════════════════════
 async function assessSentences(){
   const chId=CHAPTERS[currentChapter].id;
@@ -2323,29 +2323,59 @@ async function assessSentences(){
   const btn=document.getElementById('sent-btn');
   btn.disabled=true;btn.classList.add('running');
   btn.innerHTML=`⏳ Sätze werden analysiert … <span style="opacity:.6;font-size:10px;font-weight:400;">einen Moment bitte</span>`;
-  const system=`Du bist ein freundlicher Deutschlehrer für Kinder der 3. Klasse (Bayern, LehrplanPLUS). Analysiere jeden Satz im Text einzeln auf Satzbau und Grammatik. Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
-Format: [{"sentence":"exakter Satz aus dem Text","status":"ok"|"warn"|"error","issue":"kurzes Stichwort auf Deutsch","tip":"kindgerechte Erklärung auf Deutsch, max. 2 kurze Sätze, ermutigend"}]
-Prüfe: Großschreibung am Satzanfang, Satzzeichen am Ende (. ! ?), Subjekt vorhanden, Verb vorhanden und richtig konjugiert, Subjekt-Verb-Kongruenz, vollständiger Gedanke.
-status "ok" = alles richtig (tip = kurzes Lob), status "warn" = kleiner Hinweis, status "error" = muss verbessert werden.`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system,messages:[{role:'user',content:text}]})
+    const params=new URLSearchParams({text,language:'de-DE'});
+    const res=await fetch('https://api.languagetool.org/v2/check',{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:params
     });
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
-    raw=raw.replace(/```json|```/g,'').trim();
-    let results=[];try{results=JSON.parse(raw);}catch(e){}
+    const sentences=splitSentences(text);
+    const results=mapLTResults(text,sentences,data.matches||[]);
     renderSentences(results);
   }catch(e){
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen!':'';
     const panel=document.getElementById('sent-panel');
     panel.classList.add('on');
-    document.getElementById('sent-rows').innerHTML=`<div style="padding:12px;color:var(--coral2);"><em>⚠️ ${escH(e.message)}${hint}</em></div>`;
+    document.getElementById('sent-rows').innerHTML=`<div style="padding:12px;color:var(--coral2);"><em>⚠️ ${escH(e.message)}</em></div>`;
     document.getElementById('sent-summary').innerHTML='';
   }
   btn.disabled=false;btn.classList.remove('running');btn.innerHTML='🧩 Nochmal prüfen';
+}
+function splitSentences(text){
+  const result=[];
+  const re=/[^.!?\n]+[.!?]+|[^.!?\n]+$/g;
+  let m;
+  while((m=re.exec(text))!==null){
+    const s=m[0].trim();
+    if(s.length>1) result.push({text:s,start:m.index,end:m.index+m[0].length});
+  }
+  return result;
+}
+function mapLTResults(text,sentences,matches){
+  return sentences.map(sent=>{
+    const errors=[];
+    // Basic structural checks (free, local)
+    if(!/^[A-ZÄÖÜ]/.test(sent.text))
+      errors.push({status:'error',issue:'Großschreibung fehlt',tip:'Jeder Satz beginnt mit einem großen Buchstaben.'});
+    if(!/[.!?]$/.test(sent.text))
+      errors.push({status:'warn',issue:'Satzzeichen fehlt',tip:'Am Ende eines Satzes steht ein Punkt, Ausrufezeichen oder Fragezeichen.'});
+    // LanguageTool errors mapped to this sentence
+    matches.filter(m=>m.offset>=sent.start&&m.offset<sent.end).forEach(m=>{
+      const catId=m.rule&&m.rule.category&&m.rule.category.id||'';
+      const isErr=/GRAMMAR|AGREEMENT|VERB|MORPHOLOGY/.test(catId);
+      const fix=m.replacements&&m.replacements[0]?` → „${m.replacements[0].value}"`:'';
+      errors.push({
+        status:isErr?'error':'warn',
+        issue:m.shortMessage||m.rule&&m.rule.description||'Hinweis',
+        tip:m.message+fix
+      });
+    });
+    if(!errors.length) return{sentence:sent.text,status:'ok',issue:'Gut so! ✓',tip:'Dieser Satz ist richtig!'};
+    const worstStatus=errors.some(e=>e.status==='error')?'error':'warn';
+    return{sentence:sent.text,status:worstStatus,issue:errors[0].issue,tip:errors.map(e=>e.tip).join(' ')};
+  });
 }
 function renderSentences(results){
   const panel=document.getElementById('sent-panel');
