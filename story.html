@@ -1651,7 +1651,7 @@ Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und 
   }catch(e){
     clearInterval(stepInterval);
     buildDiv.style.display='none';
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend!':'';
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend! / API key invalid or missing!':'';
     buildDiv.innerHTML=`<p style="color:#c0392b;padding:12px;font-size:13px;">⚠️ ${e.message}${hint}</p>`;
     buildDiv.style.display='block';
     resultWrap.style.display='block';
@@ -2269,7 +2269,7 @@ Regeln: max. 6 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein
     lastCheckErrors=errors;
     renderCheckResults(text,errors);
   }catch(e){
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen!':'';
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen! / Please check your API key!':'';
     document.getElementById('check-panel').classList.add('on');
     document.getElementById('check-highlighted').innerHTML=`<em style="color:var(--coral2);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
