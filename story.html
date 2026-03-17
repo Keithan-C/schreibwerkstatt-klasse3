@@ -368,6 +368,25 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .ldot{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:3px;vertical-align:middle;}
 .no-errors-msg{padding:14px;text-align:center;font-family:var(--fp);font-size:7px;color:var(--green);background:var(--green4);}
 
+/* ── SENTENCE ASSESSOR ── */
+.sent-btn{width:100%;padding:12px;border:2px solid var(--green2);border-radius:var(--r2);background:var(--green4);color:var(--green);font-family:var(--fp);font-size:7px;cursor:pointer;transition:all .2s;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.6;}
+.sent-btn:hover{background:var(--green3);border-color:var(--green);}
+.sent-btn:disabled{opacity:.5;cursor:not-allowed;}
+.sent-btn.running{background:var(--purple3);border-color:var(--purple2);color:var(--purple);}
+.sent-panel{border-radius:var(--r2);border:2px solid var(--border);margin-bottom:.8rem;overflow:hidden;display:none;}
+.sent-panel.on{display:block;}
+.sent-panel-hdr{background:var(--green4);padding:8px 12px;font-family:var(--fp);font-size:6px;color:var(--green);display:flex;align-items:center;gap:6px;}
+.sent-row{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:5px;}
+.sent-row:last-child{border-bottom:none;}
+.sent-row.s-ok{background:#f0fdf4;}.sent-row.s-warn{background:#fffbeb;}.sent-row.s-error{background:#fff5f5;}
+.sent-text{font-size:14px;color:var(--ink);line-height:1.5;font-style:italic;}
+.sent-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--fp);font-size:8px;padding:2px 8px;border-radius:4px;width:fit-content;}
+.sent-badge.s-ok{background:var(--green4);color:var(--green);}
+.sent-badge.s-warn{background:var(--amber4);color:var(--amber);}
+.sent-badge.s-error{background:var(--coral3);color:var(--coral);}
+.sent-tip{font-size:12px;color:var(--ink2);line-height:1.55;}
+.sent-summary{padding:8px 14px;background:var(--bg);font-family:var(--fp);font-size:7px;color:var(--ink2);border-top:1.5px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+
 /* ── GATE NOTICE ── */
 .gate-notice{background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);padding:8px 12px;font-size:13px;color:var(--amber);margin-bottom:.7rem;display:none;line-height:1.6;}
 .gate-notice.on{display:block;}
@@ -608,7 +627,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
       <span class="hbadge hbadge-lp">📚 LehrplanPLUS Bayern · Klasse 3</span>
       <span class="hbadge hbadge-story">🎮 Spiel → Erzählung → Text</span>
     </div>
-    <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/story.html" class="story-link">📖 Freie Schreibwerkstatt ▶</a>
+    <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" class="story-link">📖 Freie Schreibwerkstatt ▶</a>
   </div>
 </div>
 
@@ -642,7 +661,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
 <!-- Cross-link nav -->
 <div style="display:flex;justify-content:flex-end;margin-bottom:.5rem;">
-  <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/story.html" style="
+  <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" style="
     font-family:var(--fp);font-size:5px;
     color:var(--purple2);background:var(--purple3);
     border:1.5px solid var(--purple2);border-radius:8px;
@@ -660,17 +679,6 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
 <div class="phase active" id="phase-play">
-  <div class="card" style="margin-bottom:1rem;">
-    <div class="card-stripe cs-purple"></div>
-    <div class="card-body">
-      <span class="card-title">🔑 Anthropic API-Schlüssel</span>
-      <p class="card-sub" style="margin-bottom:.6rem;">Die KI-Funktionen (Schreibideen &amp; Rechtschreibprüfung) brauchen einen API-Key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--purple2);">console.anthropic.com</a>).</p>
-      <input id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off"
-        style="width:100%;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--ink);background:#fafaf7;outline:none;transition:border .2s;"
-        oninput="apiKey=this.value.trim();localStorage.setItem('anthropic-api-key',this.value.trim());">
-    </div>
-  </div>
-
   <!-- Builder banner (shown when launched from builder.html) -->
   <div id="builder-banner" style="display:none;background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;line-height:1.7;">
     ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
@@ -1209,9 +1217,6 @@ function init(){
   buildStars();
   buildStarRow();
   renderStep();
-  const saved=localStorage.getItem('anthropic-api-key');
-  if(saved){apiKey=saved;const el=document.getElementById('api-key-input');if(el)el.value=saved;}
-
   // Load builder data if launched from builder.html
   const builderRaw=localStorage.getItem('builder-data');
   if(builderRaw){
@@ -1523,6 +1528,7 @@ async function startRecording(){
     recordChunks=[];
     mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordChunks.push(e.data);};
     mediaRecorder.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
       audioBlob=new Blob(recordChunks,{type:'audio/webm'});
       const url=URL.createObjectURL(audioBlob);
       const ap=document.getElementById('audio-playback');
@@ -1881,7 +1887,7 @@ function renderWrite(){
         </div>
 
         <div class="write-toolbar">
-          <button class="tb-btn" id="mic-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
+          <button class="tb-btn" id="speech-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
           <button class="tb-btn" onclick="openFocusMode()">🧘 Fokus</button>
           <button class="tb-btn" onclick="openIllustrator()">🎨 Illustrieren</button>
         </div>
@@ -1950,6 +1956,17 @@ function renderRevise(){
             <span class="sug-title" id="sug-title">💡 Verbesserungsvorschläge</span>
             <div id="suggestions-list"></div>
           </div>
+        </div>
+
+        <!-- SENTENCE ASSESSOR -->
+        <button class="sent-btn" id="sent-btn" onclick="assessSentences()">
+          🧩 Satzstruktur prüfen
+          <span style="font-size:10px;font-weight:400;opacity:.7;">KI prüft jeden Satz einzeln auf Grammatik &amp; Satzbau</span>
+        </button>
+        <div class="sent-panel" id="sent-panel">
+          <div class="sent-panel-hdr">🧩 Satzstruktur — Satz für Satz</div>
+          <div id="sent-rows"></div>
+          <div class="sent-summary" id="sent-summary"></div>
         </div>
 
         <div class="peer-box">
@@ -2150,7 +2167,7 @@ function showComplete(){
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-secondary" onclick="restartAll()">🔄 Neues Abenteuer</button>
         <button class="btn btn-hint" onclick="window.print()">🖨️ Lernpass drucken</button>
-        <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/story.html" class="btn" style="
+        <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" class="btn" style="
           background:var(--purple3);color:var(--purple2);border-color:var(--purple2);
           text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:5px;
         ">📖 Freie Schreibwerkstatt</a>
@@ -2293,6 +2310,67 @@ function renderCheckResults(text,errors){
     </div>`;
   }).join('');
   sugPanel.style.display='block';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ═══════════════════════════════════════════════════════════
+// SENTENCE ASSESSOR
+// ═══════════════════════════════════════════════════════════
+async function assessSentences(){
+  const chId=CHAPTERS[currentChapter].id;
+  const text=answers[chId];
+  if(!text||!text.trim())return;
+  const btn=document.getElementById('sent-btn');
+  btn.disabled=true;btn.classList.add('running');
+  btn.innerHTML=`⏳ Sätze werden analysiert … <span style="opacity:.6;font-size:10px;font-weight:400;">einen Moment bitte</span>`;
+  const system=`Du bist ein freundlicher Deutschlehrer für Kinder der 3. Klasse (Bayern, LehrplanPLUS). Analysiere jeden Satz im Text einzeln auf Satzbau und Grammatik. Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
+Format: [{"sentence":"exakter Satz aus dem Text","status":"ok"|"warn"|"error","issue":"kurzes Stichwort auf Deutsch","tip":"kindgerechte Erklärung auf Deutsch, max. 2 kurze Sätze, ermutigend"}]
+Prüfe: Großschreibung am Satzanfang, Satzzeichen am Ende (. ! ?), Subjekt vorhanden, Verb vorhanden und richtig konjugiert, Subjekt-Verb-Kongruenz, vollständiger Gedanke.
+status "ok" = alles richtig (tip = kurzes Lob), status "warn" = kleiner Hinweis, status "error" = muss verbessert werden.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system,messages:[{role:'user',content:text}]})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
+    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
+    raw=raw.replace(/```json|```/g,'').trim();
+    let results=[];try{results=JSON.parse(raw);}catch(e){}
+    renderSentences(results);
+  }catch(e){
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen!':'';
+    const panel=document.getElementById('sent-panel');
+    panel.classList.add('on');
+    document.getElementById('sent-rows').innerHTML=`<div style="padding:12px;color:var(--coral2);"><em>⚠️ ${escH(e.message)}${hint}</em></div>`;
+    document.getElementById('sent-summary').innerHTML='';
+  }
+  btn.disabled=false;btn.classList.remove('running');btn.innerHTML='🧩 Nochmal prüfen';
+}
+function renderSentences(results){
+  const panel=document.getElementById('sent-panel');
+  const rows=document.getElementById('sent-rows');
+  const summary=document.getElementById('sent-summary');
+  panel.classList.add('on');
+  if(!results.length){
+    rows.innerHTML=`<div style="padding:14px;text-align:center;font-family:var(--fp);font-size:7px;color:var(--green);">🌟 Alle Sätze sind super!</div>`;
+    summary.innerHTML='';
+    panel.scrollIntoView({behavior:'smooth',block:'start'});return;
+  }
+  const icons={ok:'🟢',warn:'🟡',error:'🔴'};
+  const labels={ok:'Gut so! ✓',warn:'Kleiner Hinweis',error:'Verbessern'};
+  rows.innerHTML=results.map(r=>{
+    const s=r.status==='error'?'error':r.status==='warn'?'warn':'ok';
+    return`<div class="sent-row s-${s}">
+      <div class="sent-text">${escH(r.sentence||'')}</div>
+      <span class="sent-badge s-${s}">${icons[s]} ${escH(r.issue||labels[s])}</span>
+      ${r.tip?`<div class="sent-tip">💬 ${escH(r.tip)}</div>`:''}
+    </div>`;
+  }).join('');
+  const ok=results.filter(r=>(!r.status||r.status==='ok')).length;
+  const warn=results.filter(r=>r.status==='warn').length;
+  const error=results.filter(r=>r.status==='error').length;
+  summary.innerHTML=`<span>🟢 ${ok} richtig</span><span>🟡 ${warn} Hinweis${warn!==1?'e':''}</span><span>🔴 ${error} zu verbessern</span>`;
   panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
@@ -2454,7 +2532,7 @@ function setIllusColor(el){
 // ═══════════════════════════════════════════════════════════
 let speechRec=null,speechActive=false;
 function toggleSpeech(){
-  const btn=document.getElementById('mic-btn');
+  const btn=document.getElementById('speech-btn');
   if(!btn)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert('Spracherkennung wird von diesem Browser nicht unterstützt.\nSpeech recognition is not supported in this browser.');return;}
@@ -2481,7 +2559,7 @@ function stopSpeech(){
   speechActive=false;
   if(speechRec){try{speechRec.stop();}catch(e){}}
   speechRec=null;
-  const btn=document.getElementById('mic-btn');
+  const btn=document.getElementById('speech-btn');
   if(btn){btn.classList.remove('recording');btn.innerHTML='🎤 <span>Sprache</span>';}
 }
 function appendSpeechText(text){

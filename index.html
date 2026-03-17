@@ -719,10 +719,6 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
     <span class="setup-label" id="lbl-name">Klasse / Class Name <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
     <input class="setup-input" id="class-input" type="text" placeholder="z.B. Klasse 3a …" maxlength="40">
 
-    <span class="setup-label">Anthropic API-Schlüssel · API Key <span style="font-weight:400;color:var(--coral2)">*</span></span>
-    <span class="setup-sublabel">KI-Funktionen benötigen einen API-Key · AI features require an API key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--lavender2);">console.anthropic.com</a>)</span>
-    <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off">
-
     <!-- Builder banner (shown when launched from builder.html) -->
     <div id="builder-banner" style="display:none;background:var(--grass);border:2px solid var(--grass2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--grass3);margin-bottom:.8rem;line-height:1.6;">
       ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
@@ -743,7 +739,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
          onmouseout="this.style.background='var(--grass)';this.style.color='var(--grass3)'">
         📖 Geschichte Baukasten / Story Builder
       </a>
-      <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" style="
+      <a href="story.html" style="
         display:inline-flex;align-items:center;justify-content:center;gap:7px;
         font-family:var(--font-head);font-size:11px;font-weight:700;
         color:var(--lavender3);text-decoration:none;
@@ -769,7 +765,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
       </div>
     </div>
     <div class="topbar-right">
-      <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" style="
+      <a href="story.html" style="
         font-family:var(--font-head);font-size:11px;font-weight:700;
         padding:6px 12px;border-radius:20px;
         background:rgba(255,208,50,.25);color:#ffd932;
@@ -1222,14 +1218,6 @@ function startApp(){
     document.getElementById('theme-input').focus();
     return;
   }
-  const keyVal=document.getElementById('api-key-input').value.trim();
-  if(!keyVal){
-    document.getElementById('api-key-input').style.borderColor='var(--coral2)';
-    document.getElementById('api-key-input').focus();
-    return;
-  }
-  apiKey=keyVal;
-  localStorage.setItem('anthropic-api-key',apiKey);
   theme=themeVal;
   className=document.getElementById('class-input').value.trim();
 
@@ -1830,9 +1818,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('theme-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')startApp();
   });
-  const saved=localStorage.getItem('anthropic-api-key');
-  if(saved)document.getElementById('api-key-input').value=saved;
-
   // Pre-fill theme from Story Builder if launched from builder.html
   const builderRaw=localStorage.getItem('builder-data');
   if(builderRaw){
