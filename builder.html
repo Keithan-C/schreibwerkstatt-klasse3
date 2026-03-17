@@ -274,6 +274,51 @@ body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:
 button:focus-visible,a:focus-visible,textarea:focus-visible{
   outline:3px solid var(--navy2);outline-offset:2px;
 }
+/* ── XP BAR ── */
+.xp-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:1.2rem;box-shadow:var(--sh);}
+.xp-icon{font-size:26px;flex-shrink:0;}
+.xp-info{flex:1;}
+.xp-level{font-size:13px;font-weight:800;color:var(--ink);display:block;}
+.xp-bar-wrap{background:var(--border-lt);border-radius:6px;height:8px;margin-top:4px;overflow:hidden;}
+.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));width:0%;}
+@media(prefers-reduced-motion:no-preference){.xp-bar-fill{transition:width .5s ease;}}
+.xp-pts{font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;white-space:nowrap;}
+/* ── TOAST ── */
+.toast{
+  position:fixed;top:12px;left:50%;transform:translateX(-50%);
+  background:var(--forest);color:#fff;font-size:14px;font-weight:800;
+  padding:10px 22px;border-radius:40px;box-shadow:var(--sh2);z-index:9999;
+  pointer-events:none;opacity:0;white-space:nowrap;
+}
+@media(prefers-reduced-motion:no-preference){
+  .toast.show{animation:tIn .2s ease forwards;}
+  @keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  .toast.hide{transition:opacity .3s;}
+}
+.toast.show{opacity:1;}
+.toast.hide{opacity:0;}
+/* ── INTEREST SELECTOR ── */
+.interest-section{margin-bottom:1.1rem;}
+.interest-label{font-size:12px;font-weight:800;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.interest-row{display:flex;gap:6px;flex-wrap:wrap;}
+.interest-btn{padding:7px 14px;border-radius:20px;border:2px solid var(--border);background:var(--surface);color:var(--ink2);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:40px;}
+.interest-btn:hover{border-color:var(--amber2);background:var(--amber4);}
+.interest-btn.active{background:var(--amber);color:#fff;border-color:var(--amber);}
+/* ── THEMED MINI IDEAS ── */
+.themed-ideas{background:var(--amber4);border:1.5px solid var(--amber3);border-radius:var(--r2);padding:8px 10px;margin-bottom:8px;}
+.themed-label{font-size:11px;font-weight:800;color:var(--amber);display:block;margin-bottom:6px;}
+.themed-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.themed-chip{padding:7px 13px;border-radius:20px;border:2px solid var(--amber3);background:var(--surface);color:var(--amber);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:40px;display:inline-flex;align-items:center;gap:5px;}
+.themed-chip:hover{background:var(--amber3);}
+.themed-chip.selected{background:var(--amber);color:#fff;border-color:var(--amber);}
+/* ── ACHIEVEMENT CARD ── */
+.ach-card{background:linear-gradient(135deg,var(--amber4),var(--forest4));border:2px solid var(--amber3);border-radius:var(--r);padding:1.2rem;text-align:center;margin-bottom:1rem;box-shadow:var(--sh);}
+.ach-icon{font-size:52px;display:block;margin-bottom:.3rem;}
+.ach-title{font-size:clamp(16px,3.5vw,20px);font-weight:900;color:var(--ink);display:block;}
+.ach-sub{font-size:13px;color:var(--muted);display:block;margin-top:.2rem;}
+.ach-xp{font-size:18px;font-weight:800;color:var(--forest);display:block;margin-top:.4rem;}
+.ach-bar-wrap{background:var(--border-lt);border-radius:6px;height:10px;margin:.6rem auto 0;max-width:200px;overflow:hidden;}
+.ach-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));}
 </style>
 </head>
 <body>
@@ -291,6 +336,15 @@ button:focus-visible,a:focus-visible,textarea:focus-visible{
 <div class="wrap">
 
 <div class="step-progress" id="step-progress"></div>
+
+<div class="xp-row" id="xp-bar">
+  <span class="xp-icon" id="xp-icon">📖</span>
+  <div class="xp-info">
+    <span class="xp-level" id="xp-level">Level: Anfänger</span>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+  </div>
+  <span class="xp-pts" id="xp-pts">0 / 500 XP</span>
+</div>
 
 <div class="confidence-bar">
   <span class="conf-label">💡 Wie viel Hilfe möchtest du?</span>
@@ -433,6 +487,39 @@ const RUBRIC = [
   {id:'r7',icon:'🏁',text:'Ich habe eine Schlussformel benutzt.'},
 ];
 
+const INTERESTS = {
+  minecraft:{label:'⛏️ Minecraft',ideas:{
+    character:[{e:'⛏️',l:'Bergmann'},{e:'🧱',l:'Baumeister'},{e:'👾',l:'Creeper'},{e:'🐺',l:'Wolf'}],
+    place:    [{e:'⛏️',l:'Mine'},{e:'🏚️',l:'Dorf'},{e:'🔮',l:'Portal'},{e:'🌋',l:'Nether'}],
+    problem:  [{e:'👾',l:'Monsterschwarm'},{e:'💫',l:'Verfluchtes Objekt'},{e:'🌑',l:'Dunkelheit'},{e:'💎',l:'Gestohlenes Erz'}]
+  }},
+  tiere:{label:'🦁 Tiere',ideas:{
+    character:[{e:'🦁',l:'Löwe'},{e:'🐯',l:'Tiger'},{e:'🦅',l:'Adler'},{e:'🐬',l:'Delfin'}],
+    place:    [{e:'🌾',l:'Savanne'},{e:'🌿',l:'Dschungel'},{e:'🌊',l:'Ozean'},{e:'❄️',l:'Polargebiet'}],
+    problem:  [{e:'🌪️',l:'Sturm'},{e:'🌊',l:'Überschwemmung'},{e:'🔥',l:'Waldbrand'},{e:'🕳️',l:'Falle'}]
+  }},
+  weltraum:{label:'🚀 Weltraum',ideas:{
+    character:[{e:'👨‍🚀',l:'Astronaut'},{e:'👽',l:'Alien'},{e:'🤖',l:'Roboter'},{e:'🌟',l:'Raumpilotin'}],
+    place:    [{e:'🪐',l:'Planet'},{e:'🌙',l:'Mondstation'},{e:'⭐',l:'Sternbasis'},{e:'🌌',l:'Nebel'}],
+    problem:  [{e:'💥',l:'Absturz'},{e:'🔒',l:'Eingesperrt'},{e:'🌑',l:'Dunkelheit'},{e:'🔮',l:'Rätsel'}]
+  }},
+  magie:{label:'🏰 Magie',ideas:{
+    character:[{e:'🧙',l:'Zauberer'},{e:'🧝',l:'Elfe'},{e:'🧜',l:'Nixe'},{e:'🦄',l:'Einhorn'}],
+    place:    [{e:'🏰',l:'Burg'},{e:'🌲',l:'Zauberwald'},{e:'🌊',l:'Zaubersee'},{e:'🗻',l:'Drachenberg'}],
+    problem:  [{e:'🔮',l:'Zauberpech'},{e:'💤',l:'Zauberschlaf'},{e:'🦹',l:'Bösewicht'},{e:'💎',l:'Verlorener Schatz'}]
+  }},
+};
+
+const LEVELS = [
+  {min:0,   max:99,  icon:'📖', name:'Anfänger'},
+  {min:100, max:199, icon:'✏️', name:'Schreiber'},
+  {min:200, max:299, icon:'🌟', name:'Held'},
+  {min:300, max:399, icon:'🏆', name:'Geschichtenmeister'},
+  {min:400, max:500, icon:'👑', name:'Meistererzähler'},
+];
+
+const XP_PER_STEP = {1:100, 2:150, 3:75, 4:75, 5:100};
+
 const STEPS_META = [
   {n:1,icon:'🎭',label:'Figuren & Ort'},
   {n:2,icon:'🏔️',label:'Schreibberg'},
@@ -451,6 +538,9 @@ let mountain    = {};       // { anfang, aufbau, hoehepunkt, loesung, schluss }
 let starters    = new Set();
 let wordPicks   = new Set();
 let rubric      = {};
+let interest    = null;   // 'minecraft' | 'tiere' | 'weltraum' | 'magie' | null
+let xp          = 0;
+let earnedSteps = new Set();
 
 // ══════════════════════════════════════════════════
 // CONFIDENCE
@@ -485,13 +575,37 @@ function renderProgress(){
 // STEP 1 — CHARACTER / PLACE / PROBLEM PICKERS
 // ══════════════════════════════════════════════════
 function renderStep1(){
+  // Interest selector buttons
+  const interestBtns = Object.entries(INTERESTS).map(([k,v])=>
+    `<button class="interest-btn${interest===k?' active':''}" onclick="setInterest('${k}')">${v.label}</button>`
+  ).join('');
+
+  // Build subsections with optional themed ideas
   const subs = CATEGORIES.map((cat, i)=>{
-    // Reveal progressively: show next picker only after previous is chosen
     const prevDone = i === 0 || !!choices[CATEGORIES[i-1].id];
     if(!prevDone) return '';
     const sel = choices[cat.id];
+
+    // Themed idea chips for chosen interest
+    let themedHTML = '';
+    if(interest && INTERESTS[interest]){
+      const tIdeas = INTERESTS[interest].ideas[cat.id] || [];
+      if(tIdeas.length){
+        const chips = tIdeas.map((c,j)=>{
+          const isSelected = sel && sel.e===c.e && sel.l===c.l;
+          return `<button class="themed-chip${isSelected?' selected':''}" onclick="pickThemed('${cat.id}','${c.e}','${c.l.replace(/'/g,"\\'")}')">
+            ${c.e} ${c.l}
+          </button>`;
+        }).join('');
+        themedHTML = `<div class="themed-ideas">
+          <span class="themed-label">✨ ${INTERESTS[interest].label} Ideen:</span>
+          <div class="themed-chips">${chips}</div>
+        </div>`;
+      }
+    }
+
     const grid = cat.choices.map((c,j)=>`
-      <div class="icon-card${sel && sel.e===c.e?' selected':''}" onclick="pick('${cat.id}',${j})" role="button" aria-label="${c.l}">
+      <div class="icon-card${sel && sel.e===c.e && sel.l===c.l?' selected':''}" onclick="pick('${cat.id}',${j})" role="button" aria-label="${c.l}">
         <span class="ic-emoji">${c.e}</span>
         <span class="ic-label">${c.l}</span>
       </div>`).join('');
@@ -502,6 +616,7 @@ function renderStep1(){
           <span class="subsec-title">${cat.question}</span>
           <span class="subsec-check">${sel ? '✅ '+sel.l : ''}</span>
         </div>
+        ${themedHTML}
         <div class="icon-grid">${grid}</div>
       </div>`;
   }).join('');
@@ -515,6 +630,13 @@ function renderStep1(){
           <span class="step-eyebrow">Schritt 1 von 5 · LehrplanPLUS Deutsch D3/4 LB 2</span>
           <span class="step-title">🎭 Figuren &amp; Ort wählen</span>
           <span class="step-desc">Wähle eine Figur, einen Ort und ein Problem. Tippe auf ein Bild, um es zu wählen.</span>
+        </div>
+      </div>
+      <div class="interest-section">
+        <span class="interest-label">🌟 Passt das zu deinen Interessen?</span>
+        <div class="interest-row">
+          <button class="interest-btn${!interest?' active':''}" onclick="setInterest(null)">Standard</button>
+          ${interestBtns}
         </div>
       </div>
       ${subs}
@@ -734,6 +856,11 @@ function pick(catId, idx){
   renderCurrentStep();
 }
 
+function pickThemed(catId, e, l){
+  choices[catId] = {e, l};
+  renderCurrentStep();
+}
+
 function toggleStarter(id){
   starters.has(id) ? starters.delete(id) : starters.add(id);
   renderCurrentStep();
@@ -762,6 +889,7 @@ function nextStep(){
     }
     document.getElementById('gate-notice').classList.remove('on');
   }
+  awardXp(currentStep);
   if(currentStep < 5){
     currentStep++;
     render();
@@ -814,6 +942,7 @@ function renderCurrentStep(){
 
 function render(){
   renderProgress();
+  updateXpBar();
   const resultEl = document.getElementById('result-panel');
   const panelsEl = document.getElementById('step-panels');
   if(currentStep === 6){
@@ -831,11 +960,31 @@ function render(){
 // ══════════════════════════════════════════════════
 function renderResult(){
   renderProgress();
+  updateXpBar();
   const ch = choices;
   document.getElementById('rh-title').textContent =
     `${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l}`;
   document.getElementById('rh-emojis').innerHTML =
     `<span>${ch.character.e}</span><span>${ch.place.e}</span><span>${ch.problem.e}</span>`;
+
+  // Show achievement card before action buttons
+  const lvl  = getLevel(xp);
+  const pct  = Math.min(100, Math.round(xp / 500 * 100));
+  const achEl = document.createElement('div');
+  achEl.className = 'ach-card';
+  achEl.innerHTML = `
+    <span class="ach-icon">${lvl.icon}</span>
+    <span class="ach-title">Du bist jetzt: ${lvl.name}!</span>
+    <span class="ach-sub">Du hast deinen Schreibplan fertig gestellt. Gut gemacht!</span>
+    <span class="ach-xp">⭐ ${xp} / 500 XP</span>
+    <div class="ach-bar-wrap"><div class="ach-bar-fill" style="width:${pct}%"></div></div>`;
+
+  const resultPanel = document.getElementById('result-panel');
+  // Insert after result-hero if not already there
+  const existing = resultPanel.querySelector('.ach-card');
+  if(existing) existing.remove();
+  const hero = resultPanel.querySelector('.result-hero');
+  if(hero) hero.insertAdjacentElement('afterend', achEl);
 }
 
 function launchApp(target){
@@ -879,9 +1028,65 @@ function launchApp(target){
 
 function resetBuilder(){
   choices = {}; mountain = {}; starters = new Set(); wordPicks = new Set(); rubric = {};
+  interest = null; xp = 0; earnedSteps = new Set();
   currentStep = 1;
   render();
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── GAMIFICATION ───────────────────────────────────
+function getLevel(pts){
+  return LEVELS.find(l=>pts>=l.min&&pts<=l.max) || LEVELS[LEVELS.length-1];
+}
+
+function updateXpBar(){
+  const lvl  = getLevel(xp);
+  const pct  = Math.min(100, Math.round(xp / 500 * 100));
+  const icon = document.getElementById('xp-icon');
+  const lbl  = document.getElementById('xp-level');
+  const fill = document.getElementById('xp-bar-fill');
+  const pts  = document.getElementById('xp-pts');
+  if(icon) icon.textContent = lvl.icon;
+  if(lbl)  lbl.textContent  = `Level: ${lvl.name}`;
+  if(fill) fill.style.width = pct + '%';
+  if(pts)  pts.textContent  = `${xp} / 500 XP`;
+}
+
+function showToast(msg, dur=2500){
+  let t = document.getElementById('_toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = '_toast'; t.className = 'toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.remove('hide');
+  t.classList.add('show');
+  clearTimeout(t._tmr);
+  t._tmr = setTimeout(()=>{ t.classList.remove('show'); t.classList.add('hide'); }, dur);
+}
+
+function awardXp(step){
+  if(earnedSteps.has(step)) return;
+  earnedSteps.add(step);
+  const pts = XP_PER_STEP[step] || 0;
+  xp += pts;
+  updateXpBar();
+  const lvl = getLevel(xp);
+  const messages = {
+    1:`🎭 Figuren gewählt! +${pts} XP`,
+    2:`🏔️ Schreibberg fertig! +${pts} XP`,
+    3:`✍️ Satzanfänge gesammelt! +${pts} XP`,
+    4:`🎨 Wörterschatz gepackt! +${pts} XP`,
+    5:`✅ Selbstcheck erledigt! +${pts} XP · ${lvl.icon} ${lvl.name}`,
+  };
+  showToast(messages[step] || `+${pts} XP`);
+}
+
+function setInterest(key){
+  // key is null for "Standard" button, or a theme string
+  interest = (key !== null && interest === key) ? null : key;
+  renderCurrentStep();
 }
 
 // ══════════════════════════════════════════════════
