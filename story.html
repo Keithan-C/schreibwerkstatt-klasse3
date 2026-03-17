@@ -1509,6 +1509,7 @@ async function startRecording(){
     recordChunks=[];
     mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordChunks.push(e.data);};
     mediaRecorder.onstop=()=>{
+      stream.getTracks().forEach(t=>t.stop());
       audioBlob=new Blob(recordChunks,{type:'audio/webm'});
       const url=URL.createObjectURL(audioBlob);
       const ap=document.getElementById('audio-playback');
@@ -1867,7 +1868,7 @@ function renderWrite(){
         </div>
 
         <div class="write-toolbar">
-          <button class="tb-btn" id="mic-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
+          <button class="tb-btn" id="speech-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
           <button class="tb-btn" onclick="openFocusMode()">🧘 Fokus</button>
           <button class="tb-btn" onclick="openIllustrator()">🎨 Illustrieren</button>
         </div>
@@ -2440,7 +2441,7 @@ function setIllusColor(el){
 // ═══════════════════════════════════════════════════════════
 let speechRec=null,speechActive=false;
 function toggleSpeech(){
-  const btn=document.getElementById('mic-btn');
+  const btn=document.getElementById('speech-btn');
   if(!btn)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){alert('Spracherkennung wird von diesem Browser nicht unterstützt.\nSpeech recognition is not supported in this browser.');return;}
@@ -2467,7 +2468,7 @@ function stopSpeech(){
   speechActive=false;
   if(speechRec){try{speechRec.stop();}catch(e){}}
   speechRec=null;
-  const btn=document.getElementById('mic-btn');
+  const btn=document.getElementById('speech-btn');
   if(btn){btn.classList.remove('recording');btn.innerHTML='🎤 <span>Sprache</span>';}
 }
 function appendSpeechText(text){
