@@ -650,6 +650,28 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
 
 @media(max-width:480px){.wrap{padding:1rem .7rem 5rem;}}
 
+/* ── SCHREIBPLAN PANEL (keywords/plan from builder.html) ── */
+.schreibplan-panel{margin-bottom:1rem;border:2px solid #c8ecb0;border-radius:12px;background:#edf8e6;overflow:hidden;}
+.schreibplan-panel summary{padding:10px 14px;cursor:pointer;font-weight:700;font-size:13px;color:#2a5c1a;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
+.schreibplan-panel summary::-webkit-details-marker{display:none;}
+.schreibplan-panel summary::after{content:'▼';margin-left:auto;font-size:11px;opacity:.6;}
+.schreibplan-panel[open] summary::after{content:'▲';}
+.sp-inner{padding:8px 14px 12px;border-top:1px solid #c8ecb0;}
+.sp-choices-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.sp-choice-tag{padding:5px 11px;border-radius:6px;background:#fff;border:1.5px solid #c8ecb0;font-size:13px;font-weight:700;color:#1c3f6e;}
+.sp-mtn{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.sp-mtn-item{padding:6px 10px;border-radius:6px;font-size:12px;line-height:1.6;color:#1c1a18;}
+.sp-words-row{display:flex;flex-wrap:wrap;gap:4px;}
+.sp-word-tag{padding:4px 9px;border-radius:5px;font-size:12px;font-weight:700;background:#dceeff;color:#1c3f6e;border:1.5px solid #b8d8f0;}
+
+/* ── AUTISM-FRIENDLY OVERRIDES ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
+  outline:3px solid var(--lavender2);outline-offset:3px;
+}
+
 </style>
 </head>
 <body>
@@ -771,6 +793,7 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
       <div><span class="lz-label" id="lz-label">Mein Lernziel</span><div class="lz-text" id="lz-text"></div></div>
     </div>
 
+    <div id="schreibplan-panel"></div>
     <div class="gate-notice" id="gate-notice"></div>
 
     <div class="part-tabs">
@@ -1774,7 +1797,7 @@ async function askAI(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
@@ -1817,12 +1840,53 @@ document.addEventListener('DOMContentLoaded',()=>{
       const bannerText=document.getElementById('builder-banner-text');
       if(banner&&bd.choices){
         const ch=bd.choices;
-        bannerText.textContent=`${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l} · ${ch.event.e} ${ch.event.l} · ${ch.ending.e} ${ch.ending.l}`;
+        const parts=[ch.character,ch.place,ch.problem]
+          .filter(x=>x&&x.l)
+          .map(x=>`${x.e} ${x.l}`);
+        bannerText.textContent=parts.join(' · ');
         banner.style.display='block';
       }
+      // Build Schreibplan panel
+      buildSchreibplanPanel(bd);
     }catch(e){}
   }
 });
+
+function buildSchreibplanPanel(bd){
+  const el=document.getElementById('schreibplan-panel');
+  if(!el||!bd)return;
+  const ch=bd.choices||{};
+  const choices=[ch.character,ch.place,ch.problem].filter(x=>x&&x.l);
+  const choiceHTML=choices.map(x=>`<span class="sp-choice-tag">${x.e} ${x.l}</span>`).join('');
+
+  let mtnHTML='';
+  const mtn=bd.storyMountain||{};
+  const mtnLabels={anfang:'🌅 Anfang',aufbau:'📈 Aufbau',hoehepunkt:'⚡ Höhepunkt',loesung:'💡 Lösung',schluss:'🏁 Schluss'};
+  const mtnColors={anfang:'#edf8e6',aufbau:'#f0fbf0',hoehepunkt:'#fdf5de',loesung:'#e4f0fb',schluss:'#f0ebff'};
+  const mtnParts=Object.entries(mtnLabels).filter(([k])=>mtn[k]&&mtn[k].trim());
+  if(mtnParts.length){
+    mtnHTML=`<div class="sp-mtn">${mtnParts.map(([k,label])=>
+      `<div class="sp-mtn-item" style="background:${mtnColors[k]}">${label}: ${mtn[k]}</div>`
+    ).join('')}</div>`;
+  }
+
+  let wordsHTML='';
+  const words=bd.selectedWords||[];
+  if(words.length){
+    wordsHTML=`<div class="sp-words-row">${words.map(w=>`<span class="sp-word-tag">${w}</span>`).join('')}</div>`;
+  }
+
+  if(!choiceHTML&&!mtnHTML&&!wordsHTML) return;
+
+  el.innerHTML=`<details class="schreibplan-panel" open>
+    <summary>📋 Mein Schreibplan <span style="font-size:11px;font-weight:400;opacity:.7;">(vom Baukasten)</span></summary>
+    <div class="sp-inner">
+      ${choiceHTML?`<div class="sp-choices-row">${choiceHTML}</div>`:''}
+      ${mtnHTML}
+      ${wordsHTML}
+    </div>
+  </details>`;
+}
 
 // ═══════════════════════════════════════════════════════════
 // GRAMMAR PRACTICE ENGINE
@@ -2256,7 +2320,7 @@ async function checkGramAnswer(){
         method:'POST',
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
+          model:'claude-sonnet-4-6',
           max_tokens:200,
           system:`Du bist ein freundlicher Deutschlehrer für Klasse 3 (Bayern, LehrplanPLUS). Grammatik-Thema: ${topic.label}. Antworte kurz, ermutigend, max. 3 Sätze.`,
           messages:[{role:'user',content:`${prompt}\n\nAntwort des Kindes: ${answer}`}]
@@ -2340,7 +2404,7 @@ Rules:
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:systemPrompt,
         messages:[{role:'user',content:text}]

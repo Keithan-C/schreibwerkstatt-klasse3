@@ -545,6 +545,32 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
 .if-btn:hover{opacity:.85;}
 
 @media(max-width:480px){.wrap{padding:0 .6rem 5rem;}}
+
+/* ── SCHREIBPLAN PANEL (keywords/plan from builder.html) ── */
+.schreibplan-panel{margin-bottom:1rem;border:2px solid #c8ecb0;border-radius:12px;background:#edf8e6;overflow:hidden;font-family:var(--font-body);}
+.schreibplan-panel summary{padding:10px 14px;cursor:pointer;font-weight:700;font-size:13px;color:#2a5c1a;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
+.schreibplan-panel summary::-webkit-details-marker{display:none;}
+.schreibplan-panel summary::after{content:'▼';margin-left:auto;font-size:11px;opacity:.6;}
+.schreibplan-panel[open] summary::after{content:'▲';}
+.sp-inner{padding:8px 14px 12px;border-top:1px solid #c8ecb0;}
+.sp-choices-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.sp-choice-tag{padding:5px 11px;border-radius:6px;background:#fff;border:1.5px solid #c8ecb0;font-size:13px;font-weight:700;color:#1c3f6e;}
+.sp-mtn{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.sp-mtn-item{padding:6px 10px;border-radius:6px;font-size:12px;line-height:1.6;color:#1c1a18;}
+.sp-words-row{display:flex;flex-wrap:wrap;gap:4px;}
+.sp-word-tag{padding:4px 9px;border-radius:5px;font-size:12px;font-weight:700;background:#dceeff;color:#1c3f6e;border:1.5px solid #b8d8f0;}
+
+/* ── AUTISM-FRIENDLY OVERRIDES ── */
+/* Stop header character from bouncing (distracting for some) */
+@media(prefers-reduced-motion:reduce){
+  .header-char{animation:none!important;}
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+/* Larger, easier tap targets */
+.btn{min-height:46px;}
+button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
+  outline:3px solid var(--lavender2);outline-offset:3px;
+}
 </style>
 </head>
 <body>
@@ -1011,6 +1037,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
      PHASE 5: SCHREIBEN
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-write">
+  <div id="schreibplan-panel"></div>
   <!-- Chapter tabs -->
   <div class="chapter-tabs" id="chapter-tabs"></div>
   <div class="phase-tabs-mini" id="phase-tabs-mini">
@@ -1192,15 +1219,21 @@ function init(){
       const bd=JSON.parse(builderRaw);
       const ch=bd.choices;
       if(ch){
-        // Pre-fill keywords from builder choices
-        keywords=[ch.character.l,ch.place.l,ch.problem.l,ch.event.l,ch.ending.l];
+        // Pre-fill keywords (filter out null/placeholder choices)
+        keywords=[ch.character,ch.place,ch.problem,ch.event,ch.ending]
+          .filter(x=>x&&x.l&&x.l!=='Wendepunkt'&&x.l!=='Schluss')
+          .map(x=>x.l);
         // Pre-fill narration hint
-        typedNarration=`Mein Held ist ${ch.character.e} ${ch.character.l}. Ich spielte in ${ch.place.e} ${ch.place.l}. Dann passierte: ${ch.problem.e} ${ch.problem.l}. Schließlich: ${ch.event.e} ${ch.event.l} — und am Ende: ${ch.ending.e} ${ch.ending.l}.`;
+        const evtStr=ch.event&&ch.event.l&&ch.event.l!=='Wendepunkt'?` Dann: ${ch.event.e} ${ch.event.l}.`:'';
+        typedNarration=`Mein Held ist ${ch.character.e} ${ch.character.l}. Ich spielte in ${ch.place.e} ${ch.place.l}. Das Problem: ${ch.problem.e} ${ch.problem.l}.${evtStr}`;
         // Show banner
         const banner=document.getElementById('builder-banner');
         const bannerText=document.getElementById('builder-banner-text');
         if(banner){
-          bannerText.textContent=`${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l} · ${ch.event.e} ${ch.event.l} · ${ch.ending.e} ${ch.ending.l}`;
+          const parts=[ch.character,ch.place,ch.problem]
+            .filter(x=>x&&x.l)
+            .map(x=>`${x.e} ${x.l}`);
+          bannerText.textContent=parts.join(' · ');
           banner.style.display='block';
         }
         // Pre-populate scaffold prompts if available
@@ -1212,9 +1245,55 @@ function init(){
           scaffoldEdits.middle=scaffoldData.middle;
           scaffoldEdits.end=scaffoldData.end;
         }
+        // Build Schreibplan panel (visible in writing phase)
+        buildSchreibplanPanel(bd);
       }
     }catch(e){}
   }
+}
+
+function buildSchreibplanPanel(bd){
+  const el=document.getElementById('schreibplan-panel');
+  if(!el||!bd)return;
+  const ch=bd.choices||{};
+  const choices=[ch.character,ch.place,ch.problem].filter(x=>x&&x.l);
+  const choiceHTML=choices.map(x=>`<span class="sp-choice-tag">${x.e} ${x.l}</span>`).join('');
+
+  let mtnHTML='';
+  const mtn=bd.storyMountain||{};
+  const mtnLabels={anfang:'🌅 Anfang',aufbau:'📈 Aufbau',hoehepunkt:'⚡ Höhepunkt',loesung:'💡 Lösung',schluss:'🏁 Schluss'};
+  const mtnColors={anfang:'#edf8e6',aufbau:'#f0fbf0',hoehepunkt:'#fdf5de',loesung:'#e4f0fb',schluss:'#f0ebff'};
+  const mtnParts=Object.entries(mtnLabels).filter(([k])=>mtn[k]&&mtn[k].trim());
+  if(mtnParts.length){
+    mtnHTML=`<div class="sp-mtn">${mtnParts.map(([k,label])=>
+      `<div class="sp-mtn-item" style="background:${mtnColors[k]}">${label}: ${mtn[k]}</div>`
+    ).join('')}</div>`;
+  }
+
+  let wordsHTML='';
+  const words=bd.selectedWords||[];
+  if(words.length){
+    wordsHTML=`<div class="sp-words-row">${words.map(w=>`<span class="sp-word-tag">${w}</span>`).join('')}</div>`;
+  }
+
+  let startersHTML='';
+  const starters=bd.selectedStarters||[];
+  if(starters.length){
+    // Resolve starter IDs to text — just show as note
+    startersHTML=`<div style="font-size:12px;color:#2a5c1a;margin-top:6px;">✍️ Deine Satzanfänge wurden in deinem Schreibplan gespeichert.</div>`;
+  }
+
+  if(!choiceHTML&&!mtnHTML&&!wordsHTML) return; // nothing to show
+
+  el.innerHTML=`<details class="schreibplan-panel" open>
+    <summary>📋 Mein Schreibplan <span style="font-size:11px;font-weight:400;opacity:.7;">(vom Baukasten)</span></summary>
+    <div class="sp-inner">
+      ${choiceHTML?`<div class="sp-choices-row">${choiceHTML}</div>`:''}
+      ${mtnHTML}
+      ${wordsHTML}
+      ${startersHTML}
+    </div>
+  </details>`;
 }
 
 function buildStars(){
@@ -1537,7 +1616,7 @@ Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und 
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1200,
         system,
         messages:[{role:'user',content:userMsg}]
@@ -2161,7 +2240,7 @@ Regeln: max. 6 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages:[{role:'user',content:text}]})
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system,messages:[{role:'user',content:text}]})
     });
     const data=await res.json();
     let raw=data.content&&data.content[0]?data.content[0].text:'[]';
