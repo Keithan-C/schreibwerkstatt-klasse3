@@ -613,7 +613,64 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
 .gram-bar-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
 .gram-bar-fill{height:100%;background:linear-gradient(90deg,var(--grass2),var(--lavender2));border-radius:3px;transition:width .4s;}
 
+/* ── WRITE TOOLBAR ── */
+.write-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem;align-items:center;}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:20px;border:2px solid var(--border);background:var(--white);cursor:pointer;font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.tb-btn:hover{border-color:var(--lavender2);color:var(--lavender2);}
+.tb-btn.recording{border-color:#e53935;background:#ffebee;color:#e53935;animation:micPulse 1s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.3)}50%{box-shadow:0 0 0 6px rgba(229,57,53,0)}}
+/* ── FOCUS MODE ── */
+.focus-overlay{position:fixed;inset:0;background:#0d0d1a;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;}
+.focus-overlay.open{display:flex;}
+.focus-eyebrow{color:rgba(255,255,255,.3);font-family:var(--font-head);font-size:9px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:.5rem;max-width:640px;width:100%;}
+.focus-prompt{color:rgba(255,255,255,.65);font-family:var(--font-body);font-size:14px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(255,255,255,.06);border-radius:12px;padding:12px 20px;}
+.focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);border-radius:16px;padding:20px;color:#f0f0ff;font-family:var(--font-body);font-size:17px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
+.focus-area:focus{border-color:rgba(124,77,255,.55);}
+.focus-wc{color:rgba(255,255,255,.3);font-size:11px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
+.focus-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.8);border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+.focus-close:hover{background:rgba(255,255,255,.22);}
+/* ── ILLUSTRATOR ── */
+.illus-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8000;display:none;align-items:center;justify-content:center;padding:1rem;}
+.illus-bg.open{display:flex;}
+.illus-modal{background:var(--white);border-radius:20px;max-width:580px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.35);overflow:hidden;display:flex;flex-direction:column;}
+.illus-head{background:linear-gradient(135deg,var(--mint2),var(--mint3));padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.illus-head-title{font-family:var(--font-head);font-size:14px;color:#fff;font-weight:700;}
+.illus-close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.illus-bar{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--offwhite);border-bottom:1.5px solid var(--border);flex-wrap:wrap;}
+.it-btn{padding:5px 9px;border-radius:8px;border:2px solid var(--border);background:var(--white);cursor:pointer;font-size:12px;font-family:var(--font-head);font-weight:700;color:var(--ink);transition:all .15s;display:inline-flex;align-items:center;gap:4px;}
+.it-btn.on{border-color:var(--lavender2);background:var(--lavender);color:var(--lavender3);}
+.it-swatch{width:22px;height:22px;border-radius:50%;border:2.5px solid #fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);flex-shrink:0;transition:transform .15s;}
+.it-swatch:hover,.it-swatch.on{transform:scale(1.28);box-shadow:0 2px 8px rgba(0,0,0,.25);}
+.illus-canvas-wrap{background:#fff;overflow:hidden;}
+.illus-canvas{display:block;touch-action:none;cursor:crosshair;max-width:100%;}
+.illus-foot{display:flex;gap:8px;padding:8px 10px;border-top:1.5px solid var(--border);}
+.if-btn{flex:1;padding:8px 10px;border-radius:8px;border:2px solid var(--border);background:var(--offwhite);cursor:pointer;font-family:var(--font-head);font-size:10px;font-weight:700;color:var(--ink);transition:all .2s;}
+.if-btn.primary{background:var(--grass);border-color:var(--grass2);color:var(--grass3);}
+.if-btn:hover{opacity:.85;}
+
 @media(max-width:480px){.wrap{padding:1rem .7rem 5rem;}}
+
+/* ── SCHREIBPLAN PANEL (keywords/plan from builder.html) ── */
+.schreibplan-panel{margin-bottom:1rem;border:2px solid #c8ecb0;border-radius:12px;background:#edf8e6;overflow:hidden;}
+.schreibplan-panel summary{padding:10px 14px;cursor:pointer;font-weight:700;font-size:13px;color:#2a5c1a;list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
+.schreibplan-panel summary::-webkit-details-marker{display:none;}
+.schreibplan-panel summary::after{content:'▼';margin-left:auto;font-size:11px;opacity:.6;}
+.schreibplan-panel[open] summary::after{content:'▲';}
+.sp-inner{padding:8px 14px 12px;border-top:1px solid #c8ecb0;}
+.sp-choices-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.sp-choice-tag{padding:5px 11px;border-radius:6px;background:#fff;border:1.5px solid #c8ecb0;font-size:13px;font-weight:700;color:#1c3f6e;}
+.sp-mtn{display:flex;flex-direction:column;gap:4px;margin-bottom:8px;}
+.sp-mtn-item{padding:6px 10px;border-radius:6px;font-size:12px;line-height:1.6;color:#1c1a18;}
+.sp-words-row{display:flex;flex-wrap:wrap;gap:4px;}
+.sp-word-tag{padding:4px 9px;border-radius:5px;font-size:12px;font-weight:700;background:#dceeff;color:#1c3f6e;border:1.5px solid #b8d8f0;}
+
+/* ── AUTISM-FRIENDLY OVERRIDES ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+}
+button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
+  outline:3px solid var(--lavender2);outline-offset:3px;
+}
 
 </style>
 </head>
@@ -662,11 +719,32 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
     <span class="setup-label" id="lbl-name">Klasse / Class Name <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
     <input class="setup-input" id="class-input" type="text" placeholder="z.B. Klasse 3a …" maxlength="40">
 
+    <span class="setup-label">Anthropic API-Schlüssel · API Key <span style="font-weight:400;color:var(--coral2)">*</span></span>
+    <span class="setup-sublabel">KI-Funktionen benötigen einen API-Key · AI features require an API key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--lavender2);">console.anthropic.com</a>)</span>
+    <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off">
+
+    <!-- Builder banner (shown when launched from builder.html) -->
+    <div id="builder-banner" style="display:none;background:var(--grass);border:2px solid var(--grass2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--grass3);margin-bottom:.8rem;line-height:1.6;">
+      ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
+      <span id="builder-banner-text" style="font-size:12px;opacity:.9;"></span>
+    </div>
+
     <button class="setup-btn" id="start-btn" onclick="startApp()">✏️ Für Schüler öffnen / Open for Students</button>
 
-    <div style="text-align:center;margin-top:1rem;">
+    <div style="text-align:center;margin-top:1rem;display:flex;flex-direction:column;gap:8px;">
+      <a href="builder.html" style="
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;
+        font-family:var(--font-head);font-size:11px;font-weight:700;
+        color:var(--grass3);text-decoration:none;
+        background:var(--grass);border:2px solid var(--grass2);
+        padding:8px 16px;border-radius:var(--radius-sm);
+        transition:background .2s;
+      " onmouseover="this.style.background='var(--grass2)';this.style.color='#fff'"
+         onmouseout="this.style.background='var(--grass)';this.style.color='var(--grass3)'">
+        📖 Geschichte Baukasten / Story Builder
+      </a>
       <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" style="
-        display:inline-flex;align-items:center;gap:7px;
+        display:inline-flex;align-items:center;justify-content:center;gap:7px;
         font-family:var(--font-head);font-size:11px;font-weight:700;
         color:var(--lavender3);text-decoration:none;
         background:var(--lavender);border:2px solid var(--lavender2);
@@ -715,6 +793,7 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
       <div><span class="lz-label" id="lz-label">Mein Lernziel</span><div class="lz-text" id="lz-text"></div></div>
     </div>
 
+    <div id="schreibplan-panel"></div>
     <div class="gate-notice" id="gate-notice"></div>
 
     <div class="part-tabs">
@@ -786,6 +865,7 @@ let lang='de'; // 'de','en','both'
 let role='teacher'; // 'teacher' or 'parent'
 let theme='';
 let className='';
+let apiKey=localStorage.getItem('anthropic-api-key')||'';
 let part='begin'; // begin, middle, end
 let celebCallback=null;
 
@@ -1142,6 +1222,14 @@ function startApp(){
     document.getElementById('theme-input').focus();
     return;
   }
+  const keyVal=document.getElementById('api-key-input').value.trim();
+  if(!keyVal){
+    document.getElementById('api-key-input').style.borderColor='var(--coral2)';
+    document.getElementById('api-key-input').focus();
+    return;
+  }
+  apiKey=keyVal;
+  localStorage.setItem('anthropic-api-key',apiKey);
   theme=themeVal;
   className=document.getElementById('class-input').value.trim();
 
@@ -1380,6 +1468,11 @@ function renderWrite(){
         ${stems}
       </div>
       <div class="hint-box ${hints[part]?'on':''}" id="hint-box">${T[l].hints[part]}</div>
+      <div class="write-toolbar">
+        <button class="tb-btn" id="mic-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
+        <button class="tb-btn" onclick="openFocusMode()">🧘 Fokus</button>
+        <button class="tb-btn" onclick="openIllustrator()">🎨 Illustrieren</button>
+      </div>
       <textarea id="answer-box" rows="7" spellcheck="true" lang="${l}">${esc(text)}</textarea>
       <div class="wc-row">
         <span id="wc-el" class="${good?'wc-good':''}">${T[l].wcLabel(count,min)}</span>
@@ -1702,21 +1795,25 @@ async function askAI(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
       })
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     const reply=data.content&&data.content[0]?data.content[0].text:'…';
     document.getElementById('ai-response').textContent=reply;
     document.getElementById('ai-response').classList.add('on');
   }catch(e){
+    const hint=/auth|key|invalid/i.test(e.message)
+      ?(l==='de'?' Bitte API-Key prüfen (⚙️ Thema).'
+                :' Please check your API key (⚙️ Theme).'):'';
     document.getElementById('ai-response').textContent=
-      l==='de'?'Ups, etwas ist schiefgegangen. Versuch es nochmal!':'Oops, something went wrong. Please try again!';
+      (l==='de'?`⚠️ Fehler: ${e.message}`:`⚠️ Error: ${e.message}`)+hint;
     document.getElementById('ai-response').classList.add('on');
   }
 
@@ -1725,7 +1822,7 @@ async function askAI(){
   inputEl.value='';
 }
 
-// Enter key for AI input
+// Enter key for AI input; pre-fill API key from storage
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('ai-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')askAI();
@@ -1733,7 +1830,67 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('theme-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')startApp();
   });
+  const saved=localStorage.getItem('anthropic-api-key');
+  if(saved)document.getElementById('api-key-input').value=saved;
+
+  // Pre-fill theme from Story Builder if launched from builder.html
+  const builderRaw=localStorage.getItem('builder-data');
+  if(builderRaw){
+    try{
+      const bd=JSON.parse(builderRaw);
+      const ti=document.getElementById('theme-input');
+      if(ti&&!ti.value)ti.value=bd.theme||'';
+      const banner=document.getElementById('builder-banner');
+      const bannerText=document.getElementById('builder-banner-text');
+      if(banner&&bd.choices){
+        const ch=bd.choices;
+        const parts=[ch.character,ch.place,ch.problem]
+          .filter(x=>x&&x.l)
+          .map(x=>`${x.e} ${x.l}`);
+        bannerText.textContent=parts.join(' · ');
+        banner.style.display='block';
+      }
+      // Build Schreibplan panel
+      buildSchreibplanPanel(bd);
+    }catch(e){}
+  }
 });
+
+function buildSchreibplanPanel(bd){
+  const el=document.getElementById('schreibplan-panel');
+  if(!el||!bd)return;
+  const ch=bd.choices||{};
+  const choices=[ch.character,ch.place,ch.problem].filter(x=>x&&x.l);
+  const choiceHTML=choices.map(x=>`<span class="sp-choice-tag">${x.e} ${x.l}</span>`).join('');
+
+  let mtnHTML='';
+  const mtn=bd.storyMountain||{};
+  const mtnLabels={anfang:'🌅 Anfang',aufbau:'📈 Aufbau',hoehepunkt:'⚡ Höhepunkt',loesung:'💡 Lösung',schluss:'🏁 Schluss'};
+  const mtnColors={anfang:'#edf8e6',aufbau:'#f0fbf0',hoehepunkt:'#fdf5de',loesung:'#e4f0fb',schluss:'#f0ebff'};
+  const mtnParts=Object.entries(mtnLabels).filter(([k])=>mtn[k]&&mtn[k].trim());
+  if(mtnParts.length){
+    mtnHTML=`<div class="sp-mtn">${mtnParts.map(([k,label])=>
+      `<div class="sp-mtn-item" style="background:${mtnColors[k]}">${label}: ${mtn[k]}</div>`
+    ).join('')}</div>`;
+  }
+
+  let wordsHTML='';
+  const words=bd.selectedWords||[];
+  if(words.length){
+    wordsHTML=`<div class="sp-words-row">${words.map(w=>`<span class="sp-word-tag">${w}</span>`).join('')}</div>`;
+  }
+
+  if(!choiceHTML&&!mtnHTML&&!wordsHTML) return;
+
+  el.innerHTML=`<details class="schreibplan-panel" open>
+    <summary>📋 Mein Schreibplan <span style="font-size:11px;font-weight:400;opacity:.7;">(vom Baukasten)</span></summary>
+    <div class="sp-inner">
+      ${choiceHTML?`<div class="sp-choices-row">${choiceHTML}</div>`:''}
+      ${mtnHTML}
+      ${wordsHTML}
+    </div>
+  </details>`;
+}
 
 // ═══════════════════════════════════════════════════════════
 // GRAMMAR PRACTICE ENGINE
@@ -2165,9 +2322,9 @@ async function checkGramAnswer(){
     try{
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
+          model:'claude-sonnet-4-6',
           max_tokens:200,
           system:`Du bist ein freundlicher Deutschlehrer für Klasse 3 (Bayern, LehrplanPLUS). Grammatik-Thema: ${topic.label}. Antworte kurz, ermutigend, max. 3 Sätze.`,
           messages:[{role:'user',content:`${prompt}\n\nAntwort des Kindes: ${answer}`}]
@@ -2249,15 +2406,16 @@ Rules:
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:systemPrompt,
         messages:[{role:'user',content:text}]
       })
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     let raw=data.content&&data.content[0]?data.content[0].text:'[]';
     raw=raw.replace(/```json|```/g,'').trim();
     let errors=[];
@@ -2267,8 +2425,9 @@ Rules:
   }catch(e){
     const panel=document.getElementById('check-panel');
     panel.classList.add('on');
+    const hint=/auth|key|invalid/i.test(e.message)?' (API-Key prüfen!)':'';
     document.getElementById('check-highlighted').innerHTML=
-      `<em style="color:var(--muted);padding:12px;display:block;">${l==='de'?'Fehler beim Prüfen – bitte erneut versuchen.':'Could not check – please try again.'}</em>`;
+      `<em style="color:var(--coral3);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
   }
 
@@ -2369,6 +2528,176 @@ function applyFix(i){
   const remaining=lastCheckErrors.filter(e=>e&&e.original);
   renderCheckResults(answers[part],remaining,l);
 }
+
+// ═══════════════════════════════════════════════════════════
+// FOCUS MODE
+// ═══════════════════════════════════════════════════════════
+function openFocusMode(){
+  const l=lang==='both'?'de':lang;
+  const fa=document.getElementById('focus-area');
+  const fp=document.getElementById('focus-prompt');
+  fp.textContent=T[l].tasks[part];
+  fa.lang=l==='de'?'de':'en';
+  fa.value=answers[part]||'';
+  document.getElementById('focus-overlay').classList.add('open');
+  fa.focus();
+  updateFocusWC();
+}
+function closeFocusMode(){
+  const fa=document.getElementById('focus-area');
+  answers[part]=fa.value;
+  const ta=document.getElementById('answer-box');
+  if(ta){ta.value=fa.value;liveUpdate(fa.value);}
+  document.getElementById('focus-overlay').classList.remove('open');
+}
+function updateFocusWC(){
+  const fa=document.getElementById('focus-area');
+  if(!fa)return;
+  const wcel=document.getElementById('focus-wc');
+  if(wcel)wcel.textContent=wc(fa.value)+' Wörter · Words';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('focus-overlay').classList.contains('open'))closeFocusMode();
+});
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('focus-area').addEventListener('input',()=>{
+    const fa=document.getElementById('focus-area');
+    answers[part]=fa.value;
+    updateFocusWC();
+    const ta=document.getElementById('answer-box');
+    if(ta){ta.value=fa.value;liveUpdate(fa.value);}
+  });
+});
+
+// ═══════════════════════════════════════════════════════════
+// ILLUSTRATOR
+// ═══════════════════════════════════════════════════════════
+let illusTool='pencil',illusColor='#1a1a2e',illusSize=4,illusDrawing=false;
+let illusHistory=[],illusCtx=null,illusCanvas=null,illusInited=false;
+function openIllustrator(){
+  document.getElementById('illus-bg').classList.add('open');
+  if(!illusInited)setTimeout(initIllustrator,60);
+}
+function closeIllustrator(){document.getElementById('illus-bg').classList.remove('open');}
+function closeIllusOnBg(e){if(e.target===document.getElementById('illus-bg'))closeIllustrator();}
+function initIllustrator(){
+  illusCanvas=document.getElementById('illus-canvas');
+  const wrap=document.getElementById('illus-canvas-wrap');
+  const W=Math.min(556,wrap.clientWidth||400);
+  const H=Math.round(W*0.65);
+  illusCanvas.width=W;illusCanvas.height=H;
+  illusCanvas.style.width=W+'px';illusCanvas.style.height=H+'px';
+  illusCtx=illusCanvas.getContext('2d');
+  illusCtx.fillStyle='#fff';illusCtx.fillRect(0,0,W,H);
+  illusSaveSnap();
+  illusCanvas.addEventListener('pointerdown',illusStart);
+  illusCanvas.addEventListener('pointermove',illusMove);
+  illusCanvas.addEventListener('pointerup',illusEnd);
+  illusCanvas.addEventListener('pointerleave',illusEnd);
+  illusCanvas.addEventListener('contextmenu',e=>e.preventDefault());
+  illusInited=true;
+}
+function illusPos(e){
+  const r=illusCanvas.getBoundingClientRect();
+  return{x:(e.clientX-r.left)*(illusCanvas.width/r.width),y:(e.clientY-r.top)*(illusCanvas.height/r.height)};
+}
+function illusStart(e){
+  e.preventDefault();illusDrawing=true;
+  const p=illusPos(e);
+  illusCtx.beginPath();
+  if(illusTool==='eraser'){illusCtx.globalCompositeOperation='destination-out';illusCtx.lineWidth=illusSize*3;}
+  else{illusCtx.globalCompositeOperation='source-over';illusCtx.strokeStyle=illusColor;illusCtx.lineWidth=illusSize;}
+  illusCtx.lineCap='round';illusCtx.lineJoin='round';
+  illusCtx.moveTo(p.x,p.y);
+}
+function illusMove(e){
+  if(!illusDrawing)return;e.preventDefault();
+  const p=illusPos(e);illusCtx.lineTo(p.x,p.y);illusCtx.stroke();
+}
+function illusEnd(){
+  if(!illusDrawing)return;illusDrawing=false;
+  illusCtx.globalCompositeOperation='source-over';
+  illusSaveSnap();
+}
+function illusSaveSnap(){
+  illusHistory.push(illusCanvas.toDataURL());
+  if(illusHistory.length>30)illusHistory.shift();
+}
+function illusUndo(){
+  if(illusHistory.length<2)return;
+  illusHistory.pop();
+  const img=new Image();
+  img.src=illusHistory[illusHistory.length-1];
+  img.onload=()=>{illusCtx.clearRect(0,0,illusCanvas.width,illusCanvas.height);illusCtx.drawImage(img,0,0);}
+}
+function illusClear(){
+  illusCtx.fillStyle='#fff';illusCtx.fillRect(0,0,illusCanvas.width,illusCanvas.height);
+  illusSaveSnap();
+}
+function illusSave(){
+  const a=document.createElement('a');
+  a.href=illusCanvas.toDataURL('image/png');
+  a.download='illustration.png';a.click();
+}
+function setIllusTool(t){
+  illusTool=t;
+  document.getElementById('it-pencil').classList.toggle('on',t==='pencil');
+  document.getElementById('it-eraser').classList.toggle('on',t==='eraser');
+}
+function setIllusColor(el){
+  illusColor=el.dataset.c;
+  document.querySelectorAll('.it-swatch').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  if(illusTool==='eraser')setIllusTool('pencil');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SPEECH TO TEXT
+// ═══════════════════════════════════════════════════════════
+let speechRec=null,speechActive=false;
+function toggleSpeech(){
+  const btn=document.getElementById('mic-btn');
+  if(!btn)return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Spracherkennung wird von diesem Browser nicht unterstützt.\nSpeech recognition is not supported in this browser.');return;}
+  if(speechActive){stopSpeech();}
+  else{
+    const l=lang==='both'?'de':lang;
+    speechRec=new SR();
+    speechRec.lang=l==='de'?'de-DE':'en-GB';
+    speechRec.interimResults=false;
+    speechRec.continuous=true;
+    speechRec.onresult=e=>{
+      let t='';
+      for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;
+      appendSpeechText(t.trim());
+    };
+    speechRec.onerror=()=>stopSpeech();
+    speechRec.onend=()=>{if(speechActive)speechRec.start();};
+    speechRec.start();
+    speechActive=true;
+    btn.classList.add('recording');
+    btn.innerHTML='⏹️ <span>Stopp</span>';
+  }
+}
+function stopSpeech(){
+  speechActive=false;
+  if(speechRec){try{speechRec.stop();}catch(e){}}
+  speechRec=null;
+  const btn=document.getElementById('mic-btn');
+  if(btn){btn.classList.remove('recording');btn.innerHTML='🎤 <span>Sprache</span>';}
+}
+function appendSpeechText(text){
+  if(!text)return;
+  if(document.getElementById('focus-overlay').classList.contains('open')){
+    const fa=document.getElementById('focus-area');
+    fa.value=(fa.value?fa.value+' ':'')+text;
+    answers[part]=fa.value;updateFocusWC();
+  }else{
+    const ta=document.getElementById('answer-box');
+    if(ta){ta.value=(ta.value?ta.value+' ':'')+text;answers[part]=ta.value;liveUpdate(ta.value);}
+  }
+}
 </script>
 <!-- ══ GRAMMAR PRACTICE MODAL ══ -->
 <div class="gram-modal-bg" id="gram-modal-bg">
@@ -2416,5 +2745,47 @@ function applyFix(i){
   <div class="gram-bar-inner">
     <span class="gram-bar-label" id="gram-bar-label">⭐ 0 Grammatik-Sterne</span>
     <div class="gram-bar-track"><div class="gram-bar-fill" id="gram-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- ══ FOCUS MODE OVERLAY ══ -->
+<div class="focus-overlay" id="focus-overlay">
+  <button class="focus-close" onclick="closeFocusMode()" title="Schließen · Close (Esc)">✕</button>
+  <div class="focus-eyebrow">SCHREIBAUFTRAG · WRITING TASK</div>
+  <div class="focus-prompt" id="focus-prompt"></div>
+  <textarea class="focus-area" id="focus-area" spellcheck="true" placeholder="Schreib hier … / Write here …"></textarea>
+  <div class="focus-wc" id="focus-wc">0 Wörter</div>
+</div>
+
+<!-- ══ ILLUSTRATOR MODAL ══ -->
+<div class="illus-bg" id="illus-bg" onclick="closeIllusOnBg(event)">
+  <div class="illus-modal" id="illus-modal">
+    <div class="illus-head">
+      <span class="illus-head-title">🎨 Illustrator — Male deine Geschichte</span>
+      <button class="illus-close-btn" onclick="closeIllustrator()">✕</button>
+    </div>
+    <div class="illus-bar">
+      <button class="it-btn on" id="it-pencil" onclick="setIllusTool('pencil')">✏️ Stift</button>
+      <button class="it-btn" id="it-eraser" onclick="setIllusTool('eraser')">🧹 Radierer</button>
+      <input type="range" id="it-size" min="2" max="24" value="4" style="width:66px;cursor:pointer;" title="Stiftgröße" oninput="illusSize=+this.value">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+        <div class="it-swatch on" style="background:#1a1a2e" data-c="#1a1a2e" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#e53935" data-c="#e53935" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#1e88e5" data-c="#1e88e5" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#43a047" data-c="#43a047" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#fb8c00" data-c="#fb8c00" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#8e24aa" data-c="#8e24aa" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#fdd835" data-c="#fdd835" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#ffffff;border-color:#ccc;" data-c="#ffffff" onclick="setIllusColor(this)"></div>
+      </div>
+    </div>
+    <div class="illus-canvas-wrap" id="illus-canvas-wrap">
+      <canvas class="illus-canvas" id="illus-canvas"></canvas>
+    </div>
+    <div class="illus-foot">
+      <button class="if-btn" onclick="illusClear()">🗑️ Löschen</button>
+      <button class="if-btn" onclick="illusUndo()">↩️ Rückgängig</button>
+      <button class="if-btn primary" onclick="illusSave()">💾 Speichern</button>
+    </div>
   </div>
 </div>

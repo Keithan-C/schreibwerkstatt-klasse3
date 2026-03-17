@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geschichte Baukasten – Klasse 3/4 Bayern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  /* Autism-friendly palette: calm, muted, no saturated brights */
+  --forest:#2a5c1a;  --forest2:#4a9c2a;  --forest3:#c8ecb0;  --forest4:#edf8e6;
+  --navy:#1c3f6e;    --navy2:#2e6ab8;    --navy3:#b8d8f0;    --navy4:#e4f0fb;
+  --amber:#6b4c1a;   --amber2:#b07828;   --amber3:#f0d080;   --amber4:#fdf5de;
+  --plum:#4a2d8a;    --plum2:#7a5adf;    --plum3:#d8ccf8;    --plum4:#f0ebff;
+  --clay:#8a3020;    --clay3:#f8ddd8;    --clay4:#fdf0ee;
+  --ink:#1c1a18;     --ink2:#3c3a36;     --muted:#6a6660;
+  --surface:#ffffff; --page:#f4f2ed;
+  --border:#ccc8be;  --border-lt:#e4e2d8;
+  --font:'Nunito',sans-serif;
+  --r:14px;--r2:8px;
+  --sh:0 2px 10px rgba(0,0,0,.07);
+  --sh2:0 4px 18px rgba(0,0,0,.11);
+}
+body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:100vh;}
+.wrap{max-width:680px;margin:0 auto;padding:0 1rem 6rem;}
+
+/* ── HEADER ── */
+.site-header{
+  background:var(--forest);padding:1.2rem 1.5rem 1.4rem;
+  margin-bottom:1.8rem;text-align:center;
+}
+.header-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:#fff;display:block;margin-bottom:.3rem;line-height:1.2;}
+.header-sub{font-size:14px;color:rgba(255,255,255,.78);display:block;margin-bottom:.7rem;}
+.header-badge{
+  display:inline-block;font-size:12px;font-weight:700;
+  background:rgba(255,255,255,.18);color:#fff;
+  border:1.5px solid rgba(255,255,255,.35);
+  border-radius:20px;padding:4px 14px;
+}
+.header-links{display:flex;gap:8px;justify-content:center;margin-top:.9rem;flex-wrap:wrap;}
+.hlink{
+  font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;
+  border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.9);
+  text-decoration:none;background:rgba(255,255,255,.12);
+}
+.hlink:hover{background:rgba(255,255,255,.22);}
+
+/* ── STEP PROGRESS ── */
+.step-progress{
+  display:flex;align-items:stretch;justify-content:center;
+  margin-bottom:1.6rem;background:var(--surface);
+  border-radius:var(--r);border:2px solid var(--border);
+  overflow:hidden;box-shadow:var(--sh);
+}
+.sp-step{
+  flex:1;padding:10px 4px;text-align:center;
+  border-right:1px solid var(--border);position:relative;
+}
+.sp-step:last-child{border-right:none;}
+.sp-num{font-size:10px;font-weight:900;color:var(--muted);display:block;margin-bottom:2px;}
+.sp-icon{font-size:18px;display:block;margin-bottom:2px;}
+.sp-label{font-size:10px;font-weight:700;color:var(--muted);display:block;line-height:1.3;}
+.sp-step.active{background:var(--amber4);}
+.sp-step.active .sp-num,.sp-step.active .sp-label{color:var(--amber);}
+.sp-step.done{background:var(--forest4);}
+.sp-step.done .sp-num,.sp-step.done .sp-label{color:var(--forest);}
+
+/* ── CONFIDENCE TOGGLE ── */
+.confidence-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:var(--navy4);border:1.5px solid var(--navy3);
+  border-radius:var(--r2);padding:10px 14px;margin-bottom:1.2rem;
+  font-size:13px;color:var(--navy);
+}
+.conf-label{flex:1;font-weight:700;}
+.conf-toggle{display:flex;gap:4px;flex-wrap:wrap;}
+.conf-btn{
+  padding:6px 13px;border-radius:20px;border:2px solid var(--navy3);
+  background:var(--surface);color:var(--muted);font-size:12px;font-weight:700;
+  cursor:pointer;font-family:var(--font);min-height:36px;
+}
+.conf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* ── GATE NOTICE ── */
+.gate-notice{
+  background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);
+  padding:10px 14px;font-size:13px;font-weight:700;color:var(--amber);
+  margin-bottom:.9rem;display:none;line-height:1.6;
+}
+.gate-notice.on{display:block;}
+
+/* ── STEP PANELS ── */
+.step-panel{display:none;}
+.step-panel.active{display:block;}
+@media(prefers-reduced-motion:no-preference){
+  .step-panel.active{animation:fadeIn .22s ease;}
+}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── STEP CARD ── */
+.step-card{
+  background:var(--surface);border:2px solid var(--border);
+  border-radius:var(--r);margin-bottom:1.2rem;
+  box-shadow:var(--sh);overflow:hidden;
+}
+.step-accent{height:5px;}
+.sa-forest{background:var(--forest);}
+.sa-navy{background:var(--navy);}
+.sa-amber{background:var(--amber);}
+.sa-plum{background:var(--plum);}
+.sa-clay{background:var(--clay);}
+.step-body{padding:1.1rem 1.3rem .9rem;}
+.step-eyebrow{font-size:11px;font-weight:800;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.step-title{font-size:clamp(17px,3.5vw,22px);font-weight:900;color:var(--ink);display:block;margin-bottom:.4rem;line-height:1.3;}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.65;}
+
+/* ── SUBSECTIONS (Step 1) ── */
+.subsection{margin-bottom:1.3rem;}
+.subsec-header{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 13px;border-radius:var(--r2);
+  background:var(--page);border:2px solid var(--border);margin-bottom:8px;
+}
+.subsec-icon{font-size:22px;}
+.subsec-title{font-size:15px;font-weight:800;color:var(--ink);}
+.subsec-check{font-size:14px;font-weight:700;color:var(--forest);margin-left:auto;}
+
+/* ── ICON GRID ── */
+.icon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:.3rem;}
+@media(min-width:480px){.icon-grid{grid-template-columns:repeat(6,1fr);}}
+.icon-card{
+  background:var(--surface);border:2.5px solid var(--border);
+  border-radius:var(--r2);padding:10px 4px 8px;text-align:center;
+  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  min-height:72px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;position:relative;
+}
+.icon-card:hover{border-color:var(--amber2);background:var(--amber4);}
+.icon-card.selected{border-color:var(--forest2);background:var(--forest4);}
+.icon-card.selected::after{
+  content:'✓';position:absolute;top:4px;right:5px;
+  font-size:10px;color:var(--forest);font-weight:900;
+}
+.ic-emoji{font-size:clamp(24px,5vw,30px);display:block;margin-bottom:3px;line-height:1;}
+.ic-label{font-size:11px;font-weight:700;color:var(--ink2);line-height:1.3;display:block;}
+
+/* ── NAV BUTTONS ── */
+.step-nav{display:flex;gap:10px;justify-content:space-between;margin-bottom:1.5rem;align-items:center;}
+.nav-btn{
+  padding:12px 24px;border-radius:var(--r2);border:2px solid;
+  font-family:var(--font);font-size:15px;font-weight:800;
+  cursor:pointer;min-height:50px;
+}
+.nav-back{background:var(--surface);color:var(--ink2);border-color:var(--border);}
+.nav-back:hover{background:var(--page);}
+.nav-next{background:var(--forest);color:#fff;border-color:var(--forest);}
+.nav-next:hover{background:var(--forest2);}
+.nav-next:disabled{background:var(--border-lt);color:var(--muted);border-color:var(--border);cursor:not-allowed;}
+
+/* ── STORY MOUNTAIN ── */
+.mountain-svg-wrap{display:block;width:100%;max-width:400px;margin:0 auto .9rem;}
+.mountain-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:.5rem;}
+.mf{background:var(--surface);border:2px solid var(--border);border-radius:var(--r2);overflow:hidden;}
+.mf-header{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--border-lt);}
+.mf-num{
+  width:26px;height:26px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;flex-shrink:0;
+}
+.mf-label{font-size:14px;font-weight:800;color:var(--ink);}
+.mf-tips{padding:6px 12px 4px;background:var(--amber4);border-bottom:1px solid var(--border-lt);}
+.mf-tip-item{font-size:12px;color:var(--amber);display:block;line-height:1.6;}
+.mf textarea{
+  width:100%;min-height:76px;border:none;outline:none;
+  padding:10px 13px;font-family:var(--font);font-size:14px;
+  line-height:1.75;background:transparent;color:var(--ink);resize:vertical;
+}
+.mf textarea:focus{background:var(--amber4);}
+
+/* ── SENTENCE STARTERS ── */
+.starters-group{margin-bottom:1.1rem;}
+.sg-title{font-size:14px;font-weight:800;color:var(--ink2);display:block;margin-bottom:7px;}
+.sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px;}
+.starter-chip{
+  padding:8px 14px;border-radius:20px;border:2px solid var(--border);
+  background:var(--surface);color:var(--ink2);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:var(--font);min-height:42px;
+  display:inline-flex;align-items:center;line-height:1.4;text-align:left;
+}
+.starter-chip:hover{border-color:var(--navy2);background:var(--navy4);}
+.starter-chip.selected{border-color:var(--navy);background:var(--navy);color:#fff;}
+.selected-starters-box{
+  background:var(--forest4);border:1.5px solid var(--forest3);
+  border-radius:var(--r2);padding:10px 12px;margin-top:.5rem;
+  font-size:13px;color:var(--forest);line-height:1.8;min-height:42px;
+}
+.sel-box-label{font-size:11px;font-weight:800;color:var(--forest);display:block;margin-bottom:4px;}
+
+/* ── WORD BANK ── */
+.word-bank-group{margin-bottom:1.2rem;}
+.wb-title{font-size:14px;font-weight:800;color:var(--ink2);display:block;margin-bottom:7px;}
+.wb-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.word-chip{
+  padding:7px 13px;border-radius:6px;border:1.5px solid;
+  font-size:13px;font-weight:700;cursor:pointer;
+  font-family:var(--font);min-height:38px;display:inline-flex;align-items:center;
+}
+.wc-adj  {background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
+.wc-adj.selected,.wc-adj:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+.wc-verb {background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
+.wc-verb.selected,.wc-verb:hover{background:var(--forest);color:#fff;border-color:var(--forest);}
+.wc-place{background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
+.wc-place.selected,.wc-place:hover{background:var(--amber);color:#fff;border-color:var(--amber);}
+.selected-words{display:flex;flex-wrap:wrap;gap:5px;margin-top:.6rem;}
+
+/* ── RUBRIC ── */
+.rubric-score{
+  text-align:center;padding:14px;background:var(--surface);
+  border:2px solid var(--border);border-radius:var(--r2);margin-bottom:1rem;
+}
+.rs-num{font-size:36px;font-weight:900;color:var(--forest);}
+.rs-of{font-size:14px;color:var(--muted);}
+.rs-msg{font-size:14px;font-weight:700;margin-top:4px;color:var(--ink2);}
+.rubric-list{display:flex;flex-direction:column;gap:7px;margin-bottom:1rem;}
+.rubric-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:11px 12px;border:2px solid var(--border);
+  border-radius:var(--r2);background:var(--surface);
+  cursor:pointer;min-height:50px;
+}
+.rubric-item:hover{border-color:var(--forest3);background:var(--forest4);}
+.rubric-item.checked{background:var(--forest4);border-color:var(--forest);}
+.rub-box{
+  width:24px;height:24px;min-width:24px;border:2.5px solid var(--border);
+  border-radius:4px;background:var(--surface);display:flex;
+  align-items:center;justify-content:center;font-size:13px;color:var(--forest);margin-top:1px;
+}
+.rubric-item.checked .rub-box{background:var(--forest);border-color:var(--forest);color:#fff;}
+.rub-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.rub-text{font-size:13px;font-weight:600;color:var(--ink2);line-height:1.55;}
+.rubric-item.checked .rub-text{color:var(--ink);}
+
+/* ── RESULT PANEL ── */
+.result-panel{display:none;}
+.result-panel.active{display:block;}
+.result-hero{
+  background:var(--forest);border-radius:var(--r);
+  padding:1.5rem;text-align:center;margin-bottom:1.2rem;box-shadow:var(--sh);
+}
+.rh-title{font-size:clamp(18px,4vw,24px);font-weight:900;color:#fff;display:block;margin-bottom:.5rem;}
+.rh-sub{font-size:14px;color:rgba(255,255,255,.8);display:block;margin-bottom:.7rem;}
+.rh-emojis{font-size:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.8rem;}
+.action-btn{
+  flex:1;min-width:200px;padding:14px 16px;border-radius:var(--r2);border:2px solid;
+  font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;
+  text-align:center;text-decoration:none;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;min-height:54px;
+}
+.action-btn small{font-size:12px;font-weight:400;opacity:.8;}
+.ab-story    {background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
+.ab-story:hover{background:var(--navy);color:#fff;}
+.ab-blockwelt{background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
+.ab-blockwelt:hover{background:var(--forest);color:#fff;}
+.ab-reset    {background:var(--page);color:var(--muted);border-color:var(--border);width:100%;}
+.ab-reset:hover{background:var(--border-lt);}
+@media(max-width:440px){.action-row{flex-direction:column;}}
+
+/* ── GLOBAL ACCESSIBILITY ── */
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;}
+}
+button:focus-visible,a:focus-visible,textarea:focus-visible{
+  outline:3px solid var(--navy2);outline-offset:2px;
+}
+/* ── XP BAR ── */
+.xp-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:1.2rem;box-shadow:var(--sh);}
+.xp-icon{font-size:26px;flex-shrink:0;}
+.xp-info{flex:1;}
+.xp-level{font-size:13px;font-weight:800;color:var(--ink);display:block;}
+.xp-bar-wrap{background:var(--border-lt);border-radius:6px;height:8px;margin-top:4px;overflow:hidden;}
+.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));width:0%;}
+@media(prefers-reduced-motion:no-preference){.xp-bar-fill{transition:width .5s ease;}}
+.xp-pts{font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;white-space:nowrap;}
+/* ── TOAST ── */
+.toast{
+  position:fixed;top:12px;left:50%;transform:translateX(-50%);
+  background:var(--forest);color:#fff;font-size:14px;font-weight:800;
+  padding:10px 22px;border-radius:40px;box-shadow:var(--sh2);z-index:9999;
+  pointer-events:none;opacity:0;white-space:nowrap;
+}
+@media(prefers-reduced-motion:no-preference){
+  .toast.show{animation:tIn .2s ease forwards;}
+  @keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+  .toast.hide{transition:opacity .3s;}
+}
+.toast.show{opacity:1;}
+.toast.hide{opacity:0;}
+/* ── INTEREST SELECTOR ── */
+.interest-section{margin-bottom:1.1rem;}
+.interest-label{font-size:12px;font-weight:800;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.interest-row{display:flex;gap:6px;flex-wrap:wrap;}
+.interest-btn{padding:7px 14px;border-radius:20px;border:2px solid var(--border);background:var(--surface);color:var(--ink2);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:40px;}
+.interest-btn:hover{border-color:var(--amber2);background:var(--amber4);}
+.interest-btn.active{background:var(--amber);color:#fff;border-color:var(--amber);}
+/* ── THEMED MINI IDEAS ── */
+.themed-ideas{background:var(--amber4);border:1.5px solid var(--amber3);border-radius:var(--r2);padding:8px 10px;margin-bottom:8px;}
+.themed-label{font-size:11px;font-weight:800;color:var(--amber);display:block;margin-bottom:6px;}
+.themed-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.themed-chip{padding:7px 13px;border-radius:20px;border:2px solid var(--amber3);background:var(--surface);color:var(--amber);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:40px;display:inline-flex;align-items:center;gap:5px;}
+.themed-chip:hover{background:var(--amber3);}
+.themed-chip.selected{background:var(--amber);color:#fff;border-color:var(--amber);}
+/* ── ACHIEVEMENT CARD ── */
+.ach-card{background:linear-gradient(135deg,var(--amber4),var(--forest4));border:2px solid var(--amber3);border-radius:var(--r);padding:1.2rem;text-align:center;margin-bottom:1rem;box-shadow:var(--sh);}
+.ach-icon{font-size:52px;display:block;margin-bottom:.3rem;}
+.ach-title{font-size:clamp(16px,3.5vw,20px);font-weight:900;color:var(--ink);display:block;}
+.ach-sub{font-size:13px;color:var(--muted);display:block;margin-top:.2rem;}
+.ach-xp{font-size:18px;font-weight:800;color:var(--forest);display:block;margin-top:.4rem;}
+.ach-bar-wrap{background:var(--border-lt);border-radius:6px;height:10px;margin:.6rem auto 0;max-width:200px;overflow:hidden;}
+.ach-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));}
+</style>
+</head>
+<body>
+
+<div class="site-header">
+  <span class="header-title">📖 Geschichte Baukasten</span>
+  <span class="header-sub">Schritt für Schritt zur eigenen Geschichte</span>
+  <span class="header-badge">📚 LehrplanPLUS Bayern · Deutsch Klasse 3/4 · LB 2</span>
+  <div class="header-links">
+    <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
+    <a class="hlink" href="index.html">⛏ Blockwelt</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="step-progress" id="step-progress"></div>
+
+<div class="xp-row" id="xp-bar">
+  <span class="xp-icon" id="xp-icon">📖</span>
+  <div class="xp-info">
+    <span class="xp-level" id="xp-level">Level: Anfänger</span>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+  </div>
+  <span class="xp-pts" id="xp-pts">0 / 500 XP</span>
+</div>
+
+<div class="confidence-bar">
+  <span class="conf-label">💡 Wie viel Hilfe möchtest du?</span>
+  <div class="conf-toggle">
+    <button class="conf-btn" id="conf-0" onclick="setConfidence(0)">Viel Hilfe</button>
+    <button class="conf-btn" id="conf-1" onclick="setConfidence(1)">Etwas Hilfe</button>
+    <button class="conf-btn" id="conf-2" onclick="setConfidence(2)">Wenig Hilfe</button>
+  </div>
+</div>
+
+<div class="gate-notice" id="gate-notice"></div>
+<div id="step-panels"></div>
+
+<!-- RESULT PANEL -->
+<div class="result-panel" id="result-panel">
+  <div class="result-hero">
+    <span class="rh-title" id="rh-title">Dein Schreibplan ist fertig!</span>
+    <div class="rh-emojis" id="rh-emojis"></div>
+    <span class="rh-sub" style="margin-top:.6rem;">Wähle jetzt eine App zum Schreiben:</span>
+  </div>
+  <div class="action-row">
+    <button class="action-btn ab-story" onclick="launchApp('story')">
+      📖 Schreibwerkstatt<small>Freies Schreiben · Klasse 3/4</small>
+    </button>
+    <button class="action-btn ab-blockwelt" onclick="launchApp('blockwelt')">
+      ⛏ Blockwelt Abenteuer<small>Spiel → Geschichte → Text</small>
+    </button>
+  </div>
+  <button class="action-btn ab-reset" onclick="resetBuilder()">↩ Neu anfangen</button>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+
+const CATEGORIES = [
+  {
+    id:'character',label:'Figur',icon:'🧑',
+    question:'Wer ist dein Held?',
+    desc:'Wähle die Hauptfigur deiner Geschichte.',
+    choices:[
+      {e:'🧙',l:'Zauberer'},{e:'🦸',l:'Superheld'},{e:'👧',l:'Mädchen'},{e:'👦',l:'Junge'},
+      {e:'🐱',l:'Katze'},{e:'🐶',l:'Hund'},{e:'🤖',l:'Roboter'},{e:'🦊',l:'Fuchs'},
+      {e:'🐉',l:'Drachen'},{e:'🧜',l:'Nixe'},{e:'🦄',l:'Einhorn'},{e:'🧝',l:'Elfe'},
+    ]
+  },
+  {
+    id:'place',label:'Ort',icon:'🗺️',
+    question:'Wo spielt die Geschichte?',
+    desc:'Wähle den Ort, wo dein Held lebt und das Abenteuer beginnt.',
+    choices:[
+      {e:'🌲',l:'Wald'},{e:'🏰',l:'Burg'},{e:'🏖️',l:'Strand'},{e:'🏙️',l:'Stadt'},
+      {e:'🌋',l:'Vulkan'},{e:'🏔️',l:'Gebirge'},{e:'🌊',l:'Ozean'},{e:'🏠',l:'Zuhause'},
+      {e:'🌌',l:'Weltraum'},{e:'🧊',l:'Eisland'},{e:'🌿',l:'Dschungel'},{e:'🏕️',l:'Zeltlager'},
+    ]
+  },
+  {
+    id:'problem',label:'Problem',icon:'⚠️',
+    question:'Was ist das Problem?',
+    desc:'Wähle das Problem, das dein Held lösen muss.',
+    choices:[
+      {e:'🦹',l:'Bösewicht'},{e:'💎',l:'Gestohlener Schatz'},{e:'🌪️',l:'Sturm'},{e:'🗺️',l:'Verirrt'},
+      {e:'💤',l:'Zauberschlaf'},{e:'🌊',l:'Überschwemmung'},{e:'🕳️',l:'Falle'},{e:'🔒',l:'Eingesperrt'},
+      {e:'🐍',l:'Große Gefahr'},{e:'🌑',l:'Dunkelheit'},{e:'🧨',l:'Explosion'},{e:'🔮',l:'Zauberpech'},
+    ]
+  }
+];
+
+const MOUNTAIN_FIELDS = [
+  {
+    id:'anfang',    label:'1. Anfang',    color:'#2a5c1a', icon:'🌅',
+    tips:['Stelle deine Figur vor.','Benutze eine Einleitungsformel: z.B. „Eines Tages…" oder „Es war einmal…"','Beschreibe den Ort mit Adjektiven.'],
+    ph:['Schreibe 2–3 Sätze:\n  Eines Tages war [Figur] in [Ort]. Alles war ruhig, bis…','Schreibe den Anfang deiner Geschichte.','Anfang…']
+  },
+  {
+    id:'aufbau',    label:'2. Aufbau',    color:'#4a9c2a', icon:'📈',
+    tips:['Das Problem beginnt hier.','Wie fühlt sich die Figur?','Was versucht sie zu tun?'],
+    ph:['Schreibe 2–3 Sätze:\n  [Figur] bemerkte, dass [Problem]. Sie/Er war sehr…','Das Problem beginnt hier.','Aufbau…']
+  },
+  {
+    id:'hoehepunkt',label:'3. Höhepunkt', color:'#b07828', icon:'⚡',
+    tips:['Das ist die spannendste Stelle!','Benutze: „Plötzlich…" oder „Urplötzlich…"','Schreibe wörtliche Rede: „[Figur] rief: \'Hilfe!\'"'],
+    ph:['Schreibe 2–4 Sätze:\n  Urplötzlich… „Hilfe!", rief [Figur].\n  Jetzt war die Lage besonders gefährlich…','Schreibe den spannendsten Moment.','Höhepunkt…']
+  },
+  {
+    id:'loesung',   label:'4. Lösung',   color:'#1c3f6e', icon:'💡',
+    tips:['Wie wird das Problem gelöst?','Was hilft der Figur?','Wie fühlt sie sich jetzt?'],
+    ph:['Schreibe 2–3 Sätze:\n  Zum Glück hatte [Figur] eine Idee. Sie/Er…','Wie wird das Problem gelöst?','Lösung…']
+  },
+  {
+    id:'schluss',   label:'5. Schluss',  color:'#4a2d8a', icon:'🏁',
+    tips:['Was hat die Figur gelernt?','Benutze eine Schlussformel: z.B. „Von da an…"','Wie fühlt sie sich am Ende?'],
+    ph:['Schreibe 1–3 Sätze:\n  Von da an war [Figur] viel mutiger.\n  Das Abenteuer hatte ihr/ihm gezeigt, dass…','Schreibe das Ende der Geschichte.','Schluss…']
+  },
+];
+
+const SENTENCE_STARTERS = {
+  anfang:[
+    {id:'a1',text:'Es war einmal…'},
+    {id:'a2',text:'Eines Tages…'},
+    {id:'a3',text:'In einem weit entfernten Land lebte…'},
+    {id:'a4',text:'Es geschah an einem sonnigen Morgen, als…'},
+    {id:'a5',text:'Mitten in [Ort] wohnte…'},
+  ],
+  mitte:[
+    {id:'m1',text:'Plötzlich…'},
+    {id:'m2',text:'Urplötzlich…'},
+    {id:'m3',text:'Da bemerkte [Figur]…'},
+    {id:'m4',text:'Ohne Vorwarnung…'},
+    {id:'m5',text:'Gerade als [Figur] dachte, alles sei gut, …'},
+  ],
+  schluss:[
+    {id:'s1',text:'Von da an war alles anders…'},
+    {id:'s2',text:'Und so lebten sie glücklich bis ans Ende ihrer Tage.'},
+    {id:'s3',text:'Am Ende hatte [Figur] gelernt, dass…'},
+    {id:'s4',text:'Das war das größte Abenteuer in [Figur]s Leben.'},
+    {id:'s5',text:'Und wenn [Figur] nicht gestorben ist, dann lebt sie noch heute.'},
+  ]
+};
+
+const WORD_BANK = [
+  {key:'figur',  label:'Adjektive für die Figur',  type:'adj',
+   words:['mutig','klug','stark','freundlich','neugierig','ängstlich','schnell','listig','tapfer','geheimnisvoll','fröhlich','traurig']},
+  {key:'ort',    label:'Adjektive für den Ort',    type:'place',
+   words:['dunkel','still','groß','gefährlich','wunderschön','geheimnisvoll','tief','hoch','kalt','warm','verlassen','belebt']},
+  {key:'verb',   label:'Verben für die Handlung',  type:'verb',
+   words:['laufen','rufen','entdecken','kämpfen','verstecken','flüstern','suchen','finden','retten','besiegen','fliehen','helfen']},
+];
+
+const RUBRIC = [
+  {id:'r1',icon:'📖',text:'Meine Geschichte hat einen Anfang, eine Mitte und ein Ende.'},
+  {id:'r2',icon:'✍️',text:'Ich habe eine Einleitungsformel benutzt (z.B. „Eines Tages…").'},
+  {id:'r3',icon:'⚡',text:'Ich habe ein Spannungswort benutzt (z.B. „Plötzlich…" oder „Urplötzlich…").'},
+  {id:'r4',icon:'💬',text:'Ich habe wörtliche Rede mit Anführungszeichen benutzt.'},
+  {id:'r5',icon:'🎨',text:'Ich habe Adjektive benutzt, um meine Figur oder den Ort zu beschreiben.'},
+  {id:'r6',icon:'📝',text:'Mein Text hat mehr als 80 Wörter.'},
+  {id:'r7',icon:'🏁',text:'Ich habe eine Schlussformel benutzt.'},
+];
+
+const INTERESTS = {
+  minecraft:{label:'⛏️ Minecraft',ideas:{
+    character:[{e:'⛏️',l:'Bergmann'},{e:'🧱',l:'Baumeister'},{e:'👾',l:'Creeper'},{e:'🐺',l:'Wolf'}],
+    place:    [{e:'⛏️',l:'Mine'},{e:'🏚️',l:'Dorf'},{e:'🔮',l:'Portal'},{e:'🌋',l:'Nether'}],
+    problem:  [{e:'👾',l:'Monsterschwarm'},{e:'💫',l:'Verfluchtes Objekt'},{e:'🌑',l:'Dunkelheit'},{e:'💎',l:'Gestohlenes Erz'}]
+  }},
+  tiere:{label:'🦁 Tiere',ideas:{
+    character:[{e:'🦁',l:'Löwe'},{e:'🐯',l:'Tiger'},{e:'🦅',l:'Adler'},{e:'🐬',l:'Delfin'}],
+    place:    [{e:'🌾',l:'Savanne'},{e:'🌿',l:'Dschungel'},{e:'🌊',l:'Ozean'},{e:'❄️',l:'Polargebiet'}],
+    problem:  [{e:'🌪️',l:'Sturm'},{e:'🌊',l:'Überschwemmung'},{e:'🔥',l:'Waldbrand'},{e:'🕳️',l:'Falle'}]
+  }},
+  weltraum:{label:'🚀 Weltraum',ideas:{
+    character:[{e:'👨‍🚀',l:'Astronaut'},{e:'👽',l:'Alien'},{e:'🤖',l:'Roboter'},{e:'🌟',l:'Raumpilotin'}],
+    place:    [{e:'🪐',l:'Planet'},{e:'🌙',l:'Mondstation'},{e:'⭐',l:'Sternbasis'},{e:'🌌',l:'Nebel'}],
+    problem:  [{e:'💥',l:'Absturz'},{e:'🔒',l:'Eingesperrt'},{e:'🌑',l:'Dunkelheit'},{e:'🔮',l:'Rätsel'}]
+  }},
+  magie:{label:'🏰 Magie',ideas:{
+    character:[{e:'🧙',l:'Zauberer'},{e:'🧝',l:'Elfe'},{e:'🧜',l:'Nixe'},{e:'🦄',l:'Einhorn'}],
+    place:    [{e:'🏰',l:'Burg'},{e:'🌲',l:'Zauberwald'},{e:'🌊',l:'Zaubersee'},{e:'🗻',l:'Drachenberg'}],
+    problem:  [{e:'🔮',l:'Zauberpech'},{e:'💤',l:'Zauberschlaf'},{e:'🦹',l:'Bösewicht'},{e:'💎',l:'Verlorener Schatz'}]
+  }},
+};
+
+const LEVELS = [
+  {min:0,   max:99,  icon:'📖', name:'Anfänger'},
+  {min:100, max:199, icon:'✏️', name:'Schreiber'},
+  {min:200, max:299, icon:'🌟', name:'Held'},
+  {min:300, max:399, icon:'🏆', name:'Geschichtenmeister'},
+  {min:400, max:500, icon:'👑', name:'Meistererzähler'},
+];
+
+const XP_PER_STEP = {1:100, 2:150, 3:75, 4:75, 5:100};
+
+const STEPS_META = [
+  {n:1,icon:'🎭',label:'Figuren & Ort'},
+  {n:2,icon:'🏔️',label:'Schreibberg'},
+  {n:3,icon:'✍️',label:'Satzanfänge'},
+  {n:4,icon:'🎨',label:'Wörterschatz'},
+  {n:5,icon:'✅',label:'Selbstcheck'},
+];
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let currentStep = 1;
+let confidence  = parseInt(localStorage.getItem('sw-confidence') || '0');
+let choices     = {};       // { character, place, problem }
+let mountain    = {};       // { anfang, aufbau, hoehepunkt, loesung, schluss }
+let starters    = new Set();
+let wordPicks   = new Set();
+let rubric      = {};
+let interest    = null;   // 'minecraft' | 'tiere' | 'weltraum' | 'magie' | null
+let xp          = 0;
+let earnedSteps = new Set();
+
+// ══════════════════════════════════════════════════
+// CONFIDENCE
+// ══════════════════════════════════════════════════
+function setConfidence(n){
+  confidence = n;
+  localStorage.setItem('sw-confidence', String(n));
+  [0,1,2].forEach(i=>{
+    const el = document.getElementById('conf-'+i);
+    if(el) el.classList.toggle('active', i===n);
+  });
+  renderCurrentStep();
+}
+
+// ══════════════════════════════════════════════════
+// PROGRESS BAR
+// ══════════════════════════════════════════════════
+function renderProgress(){
+  document.getElementById('step-progress').innerHTML = STEPS_META.map(s=>{
+    const isDone   = s.n < currentStep || currentStep === 6;
+    const isActive = s.n === currentStep && currentStep < 6;
+    let cls = 'sp-step' + (isActive?' active':'') + (isDone?' done':'');
+    return `<div class="${cls}">
+      <span class="sp-num">${s.n}</span>
+      <span class="sp-icon">${isDone ? '✓' : s.icon}</span>
+      <span class="sp-label">${s.label}</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════
+// STEP 1 — CHARACTER / PLACE / PROBLEM PICKERS
+// ══════════════════════════════════════════════════
+function renderStep1(){
+  // Interest selector buttons
+  const interestBtns = Object.entries(INTERESTS).map(([k,v])=>
+    `<button class="interest-btn${interest===k?' active':''}" onclick="setInterest('${k}')">${v.label}</button>`
+  ).join('');
+
+  // Build subsections with optional themed ideas
+  const subs = CATEGORIES.map((cat, i)=>{
+    const prevDone = i === 0 || !!choices[CATEGORIES[i-1].id];
+    if(!prevDone) return '';
+    const sel = choices[cat.id];
+
+    // Themed idea chips for chosen interest
+    let themedHTML = '';
+    if(interest && INTERESTS[interest]){
+      const tIdeas = INTERESTS[interest].ideas[cat.id] || [];
+      if(tIdeas.length){
+        const chips = tIdeas.map((c,j)=>{
+          const isSelected = sel && sel.e===c.e && sel.l===c.l;
+          return `<button class="themed-chip${isSelected?' selected':''}" onclick="pickThemed('${cat.id}','${c.e}','${c.l.replace(/'/g,"\\'")}')">
+            ${c.e} ${c.l}
+          </button>`;
+        }).join('');
+        themedHTML = `<div class="themed-ideas">
+          <span class="themed-label">✨ ${INTERESTS[interest].label} Ideen:</span>
+          <div class="themed-chips">${chips}</div>
+        </div>`;
+      }
+    }
+
+    const grid = cat.choices.map((c,j)=>`
+      <div class="icon-card${sel && sel.e===c.e && sel.l===c.l?' selected':''}" onclick="pick('${cat.id}',${j})" role="button" aria-label="${c.l}">
+        <span class="ic-emoji">${c.e}</span>
+        <span class="ic-label">${c.l}</span>
+      </div>`).join('');
+    return `
+      <div class="subsection">
+        <div class="subsec-header">
+          <span class="subsec-icon">${cat.icon}</span>
+          <span class="subsec-title">${cat.question}</span>
+          <span class="subsec-check">${sel ? '✅ '+sel.l : ''}</span>
+        </div>
+        ${themedHTML}
+        <div class="icon-grid">${grid}</div>
+      </div>`;
+  }).join('');
+
+  const allPicked = !!choices.character && !!choices.place && !!choices.problem;
+  return `
+    <div class="step-panel active" id="panel-1">
+      <div class="step-card">
+        <div class="step-accent sa-forest"></div>
+        <div class="step-body">
+          <span class="step-eyebrow">Schritt 1 von 5 · LehrplanPLUS Deutsch D3/4 LB 2</span>
+          <span class="step-title">🎭 Figuren &amp; Ort wählen</span>
+          <span class="step-desc">Wähle eine Figur, einen Ort und ein Problem. Tippe auf ein Bild, um es zu wählen.</span>
+        </div>
+      </div>
+      <div class="interest-section">
+        <span class="interest-label">🌟 Passt das zu deinen Interessen?</span>
+        <div class="interest-row">
+          <button class="interest-btn${!interest?' active':''}" onclick="setInterest(null)">Standard</button>
+          ${interestBtns}
+        </div>
+      </div>
+      ${subs}
+      <div class="step-nav">
+        <span></span>
+        <button class="nav-btn nav-next" onclick="nextStep()" ${allPicked?'':'disabled'}>Weiter →</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// STEP 2 — STORY MOUNTAIN
+// ══════════════════════════════════════════════════
+function renderStep2(){
+  const charName  = choices.character ? choices.character.l : 'Figur';
+  const placeName = choices.place     ? choices.place.l     : 'Ort';
+
+  const fields = MOUNTAIN_FIELDS.map((f,idx)=>{
+    const phIdx = Math.min(confidence, f.ph.length - 1);
+    const ph = f.ph[phIdx]
+      .replace(/\[Figur\]/g, charName)
+      .replace(/\[Ort\]/g,   placeName);
+    const tips = (confidence < 2)
+      ? `<div class="mf-tips">${f.tips.map(t=>`<span class="mf-tip-item">• ${t}</span>`).join('')}</div>`
+      : '';
+    return `
+      <div class="mf">
+        <div class="mf-header">
+          <span class="mf-num" style="background:${f.color}">${idx+1}</span>
+          <span class="mf-label">${f.icon} ${f.label}</span>
+        </div>
+        ${tips}
+        <textarea id="mf-${f.id}" placeholder="${ph}" aria-label="${f.label}">${mountain[f.id]||''}</textarea>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="step-panel active" id="panel-2">
+      <div class="step-card">
+        <div class="step-accent sa-amber"></div>
+        <div class="step-body">
+          <span class="step-eyebrow">Schritt 2 von 5 · Erzählberg (Schreibplan)</span>
+          <span class="step-title">🏔️ Schreibberg planen</span>
+          <span class="step-desc">Fülle jeden Abschnitt mit 1–3 Sätzen aus. Hier planst du deine Geschichte. Du kannst kurze Stichworte oder ganze Sätze schreiben.</span>
+        </div>
+      </div>
+      <svg class="mountain-svg-wrap" viewBox="0 0 380 105" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polyline points="10,95 90,28 190,6 290,28 370,95" stroke="#4a9c2a" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <circle cx="10"  cy="95" r="7" fill="#2a5c1a"/>
+        <circle cx="90"  cy="28" r="7" fill="#4a9c2a"/>
+        <circle cx="190" cy="6"  r="8" fill="#b07828"/>
+        <circle cx="290" cy="28" r="7" fill="#1c3f6e"/>
+        <circle cx="370" cy="95" r="7" fill="#4a2d8a"/>
+        <text x="0"   y="104" font-family="Nunito,sans-serif" font-size="10" fill="#2a5c1a" font-weight="800">Anfang</text>
+        <text x="65"  y="22"  font-family="Nunito,sans-serif" font-size="10" fill="#4a9c2a" font-weight="800">Aufbau</text>
+        <text x="152" y="4"   font-family="Nunito,sans-serif" font-size="10" fill="#b07828" font-weight="800">Höhepunkt</text>
+        <text x="265" y="22"  font-family="Nunito,sans-serif" font-size="10" fill="#1c3f6e" font-weight="800">Lösung</text>
+        <text x="344" y="104" font-family="Nunito,sans-serif" font-size="10" fill="#4a2d8a" font-weight="800">Schluss</text>
+      </svg>
+      <div class="mountain-fields">${fields}</div>
+      <div class="step-nav" style="margin-top:1rem;">
+        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
+        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// STEP 3 — SENTENCE STARTERS
+// ══════════════════════════════════════════════════
+function renderStep3(){
+  const charName  = choices.character ? choices.character.l : 'Figur';
+  const placeName = choices.place     ? choices.place.l     : 'Ort';
+  const showMax   = confidence === 0 ? 5 : confidence === 1 ? 3 : 2;
+
+  const groups = [
+    {key:'anfang', label:'Satzanfänge für den Anfang',  icon:'🌅'},
+    {key:'mitte',  label:'Satzanfänge für die Mitte',   icon:'⚡'},
+    {key:'schluss',label:'Satzanfänge für den Schluss', icon:'🏁'},
+  ].map(g=>{
+    const shown = SENTENCE_STARTERS[g.key].slice(0, showMax);
+    const chips = shown.map(s=>{
+      const txt = s.text
+        .replace(/\[Figur\]/g, charName)
+        .replace(/\[Ort\]/g,   placeName);
+      return `<button class="starter-chip${starters.has(s.id)?' selected':''}" onclick="toggleStarter('${s.id}')">${txt}</button>`;
+    }).join('');
+    return `
+      <div class="starters-group">
+        <span class="sg-title">${g.icon} ${g.label}</span>
+        <div class="sg-chips">${chips}</div>
+      </div>`;
+  }).join('');
+
+  // Show selected starters summary
+  const selTexts = [...starters].map(id=>{
+    for(const key of Object.keys(SENTENCE_STARTERS)){
+      const s = SENTENCE_STARTERS[key].find(x=>x.id===id);
+      if(s) return s.text.replace(/\[Figur\]/g, charName).replace(/\[Ort\]/g, placeName);
+    }
+    return '';
+  }).filter(Boolean);
+
+  return `
+    <div class="step-panel active" id="panel-3">
+      <div class="step-card">
+        <div class="step-accent sa-navy"></div>
+        <div class="step-body">
+          <span class="step-eyebrow">Schritt 3 von 5 · Schreibhilfen</span>
+          <span class="step-title">✍️ Satzanfänge wählen</span>
+          <span class="step-desc">Tippe auf einen Satzanfang, den du benutzen möchtest. Du kannst mehrere wählen. Diese Sätze helfen dir beim Schreiben.</span>
+        </div>
+      </div>
+      ${groups}
+      <div class="selected-starters-box">
+        <span class="sel-box-label">Deine gewählten Satzanfänge:</span>
+        ${selTexts.length ? selTexts.join(' · ') : '<em style="color:var(--muted)">Noch keine gewählt — du kannst Schritt 3 auch überspringen.</em>'}
+      </div>
+      <div class="step-nav" style="margin-top:1rem;">
+        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
+        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// STEP 4 — WORD BANK
+// ══════════════════════════════════════════════════
+function renderStep4(){
+  const banks = WORD_BANK.map(b=>{
+    const chips = b.words.map(w=>`
+      <button class="word-chip wc-${b.type}${wordPicks.has(w)?' selected':''}" onclick="toggleWord('${w}')">${w}</button>`).join('');
+    return `
+      <div class="word-bank-group">
+        <span class="wb-title">${b.label}</span>
+        <div class="wb-chips">${chips}</div>
+      </div>`;
+  }).join('');
+
+  const selChips = [...wordPicks].map(w=>{
+    // Determine type for colour
+    const b = WORD_BANK.find(x=>x.words.includes(w));
+    const t = b ? b.type : 'adj';
+    return `<span class="word-chip wc-${t} selected" style="font-size:12px;padding:5px 10px;min-height:30px;">${w}</span>`;
+  }).join('');
+
+  return `
+    <div class="step-panel active" id="panel-4">
+      <div class="step-card">
+        <div class="step-accent sa-clay"></div>
+        <div class="step-body">
+          <span class="step-eyebrow">Schritt 4 von 5 · Wörterschatz</span>
+          <span class="step-title">🎨 Details hinzufügen</span>
+          <span class="step-desc">Tippe auf Wörter, die du in deiner Geschichte benutzen möchtest. Blaue Wörter beschreiben Figuren. Grüne Wörter sind Tätigkeiten. Braune Wörter beschreiben Orte.</span>
+        </div>
+      </div>
+      ${banks}
+      ${selChips ? `
+        <div style="margin-bottom:1rem;padding:10px 12px;background:var(--forest4);border:1.5px solid var(--forest3);border-radius:var(--r2);">
+          <span style="font-size:12px;font-weight:800;color:var(--forest);display:block;margin-bottom:6px;">Deine gewählten Wörter:</span>
+          <div class="selected-words">${selChips}</div>
+        </div>` : ''}
+      <div class="step-nav">
+        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
+        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// STEP 5 — SELF-CHECK RUBRIC
+// ══════════════════════════════════════════════════
+function renderStep5(){
+  const items = RUBRIC.map(r=>`
+    <div class="rubric-item${rubric[r.id]?' checked':''}" onclick="toggleRubric('${r.id}')" role="checkbox" aria-checked="${!!rubric[r.id]}">
+      <span class="rub-icon">${r.icon}</span>
+      <div class="rub-box">${rubric[r.id]?'✓':''}</div>
+      <span class="rub-text">${r.text}</span>
+    </div>`).join('');
+
+  const score  = RUBRIC.filter(r=>rubric[r.id]).length;
+  const total  = RUBRIC.length;
+  const msgIdx = score < 3 ? 0 : score < 6 ? 1 : 2;
+  const msgs   = [
+    'Lies deinen Schreibberg noch einmal durch. Dann fang an zu schreiben!',
+    'Fast fertig! Überprüfe noch die fehlenden Punkte.',
+    'Sehr gut! Du bist bereit zu schreiben. Klicke auf „Schreibplan fertig".',
+  ];
+
+  return `
+    <div class="step-panel active" id="panel-5">
+      <div class="step-card">
+        <div class="step-accent sa-plum"></div>
+        <div class="step-body">
+          <span class="step-eyebrow">Schritt 5 von 5 · Selbstcheck · LehrplanPLUS D3/4</span>
+          <span class="step-title">✅ Selbstcheck</span>
+          <span class="step-desc">Lies jeden Punkt. Hake ab, was du in deiner Geschichte machen wirst. Du musst nicht alles haben — es sind Tipps.</span>
+        </div>
+      </div>
+      <div class="rubric-score">
+        <div><span class="rs-num">${score}</span><span class="rs-of"> / ${total}</span></div>
+        <div class="rs-msg">${msgs[msgIdx]}</div>
+      </div>
+      <div class="rubric-list">${items}</div>
+      <div class="step-nav">
+        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
+        <button class="nav-btn nav-next" onclick="nextStep()">Schreibplan fertig! →</button>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════
+// INTERACTIONS
+// ══════════════════════════════════════════════════
+function pick(catId, idx){
+  choices[catId] = CATEGORIES.find(c=>c.id===catId).choices[idx];
+  renderCurrentStep();
+}
+
+function pickThemed(catId, e, l){
+  choices[catId] = {e, l};
+  renderCurrentStep();
+}
+
+function toggleStarter(id){
+  starters.has(id) ? starters.delete(id) : starters.add(id);
+  renderCurrentStep();
+}
+
+function toggleWord(w){
+  wordPicks.has(w) ? wordPicks.delete(w) : wordPicks.add(w);
+  renderCurrentStep();
+}
+
+function toggleRubric(id){
+  rubric[id] = !rubric[id];
+  renderCurrentStep();
+}
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function nextStep(){
+  if(currentStep === 1){
+    if(!choices.character || !choices.place || !choices.problem){
+      const g = document.getElementById('gate-notice');
+      g.textContent = 'Bitte wähle zuerst Figur, Ort und Problem. Alle drei müssen ausgewählt sein.';
+      g.classList.add('on');
+      return;
+    }
+    document.getElementById('gate-notice').classList.remove('on');
+  }
+  awardXp(currentStep);
+  if(currentStep < 5){
+    currentStep++;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    // Save mountain textarea values before showing result
+    saveMountainValues();
+    currentStep = 6;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function prevStep(){
+  if(currentStep === 2) saveMountainValues();
+  if(currentStep > 1){
+    currentStep--;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+
+function saveMountainValues(){
+  MOUNTAIN_FIELDS.forEach(f=>{
+    const el = document.getElementById('mf-'+f.id);
+    if(el) mountain[f.id] = el.value;
+  });
+}
+
+// ══════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════
+function renderCurrentStep(){
+  const fns = [null, renderStep1, renderStep2, renderStep3, renderStep4, renderStep5];
+  const panels = document.getElementById('step-panels');
+  panels.innerHTML = fns[currentStep]();
+  // Re-attach mountain oninput listeners
+  if(currentStep === 2){
+    MOUNTAIN_FIELDS.forEach(f=>{
+      const el = document.getElementById('mf-'+f.id);
+      if(el) el.addEventListener('input', e=>{ mountain[f.id] = e.target.value; });
+    });
+  }
+  // Apply confidence button active state
+  [0,1,2].forEach(i=>{
+    const el = document.getElementById('conf-'+i);
+    if(el) el.classList.toggle('active', i===confidence);
+  });
+}
+
+function render(){
+  renderProgress();
+  updateXpBar();
+  const resultEl = document.getElementById('result-panel');
+  const panelsEl = document.getElementById('step-panels');
+  if(currentStep === 6){
+    panelsEl.innerHTML = '';
+    resultEl.classList.add('active');
+    renderResult();
+  } else {
+    resultEl.classList.remove('active');
+    renderCurrentStep();
+  }
+}
+
+// ══════════════════════════════════════════════════
+// RESULT + LAUNCH
+// ══════════════════════════════════════════════════
+function renderResult(){
+  renderProgress();
+  updateXpBar();
+  const ch = choices;
+  document.getElementById('rh-title').textContent =
+    `${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l}`;
+  document.getElementById('rh-emojis').innerHTML =
+    `<span>${ch.character.e}</span><span>${ch.place.e}</span><span>${ch.problem.e}</span>`;
+
+  // Show achievement card before action buttons
+  const lvl  = getLevel(xp);
+  const pct  = Math.min(100, Math.round(xp / 500 * 100));
+  const achEl = document.createElement('div');
+  achEl.className = 'ach-card';
+  achEl.innerHTML = `
+    <span class="ach-icon">${lvl.icon}</span>
+    <span class="ach-title">Du bist jetzt: ${lvl.name}!</span>
+    <span class="ach-sub">Du hast deinen Schreibplan fertig gestellt. Gut gemacht!</span>
+    <span class="ach-xp">⭐ ${xp} / 500 XP</span>
+    <div class="ach-bar-wrap"><div class="ach-bar-fill" style="width:${pct}%"></div></div>`;
+
+  const resultPanel = document.getElementById('result-panel');
+  // Insert after result-hero if not already there
+  const existing = resultPanel.querySelector('.ach-card');
+  if(existing) existing.remove();
+  const hero = resultPanel.querySelector('.result-hero');
+  if(hero) hero.insertAdjacentElement('afterend', achEl);
+}
+
+function launchApp(target){
+  const ch = choices;
+  const theme = `${ch.character.e} ${ch.character.l} in ${ch.place.e} ${ch.place.l}`;
+
+  // Build writing prompts from mountain notes (with fallback)
+  const mBegin  = mountain.anfang       || `${ch.character.l} lebt in ${ch.place.l}. Stelle die Figur vor. Benutze eine Einleitungsformel!`;
+  const mMiddle = mountain.hoehepunkt   || `Problem: ${ch.problem.l}. Benutze „Plötzlich" oder „Urplötzlich". Schreibe wörtliche Rede!`;
+  const mEnd    = mountain.schluss      || `${ch.character.l} löst das Problem. Benutze eine Schlussformel!`;
+
+  // Build a stichworte summary shown in writing apps
+  const stichworteLines = [
+    `Figur: ${ch.character.e} ${ch.character.l}`,
+    `Ort: ${ch.place.e} ${ch.place.l}`,
+    `Problem: ${ch.problem.e} ${ch.problem.l}`,
+  ];
+  if(mountain.anfang)       stichworteLines.push(`Anfang: ${mountain.anfang.slice(0,80)}…`);
+  if(mountain.hoehepunkt)   stichworteLines.push(`Höhepunkt: ${mountain.hoehepunkt.slice(0,80)}…`);
+  if(mountain.schluss)      stichworteLines.push(`Schluss: ${mountain.schluss.slice(0,80)}…`);
+  if(wordPicks.size)        stichworteLines.push(`Wörter: ${[...wordPicks].join(', ')}`);
+
+  localStorage.setItem('builder-theme', theme);
+  localStorage.setItem('builder-data', JSON.stringify({
+    theme,
+    choices: {
+      ...ch,
+      // Keep backward-compatible event/ending fields
+      event:  {e:'💡',l:'Wendepunkt'},
+      ending: {e:'🏆',l:'Schluss'},
+    },
+    prompts: { begin: mBegin, middle: mMiddle, end: mEnd },
+    storyMountain:    {...mountain},
+    selectedStarters: [...starters],
+    selectedWords:    [...wordPicks],
+    stichhilfe:       stichworteLines,
+  }));
+
+  window.location.href = target === 'story' ? 'story.html' : 'index.html';
+}
+
+function resetBuilder(){
+  choices = {}; mountain = {}; starters = new Set(); wordPicks = new Set(); rubric = {};
+  interest = null; xp = 0; earnedSteps = new Set();
+  currentStep = 1;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── GAMIFICATION ───────────────────────────────────
+function getLevel(pts){
+  return LEVELS.find(l=>pts>=l.min&&pts<=l.max) || LEVELS[LEVELS.length-1];
+}
+
+function updateXpBar(){
+  const lvl  = getLevel(xp);
+  const pct  = Math.min(100, Math.round(xp / 500 * 100));
+  const icon = document.getElementById('xp-icon');
+  const lbl  = document.getElementById('xp-level');
+  const fill = document.getElementById('xp-bar-fill');
+  const pts  = document.getElementById('xp-pts');
+  if(icon) icon.textContent = lvl.icon;
+  if(lbl)  lbl.textContent  = `Level: ${lvl.name}`;
+  if(fill) fill.style.width = pct + '%';
+  if(pts)  pts.textContent  = `${xp} / 500 XP`;
+}
+
+function showToast(msg, dur=2500){
+  let t = document.getElementById('_toast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = '_toast'; t.className = 'toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.remove('hide');
+  t.classList.add('show');
+  clearTimeout(t._tmr);
+  t._tmr = setTimeout(()=>{ t.classList.remove('show'); t.classList.add('hide'); }, dur);
+}
+
+function awardXp(step){
+  if(earnedSteps.has(step)) return;
+  earnedSteps.add(step);
+  const pts = XP_PER_STEP[step] || 0;
+  xp += pts;
+  updateXpBar();
+  const lvl = getLevel(xp);
+  const messages = {
+    1:`🎭 Figuren gewählt! +${pts} XP`,
+    2:`🏔️ Schreibberg fertig! +${pts} XP`,
+    3:`✍️ Satzanfänge gesammelt! +${pts} XP`,
+    4:`🎨 Wörterschatz gepackt! +${pts} XP`,
+    5:`✅ Selbstcheck erledigt! +${pts} XP · ${lvl.icon} ${lvl.name}`,
+  };
+  showToast(messages[step] || `+${pts} XP`);
+}
+
+function setInterest(key){
+  // key is null for "Standard" button, or a theme string
+  interest = (key !== null && interest === key) ? null : key;
+  renderCurrentStep();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', ()=>{
+  // Apply saved confidence
+  [0,1,2].forEach(i=>{
+    const el = document.getElementById('conf-'+i);
+    if(el) el.classList.toggle('active', i===confidence);
+  });
+  render();
+});
+</script>
+</body>
+</html>
