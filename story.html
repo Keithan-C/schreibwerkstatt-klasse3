@@ -660,17 +660,6 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
 <div class="phase active" id="phase-play">
-  <div class="card" style="margin-bottom:1rem;">
-    <div class="card-stripe cs-purple"></div>
-    <div class="card-body">
-      <span class="card-title">🔑 Anthropic API-Schlüssel</span>
-      <p class="card-sub" style="margin-bottom:.6rem;">Die KI-Funktionen (Schreibideen &amp; Rechtschreibprüfung) brauchen einen API-Key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--purple2);">console.anthropic.com</a>).</p>
-      <input id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off"
-        style="width:100%;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--ink);background:#fafaf7;outline:none;transition:border .2s;"
-        oninput="apiKey=this.value.trim();localStorage.setItem('anthropic-api-key',this.value.trim());">
-    </div>
-  </div>
-
   <!-- Builder banner (shown when launched from builder.html) -->
   <div id="builder-banner" style="display:none;background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;line-height:1.7;">
     ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
@@ -1209,9 +1198,6 @@ function init(){
   buildStars();
   buildStarRow();
   renderStep();
-  const saved=localStorage.getItem('anthropic-api-key');
-  if(saved){apiKey=saved;const el=document.getElementById('api-key-input');if(el)el.value=saved;}
-
   // Load builder data if launched from builder.html
   const builderRaw=localStorage.getItem('builder-data');
   if(builderRaw){
