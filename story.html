@@ -431,6 +431,9 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .story-ch-label{font-family:var(--fp);font-size:6px;color:var(--green);display:block;margin-bottom:4px;}
 .lp-kompetenz{background:var(--green4);border:2px solid var(--green2);border-radius:var(--r2);padding:10px 14px;font-size:12px;line-height:1.9;color:var(--green);text-align:left;margin:1rem 0;}
 .lp-kompetenz strong{font-family:var(--fp);font-size:5.5px;display:block;margin-bottom:6px;}
+.full-check-panel{background:var(--bg);border:2px solid var(--border);border-radius:var(--r2);margin:10px 0;overflow:hidden;}
+.full-check-header{padding:10px 14px;background:var(--surface);border-bottom:2px solid var(--border);font-family:var(--fp);font-size:6px;color:var(--ink);}
+.full-check-header .err-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-family:var(--f);font-size:11px;font-weight:600;}
 
 /* ── STARS ── */
 .star-row{display:flex;justify-content:center;gap:6px;margin:.5rem 0 .9rem;}
@@ -2154,6 +2157,10 @@ function showComplete(){
             <div>${esc(answers[ch.id].trim())||'<em style="color:var(--muted)">—</em>'}</div>
           </div>`).join('')}
       </div>
+      <div class="btn-row" style="justify-content:center;margin:4px 0 8px;">
+        <button class="btn btn-hint" id="full-check-btn" onclick="checkFullStory()">🔎 Ganze Geschichte prüfen / Check full story</button>
+      </div>
+      <div id="full-check-results"></div>
       <div class="lp-kompetenz">
         <strong>✅ Geübte Kompetenzen – LehrplanPLUS Bayern Deutsch 3/4:</strong>
         ✓ D3/4 LB 2.1: Erzählender Text (Erzählsituation – Ereignis – Ausgang)<br>
@@ -2174,6 +2181,92 @@ function showComplete(){
       </div>
     </div>`;
   buildLernpass(totalW,stars);
+}
+
+async function checkFullStory(){
+  const btn=document.getElementById('full-check-btn');
+  if(!btn)return;
+  btn.disabled=true;btn.classList.add('running');
+  btn.innerHTML=`⏳ Wird geprüft … / Checking … <span style="opacity:.6;font-size:10px;font-weight:400;">einen Moment bitte</span>`;
+  const fullText=CHAPTERS.map(ch=>answers[ch.id].trim()).filter(Boolean).join('\n\n');
+  const system=`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern). Prüfe den deutschen Text auf Rechtschreib-, Grammatik- und Satzbaufehler. Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
+Format: [{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fix":"Korrektur","explain":"kindgerechte Erklärung Deutsch max. 2 Sätze ermutigend","explainEN":"same explanation in English max. 2 sentences encouraging"}]
+Regeln: max. 8 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein netter Lehrer, keine Fehler → []`;
+  const resultsDiv=document.getElementById('full-check-results');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system,messages:[{role:'user',content:fullText}]})
+    });
+    const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
+    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
+    raw=raw.replace(/```json|```/g,'').trim();
+    let errors=[];try{errors=JSON.parse(raw);}catch(e){}
+    renderFullCheckResults(errors,resultsDiv);
+  }catch(e){
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend! / API key invalid or missing!':'';
+    resultsDiv.innerHTML=`<p style="color:var(--coral2);padding:12px;font-size:13px;">⚠️ ${e.message}${hint}</p>`;
+  }
+  btn.disabled=false;btn.classList.remove('running');
+  btn.innerHTML='🔎 Nochmal prüfen / Check again';
+}
+
+function renderFullCheckResults(errors,container){
+  const active=errors.filter(e=>e&&e.original);
+  let storyHTML='';
+  CHAPTERS.forEach(ch=>{
+    const text=answers[ch.id].trim();
+    if(!text)return;
+    let chText=escH(text);
+    active.forEach((err,i)=>{
+      if(text.includes(err.original)){
+        const cls=err.type==='spell'?'err-spell':err.type==='grammar'?'err-grammar':'err-style';
+        chText=chText.replace(escH(err.original),
+          `<span class="${cls}" onclick="scrollToFullSug(${i})" title="Tipp / Tip">${escH(err.original)}</span>`);
+      }
+    });
+    storyHTML+=`<div class="story-ch"><span class="story-ch-label">${ch.icon} ${ch.label}</span><div style="font-size:14px;line-height:1.85;">${chText}</div></div>`;
+  });
+  if(!active.length){
+    container.innerHTML=`<div class="full-check-panel"><div style="padding:12px 14px;color:var(--green);font-weight:700;font-size:14px;">🌟 Super! Keine Fehler gefunden! / No errors found!</div><div class="full-story" style="margin:0;border:none;">${storyHTML}</div></div>`;
+    container.scrollIntoView({behavior:'smooth',block:'start'});
+    return;
+  }
+  const sugCards=active.map((err,i)=>{
+    const tl=err.type==='spell'?'Rechtschreibung':err.type==='grammar'?'Grammatik':'Satzbau';
+    const tc=`st-${err.type}`;
+    return`<div class="sug-card" id="full-sug-${i}">
+      <span class="sug-type ${tc}">${tl}</span>
+      <div class="sug-orig">${escH(err.original)}</div>
+      <div class="sug-fix">✓ ${escH(err.fix||'')}</div>
+      <div class="sug-explain">${escH(err.explain||'')}</div>
+      ${err.explainEN?`<div class="sug-explain" style="color:var(--blue2);font-size:12px;margin-top:3px;">🇬🇧 ${escH(err.explainEN)}</div>`:''}
+    </div>`;
+  }).join('');
+  container.innerHTML=`
+    <div class="full-check-panel">
+      <div class="full-check-header">
+        🔎 Deine ganze Geschichte mit Hinweisen / Your full story with hints
+        <div class="err-legend">
+          <span class="err-spell" style="padding:2px 8px;border-radius:3px;">Rechtschreibung / Spelling</span>
+          <span class="err-grammar" style="padding:2px 8px;border-radius:3px;">Grammatik / Grammar</span>
+          <span class="err-style" style="padding:2px 8px;border-radius:3px;">Satzbau / Style</span>
+        </div>
+      </div>
+      <div class="full-story" style="margin:0;border:none;border-radius:0;">${storyHTML}</div>
+      <div class="suggestions-panel" style="display:block;">
+        <span class="sug-title">💡 ${active.length} Verbesserungsvorschlag${active.length>1?'e':''} / Suggestion${active.length>1?'s':''}</span>
+        <div>${sugCards}</div>
+      </div>
+    </div>`;
+  container.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function scrollToFullSug(i){
+  const el=document.getElementById(`full-sug-${i}`);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 function buildLernpass(totalW,stars){
