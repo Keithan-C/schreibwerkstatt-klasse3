@@ -1623,6 +1623,7 @@ Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und 
       })
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     let raw=data.content&&data.content[0]?data.content[0].text:'{}';
     raw=raw.replace(/```json|```/g,'').trim();
     let parsed={};
@@ -1644,8 +1645,9 @@ Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und 
   }catch(e){
     clearInterval(stepInterval);
     buildDiv.style.display='none';
-    // Fallback with generic scaffold
-    renderScaffoldResult({});
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend!':'';
+    buildDiv.innerHTML=`<p style="color:#c0392b;padding:12px;font-size:13px;">⚠️ ${e.message}${hint}</p>`;
+    buildDiv.style.display='block';
     resultWrap.style.display='block';
   }
 }
@@ -2243,14 +2245,16 @@ Regeln: max. 6 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein
       body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system,messages:[{role:'user',content:text}]})
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     let raw=data.content&&data.content[0]?data.content[0].text:'[]';
     raw=raw.replace(/```json|```/g,'').trim();
     let errors=[];try{errors=JSON.parse(raw);}catch(e){}
     lastCheckErrors=errors;
     renderCheckResults(text,errors);
   }catch(e){
+    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen!':'';
     document.getElementById('check-panel').classList.add('on');
-    document.getElementById('check-highlighted').innerHTML='<em style="color:var(--muted);padding:12px;display:block;">Fehler beim Prüfen — bitte erneut versuchen.</em>';
+    document.getElementById('check-highlighted').innerHTML=`<em style="color:var(--coral2);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
   }
   btn.disabled=false;btn.classList.remove('running');btn.innerHTML='🔎 Nochmal prüfen';

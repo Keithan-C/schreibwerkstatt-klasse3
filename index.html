@@ -1804,12 +1804,16 @@ async function askAI(){
       })
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     const reply=data.content&&data.content[0]?data.content[0].text:'…';
     document.getElementById('ai-response').textContent=reply;
     document.getElementById('ai-response').classList.add('on');
   }catch(e){
+    const hint=/auth|key|invalid/i.test(e.message)
+      ?(l==='de'?' Bitte API-Key prüfen (⚙️ Thema).'
+                :' Please check your API key (⚙️ Theme).'):'';
     document.getElementById('ai-response').textContent=
-      l==='de'?'Ups, etwas ist schiefgegangen. Versuch es nochmal!':'Oops, something went wrong. Please try again!';
+      (l==='de'?`⚠️ Fehler: ${e.message}`:`⚠️ Error: ${e.message}`)+hint;
     document.getElementById('ai-response').classList.add('on');
   }
 
@@ -2411,6 +2415,7 @@ Rules:
       })
     });
     const data=await res.json();
+    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
     let raw=data.content&&data.content[0]?data.content[0].text:'[]';
     raw=raw.replace(/```json|```/g,'').trim();
     let errors=[];
@@ -2420,8 +2425,9 @@ Rules:
   }catch(e){
     const panel=document.getElementById('check-panel');
     panel.classList.add('on');
+    const hint=/auth|key|invalid/i.test(e.message)?' (API-Key prüfen!)':'';
     document.getElementById('check-highlighted').innerHTML=
-      `<em style="color:var(--muted);padding:12px;display:block;">${l==='de'?'Fehler beim Prüfen – bitte erneut versuchen.':'Could not check – please try again.'}</em>`;
+      `<em style="color:var(--coral3);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
   }
 
