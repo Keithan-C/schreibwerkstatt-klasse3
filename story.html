@@ -599,6 +599,16 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
 <div class="phase active" id="phase-play">
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-stripe cs-purple"></div>
+    <div class="card-body">
+      <span class="card-title">🔑 Anthropic API-Schlüssel</span>
+      <p class="card-sub" style="margin-bottom:.6rem;">Die KI-Funktionen (Schreibideen &amp; Rechtschreibprüfung) brauchen einen API-Key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--purple2);">console.anthropic.com</a>).</p>
+      <input id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off"
+        style="width:100%;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--fb);font-size:14px;color:var(--ink);background:#fafaf7;outline:none;transition:border .2s;"
+        oninput="apiKey=this.value.trim();localStorage.setItem('anthropic-api-key',this.value.trim());">
+    </div>
+  </div>
   <div class="play-card">
     <span class="play-emoji">🎮</span>
     <span class="play-title">Geh spielen!</span>
@@ -1071,6 +1081,7 @@ const CRIT={
   ]
 };
 
+let apiKey=localStorage.getItem('anthropic-api-key')||'';
 let currentStep='play';
 let currentChapter=0;
 let writePhase='plan'; // plan | write | revise
@@ -1116,6 +1127,8 @@ function init(){
   buildStars();
   buildStarRow();
   renderStep();
+  const saved=localStorage.getItem('anthropic-api-key');
+  if(saved){apiKey=saved;const el=document.getElementById('api-key-input');if(el)el.value=saved;}
 }
 
 function buildStars(){
@@ -1436,7 +1449,7 @@ Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und 
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1200,
@@ -2056,7 +2069,7 @@ Format: [{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fi
 Regeln: max. 6 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein netter Lehrer, keine Fehler → []`;
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
+      method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system,messages:[{role:'user',content:text}]})
     });
     const data=await res.json();

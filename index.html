@@ -662,6 +662,10 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
     <span class="setup-label" id="lbl-name">Klasse / Class Name <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
     <input class="setup-input" id="class-input" type="text" placeholder="z.B. Klasse 3a …" maxlength="40">
 
+    <span class="setup-label">Anthropic API-Schlüssel · API Key <span style="font-weight:400;color:var(--coral2)">*</span></span>
+    <span class="setup-sublabel">KI-Funktionen benötigen einen API-Key · AI features require an API key (<a href="https://console.anthropic.com/" target="_blank" style="color:var(--lavender2);">console.anthropic.com</a>)</span>
+    <input class="setup-input" id="api-key-input" type="password" placeholder="sk-ant-…" autocomplete="off">
+
     <button class="setup-btn" id="start-btn" onclick="startApp()">✏️ Für Schüler öffnen / Open for Students</button>
 
     <div style="text-align:center;margin-top:1rem;">
@@ -786,6 +790,7 @@ let lang='de'; // 'de','en','both'
 let role='teacher'; // 'teacher' or 'parent'
 let theme='';
 let className='';
+let apiKey=localStorage.getItem('anthropic-api-key')||'';
 let part='begin'; // begin, middle, end
 let celebCallback=null;
 
@@ -1142,6 +1147,14 @@ function startApp(){
     document.getElementById('theme-input').focus();
     return;
   }
+  const keyVal=document.getElementById('api-key-input').value.trim();
+  if(!keyVal){
+    document.getElementById('api-key-input').style.borderColor='var(--coral2)';
+    document.getElementById('api-key-input').focus();
+    return;
+  }
+  apiKey=keyVal;
+  localStorage.setItem('anthropic-api-key',apiKey);
   theme=themeVal;
   className=document.getElementById('class-input').value.trim();
 
@@ -1702,7 +1715,7 @@ async function askAI(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
@@ -1725,7 +1738,7 @@ async function askAI(){
   inputEl.value='';
 }
 
-// Enter key for AI input
+// Enter key for AI input; pre-fill API key from storage
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('ai-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')askAI();
@@ -1733,6 +1746,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('theme-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')startApp();
   });
+  const saved=localStorage.getItem('anthropic-api-key');
+  if(saved)document.getElementById('api-key-input').value=saved;
 });
 
 // ═══════════════════════════════════════════════════════════
@@ -2165,7 +2180,7 @@ async function checkGramAnswer(){
     try{
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({
           model:'claude-sonnet-4-20250514',
           max_tokens:200,
@@ -2249,7 +2264,7 @@ Rules:
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
