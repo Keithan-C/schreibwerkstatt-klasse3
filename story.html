@@ -509,6 +509,41 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
   outline:3px solid var(--purple2);outline-offset:3px;
 }
 
+/* ── WRITE TOOLBAR ── */
+.write-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.6rem;align-items:center;}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:20px;border:2px solid var(--border);background:var(--surface);cursor:pointer;font-family:var(--fb);font-size:11px;font-weight:700;color:var(--muted);transition:all .2s;white-space:nowrap;}
+.tb-btn:hover{border-color:var(--purple2);color:var(--purple2);}
+.tb-btn.recording{border-color:#e53935;background:#fff0f0;color:#e53935;animation:micPulse 1s ease-in-out infinite;}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,57,53,.3)}50%{box-shadow:0 0 0 6px rgba(229,57,53,0)}}
+/* ── FOCUS MODE ── */
+.focus-overlay{position:fixed;inset:0;background:#0a0a12;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;}
+.focus-overlay.open{display:flex;}
+.focus-eyebrow{color:rgba(200,240,160,.35);font-family:var(--fp);font-size:6px;text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem;max-width:640px;width:100%;}
+.focus-prompt{color:rgba(200,240,160,.7);font-family:var(--fb);font-size:14px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.07);border-radius:12px;padding:12px 20px;border:1px solid rgba(200,240,160,.15);}
+.focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:20px;color:#f0fff0;font-family:var(--fb);font-size:17px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
+.focus-area:focus{border-color:rgba(74,170,42,.5);}
+.focus-wc{color:rgba(255,255,255,.28);font-size:11px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
+.focus-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.75);border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;}
+.focus-close:hover{background:rgba(255,255,255,.2);}
+/* ── ILLUSTRATOR ── */
+.illus-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:8000;display:none;align-items:center;justify-content:center;padding:1rem;}
+.illus-bg.open{display:flex;}
+.illus-modal{background:var(--surface);border:3px solid var(--ink);border-radius:var(--r);max-width:580px;width:100%;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;display:flex;flex-direction:column;}
+.illus-head{background:linear-gradient(135deg,var(--green),var(--green2));padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.illus-head-title{font-family:var(--fp);font-size:7px;color:#c8f0a0;font-weight:700;}
+.illus-close-btn{background:rgba(0,0,0,.2);border:none;color:#c8f0a0;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.illus-bar{display:flex;align-items:center;gap:6px;padding:8px 10px;background:var(--bg);border-bottom:2px solid var(--ink);flex-wrap:wrap;}
+.it-btn{padding:5px 9px;border-radius:var(--r2);border:2px solid var(--border);background:var(--surface);cursor:pointer;font-size:11px;font-family:var(--fb);font-weight:700;color:var(--ink);transition:all .15s;display:inline-flex;align-items:center;gap:4px;}
+.it-btn.on{border-color:var(--green2);background:var(--green4);color:var(--green);}
+.it-swatch{width:22px;height:22px;border-radius:50%;border:2.5px solid #fff;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);flex-shrink:0;transition:transform .15s;}
+.it-swatch:hover,.it-swatch.on{transform:scale(1.28);box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.illus-canvas-wrap{background:#fff;overflow:hidden;}
+.illus-canvas{display:block;touch-action:none;cursor:crosshair;max-width:100%;}
+.illus-foot{display:flex;gap:8px;padding:8px 10px;border-top:2px solid var(--border);}
+.if-btn{flex:1;padding:8px 10px;border-radius:var(--r2);border:2px solid var(--border);background:var(--bg);cursor:pointer;font-family:var(--fb);font-size:11px;font-weight:700;color:var(--ink);transition:all .2s;}
+.if-btn.primary{background:var(--green4);border-color:var(--green2);color:var(--green);}
+.if-btn:hover{opacity:.85;}
+
 @media(max-width:480px){.wrap{padding:0 .6rem 5rem;}}
 </style>
 </head>
@@ -1713,6 +1748,11 @@ function renderWrite(){
           💡 <strong>Tipp:</strong> Denk an dein Spiel — was genau hast du gesehen, gehört, gefühlt? Schreib es auf!
         </div>
 
+        <div class="write-toolbar">
+          <button class="tb-btn" id="mic-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
+          <button class="tb-btn" onclick="openFocusMode()">🧘 Fokus</button>
+          <button class="tb-btn" onclick="openIllustrator()">🎨 Illustrieren</button>
+        </div>
         <textarea id="answer-box" rows="7" spellcheck="true" lang="de">${esc(text)}</textarea>
 
         <div class="wc-row">
@@ -2150,7 +2190,220 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('keyword-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')addKeyword();
   });
+  document.getElementById('focus-area').addEventListener('input',()=>{
+    const fa=document.getElementById('focus-area');
+    const chId=CHAPTERS[currentChapter].id;
+    answers[chId]=fa.value;
+    updateFocusWC();
+    const ta=document.getElementById('answer-box');
+    if(ta){ta.value=fa.value;liveUpdate(fa.value);}
+  });
 });
+
+// ═══════════════════════════════════════════════════════════
+// FOCUS MODE
+// ═══════════════════════════════════════════════════════════
+function openFocusMode(){
+  const chId=CHAPTERS[currentChapter].id;
+  const ch=CHAPTERS[currentChapter];
+  const fa=document.getElementById('focus-area');
+  const fp=document.getElementById('focus-prompt');
+  fp.textContent=ch.taskText;
+  fa.lang='de';
+  fa.value=answers[chId]||'';
+  document.getElementById('focus-overlay').classList.add('open');
+  fa.focus();
+  updateFocusWC();
+}
+function closeFocusMode(){
+  const chId=CHAPTERS[currentChapter].id;
+  const fa=document.getElementById('focus-area');
+  answers[chId]=fa.value;
+  const ta=document.getElementById('answer-box');
+  if(ta){ta.value=fa.value;liveUpdate(fa.value);}
+  document.getElementById('focus-overlay').classList.remove('open');
+}
+function updateFocusWC(){
+  const fa=document.getElementById('focus-area');
+  if(!fa)return;
+  const wcel=document.getElementById('focus-wc');
+  if(wcel)wcel.textContent=wc(fa.value)+' Wörter';
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('focus-overlay').classList.contains('open'))closeFocusMode();
+});
+
+// ═══════════════════════════════════════════════════════════
+// ILLUSTRATOR
+// ═══════════════════════════════════════════════════════════
+let illusTool='pencil',illusColor='#1a1a18',illusSize=4,illusDrawing=false;
+let illusHistory=[],illusCtx=null,illusCanvas=null,illusInited=false;
+function openIllustrator(){
+  document.getElementById('illus-bg').classList.add('open');
+  if(!illusInited)setTimeout(initIllustrator,60);
+}
+function closeIllustrator(){document.getElementById('illus-bg').classList.remove('open');}
+function closeIllusOnBg(e){if(e.target===document.getElementById('illus-bg'))closeIllustrator();}
+function initIllustrator(){
+  illusCanvas=document.getElementById('illus-canvas');
+  const wrap=document.getElementById('illus-canvas-wrap');
+  const W=Math.min(556,wrap.clientWidth||400);
+  const H=Math.round(W*0.65);
+  illusCanvas.width=W;illusCanvas.height=H;
+  illusCanvas.style.width=W+'px';illusCanvas.style.height=H+'px';
+  illusCtx=illusCanvas.getContext('2d');
+  illusCtx.fillStyle='#fff';illusCtx.fillRect(0,0,W,H);
+  illusSaveSnap();
+  illusCanvas.addEventListener('pointerdown',illusStart);
+  illusCanvas.addEventListener('pointermove',illusMove);
+  illusCanvas.addEventListener('pointerup',illusEnd);
+  illusCanvas.addEventListener('pointerleave',illusEnd);
+  illusCanvas.addEventListener('contextmenu',e=>e.preventDefault());
+  illusInited=true;
+}
+function illusPos(e){
+  const r=illusCanvas.getBoundingClientRect();
+  return{x:(e.clientX-r.left)*(illusCanvas.width/r.width),y:(e.clientY-r.top)*(illusCanvas.height/r.height)};
+}
+function illusStart(e){
+  e.preventDefault();illusDrawing=true;
+  const p=illusPos(e);
+  illusCtx.beginPath();
+  if(illusTool==='eraser'){illusCtx.globalCompositeOperation='destination-out';illusCtx.lineWidth=illusSize*3;}
+  else{illusCtx.globalCompositeOperation='source-over';illusCtx.strokeStyle=illusColor;illusCtx.lineWidth=illusSize;}
+  illusCtx.lineCap='round';illusCtx.lineJoin='round';
+  illusCtx.moveTo(p.x,p.y);
+}
+function illusMove(e){
+  if(!illusDrawing)return;e.preventDefault();
+  const p=illusPos(e);illusCtx.lineTo(p.x,p.y);illusCtx.stroke();
+}
+function illusEnd(){
+  if(!illusDrawing)return;illusDrawing=false;
+  illusCtx.globalCompositeOperation='source-over';
+  illusSaveSnap();
+}
+function illusSaveSnap(){
+  illusHistory.push(illusCanvas.toDataURL());
+  if(illusHistory.length>30)illusHistory.shift();
+}
+function illusUndo(){
+  if(illusHistory.length<2)return;
+  illusHistory.pop();
+  const img=new Image();
+  img.src=illusHistory[illusHistory.length-1];
+  img.onload=()=>{illusCtx.clearRect(0,0,illusCanvas.width,illusCanvas.height);illusCtx.drawImage(img,0,0);}
+}
+function illusClear(){
+  illusCtx.fillStyle='#fff';illusCtx.fillRect(0,0,illusCanvas.width,illusCanvas.height);
+  illusSaveSnap();
+}
+function illusSave(){
+  const a=document.createElement('a');
+  a.href=illusCanvas.toDataURL('image/png');
+  a.download='blockwelt-illustration.png';a.click();
+}
+function setIllusTool(t){
+  illusTool=t;
+  document.getElementById('it-pencil').classList.toggle('on',t==='pencil');
+  document.getElementById('it-eraser').classList.toggle('on',t==='eraser');
+}
+function setIllusColor(el){
+  illusColor=el.dataset.c;
+  document.querySelectorAll('.it-swatch').forEach(s=>s.classList.remove('on'));
+  el.classList.add('on');
+  if(illusTool==='eraser')setIllusTool('pencil');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SPEECH TO TEXT
+// ═══════════════════════════════════════════════════════════
+let speechRec=null,speechActive=false;
+function toggleSpeech(){
+  const btn=document.getElementById('mic-btn');
+  if(!btn)return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Spracherkennung wird von diesem Browser nicht unterstützt.\nSpeech recognition is not supported in this browser.');return;}
+  if(speechActive){stopSpeech();}
+  else{
+    speechRec=new SR();
+    speechRec.lang='de-DE';
+    speechRec.interimResults=false;
+    speechRec.continuous=true;
+    speechRec.onresult=e=>{
+      let t='';
+      for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;
+      appendSpeechText(t.trim());
+    };
+    speechRec.onerror=()=>stopSpeech();
+    speechRec.onend=()=>{if(speechActive)speechRec.start();};
+    speechRec.start();
+    speechActive=true;
+    btn.classList.add('recording');
+    btn.innerHTML='⏹️ <span>Stopp</span>';
+  }
+}
+function stopSpeech(){
+  speechActive=false;
+  if(speechRec){try{speechRec.stop();}catch(e){}}
+  speechRec=null;
+  const btn=document.getElementById('mic-btn');
+  if(btn){btn.classList.remove('recording');btn.innerHTML='🎤 <span>Sprache</span>';}
+}
+function appendSpeechText(text){
+  if(!text)return;
+  const chId=CHAPTERS[currentChapter].id;
+  if(document.getElementById('focus-overlay').classList.contains('open')){
+    const fa=document.getElementById('focus-area');
+    fa.value=(fa.value?fa.value+' ':'')+text;
+    answers[chId]=fa.value;updateFocusWC();
+  }else{
+    const ta=document.getElementById('answer-box');
+    if(ta){ta.value=(ta.value?ta.value+' ':'')+text;answers[chId]=ta.value;liveUpdate(ta.value);}
+  }
+}
 </script>
+
+<!-- ══ FOCUS MODE OVERLAY ══ -->
+<div class="focus-overlay" id="focus-overlay">
+  <button class="focus-close" onclick="closeFocusMode()" title="Schließen (Esc)">✕</button>
+  <div class="focus-eyebrow">SCHREIBAUFTRAG</div>
+  <div class="focus-prompt" id="focus-prompt"></div>
+  <textarea class="focus-area" id="focus-area" spellcheck="true" lang="de" placeholder="Schreib hier …"></textarea>
+  <div class="focus-wc" id="focus-wc">0 Wörter</div>
+</div>
+
+<!-- ══ ILLUSTRATOR MODAL ══ -->
+<div class="illus-bg" id="illus-bg" onclick="closeIllusOnBg(event)">
+  <div class="illus-modal" id="illus-modal">
+    <div class="illus-head">
+      <span class="illus-head-title">⛏ ILLUSTRATOR — Male dein Abenteuer</span>
+      <button class="illus-close-btn" onclick="closeIllustrator()">✕</button>
+    </div>
+    <div class="illus-bar">
+      <button class="it-btn on" id="it-pencil" onclick="setIllusTool('pencil')">✏️ Stift</button>
+      <button class="it-btn" id="it-eraser" onclick="setIllusTool('eraser')">🧹 Radierer</button>
+      <input type="range" id="it-size" min="2" max="24" value="4" style="width:66px;cursor:pointer;" title="Stiftgröße" oninput="illusSize=+this.value">
+      <div style="display:flex;gap:4px;flex-wrap:wrap;">
+        <div class="it-swatch on" style="background:#1a1a18" data-c="#1a1a18" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#e05030" data-c="#e05030" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#2e6ab8" data-c="#2e6ab8" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#4aaa2a" data-c="#4aaa2a" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#e09010" data-c="#e09010" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#6a4adf" data-c="#6a4adf" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#ffd070" data-c="#ffd070" onclick="setIllusColor(this)"></div>
+        <div class="it-swatch" style="background:#ffffff;border-color:#999;" data-c="#ffffff" onclick="setIllusColor(this)"></div>
+      </div>
+    </div>
+    <div class="illus-canvas-wrap" id="illus-canvas-wrap">
+      <canvas class="illus-canvas" id="illus-canvas"></canvas>
+    </div>
+    <div class="illus-foot">
+      <button class="if-btn" onclick="illusClear()">🗑️ Löschen</button>
+      <button class="if-btn" onclick="illusUndo()">↩️ Rückgängig</button>
+      <button class="if-btn primary" onclick="illusSave()">💾 Speichern</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
