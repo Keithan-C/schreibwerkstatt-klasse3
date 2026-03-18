@@ -1218,7 +1218,7 @@ const CRIT={
 
 let currentStep='play';
 let currentChapter=0;
-let writePhase='plan'; // plan | write | revise
+let writePhase='write'; // write | revise
 let playChecks={1:false,2:false,3:false,4:false};
 let keywords=[];
 let screenshotData=null;
@@ -1776,10 +1776,18 @@ function completeScaffold(){
   document.querySelectorAll('.scaffold-edit').forEach(ta=>{
     scaffoldEdits[ta.dataset.ch]=ta.value;
   });
+  // Pre-fill answers with Part 4 scaffold text and unlock write+revise for each chapter
+  CHAPTERS.forEach(ch=>{
+    if(scaffoldEdits[ch.id]&&!answers[ch.id]){
+      answers[ch.id]=scaffoldEdits[ch.id];
+    }
+    writeUnlocked[ch.id]=true;
+    if(answers[ch.id]&&answers[ch.id].trim()) reviseUnlocked[ch.id]=true;
+  });
   currentStep='write';
   document.getElementById('step-write').classList.remove('locked');
   currentChapter=0;
-  writePhase='plan';
+  writePhase='write';
   renderStep();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -1788,6 +1796,12 @@ function completeScaffold(){
 // PHASE 5: WRITE
 // ═══════════════════════════════════════════════════════════
 function renderWritePhase(){
+  // Hide the Plan tab and clear any Baukasten panel — Part 5 is self-contained
+  const planTab=document.getElementById('ptab-plan');
+  if(planTab)planTab.style.display='none';
+  const sp=document.getElementById('schreibplan-panel');
+  if(sp)sp.innerHTML='';
+
   // Chapter tabs
   const tabs=document.getElementById('chapter-tabs');
   tabs.innerHTML=CHAPTERS.map((ch,i)=>{
@@ -1798,31 +1812,22 @@ function renderWritePhase(){
     return`<div class="${cls}" onclick="tryChapter(${i})">${ch.icon} ${ch.label}</div>`;
   }).join('');
 
-  // Phase mini tabs
+  // Phase mini tabs (write + revise only)
   const ch=CHAPTERS[currentChapter];
   const chId=ch.id;
-  ['plan','write','revise'].forEach(p=>{
-    const el=document.getElementById('ptab-'+p);
-    if(!el)return;
-    el.classList.remove('active','done','locked');
-    if(p===writePhase)el.classList.add('active');
-    else if(p==='write'&&writeUnlocked[chId])el.innerHTML=`✏️ Schreiben`;
-    else if(p==='revise'&&reviseUnlocked[chId])el.innerHTML=`🔍 Überarbeiten`;
-  });
-  // Update lock icons
   const wt=document.getElementById('ptab-write');
   const rt=document.getElementById('ptab-revise');
   if(wt){
-    wt.classList.toggle('locked',!writeUnlocked[chId]);
-    wt.innerHTML=writeUnlocked[chId]?'✏️ Schreiben':'✏️ Schreiben 🔒';
+    wt.classList.remove('active','locked');
+    wt.innerHTML='✏️ Schreiben';
+    if(writePhase==='write')wt.classList.add('active');
   }
   if(rt){
-    rt.classList.toggle('locked',!reviseUnlocked[chId]);
+    rt.classList.remove('active','locked');
     rt.innerHTML=reviseUnlocked[chId]?'🔍 Überarbeiten':'🔍 Überarbeiten 🔒';
+    rt.classList.toggle('locked',!reviseUnlocked[chId]);
+    if(writePhase==='revise')rt.classList.add('active');
   }
-  if(writePhase==='plan')document.getElementById('ptab-plan').classList.add('active');
-  else if(writePhase==='write')wt&&wt.classList.add('active');
-  else rt&&rt.classList.add('active');
 
   // Stars
   CHAPTERS.forEach((ch,i)=>{
@@ -1832,11 +1837,13 @@ function renderWritePhase(){
 
   // Render content
   const content=document.getElementById('write-content');
-  if(writePhase==='plan')content.innerHTML=renderPlan();
-  else if(writePhase==='write')content.innerHTML=renderWrite();
+  if(writePhase==='write')content.innerHTML=renderWrite();
   else content.innerHTML=renderRevise();
 
   bindWriteEvents();
+
+  // Auto-run grammar check when entering revise
+  if(writePhase==='revise')checkWriting();
 }
 
 function tryChapter(i){
@@ -1846,24 +1853,19 @@ function tryChapter(i){
     notice.innerHTML=`🔒 Schließe zuerst "${CHAPTERS[i-1].label}" ab!`;
     notice.classList.add('on');return;
   }
-  currentChapter=i;writePhase='plan';renderWritePhase();
+  currentChapter=i;writePhase='write';renderWritePhase();
 }
 
 function tryWritePhase(p){
   const notice=document.getElementById('gate-notice');
   notice.classList.remove('on');
   const chId=CHAPTERS[currentChapter].id;
-  if(p==='write'&&!writeUnlocked[chId]){
-    if(planFilled(chId)<2){
-      notice.innerHTML='🔒 Fülle zuerst mindestens <strong>2 Planungsfelder</strong> aus!';
-      notice.classList.add('on');return;
-    }
-    writeUnlocked[chId]=true;
-  }
-  if(p==='revise'&&!reviseUnlocked[chId]){
-    const min=CHAPTERS[currentChapter].minWords;
-    if(wc(answers[chId])<min){
-      notice.innerHTML=`🔒 Schreib noch mehr — du brauchst mindestens <strong>${min} Wörter</strong>!`;
+  // Write is always unlocked in Part 5 (pre-filled from Part 4)
+  writeUnlocked[chId]=true;
+  if(p==='revise'){
+    // Unlock revise if there's any text
+    if(!answers[chId]||!answers[chId].trim()){
+      notice.innerHTML='🔒 Schreib zuerst etwas in das Textfeld!';
       notice.classList.add('on');return;
     }
     reviseUnlocked[chId]=true;
@@ -1941,7 +1943,7 @@ function renderPlan(){
     </div>
 
     <div class="btn-row">
-      ${currentChapter>0?`<button class="btn btn-secondary" onclick="currentChapter--;writePhase='plan';renderWritePhase()">◀ Zurück</button>`:''}
+      ${currentChapter>0?`<button class="btn btn-secondary" onclick="currentChapter--;writePhase='write';renderWritePhase()">◀ Zurück</button>`:''}
       <button class="btn btn-primary" onclick="tryWritePhase('write')">✏️ Jetzt schreiben ▶</button>
     </div>`;
 }
@@ -1953,82 +1955,27 @@ function renderWrite(){
   const text=answers[chId];
   const cnt=wc(text);
   const good=cnt>=ch.minWords;
-  const hasCap=(text.trimStart()[0]||'').match(/[A-ZÄÖÜ]/);
-  const hasPunct=['.','!','?','"'].includes(text.trimEnd().slice(-1));
-  const hasRede=/„/.test(text);
-  const scaffoldHint=scaffoldEdits[chId];
-
-  const crit=CRIT[chId].map((c,i)=>`
-    <div class="crit-item ${checkedCrit[chId][i]?'ck':''}" data-ci="${i}" onclick="toggleCrit(${i})">
-      <div class="cbox">${checkedCrit[chId][i]?'✓':''}</div><span>${c}</span>
-    </div>`).join('');
-
-  const stemsHtml=STEMS[chId].map((s,i)=>`
-    <div class="stem-item" onclick="insertStem(${i})">
-      <span class="stem-arrow">➜</span><span>${s}</span>
-    </div>`).join('');
 
   return`
-    <div class="lernziel-strip">
-      <div class="lz-icon">🎯</div>
-      <div class="lz-body">
-        <span class="lz-label">Mein Lernziel</span>
-        <div class="lz-text">${ch.lernziel}</div>
-      </div>
-    </div>
-
-    ${buildPlanningRef(chId)}
-
-    ${scaffoldHint?`<div class="my-adventure-callout">
-      💡 <strong>Meine Idee aus Schritt 4:</strong> ${esc(scaffoldHint)}
-    </div>`:''}
-
     <div class="card">
       <div class="card-stripe cs-green"></div>
       <div class="card-body">
-        <div style="background:var(--blue3);border-left:4px solid var(--blue2);border-radius:0 var(--r2) var(--r2) 0;padding:8px 12px;margin-bottom:.8rem;">
-          <span style="font-family:var(--fp);font-size:5.5px;color:var(--blue);display:block;margin-bottom:4px;">Schreibauftrag (LP+ D3/4)</span>
-          <div style="font-size:13.5px;color:var(--blue);line-height:1.65;">${ch.taskText}</div>
-          <span style="font-size:10px;color:var(--blue2);display:block;margin-top:4px;">📚 ${ch.lpRef}</span>
-        </div>
-
-        <div class="stem-box">
-          <span class="stem-label">✏️ Deine persönlichen Textbausteine — tippe drauf:</span>
-          ${stemsHtml}
-        </div>
-
-        <div class="hint-box ${hints[chId]?'on':''}" id="hint-box">
-          💡 <strong>Tipp:</strong> Denk an dein Spiel — was genau hast du gesehen, gehört, gefühlt? Schreib es auf!
-        </div>
+        <span class="card-title">${ch.icon} ${ch.label} — Dein Text aus Schritt 4</span>
+        <p class="card-sub" style="margin-bottom:.6rem;">Das ist dein Text aus Schritt 4. Du kannst ihn hier noch anpassen, bevor du die Grammatikprüfung startest.</p>
 
         <div class="write-toolbar">
           <button class="tb-btn" id="speech-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
           <button class="tb-btn" onclick="openFocusMode()">🧘 Fokus</button>
           <button class="tb-btn" onclick="openIllustrator()">🎨 Illustrieren</button>
         </div>
-        <textarea id="answer-box" rows="7" spellcheck="true" lang="de">${esc(text)}</textarea>
+        <textarea id="answer-box" rows="8" spellcheck="true" lang="de">${esc(text)}</textarea>
 
         <div class="wc-row">
-          <span id="wc-el" class="${good?'wc-good':''}">Wörter: ${cnt} / ${ch.minWords}</span>
-          <span id="wc-ok" style="${good?'':'display:none'};color:var(--green)">✓ Gut so!</span>
-        </div>
-
-        <div class="qpills">
-          <span class="qpill qp-g ${hasCap?'on':''}">✓ Großbuchstabe</span>
-          <span class="qpill qp-g ${hasPunct?'on':''}">✓ Satzzeichen</span>
-          <span class="qpill qp-b ${good?'on':''}">✓ ${ch.minWords}+ Wörter</span>
-          <span class="qpill qp-a ${hasRede?'on':''}">✓ Wörtliche Rede</span>
-        </div>
-
-        <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r2);padding:.75rem;margin-bottom:.8rem;">
-          <span style="font-family:var(--fp);font-size:5.5px;color:var(--ink);display:block;margin-bottom:7px;">✅ Schreibkriterien (LP+ D3/4 LB 2)</span>
-          <div class="crit-list">${crit}</div>
+          <span id="wc-el" class="${good?'wc-good':''}">Wörter: ${cnt}</span>
         </div>
 
         <div class="btn-row">
-          <button class="btn btn-secondary" onclick="tryWritePhase('plan')">◀ Planen</button>
-          <button class="btn btn-hint" onclick="toggleHint()">💡 Tipp</button>
-          <button class="btn btn-primary" onclick="tryWritePhase('revise')">🔍 Überarbeiten ▶</button>
+          <button class="btn btn-primary" onclick="tryWritePhase('revise')">🔍 Grammatik &amp; Rechtschreibung prüfen ▶</button>
         </div>
       </div>
     </div>`;
@@ -2041,33 +1988,29 @@ function renderRevise(){
   const text=answers[chId];
   const cnt=wc(text);
   const textDisp=esc(text)||'<em style="color:var(--muted)">Noch kein Text.</em>';
-  const rev=revNotes[chId];
   const isLast=currentChapter===CHAPTERS.length-1;
-
-  const goodStems=ch.goodStems.map((s,i)=>`<button class="fb-stem-btn" onclick="appendRev('rev-good','good',${i})">${s}</button>`).join('');
-  const improveStems=ch.improveStems.map((s,i)=>`<button class="fb-stem-btn" onclick="appendRev('rev-improve','improve',${i})">${s}</button>`).join('');
 
   return`
     <div class="card">
       <div class="card-stripe cs-coral"></div>
       <div class="card-body">
-        <span class="card-title">🔍 Überarbeiten — Dein Text (${cnt} Wörter)</span>
-        <div class="my-text-display" id="text-display-plain">${textDisp}</div>
+        <span class="card-title">🔍 Grammatik &amp; Rechtschreibung — ${ch.icon} ${ch.label} (${cnt} Wörter)</span>
+        <p class="card-sub" style="margin-bottom:.8rem;">Dein Text wird auf Rechtschreibung und Grammatik geprüft. Fehler sind farbig markiert — tippe auf einen Fehler, um den Tipp zu sehen.</p>
 
-        <!-- WRITING CHECK -->
+        <!-- WRITING CHECK — auto-runs on entry; button allows re-check -->
         <button class="check-btn" id="check-btn" onclick="checkWriting()">
-          🔎 Mein Schreiben prüfen lassen
-          <span style="font-size:10px;font-weight:400;opacity:.7;">KI prüft Rechtschreibung, Grammatik &amp; Satzbau</span>
+          🔎 Nochmal prüfen
+          <span style="font-size:10px;font-weight:400;opacity:.7;">Rechtschreibung, Grammatik &amp; Satzbau</span>
         </button>
-        <div class="check-panel" id="check-panel">
-          <div class="check-panel-hdr">📝 Dein Text — Fehler markiert</div>
-          <div class="check-highlighted" id="check-highlighted"></div>
+        <div class="check-panel on" id="check-panel">
+          <div class="check-panel-hdr">📝 Dein Text — wird geprüft …</div>
+          <div class="check-highlighted" id="check-highlighted"><em style="padding:12px;display:block;opacity:.6;">Einen Moment …</em></div>
           <div class="check-legend">
             <span><span class="ldot" style="background:#fff0b3;border:1.5px solid var(--amber2);"></span>Rechtschreibung</span>
             <span><span class="ldot" style="background:var(--coral3);border:1.5px solid var(--coral2);"></span>Grammatik</span>
             <span><span class="ldot" style="background:var(--blue3);border:1.5px solid var(--blue2);"></span>Satzbau</span>
           </div>
-          <div class="suggestions-panel" id="suggestions-panel">
+          <div class="suggestions-panel" id="suggestions-panel" style="display:none">
             <span class="sug-title" id="sug-title">💡 Verbesserungsvorschläge</span>
             <div id="suggestions-list"></div>
           </div>
@@ -2084,20 +2027,6 @@ function renderRevise(){
           <div class="sent-summary" id="sent-summary"></div>
         </div>
 
-        <div class="peer-box">
-          <p><strong>📣 Schreibkonferenz (LP+ LB 2.3)</strong><br>
-          Lies deinen Text laut vor. Benenne einen gelungenen Aspekt und gib einen konkreten Überarbeitungshinweis.</p>
-        </div>
-        <div class="rev-box good">
-          <span class="rlabel">👍 Gelungenes benennen</span>
-          <div class="fb-stems">${goodStems}</div>
-          <textarea id="rev-good" rows="2" style="min-height:50px;" placeholder="Ich finde gut, dass …">${esc(rev.good||'')}</textarea>
-        </div>
-        <div class="rev-box improve">
-          <span class="rlabel">✏️ Konkreter Überarbeitungshinweis</span>
-          <div class="fb-stems">${improveStems}</div>
-          <textarea id="rev-improve" rows="2" style="min-height:50px;" placeholder="Du könntest noch …">${esc(rev.improve||'')}</textarea>
-        </div>
         <div class="btn-row" style="margin-top:.8rem;">
           <button class="btn btn-secondary" onclick="tryWritePhase('write')">◀ Text bearbeiten</button>
           <button class="btn btn-primary" onclick="finishChapter()">${isLast?'Geschichte abschließen 🎉':'Kapitel abschließen ▶'}</button>
@@ -2212,7 +2141,7 @@ function finishChapter(){
     btnLabel:currentChapter<CHAPTERS.length-1?'Weiter zum nächsten Teil ▶':'Geschichte abschließen 🎉'
   },()=>{
     if(currentChapter<CHAPTERS.length-1){
-      currentChapter++;writePhase='plan';
+      currentChapter++;writePhase='write';
       renderWritePhase();window.scrollTo({top:0,behavior:'smooth'});
     } else {
       showComplete();
@@ -2563,7 +2492,7 @@ function buildLernpass(totalW,stars){
 }
 
 function restartAll(){
-  currentStep='play';currentChapter=0;writePhase='plan';
+  currentStep='play';currentChapter=0;writePhase='write';
   playChecks={1:false,2:false,3:false,4:false};
   keywords=[];screenshotData=null;audioBlob=null;narrateSpeechRec=null;narrateTranscriptFinal='';typedNarration='';
   scaffoldData={begin:'',middle:'',end:''};scaffoldEdits={begin:'',middle:'',end:''};
