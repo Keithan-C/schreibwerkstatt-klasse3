@@ -2,176 +2,1049 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Satz Builder – Klasse 3</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geschichten-Baumeister 📖</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ══════════════════════════════════════════════
+   RESET & TOKENS
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body{
-font-family: Arial, sans-serif;
-background:#f2f7ff;
-text-align:center;
-padding:30px;
+:root {
+  /* story colours – consistent throughout */
+  --begin:    #16a34a;  --begin-bg:  #f0fdf4;  --begin-mid: #86efac;
+  --middle:   #d97706;  --middle-bg: #fffbeb;  --middle-mid:#fcd34d;
+  --end:      #7c3aed;  --end-bg:    #faf5ff;   --end-mid:  #c4b5fd;
+
+  --blue:     #4f6ef7;  --blue-lt:   #eef0ff;
+  --surface:  #ffffff;
+  --bg:       #f2f5ff;
+  --text:     #1a1f36;
+  --muted:    #64748b;
+  --border:   #e0e7f0;
+  --radius-sm:10px;
+  --radius:   18px;
+  --radius-lg:26px;
+  --shadow:   0 2px 16px rgba(79,110,247,0.09);
+  --shadow-md:0 6px 28px rgba(79,110,247,0.13);
 }
 
-h1{
-color:#2c3e50;
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
 }
 
-.instructions{
-margin-bottom:20px;
-font-size:18px;
+/* ══════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--blue);
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 12px rgba(39,60,200,0.18);
+}
+.topbar-logo {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 800;
+  color: #fff;
+  flex: 1;
+}
+.topbar a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+.topbar a:hover { color: #fff; }
+
+/* hero chips – show chosen char + setting */
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 40px;
+  padding: 4px 12px;
+  font-size: .82rem; font-weight: 700; color: #fff;
+  backdrop-filter: blur(6px);
+  transition: background .2s;
+}
+.hero-chip.empty { opacity: .55; }
+.hero-chip .chip-icon { font-size: 1.1rem; }
+
+/* ══════════════════════════════════════════════
+   SETUP ZONE
+══════════════════════════════════════════════ */
+.setup-zone {
+  background: var(--surface);
+  border-bottom: 3px solid var(--border);
+  padding: 18px 20px 16px;
+}
+.setup-row-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+.setup-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue);
+  font-size: .8rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.setup-num.done { background: var(--begin-bg); color: var(--begin); }
+
+.mini-grid {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.mini-card {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 2.5px solid var(--border);
+  border-radius: 40px;
+  padding: 6px 14px 6px 8px;
+  cursor: pointer;
+  font-weight: 700; font-size: .88rem;
+  transition: all .2s;
+  user-select: none;
+}
+.mini-card .mc-emoji { font-size: 1.3rem; line-height: 1; }
+.mini-card:hover { border-color: var(--blue); background: var(--blue-lt); color: var(--blue); transform: translateY(-2px); }
+.mini-card.selected {
+  background: var(--blue-lt);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+}
+.mini-card.selected::after {
+  content: '✓';
+  font-size: .75rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
 
-.blocks{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:30px;
+.setup-divider { border: none; border-top: 2px solid var(--border); margin: 14px 0; }
+
+/* ══════════════════════════════════════════════
+   STORY TRACK (visual thread connecting panels)
+══════════════════════════════════════════════ */
+.canvas-zone {
+  padding: 24px 16px 0;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.block{
-padding:12px 18px;
-background:#4da6ff;
-color:white;
-border-radius:8px;
-cursor:grab;
-font-size:18px;
+.story-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -14px; /* overlap with panels */
+  position: relative;
+  z-index: 5;
+  padding: 0 60px;
+}
+.track-node {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  border: 3px solid;
+  flex-shrink: 0;
+  transition: all .4s;
+  background: var(--surface);
+  position: relative;
+  z-index: 2;
+}
+.track-node.n-begin { border-color: var(--begin-mid); color: var(--begin); }
+.track-node.n-middle { border-color: var(--middle-mid); color: var(--middle); }
+.track-node.n-end   { border-color: var(--end-mid);   color: var(--end); }
+.track-node.lit { box-shadow: 0 0 0 5px; }
+.track-node.n-begin.lit { background: var(--begin-bg); box-shadow: 0 0 0 5px rgba(22,163,74,0.18); }
+.track-node.n-middle.lit{ background: var(--middle-bg); box-shadow: 0 0 0 5px rgba(217,119,6,0.18); }
+.track-node.n-end.lit   { background: var(--end-bg);   box-shadow: 0 0 0 5px rgba(124,58,237,0.18); }
+
+.track-line {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background .4s;
+}
+.track-line.active { background: linear-gradient(90deg, var(--begin-mid), var(--middle-mid)); }
+.track-line.done   { background: linear-gradient(90deg, var(--middle-mid), var(--end-mid)); }
+.track-line .line-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0%; border-radius: 4px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.track-line.tl-1 .line-fill { background: linear-gradient(90deg, var(--begin), var(--middle)); }
+.track-line.tl-2 .line-fill { background: linear-gradient(90deg, var(--middle), var(--end)); }
+
+/* ══════════════════════════════════════════════
+   PANELS ROW
+══════════════════════════════════════════════ */
+.panels-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
 }
 
-.block:hover{
-background:#2e86de;
+/* ── connector arrows ── */
+.panel-arrow {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 4px;
+  margin-top: 72px; /* align with middle of panel header */
+  color: var(--border);
+  font-size: 1.4rem;
+  transition: color .4s;
+  flex-shrink: 0;
+}
+.panel-arrow svg { width: 36px; height: 36px; }
+.panel-arrow.active { color: var(--begin); }
+.panel-arrow.active2 { color: var(--middle); }
+
+/* ── story panel ── */
+.s-panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  transition: border-color .3s, box-shadow .3s;
+  position: relative;
+}
+.s-panel.p-begin  { border-color: var(--begin-mid); }
+.s-panel.p-middle { border-color: var(--middle-mid); }
+.s-panel.p-end    { border-color: var(--end-mid); }
+.s-panel.p-middle.locked, .s-panel.p-end.locked {
+  border-color: var(--border);
+  opacity: .7;
+}
+.s-panel.p-middle.locked .panel-body,
+.s-panel.p-end.locked   .panel-body { pointer-events: none; filter: blur(1.5px); }
+
+/* panel header */
+.panel-hd {
+  padding: 16px 18px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-hd.hd-begin  { background: var(--begin-bg); }
+.panel-hd.hd-middle { background: var(--middle-bg); }
+.panel-hd.hd-end    { background: var(--end-bg); }
+.ph-icon { font-size: 1.6rem; }
+.ph-info { flex: 1; }
+.ph-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.1rem; font-weight: 800;
+}
+.p-begin  .ph-title { color: var(--begin); }
+.p-middle .ph-title { color: var(--middle); }
+.p-end    .ph-title { color: var(--end); }
+.ph-sub { font-size: .78rem; font-weight: 600; color: var(--muted); margin-top: 1px; }
+.ph-badge {
+  font-size: .7rem; font-weight: 800;
+  border-radius: 40px; padding: 3px 10px;
+  border: 2px solid;
+}
+.p-begin  .ph-badge { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .ph-badge { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .ph-badge { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
+
+/* panel body */
+.panel-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+/* scene preview */
+.scene-prev {
+  background: linear-gradient(135deg, var(--bg), #e8eeff);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  min-height: 70px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+}
+.scene-emojis { font-size: 2.2rem; display: flex; gap: 6px; justify-content: center; }
+.scene-emojis .se { animation: bob 2.8s ease-in-out infinite; }
+.scene-emojis .se:nth-child(2) { animation-delay: .7s; }
+.scene-emojis .se:nth-child(3) { animation-delay: 1.4s; }
+@keyframes bob {
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-6px); }
+}
+.scene-label { font-size: .72rem; font-weight: 700; color: var(--muted); }
+
+/* starters */
+.starters-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.starter {
+  font-size: .78rem; font-weight: 700;
+  border-radius: 40px; padding: 5px 12px;
+  cursor: pointer; border: 2px solid; font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.p-begin  .starter { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .starter { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .starter { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
+.p-begin  .starter:hover { background: var(--begin);  color: #fff; }
+.p-middle .starter:hover { background: var(--middle); color: #fff; }
+.p-end    .starter:hover { background: var(--end);    color: #fff; }
+
+/* textarea */
+.s-textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  color: var(--text);
+  line-height: 1.7;
+  resize: none;
+  transition: border-color .2s;
+  background: #fafcff;
+}
+.s-textarea:focus { outline: none; border-color: var(--blue); background: #fff; }
+.s-textarea::placeholder { color: #b0bcda; font-weight: 500; }
+
+/* write footer */
+.write-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.wc-pill {
+  font-size: .75rem; font-weight: 800;
+  border-radius: 40px; padding: 4px 12px;
+  background: var(--bg); color: var(--muted);
+  border: 2px solid var(--border);
+  transition: all .3s;
+  white-space: nowrap;
+}
+.wc-pill.ok {
+  color: var(--begin); border-color: var(--begin-mid); background: var(--begin-bg);
+}
+.speak-btn {
+  background: none; border: 2px solid var(--border);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .85rem; color: var(--muted);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s;
+}
+.speak-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+
+/* lock overlay */
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 10;
+  background: rgba(242,245,255,0.82);
+  backdrop-filter: blur(3px);
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  transition: opacity .4s;
+}
+.lock-overlay.hidden { opacity: 0; pointer-events: none; }
+.lock-icon { font-size: 2.5rem; }
+.lock-msg {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: var(--muted); text-align: center;
+  max-width: 180px; line-height: 1.4;
 }
 
-#sentence{
-min-height:80px;
-border:3px dashed #999;
-border-radius:10px;
-padding:20px;
-margin-bottom:20px;
-background:white;
-font-size:20px;
+/* ══════════════════════════════════════════════
+   PREVIEW ZONE  (always visible below panels)
+══════════════════════════════════════════════ */
+.preview-zone {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+.preview-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.preview-header .ph-live {
+  font-size: .7rem; font-weight: 800;
+  background: #ef4444; color: #fff;
+  border-radius: 40px; padding: 2px 8px;
+  letter-spacing: .05em;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:.5; } }
+
+.preview-book {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 3px solid var(--blue-lt);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.pv-part {
+  padding: 20px;
+  min-height: 120px;
+  border-right: 2px solid var(--border);
+  position: relative;
+  transition: background .3s;
+}
+.pv-part:last-child { border-right: none; }
+.pv-part-label {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: 10px;
+}
+.pv-begin  .pv-part-label { color: var(--begin); }
+.pv-middle .pv-part-label { color: var(--middle); }
+.pv-end    .pv-part-label { color: var(--end); }
+
+.pv-begin  { border-top: 4px solid var(--begin); }
+.pv-middle { border-top: 4px solid var(--middle); }
+.pv-end    { border-top: 4px solid var(--end); }
+
+.pv-text {
+  font-size: .9rem; font-weight: 600; line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+.pv-text.empty { color: #c8d3e8; font-style: italic; }
+
+/* dotted placeholder lines */
+.pv-lines {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 4px;
+}
+.pv-line {
+  height: 10px; border-radius: 5px;
+  background: var(--border);
+  opacity: .5;
+}
+.pv-line:nth-child(1){ width:85%; }
+.pv-line:nth-child(2){ width:70%; }
+.pv-line:nth-child(3){ width:55%; }
+
+/* ── celebrate ── */
+.celebrate-bar {
+  background: linear-gradient(135deg, var(--begin-bg), var(--end-bg));
+  border-radius: var(--radius);
+  border: 3px solid var(--end-mid);
+  padding: 22px 28px;
+  display: flex; align-items: center; gap: 18px;
+  margin-top: 20px;
+  animation: fadeUp .4s ease;
+  display: none;
+}
+.celebrate-bar.show { display: flex; }
+.cel-emoji { font-size: 3rem; animation: pop .5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes pop { 0%{ transform:scale(0); } 70%{ transform:scale(1.2); } 100%{ transform:scale(1); } }
+.cel-text { flex: 1; }
+.cel-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--end);
+  margin-bottom: 3px;
+}
+.cel-sub { font-size: .88rem; font-weight: 600; color: var(--muted); }
+.cel-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-print {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 4px 14px rgba(79,110,247,0.25);
+  transition: all .2s;
+}
+.btn-print:hover { background: #3a55e0; transform: translateY(-2px); }
+.btn-speak-all {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--end-bg); color: var(--end);
+  border: 2px solid var(--end-mid); border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.btn-speak-all:hover { background: var(--end); color: #fff; }
+
+/* ══════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════ */
+.confetti-piece {
+  position: fixed; pointer-events: none; z-index: 9999;
+  border-radius: 2px;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  from { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+  to   { opacity: 0; transform: translateY(110vh) rotate(720deg); }
 }
 
-button{
-padding:10px 20px;
-font-size:16px;
-margin:5px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .panels-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .panel-arrow {
+    margin-top: 0; padding: 6px 0;
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+  .story-track { display: none; }
+  .preview-book { grid-template-columns: 1fr; }
+  .pv-part { border-right: none; border-bottom: 2px solid var(--border); }
+  .pv-part:last-child { border-bottom: none; }
+  .celebrate-bar { flex-direction: column; text-align: center; }
+  .cel-btns { justify-content: center; }
 }
 
-.check{
-background:#27ae60;
-color:white;
+/* ══════════════════════════════════════════════
+   PRINT
+══════════════════════════════════════════════ */
+@media print {
+  .topbar, .setup-zone, .story-track, .panels-row,
+  .panel-arrow, .celebrate-bar, .preview-header { display: none !important; }
+  .preview-zone { padding: 0; max-width: 100%; }
+  .preview-book { box-shadow: none; border: 1px solid #ccc; }
 }
 
-.clear{
-background:#e74c3c;
-color:white;
+/* fade-up util */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
-#feedback{
-margin-top:20px;
-font-size:20px;
-font-weight:bold;
-}
-
-.suggestion{
-margin-top:10px;
-color:#2c3e50;
-font-size:18px;
-}
-
 </style>
 </head>
-
 <body>
 
-<h1>Satz-Baumeister</h1>
+<!-- ══════════════════════════════════════════
+     TOPBAR
+══════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-logo">📖 Geschichten-Baumeister</div>
+  <div class="hero-chips">
+    <div class="hero-chip empty" id="chipChar"><span class="chip-icon">🧒</span><span id="chipCharLabel">Figur wählen…</span></div>
+    <div class="hero-chip empty" id="chipSet"><span class="chip-icon">🗺️</span><span id="chipSetLabel">Ort wählen…</span></div>
+  </div>
+  <a href="index.html">← Zurück</a>
+</header>
 
-<div class="instructions">
-Ziehe die Wörter in das Feld und baue einen Satz.
+<!-- ══════════════════════════════════════════
+     SETUP ZONE
+══════════════════════════════════════════ -->
+<section class="setup-zone">
+  <!-- Step 1: Character -->
+  <div class="setup-row-header">
+    <span class="setup-num" id="numChar">1</span>
+    Wähle deine Hauptfigur
+  </div>
+  <div class="mini-grid" id="charGrid"></div>
+
+  <hr class="setup-divider">
+
+  <!-- Step 2: Setting -->
+  <div class="setup-row-header">
+    <span class="setup-num" id="numSet">2</span>
+    Wähle deinen Ort
+  </div>
+  <div class="mini-grid" id="settingGrid"></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     STORY TRACK (visual connection line)
+══════════════════════════════════════════ -->
+<div class="canvas-zone">
+  <div class="story-track">
+    <div class="track-node n-begin" id="tn-begin">🌅</div>
+    <div class="track-line tl-1" id="tl1"><div class="line-fill" id="lf1"></div></div>
+    <div class="track-node n-middle" id="tn-middle">⚡</div>
+    <div class="track-line tl-2" id="tl2"><div class="line-fill" id="lf2"></div></div>
+    <div class="track-node n-end" id="tn-end">⭐</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANELS ROW
+  ══════════════════════════════════════════ -->
+  <div class="panels-row">
+
+    <!-- ── PANEL: Anfang ── -->
+    <div class="s-panel p-begin" id="panelBegin">
+      <div class="panel-hd hd-begin">
+        <span class="ph-icon">🌅</span>
+        <div class="ph-info">
+          <div class="ph-title">Anfang</div>
+          <div class="ph-sub">Stell die Figur und den Ort vor</div>
+        </div>
+        <div class="ph-badge" id="badge-begin">Schritt 1</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-begin">
+          <div class="scene-emojis">
+            <span class="se" id="se-b-char">🧒</span>
+            <span class="se" id="se-b-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-begin-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-begin"></div>
+        <textarea class="s-textarea" id="ta-begin"
+          placeholder="Schreibe hier den Anfang der Geschichte …"
+          oninput="onType('begin')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-begin">0 Wörter</span>
+          <button class="speak-btn" onclick="speak('begin')">🔊 Vorlesen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- connector arrow 1 -->
+    <div class="panel-arrow" id="arr1">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- ── PANEL: Ereignis ── -->
+    <div class="s-panel p-middle locked" id="panelMiddle">
+      <div class="panel-hd hd-middle">
+        <span class="ph-icon">⚡</span>
+        <div class="ph-info">
+          <div class="ph-title">Ereignis</div>
+          <div class="ph-sub">Was passiert? Was ist das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-middle">Schritt 2</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-middle">
+          <div class="scene-emojis">
+            <span class="se" id="se-m-char">🧒</span>
+            <span class="se">❗</span>
+            <span class="se" id="se-m-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-middle-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-middle"></div>
+        <textarea class="s-textarea" id="ta-middle"
+          placeholder="Schreibe hier das Ereignis …"
+          oninput="onType('middle')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-middle">0 Wörter</span>
+          <button class="speak-btn" onclick="speak('middle')">🔊 Vorlesen</button>
+        </div>
+      </div>
+      <div class="lock-overlay" id="lock-middle">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst den Anfang fertig!</div>
+      </div>
+    </div>
+
+    <!-- connector arrow 2 -->
+    <div class="panel-arrow" id="arr2">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- ── PANEL: Ende ── -->
+    <div class="s-panel p-end locked" id="panelEnd">
+      <div class="panel-hd hd-end">
+        <span class="ph-icon">⭐</span>
+        <div class="ph-info">
+          <div class="ph-title">Ende</div>
+          <div class="ph-sub">Wie löst sich das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-end">Schritt 3</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-end">
+          <div class="scene-emojis">
+            <span class="se" id="se-e-char">🧒</span>
+            <span class="se">✨</span>
+            <span class="se" id="se-e-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-end-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-end"></div>
+        <textarea class="s-textarea" id="ta-end"
+          placeholder="Schreibe hier das Ende der Geschichte …"
+          oninput="onType('end')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-end">0 Wörter</span>
+          <button class="speak-btn" onclick="speak('end')">🔊 Vorlesen</button>
+        </div>
+      </div>
+      <div class="lock-overlay" id="lock-end">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst das Ereignis fertig!</div>
+      </div>
+    </div>
+
+  </div><!-- /panels-row -->
+</div><!-- /canvas-zone -->
+
+<!-- ══════════════════════════════════════════
+     LIVE PREVIEW ZONE
+══════════════════════════════════════════ -->
+<div class="preview-zone">
+  <div class="preview-header">
+    📖 Meine Geschichte
+    <span class="ph-live">LIVE</span>
+  </div>
+
+  <div class="preview-book">
+    <!-- Anfang -->
+    <div class="pv-part pv-begin">
+      <div class="pv-part-label">🌅 Anfang</div>
+      <div class="pv-text empty" id="pv-begin">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Ereignis -->
+    <div class="pv-part pv-middle">
+      <div class="pv-part-label">⚡ Ereignis</div>
+      <div class="pv-text empty" id="pv-middle">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Ende -->
+    <div class="pv-part pv-end">
+      <div class="pv-part-label">⭐ Ende</div>
+      <div class="pv-text empty" id="pv-end">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebrate bar (hidden until all done) -->
+  <div class="celebrate-bar" id="celebBar">
+    <span class="cel-emoji">🎉</span>
+    <div class="cel-text">
+      <div class="cel-title">Fantastisch! Deine Geschichte ist fertig!</div>
+      <div class="cel-sub">Du hast eine tolle Geschichte geschrieben. Weiter so!</div>
+    </div>
+    <div class="cel-btns">
+      <button class="btn-speak-all" onclick="speakAll()">🔊 Alles vorlesen</button>
+      <button class="btn-print" onclick="window.print()">🖨️ Ausdrucken</button>
+    </div>
+  </div>
 </div>
 
-<div class="blocks">
-<div class="block" draggable="true">Der</div>
-<div class="block" draggable="true">Papagei</div>
-<div class="block" draggable="true">schaut</div>
-<div class="block" draggable="true">die</div>
-<div class="block" draggable="true">Menschen</div>
-<div class="block" draggable="true">an</div>
-</div>
-
-<div id="sentence">
-Ziehe die Wörter hier hinein...
-</div>
-
-<button class="check" onclick="checkSentence()">Satz prüfen</button>
-<button class="clear" onclick="clearSentence()">Neu</button>
-
-<div id="feedback"></div>
-<div class="suggestion" id="suggestion"></div>
-
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
 <script>
+/* ── DATA ─────────────────────────────────── */
+const CHARS = [
+  { emoji:'👧', name:'Emma',   desc:'Mutiges Mädchen',    pronoun:'Sie' },
+  { emoji:'👦', name:'Luca',   desc:'Neugieriger Junge',   pronoun:'Er' },
+  { emoji:'🐕', name:'Bello',  desc:'Freundlicher Hund',   pronoun:'Er' },
+  { emoji:'🐱', name:'Mia',    desc:'Schlaue Katze',       pronoun:'Sie' },
+  { emoji:'🦊', name:'Felix',  desc:'Schlauer Fuchs',      pronoun:'Er' },
+  { emoji:'🐉', name:'Drako',  desc:'Freundlicher Drache', pronoun:'Er' },
+];
 
-const blocks = document.querySelectorAll(".block");
-const sentenceBox = document.getElementById("sentence");
+const SETS = [
+  { emoji:'🌲', name:'Im Wald',          desc:'Große Bäume' },
+  { emoji:'🏫', name:'In der Schule',    desc:'Klassenzimmer' },
+  { emoji:'🏖️', name:'Am Strand',        desc:'Sand und Meer' },
+  { emoji:'🏙️', name:'In der Stadt',     desc:'Straßen und Häuser' },
+  { emoji:'🏡', name:'Auf dem Bauernhof',desc:'Tiere und Felder' },
+  { emoji:'⛰️', name:'In den Bergen',    desc:'Schnee und Gipfel' },
+];
 
-blocks.forEach(block=>{
-block.addEventListener("dragstart",dragStart);
-});
+const STARTERS = {
+  begin: [
+    'Es war einmal …',
+    'An einem sonnigen Morgen …',
+    'Eines Tages …',
+    'In [ORT] lebte …',
+    '[FIGUR] wachte auf und …',
+  ],
+  middle: [
+    'Plötzlich …',
+    'Da sah [FIGUR] …',
+    'Auf einmal …',
+    'Oh nein! …',
+    'Dann passierte etwas …',
+  ],
+  end: [
+    'Zum Glück …',
+    'Am Ende …',
+    'Danach war alles …',
+    '[FIGUR] war sehr froh, weil …',
+    'Von nun an …',
+  ],
+};
 
-sentenceBox.addEventListener("dragover",dragOver);
-sentenceBox.addEventListener("drop",dropWord);
+/* ── STATE ────────────────────────────────── */
+let st = { charIdx: null, setIdx: null };
+const MIN_WORDS = 5;
 
-function dragStart(e){
-e.dataTransfer.setData("text",e.target.innerText);
+/* ── BOOT ─────────────────────────────────── */
+buildCharGrid();
+buildSettingGrid();
+updateAll();
+
+/* ── GRIDS ────────────────────────────────── */
+function buildCharGrid() {
+  const g = document.getElementById('charGrid');
+  CHARS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `cc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${c.emoji}</span>${c.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${c.desc}</span>`;
+    el.onclick = () => { st.charIdx = i; selectMini('cc', i, CHARS.length); onCharSetChange(); };
+    g.appendChild(el);
+  });
+}
+function buildSettingGrid() {
+  const g = document.getElementById('settingGrid');
+  SETS.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `sc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${s.emoji}</span>${s.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${s.desc}</span>`;
+    el.onclick = () => { st.setIdx = i; selectMini('sc', i, SETS.length); onCharSetChange(); };
+    g.appendChild(el);
+  });
+}
+function selectMini(prefix, idx, total) {
+  for (let i = 0; i < total; i++) {
+    const el = document.getElementById(`${prefix}-${i}`);
+    if (el) el.className = i === idx ? 'mini-card selected' : 'mini-card';
+  }
 }
 
-function dragOver(e){
-e.preventDefault();
+/* ── CHARACTER / SETTING CHANGE ───────────── */
+function onCharSetChange() {
+  const char = st.charIdx !== null ? CHARS[st.charIdx] : null;
+  const set  = st.setIdx  !== null ? SETS[st.setIdx]   : null;
+
+  // topbar chips
+  const chipChar  = document.getElementById('chipChar');
+  const chipSet   = document.getElementById('chipSet');
+  const chipCLbl  = document.getElementById('chipCharLabel');
+  const chipSLbl  = document.getElementById('chipSetLabel');
+  if (char) { chipChar.classList.remove('empty'); chipCLbl.textContent = char.name; chipChar.querySelector('.chip-icon').textContent = char.emoji; }
+  else      { chipChar.classList.add('empty');    chipCLbl.textContent = 'Figur wählen…'; chipChar.querySelector('.chip-icon').textContent = '🧒'; }
+  if (set)  { chipSet.classList.remove('empty');  chipSLbl.textContent = set.name;  chipSet.querySelector('.chip-icon').textContent = set.emoji; }
+  else      { chipSet.classList.add('empty');     chipSLbl.textContent = 'Ort wählen…';  chipSet.querySelector('.chip-icon').textContent = '🗺️'; }
+
+  // setup step badges
+  document.getElementById('numChar').className = 'setup-num' + (char ? ' done' : '');
+  document.getElementById('numSet').className  = 'setup-num' + (set  ? ' done' : '');
+
+  // scene previews
+  ['b','m','e'].forEach(k => {
+    const ce = document.getElementById(`se-${k}-char`);
+    const se = document.getElementById(`se-${k}-set`);
+    if (ce) ce.textContent = char ? char.emoji : '🧒';
+    if (se) se.textContent = set  ? set.emoji  : '🌲';
+  });
+
+  const name = char ? char.name : 'die Figur';
+  const place = set ? set.name : 'dem Ort';
+
+  ['begin','middle','end'].forEach(part => {
+    const lbl = document.getElementById(`scene-${part}-label`);
+    if (lbl) lbl.textContent = `${name} ${part === 'begin' ? 'erkundet' : part === 'middle' ? 'erlebt etwas bei' : 'endet in'} ${place}`;
+  });
+
+  // rebuild starters with name injected
+  buildStarters('begin', name, place);
+  buildStarters('middle', name, place);
+  buildStarters('end', name, place);
+
+  updateAll();
 }
 
-function dropWord(e){
-e.preventDefault();
-let word = e.dataTransfer.getData("text");
-
-let span = document.createElement("span");
-span.innerText = word + " ";
-sentenceBox.appendChild(span);
+function buildStarters(part, name, place) {
+  const wrap = document.getElementById(`starters-${part}`);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  (STARTERS[part] || []).forEach(s => {
+    const text = s.replace('[FIGUR]', name).replace('[ORT]', place);
+    const btn = document.createElement('button');
+    btn.className = 'starter';
+    btn.textContent = text;
+    btn.onclick = () => insertStarter(part, text);
+    wrap.appendChild(btn);
+  });
 }
 
-function checkSentence(){
-
-let sentence = sentenceBox.innerText.trim();
-
-let correct = "Der Papagei schaut die Menschen an";
-
-if(sentence === correct){
-
-document.getElementById("feedback").innerText = "✅ Super! Der Satz ist richtig.";
-document.getElementById("suggestion").innerText = "";
-
+function insertStarter(part, text) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const cur = ta.value.trim();
+  ta.value = cur ? cur + ' ' + text + ' ' : text + ' ';
+  ta.focus();
+  onType(part);
 }
 
-else{
+/* ── TYPING ───────────────────────────────── */
+function onType(part) {
+  const ta  = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const words = countWords(ta.value);
 
-document.getElementById("feedback").innerText = "❌ Fast! Schau dir den Vorschlag an.";
-document.getElementById("suggestion").innerText = "Vorschlag: " + correct;
+  // word count pill
+  const pill = document.getElementById(`wc-${part}`);
+  pill.textContent = `${words} ${words === 1 ? 'Wort' : 'Wörter'}`;
+  pill.className   = words >= MIN_WORDS ? 'wc-pill ok' : 'wc-pill';
 
+  // live preview
+  updatePreview(part, ta.value.trim());
+  updateAll();
 }
 
+function updatePreview(part, text) {
+  const pv = document.getElementById(`pv-${part}`);
+  if (!pv) return;
+  if (text) {
+    pv.className = 'pv-text';
+    pv.textContent = text;
+  } else {
+    pv.className = 'pv-text empty';
+    pv.innerHTML = '<div class="pv-lines"><div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div></div>';
+  }
 }
 
-function clearSentence(){
-sentenceBox.innerHTML="Ziehe die Wörter hier hinein...";
-document.getElementById("feedback").innerText="";
-document.getElementById("suggestion").innerText="";
+function countWords(str) {
+  return str.trim().split(/\s+/).filter(w => w.length > 0).length;
 }
 
+/* ── LOCK / UNLOCK LOGIC ─────────────────── */
+function updateAll() {
+  const beginWords  = countWords(document.getElementById('ta-begin').value);
+  const middleWords = countWords(document.getElementById('ta-middle').value);
+
+  const beginDone  = beginWords  >= MIN_WORDS;
+  const middleDone = middleWords >= MIN_WORDS;
+
+  // lock overlays
+  const lockM = document.getElementById('lock-middle');
+  const lockE = document.getElementById('lock-end');
+  const panelM = document.getElementById('panelMiddle');
+  const panelE = document.getElementById('panelEnd');
+
+  if (beginDone) {
+    lockM.classList.add('hidden');
+    panelM.classList.remove('locked');
+    document.getElementById('arr1').classList.add('active');
+    document.getElementById('tn-begin').classList.add('lit');
+    document.getElementById('lf1').style.width = '100%';
+  } else {
+    lockM.classList.remove('hidden');
+    panelM.classList.add('locked');
+    document.getElementById('arr1').classList.remove('active');
+    document.getElementById('tn-begin').classList.remove('lit');
+    document.getElementById('lf1').style.width = '0%';
+  }
+
+  if (beginDone && middleDone) {
+    lockE.classList.add('hidden');
+    panelE.classList.remove('locked');
+    document.getElementById('arr2').classList.add('active2');
+    document.getElementById('tn-middle').classList.add('lit');
+    document.getElementById('lf2').style.width = '100%';
+  } else {
+    lockE.classList.remove('hidden');
+    panelE.classList.add('locked');
+    document.getElementById('arr2').classList.remove('active2');
+    document.getElementById('tn-middle').classList.remove('lit');
+    document.getElementById('lf2').style.width = '0%';
+  }
+
+  // track node end
+  const endWords = countWords(document.getElementById('ta-end').value);
+  const endDone  = endWords >= MIN_WORDS;
+  if (endDone) document.getElementById('tn-end').classList.add('lit');
+  else         document.getElementById('tn-end').classList.remove('lit');
+
+  // celebrate
+  const allDone = beginDone && middleDone && endDone;
+  const bar = document.getElementById('celebBar');
+  if (allDone && !bar.classList.contains('show')) {
+    bar.classList.add('show');
+    confetti();
+  }
+}
+
+/* ── SPEECH ───────────────────────────────── */
+function speak(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta || !ta.value.trim()) return;
+  tts(ta.value.trim());
+}
+
+function speakAll() {
+  const parts = ['begin','middle','end'].map(p => {
+    const ta = document.getElementById(`ta-${p}`);
+    return ta ? ta.value.trim() : '';
+  }).filter(Boolean).join(' … ');
+  if (parts) tts(parts);
+}
+
+function tts(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE'; u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+/* ── CONFETTI ─────────────────────────────── */
+function confetti() {
+  const colors = ['#22c55e','#d97706','#7c3aed','#4f6ef7','#f87171','#06b6d4','#f59e0b'];
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 7 + Math.random() * 9;
+    el.style.cssText = `
+      left:${Math.random()*100}vw; top:-12px;
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      animation-duration:${2.5+Math.random()*2.5}s;
+      animation-delay:${Math.random()*1.2}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+}
 </script>
-
 </body>
 </html>
