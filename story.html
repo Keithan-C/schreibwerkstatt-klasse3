@@ -347,58 +347,58 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 
 /* ── WRITING CHECK ── */
 .check-btn{
-  width:100%;padding:12px;border:2px solid var(--amber2);border-radius:var(--r2);
-  background:var(--amber4);color:var(--amber);font-family:var(--fp);font-size:7px;
+  width:100%;padding:13px 16px;border:2px solid var(--amber2);border-radius:var(--r2);
+  background:var(--amber4);color:var(--amber);font-family:var(--fb);font-size:14px;font-weight:700;
   cursor:pointer;transition:all .2s;margin-bottom:.8rem;display:flex;
-  align-items:center;justify-content:center;gap:8px;line-height:1.6;
+  align-items:center;justify-content:center;gap:8px;line-height:1.4;
 }
 .check-btn:hover{background:var(--amber3);border-color:var(--amber);}
 .check-btn:disabled{opacity:.5;cursor:not-allowed;}
 .check-btn.running{background:var(--purple3);border-color:var(--purple2);color:var(--purple);}
 .check-panel{border-radius:var(--r2);border:2px solid var(--border);margin-bottom:.8rem;overflow:hidden;display:none;}
 .check-panel.on{display:block;}
-.check-panel-hdr{background:var(--amber4);padding:8px 12px;font-family:var(--fp);font-size:6px;color:var(--amber);display:flex;align-items:center;gap:6px;}
-.check-highlighted{padding:12px 14px;font-size:14px;line-height:2;background:var(--surface);white-space:pre-wrap;word-break:break-word;}
+.check-panel-hdr{background:var(--amber4);padding:10px 14px;font-family:var(--fb);font-size:13px;font-weight:700;color:var(--amber);display:flex;align-items:center;gap:6px;}
+.check-highlighted{padding:12px 14px;font-size:14px;line-height:2.1;background:var(--surface);white-space:pre-wrap;word-break:break-word;}
 .err-spell{background:#fff0b3;border-bottom:2.5px solid var(--amber2);border-radius:3px;cursor:pointer;transition:background .15s;}
 .err-spell:hover{background:#ffe066;}
 .err-grammar{background:var(--coral3);border-bottom:2.5px solid var(--coral2);border-radius:3px;cursor:pointer;transition:background .15s;}
 .err-grammar:hover{background:#ffb8a0;}
 .err-style{background:var(--blue3);border-bottom:2.5px solid var(--blue2);border-radius:3px;cursor:pointer;transition:background .15s;}
 .suggestions-panel{padding:10px 12px;background:var(--bg);border-top:1.5px solid var(--border);}
-.sug-title{font-family:var(--fp);font-size:6px;color:var(--ink);margin-bottom:7px;display:block;}
-.sug-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:9px 11px;margin-bottom:6px;transition:border-color .15s,box-shadow .15s;}
-.sug-card:hover{border-color:var(--purple2);}
-.sug-type{font-family:var(--fp);font-size:8px;padding:2px 7px;border-radius:4px;display:inline-block;margin-bottom:4px;}
+.sug-title{font-family:var(--fb);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px;display:block;}
+.sug-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 13px;margin-bottom:7px;transition:border-color .15s,box-shadow .15s;}
+.sug-card:hover{border-color:var(--purple2);box-shadow:0 2px 8px rgba(110,58,223,.1);}
+.sug-type{font-family:var(--fb);font-size:11px;font-weight:700;padding:3px 9px;border-radius:5px;display:inline-block;margin-bottom:5px;}
 .st-spell{background:var(--amber4);color:var(--amber);}
 .st-grammar{background:var(--coral3);color:var(--coral);}
 .st-style{background:var(--blue3);color:var(--blue);}
-.sug-orig{font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:2px;}
-.sug-fix{font-size:13.5px;font-weight:800;color:var(--green);margin-bottom:3px;}
-.sug-explain{font-size:12px;color:var(--ink2);line-height:1.55;}
-.sug-apply{margin-top:5px;padding:4px 10px;border:1.5px solid var(--green2);border-radius:5px;background:var(--green4);color:var(--green);font-family:var(--fp);font-size:8px;cursor:pointer;transition:background .15s;}
+.sug-orig{font-size:13px;color:var(--muted);text-decoration:line-through;margin-bottom:3px;}
+.sug-fix{font-size:14px;font-weight:800;color:var(--green);margin-bottom:4px;}
+.sug-explain{font-size:13px;color:var(--ink2);line-height:1.6;}
+.sug-apply{margin-top:7px;padding:7px 14px;border:2px solid var(--green2);border-radius:7px;background:var(--green4);color:var(--green);font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;display:inline-block;}
 .sug-apply:hover{background:var(--green2);color:#fff;}
-.check-legend{display:flex;gap:8px;flex-wrap:wrap;padding:6px 12px;border-top:1px solid var(--border);background:var(--bg);font-size:11px;color:var(--muted);align-items:center;}
-.ldot{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:3px;vertical-align:middle;}
-.no-errors-msg{padding:14px;text-align:center;font-family:var(--fp);font-size:7px;color:var(--green);background:var(--green4);}
+.check-legend{display:flex;gap:10px;flex-wrap:wrap;padding:8px 14px;border-top:1px solid var(--border);background:var(--bg);font-size:12px;color:var(--muted);align-items:center;}
+.ldot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle;}
+.no-errors-msg{padding:16px;text-align:center;font-family:var(--fb);font-size:14px;font-weight:700;color:var(--green);background:var(--green4);}
 
 /* ── SENTENCE ASSESSOR ── */
-.sent-btn{width:100%;padding:12px;border:2px solid var(--green2);border-radius:var(--r2);background:var(--green4);color:var(--green);font-family:var(--fp);font-size:7px;cursor:pointer;transition:all .2s;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.6;}
+.sent-btn{width:100%;padding:13px 16px;border:2px solid var(--green2);border-radius:var(--r2);background:var(--green4);color:var(--green);font-family:var(--fb);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;margin-bottom:.8rem;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.4;}
 .sent-btn:hover{background:var(--green3);border-color:var(--green);}
 .sent-btn:disabled{opacity:.5;cursor:not-allowed;}
 .sent-btn.running{background:var(--purple3);border-color:var(--purple2);color:var(--purple);}
 .sent-panel{border-radius:var(--r2);border:2px solid var(--border);margin-bottom:.8rem;overflow:hidden;display:none;}
 .sent-panel.on{display:block;}
-.sent-panel-hdr{background:var(--green4);padding:8px 12px;font-family:var(--fp);font-size:6px;color:var(--green);display:flex;align-items:center;gap:6px;}
-.sent-row{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:5px;}
+.sent-panel-hdr{background:var(--green4);padding:10px 14px;font-family:var(--fb);font-size:13px;font-weight:700;color:var(--green);display:flex;align-items:center;gap:6px;}
+.sent-row{padding:11px 13px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:5px;}
 .sent-row:last-child{border-bottom:none;}
 .sent-row.s-ok{background:#f0fdf4;}.sent-row.s-warn{background:#fffbeb;}.sent-row.s-error{background:#fff5f5;}
-.sent-text{font-size:14px;color:var(--ink);line-height:1.5;font-style:italic;}
-.sent-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--fp);font-size:8px;padding:2px 8px;border-radius:4px;width:fit-content;}
+.sent-text{font-size:14px;color:var(--ink);line-height:1.6;font-style:italic;}
+.sent-badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--fb);font-size:12px;font-weight:700;padding:3px 10px;border-radius:5px;width:fit-content;}
 .sent-badge.s-ok{background:var(--green4);color:var(--green);}
 .sent-badge.s-warn{background:var(--amber4);color:var(--amber);}
 .sent-badge.s-error{background:var(--coral3);color:var(--coral);}
-.sent-tip{font-size:12px;color:var(--ink2);line-height:1.55;}
-.sent-summary{padding:8px 14px;background:var(--bg);font-family:var(--fp);font-size:7px;color:var(--ink2);border-top:1.5px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.sent-tip{font-size:13px;color:var(--ink2);line-height:1.6;}
+.sent-summary{padding:10px 14px;background:var(--bg);font-family:var(--fb);font-size:13px;font-weight:600;color:var(--ink2);border-top:1.5px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
 
 /* ── GATE NOTICE ── */
 .gate-notice{background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);padding:8px 12px;font-size:13px;color:var(--amber);margin-bottom:.7rem;display:none;line-height:1.6;}
@@ -1960,8 +1960,13 @@ function renderWrite(){
     <div class="card">
       <div class="card-stripe cs-green"></div>
       <div class="card-body">
-        <span class="card-title">${ch.icon} ${ch.label} — Dein Text aus Schritt 4</span>
-        <p class="card-sub" style="margin-bottom:.6rem;">Das ist dein Text aus Schritt 4. Du kannst ihn hier noch anpassen, bevor du die Grammatikprüfung startest.</p>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:24px;line-height:1;">${ch.icon}</span>
+          <div>
+            <div style="font-family:var(--fb);font-size:16px;font-weight:800;color:var(--ink);line-height:1.2;">${ch.label}</div>
+            <div style="font-family:var(--fb);font-size:12px;color:var(--muted);margin-top:1px;">✏️ Dein Text aus Schritt 4 — hier kannst du ihn noch anpassen</div>
+          </div>
+        </div>
 
         <div class="write-toolbar">
           <button class="tb-btn" id="speech-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
@@ -1971,7 +1976,7 @@ function renderWrite(){
         <textarea id="answer-box" rows="8" spellcheck="true" lang="de">${esc(text)}</textarea>
 
         <div class="wc-row">
-          <span id="wc-el" class="${good?'wc-good':''}">Wörter: ${cnt}</span>
+          <span id="wc-el" class="${good?'wc-good':''}">📝 ${cnt} Wörter</span>
         </div>
 
         <div class="btn-row">
@@ -1994,8 +1999,13 @@ function renderRevise(){
     <div class="card">
       <div class="card-stripe cs-coral"></div>
       <div class="card-body">
-        <span class="card-title">🔍 Grammatik &amp; Rechtschreibung — ${ch.icon} ${ch.label} (${cnt} Wörter)</span>
-        <p class="card-sub" style="margin-bottom:.8rem;">Dein Text wird auf Rechtschreibung und Grammatik geprüft. Fehler sind farbig markiert — tippe auf einen Fehler, um den Tipp zu sehen.</p>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <span style="font-size:24px;line-height:1;">🔍</span>
+          <div>
+            <div style="font-family:var(--fb);font-size:16px;font-weight:800;color:var(--ink);line-height:1.2;">${ch.icon} ${ch.label} — Grammatik &amp; Rechtschreibung</div>
+            <div style="font-family:var(--fb);font-size:12px;color:var(--muted);margin-top:1px;">${cnt} Wörter · Fehler sind farbig markiert — tippe drauf für den Tipp</div>
+          </div>
+        </div>
 
         <!-- WRITING CHECK — auto-runs on entry; button allows re-check -->
         <button class="check-btn" id="check-btn" onclick="checkWriting()">

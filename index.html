@@ -664,6 +664,36 @@ textarea:focus{border-color:var(--lavender2);box-shadow:0 0 0 3px rgba(124,77,25
 .sp-words-row{display:flex;flex-wrap:wrap;gap:4px;}
 .sp-word-tag{padding:4px 9px;border-radius:5px;font-size:12px;font-weight:700;background:#dceeff;color:#1c3f6e;border:1.5px solid #b8d8f0;}
 
+/* ── PLAN NOTES REFERENCE (shown in write phase) ── */
+.plan-notes-panel{
+  background:linear-gradient(135deg,var(--sun) 0%,#fff9e0 100%);
+  border:2px solid var(--sun2);border-radius:var(--radius-sm);
+  margin-bottom:.9rem;overflow:hidden;
+}
+.plan-notes-panel summary{
+  padding:10px 14px;cursor:pointer;font-family:var(--font-head);
+  font-weight:700;font-size:13px;color:#7a4200;list-style:none;
+  display:flex;align-items:center;gap:8px;user-select:none;
+}
+.plan-notes-panel summary::-webkit-details-marker{display:none;}
+.plan-notes-panel summary::after{content:'▼';margin-left:auto;font-size:11px;opacity:.6;}
+.plan-notes-panel[open] summary::after{content:'▲';}
+.plan-notes-inner{
+  padding:6px 14px 12px;border-top:1px solid var(--sun2);
+  display:flex;flex-direction:column;gap:6px;
+}
+.plan-note-row{
+  display:flex;align-items:baseline;gap:8px;
+  font-size:13px;line-height:1.55;
+}
+.plan-note-label{
+  font-family:var(--font-head);font-size:10.5px;font-weight:700;
+  color:#7a4200;min-width:90px;flex-shrink:0;opacity:.75;
+}
+.plan-note-value{
+  color:var(--ink);font-weight:600;font-size:13.5px;
+}
+
 /* ── AUTISM-FRIENDLY OVERRIDES ── */
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;transition-duration:.01ms!important;}
@@ -1443,6 +1473,20 @@ function renderWrite(){
       <span class="stem-arrow">➜</span><span>${s}</span>
     </div>`).join('');
 
+  // Build Stichwortzettel reference from plan phase
+  const filledFields=T[l].planFields[part].filter(f=>planData[part][f.key]&&planData[part][f.key].trim());
+  const planNotesHTML=filledFields.length?`
+    <details class="plan-notes-panel" open>
+      <summary>📝 ${l==='de'?'Meine Stichwörter — schau hier nach!':'My Planning Notes — use these!'}</summary>
+      <div class="plan-notes-inner">
+        ${filledFields.map(f=>`
+          <div class="plan-note-row">
+            <span class="plan-note-label">${f.label.split('–')[0].replace(/\s*\/.*$/,'').trim()}</span>
+            <span class="plan-note-value">${esc(planData[part][f.key])}</span>
+          </div>`).join('')}
+      </div>
+    </details>`:'';
+
   return`
     <div class="card">
       <div class="card-header"><div class="card-icon">✏️</div>
@@ -1456,6 +1500,7 @@ function renderWrite(){
         <span class="stems-label">${T[l].stemsLabel}</span>
         ${stems}
       </div>
+      ${planNotesHTML}
       <div class="hint-box ${hints[part]?'on':''}" id="hint-box">${T[l].hints[part]}</div>
       <div class="write-toolbar">
         <button class="tb-btn" id="mic-btn" onclick="toggleSpeech()">🎤 <span>Sprache</span></button>
