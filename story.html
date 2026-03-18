@@ -1625,7 +1625,7 @@ function buildScaffold(){
   buildDiv.style.display='block';
   resultWrap.style.display='none';
 
-  const steps=['Lese deine Stichwörter …','Denke über dein Erlebnis nach …','Erstelle Schreibideen für dich …','Fast fertig …'];
+  const steps=['Lese deine Erzählung …','Schaue, was du erzählt hast …','Teile dein Erlebnis in drei Teile …','Fast fertig …'];
   let si=0;
   const stepsEl=document.getElementById('ai-building-steps');
   const stepInterval=setInterval(()=>{stepsEl.textContent=steps[si%steps.length];si++;},700);
@@ -1634,44 +1634,50 @@ function buildScaffold(){
     setTimeout(()=>{
       clearInterval(stepInterval);
 
-      // Build personalised scaffold from child's own keywords, feelings and narration
-      const kw=keywords.length?keywords:['Blockwelt'];
-      const k0=kw[0]||'das Abenteuer';
-      const k1=kw[1]||k0;
-      const k2=kw[kw.length-1]||k0;
-      const feel=selectedFeelings.length?selectedFeelings[0]:'aufgeregt';
-      const feelStr=selectedFeelings.length?selectedFeelings.slice(0,2).join(' und '):feel;
-      // Pick a meaningful phrase from the narration for extra personalisation
-      const narrWords=(typedNarration||'').split(/\s+/).filter(w=>w.length>4);
-      const narrPhrase=narrWords.length>=3?narrWords.slice(0,3).join(' '):'';
+      // Only use what the student narrated in step 3 — no pre-generated text
+      const narr=(typedNarration||'').trim();
+
+      if(!narr){
+        // Student said/typed nothing — leave all sections blank
+        ['begin','middle','end'].forEach(ch=>{
+          scaffoldData[ch]='';
+          scaffoldEdits[ch]='';
+          STEMS[ch]=[];
+        });
+        buildDiv.style.display='none';
+        renderScaffoldResult({
+          begin:{prompt:'Was ist am Anfang passiert? Schreib deine eigenen Ideen hier rein.',draft:'',stems:[]},
+          middle:{prompt:'Was war der spannendste Moment? Was ist dann passiert?',draft:'',stems:[]},
+          end:{prompt:'Wie ist es am Ende ausgegangen? Was hast du dabei gelernt?',draft:'',stems:[]}
+        });
+        resultWrap.style.display='block';
+        resolve();
+        return;
+      }
+
+      // Split the student's own narration into thirds → Anfang / Mitte / Schluss
+      const sentences=narr.split(/(?<=[.!?])\s+/).filter(s=>s.trim().length>0);
+      const t=Math.ceil(sentences.length/3);
+      const beginText=sentences.slice(0,t).join(' ');
+      const middleText=sentences.slice(t,t*2).join(' ');
+      const endText=sentences.slice(t*2).join(' ');
+      const firstWords=(str,n=6)=>str.split(/\s+/).slice(0,n).join(' ');
 
       const parsed={
         begin:{
-          prompt:`Wer ist dein Held — wie heißt er/sie und wie sieht er/sie aus? Wo hast du „${k0}" in der Blockwelt erlebt? Beschreibe den Ort mit drei Wörtern. Was wollte dein Held am Anfang erreichen?`,
-          draft:`Eines Tages machte sich mein Held auf den Weg durch die Blockwelt${k0!=='Blockwelt'?' und entdeckte '+k0:''}. Er/Sie war ${feelStr} und voller Neugier.${narrPhrase?' „'+narrPhrase+' …", dachte er/sie.':''}`,
-          stems:[
-            `Eines Tages entdeckte ich in der Blockwelt ${k0} …`,
-            `Es war ein aufregender Tag, als ${k0} plötzlich auftauchte …`,
-            `Mitten in der Blockwelt, nicht weit von ${k0}, begann das Abenteuer …`
-          ]
+          prompt:'Was ist am Anfang passiert? Erzähl den Beginn deines Abenteuers in eigenen Worten:',
+          draft:beginText,
+          stems:beginText?[firstWords(beginText)+' …','Am Anfang war …','Ich habe mich auf den Weg gemacht, als …']:[]
         },
         middle:{
-          prompt:`Was war das spannendste Moment mit „${k1}"? Wie hat sich dein Held dabei gefühlt — ${feelStr}? Was hat er/sie gesagt oder gedacht? Gab es ein schwieriges Hindernis?`,
-          draft:`Plötzlich passierte etwas Unglaubliches: ${k1} tauchte auf und alles änderte sich! Mein Held war ${feelStr} und wusste zuerst nicht, was er/sie tun sollte. „Das schaffe ich!", rief er/sie — und handelte mutig.`,
-          stems:[
-            `Plötzlich tauchte ${k1} auf und alles änderte sich …`,
-            `Da passierte etwas, das mein Held nie vergessen wird: …`,
-            `„${k1}!", rief mein Held — denn nun war alles anders …`
-          ]
+          prompt:'Was war der spannendste Moment? Was hast du gefühlt und getan?',
+          draft:middleText,
+          stems:middleText?[firstWords(middleText)+' …','Plötzlich passierte …','Ich war überrascht, als …']:[]
         },
         end:{
-          prompt:`Wie hat dein Held das Problem am Ende gelöst? Was ist mit „${k2}" passiert? Was hat er/sie durch das Abenteuer gelernt? Schreib einen wirkungsvollen letzten Satz!`,
-          draft:`Am Ende gelang es meinem Helden, ${k2} zu bewältigen. Er/Sie war ${feel} und stolz auf sich. Von da an wusste mein Held: Mut und Geduld helfen in jedem Abenteuer!`,
-          stems:[
-            `Von da an wusste mein Held: …`,
-            `Seitdem ist mein Held nie wieder ängstlich, denn …`,
-            `Das Abenteuer war zu Ende — aber die Erinnerung an ${k2} bleibt für immer …`
-          ]
+          prompt:'Wie ist es am Ende ausgegangen? Was hast du dabei gelernt oder gefühlt?',
+          draft:endText,
+          stems:endText?[firstWords(endText)+' …','Am Ende war ich froh, dass …','Von da an wusste ich: …']:[]
         }
       };
 
@@ -1696,7 +1702,7 @@ function renderScaffoldResult(parsed){
   wrap.innerHTML=CHAPTERS.map(ch=>{
     const chData=parsed[ch.id]||{};
     const prompt=chData.prompt||'Was war das Besonderste an diesem Teil deines Abenteuers?';
-    const draft=chData.draft||'Schreib hier deine Ideen …';
+    const draft=chData.draft||'';
     return`
       <div class="scaffold-section">
         <span class="scaffold-label">${ch.icon} ${ch.label}</span>
@@ -1808,6 +1814,25 @@ function tryWritePhase(p){
   writePhase=p;renderWritePhase();
 }
 
+// ── PLANNING REFERENCE PANEL (steps 2–4) ─────────────────
+function buildPlanningRef(chId){
+  const kwHTML=keywords.length?keywords.map(k=>`<span class="sp-word-tag">${esc(k)}</span>`).join(''):'';
+  const feelHTML=selectedFeelings.length?selectedFeelings.map(f=>`<span class="sp-word-tag" style="background:#ede8ff;border-color:#a07adf;color:#3a0a8a;">${esc(f)}</span>`).join(''):'';
+  const narrSnip=typedNarration?`<p style="font-size:13px;color:var(--ink2);line-height:1.6;margin:4px 0 0;">"${esc(typedNarration.slice(0,220))}${typedNarration.length>220?'…':''}"</p>`:'';
+  const scEdit=scaffoldEdits[chId]?`<p style="font-size:13px;color:var(--ink2);line-height:1.6;margin:4px 0 0;font-style:italic;">${esc(scaffoldEdits[chId].slice(0,220))}${scaffoldEdits[chId].length>220?'…':''}</p>`:'';
+  if(!kwHTML&&!feelHTML&&!narrSnip&&!scEdit)return'';
+  return`
+    <details class="schreibplan-panel" open style="margin-bottom:.8rem;">
+      <summary>📚 Meine Vorbereitung (Schritte 2–4)</summary>
+      <div class="sp-inner">
+        ${kwHTML?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">🗝️ Schritt 2 — Meine Stichwörter:</span><div class="sp-words-row">${kwHTML}</div></div>`:''}
+        ${feelHTML?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">💜 Schritt 2 — Meine Gefühle:</span><div class="sp-words-row">${feelHTML}</div></div>`:''}
+        ${narrSnip?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">🎙️ Schritt 3 — Was ich erzählt habe:</span>${narrSnip}</div>`:''}
+        ${scEdit?`<div><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">💡 Schritt 4 — Meine Idee für diesen Teil:</span>${scEdit}</div>`:''}
+      </div>
+    </details>`;
+}
+
 // ── PLAN ──────────────────────────────────────────────────
 function renderPlan(){
   const ch=CHAPTERS[currentChapter];
@@ -1833,9 +1858,7 @@ function renderPlan(){
       </div>
     </div>
 
-    ${scaffoldHint?`<div class="my-adventure-callout">
-      💡 <strong>KI-Idee für diesen Teil:</strong> ${esc(scaffoldHint)}
-    </div>`:''}
+    ${buildPlanningRef(chId)}
 
     <div class="card">
       <div class="card-stripe cs-amber"></div>
@@ -1897,8 +1920,10 @@ function renderWrite(){
       </div>
     </div>
 
+    ${buildPlanningRef(chId)}
+
     ${scaffoldHint?`<div class="my-adventure-callout">
-      💡 <strong>Meine KI-Idee als Starthilfe:</strong> ${esc(scaffoldHint)}
+      💡 <strong>Meine Idee aus Schritt 4:</strong> ${esc(scaffoldHint)}
     </div>`:''}
 
     <div class="card">
