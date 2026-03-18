@@ -3,1046 +3,251 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satzwerkstatt – Klasse 3/4 Bayern</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<base href="/schreibwerkstatt-klasse3/">
+<title>Satzwerkstatt – Klasse 3</title>
+
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --forest:#2a5c1a; --forest2:#4a9c2a; --forest3:#c8ecb0; --forest4:#edf8e6;
-  --navy:#1c3f6e;   --navy2:#2e6ab8;   --navy3:#b8d8f0;   --navy4:#e4f0fb;
-  --amber:#6b4c1a;  --amber2:#b07828;  --amber3:#f0d080;  --amber4:#fdf5de;
-  --plum:#4a2d8a;   --plum2:#7a5adf;   --plum3:#d8ccf8;   --plum4:#f0ebff;
-  --clay:#8a3020;   --clay3:#f8ddd8;   --clay4:#fdf0ee;
-  --ink:#1c1a18;    --ink2:#3c3a36;    --muted:#6a6660;
-  --surface:#ffffff;--page:#f4f2ed;
-  --border:#ccc8be; --border-lt:#e4e2d8;
-  --font:'Nunito',sans-serif;
-  --r:14px; --r2:8px;
-  --sh:0 2px 10px rgba(0,0,0,.07);
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fb;
+  margin:0;
+  padding:0;
+  text-align:center;
 }
-body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:100vh;}
-.wrap{max-width:700px;margin:0 auto;padding:0 1rem 6rem;}
-
-/* ── HEADER ── */
-.site-header{background:var(--forest);padding:1.2rem 1.5rem 1.4rem;margin-bottom:1.6rem;text-align:center;}
-.header-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:#fff;display:block;margin-bottom:.3rem;}
-.header-sub{font-size:14px;color:rgba(255,255,255,.78);display:block;margin-bottom:.6rem;}
-.header-badge{display:inline-block;font-size:12px;font-weight:700;background:rgba(255,255,255,.18);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:20px;padding:4px 14px;}
-.header-links{display:flex;gap:8px;justify-content:center;margin-top:.8rem;flex-wrap:wrap;}
-.hlink{font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.9);text-decoration:none;background:rgba(255,255,255,.12);}
-.hlink:hover{background:rgba(255,255,255,.22);}
-
-/* ── TABS ── */
-.tab-bar{display:flex;gap:0;margin-bottom:1.4rem;border:2px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--sh);}
-.tab-btn{flex:1;padding:12px 8px;border:none;background:var(--surface);color:var(--muted);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;border-right:2px solid var(--border);transition:background .15s;}
-.tab-btn:last-child{border-right:none;}
-.tab-btn.active{background:var(--forest4);color:var(--forest);}
-.tab-btn:hover:not(.active){background:var(--page);}
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
-
-/* ── HELP CARD ── */
-.help-card{background:var(--navy4);border:2px solid var(--navy3);border-radius:var(--r);margin-bottom:1.2rem;overflow:hidden;}
-.help-summary{padding:12px 16px;cursor:pointer;font-weight:800;font-size:14px;color:var(--navy);list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
-.help-summary::-webkit-details-marker{display:none;}
-.help-body{padding:0 16px 14px;font-size:13px;color:var(--navy);line-height:1.75;}
-.help-body ol{margin-left:1.2rem;margin-top:.4rem;}
-.help-body li{margin-bottom:.3rem;}
-
-/* ── CARD ── */
-.card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);margin-bottom:1.2rem;box-shadow:var(--sh);overflow:hidden;}
-.card-accent{height:5px;}
-.ca-forest{background:var(--forest);}
-.ca-navy{background:var(--navy);}
-.ca-amber{background:var(--amber2);}
-.ca-plum{background:var(--plum);}
-.ca-clay{background:var(--clay);}
-.card-body{padding:1.1rem 1.2rem .9rem;}
-.card-eyebrow{font-size:11px;font-weight:800;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-.card-title{font-size:18px;font-weight:900;color:var(--ink);display:block;margin-bottom:.4rem;}
-.card-desc{font-size:14px;color:var(--muted);line-height:1.65;}
-
-/* ── RULE CARD ── */
-.rule-card{border:2.5px solid var(--navy3);border-radius:var(--r);background:var(--navy4);padding:12px 16px;margin-bottom:1.2rem;}
-.rule-title{font-size:13px;font-weight:900;color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:.5rem;}
-.rule-body{font-size:13px;color:var(--navy);line-height:1.75;}
-.rule-example{margin-top:.5rem;background:var(--surface);border:1.5px solid var(--navy3);border-radius:var(--r2);padding:8px 12px;font-size:13px;font-style:italic;color:var(--ink2);}
-
-/* ── TENSE TABLE ── */
-.tense-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:.6rem;}
-.tense-table th{background:var(--navy);color:#fff;padding:6px 10px;font-weight:800;text-align:left;}
-.tense-table td{padding:6px 10px;border-bottom:1px solid var(--border-lt);}
-.tense-table tr:nth-child(even) td{background:var(--page);}
-.tt-präs{color:var(--amber);font-weight:700;}
-.tt-prät{color:var(--forest);font-weight:700;}
-
-/* ── TEXTAREA ── */
-.main-textarea{width:100%;min-height:130px;border:2px solid var(--border);border-radius:var(--r2);padding:12px;font-family:var(--font);font-size:15px;line-height:1.8;resize:vertical;background:var(--surface);color:var(--ink);outline:none;}
-.main-textarea:focus{border-color:var(--navy2);background:#fafcff;}
-
-/* ── BUTTONS ── */
-.btn-analyze{display:block;width:100%;margin-top:.8rem;padding:13px;border:none;border-radius:var(--r2);background:var(--forest);color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;}
-.btn-analyze:hover{background:var(--forest2);}
-.btn-check{padding:10px 20px;border:2px solid var(--forest);border-radius:var(--r2);background:var(--forest);color:#fff;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;margin-top:.8rem;}
-.btn-check:hover{background:var(--forest2);}
-.btn-hint{padding:9px 16px;border:2px solid var(--amber2);border-radius:var(--r2);background:var(--amber4);color:var(--amber);font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;margin-top:.5rem;}
-.btn-hint:hover{background:var(--amber3);}
-.btn-nav{padding:10px 18px;border:2px solid var(--border);border-radius:var(--r2);background:var(--surface);color:var(--ink2);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;}
-.btn-nav:hover{background:var(--page);}
-.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:1rem;}
-.nav-counter{font-size:13px;font-weight:800;color:var(--muted);}
-
-/* ── ANALYSIS RESULTS ── */
-.result-section{display:none;}
-.result-section.on{display:block;}
-.sent-pills{display:flex;flex-wrap:wrap;gap:7px;margin-top:.6rem;}
-.sent-pill{border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:5px;}
-.pill-short{background:var(--amber4);color:var(--amber);border:1.5px solid var(--amber3);}
-.pill-med{background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
-.pill-long{background:var(--navy4);color:var(--navy);border:1.5px solid var(--navy3);}
-.starter-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:.6rem;}
-.starter-badge{border-radius:6px;padding:5px 11px;font-size:13px;font-weight:700;}
-.sb-ok{background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
-.sb-rep{background:var(--clay4);color:var(--clay);border:1.5px solid var(--clay3);}
-.feedback-box{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;margin-top:.8rem;line-height:1.6;}
-.fb-good{background:var(--forest4);color:var(--forest);border:2px solid var(--forest3);}
-.fb-tip{background:var(--amber4);color:var(--amber);border:2px solid var(--amber3);}
-.fb-info{background:var(--navy4);color:var(--navy);border:2px solid var(--navy3);}
-.fb-warn{background:var(--clay4);color:var(--clay);border:2px solid var(--clay3);}
-
-/* ── HIGHLIGHTED TEXT ── */
-.marked-text{font-size:15px;line-height:2.1;padding:12px 14px;background:var(--surface);border:1.5px solid var(--border-lt);border-radius:var(--r2);margin-top:.6rem;}
-mark.hl-prät{background:#c8ecb0;color:#1a4010;border-radius:3px;padding:1px 3px;}
-mark.hl-präs{background:#f0d080;color:#5a3800;border-radius:3px;padding:1px 3px;}
-mark.hl-adj{background:#d8ccf8;color:#2d1a60;border-radius:3px;padding:1px 3px;}
-.hl-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:.5rem;font-size:12px;font-weight:700;}
-.hl-badge{padding:3px 10px;border-radius:12px;}
-.hlb-prät{background:#c8ecb0;color:#1a4010;}
-.hlb-präs{background:#f0d080;color:#5a3800;}
-.hlb-adj{background:#d8ccf8;color:#2d1a60;}
-
-/* ── EXERCISES ── */
-.ex-type-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.2rem;}
-.ex-type-btn{padding:9px 16px;border:2px solid var(--border);border-radius:20px;background:var(--surface);color:var(--muted);font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;}
-.ex-type-btn.active{background:var(--plum);color:#fff;border-color:var(--plum);}
-.ex-panel{display:none;}
-.ex-panel.active{display:block;}
-
-/* ── EXERCISE CARD ── */
-.ex-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--sh);}
-.ex-num{font-size:11px;font-weight:900;color:var(--muted);display:block;margin-bottom:.3rem;text-transform:uppercase;}
-.ex-original{background:var(--amber4);border:2px solid var(--amber3);border-radius:var(--r2);padding:10px 14px;font-size:15px;font-weight:700;color:var(--amber);margin-bottom:.8rem;line-height:1.6;}
-.ex-instruction{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:.6rem;line-height:1.5;}
-.ex-input{width:100%;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--font);font-size:14px;outline:none;background:var(--surface);}
-.ex-input:focus{border-color:var(--navy2);}
-.ex-feedback{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;margin-top:.7rem;line-height:1.6;display:none;}
-.ex-feedback.on{display:block;}
-.ef-correct{background:var(--forest4);color:var(--forest);border:2px solid var(--forest3);}
-.ef-wrong{background:var(--clay4);color:var(--clay);border:2px solid var(--clay3);}
-.ef-hint{background:var(--amber4);color:var(--amber);border:2px solid var(--amber3);}
-
-/* ── WORD BANK ── */
-.word-bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.6rem;}
-.wb-word{padding:7px 14px;border:2px solid var(--plum3);border-radius:20px;background:var(--plum4);color:var(--plum);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);}
-.wb-word:hover{background:var(--plum3);}
-.wb-word.used{background:var(--plum);color:#fff;border-color:var(--plum);}
-.blank-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:.6rem;}
-.blank-slot{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px;}
-.blank-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;}
-.blank-input{border:2px solid var(--border);border-radius:var(--r2);padding:7px 11px;font-family:var(--font);font-size:14px;font-weight:700;color:var(--plum);background:var(--plum4);width:130px;outline:none;}
-.blank-input:focus{border-color:var(--plum2);}
-
-/* ── TENSE EXERCISE ── */
-.tense-choices{display:flex;flex-direction:column;gap:8px;margin-top:.8rem;}
-.tense-choice{padding:12px 14px;border:2.5px solid var(--border);border-radius:var(--r2);font-size:15px;font-weight:600;color:var(--ink2);cursor:pointer;background:var(--surface);text-align:left;font-family:var(--font);}
-.tense-choice:hover{border-color:var(--navy2);background:var(--navy4);}
-.tense-choice.correct{border-color:var(--forest2);background:var(--forest4);color:var(--forest);}
-.tense-choice.wrong-pick{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
-.tense-choice.reveal-wrong{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
-
-/* ── TOAST ── */
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;font-size:14px;font-weight:800;padding:10px 22px;border-radius:40px;box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;}
-.toast.show{opacity:1;}
-
-@media(prefers-reduced-motion:no-preference){
-  .tab-panel.active{animation:fadeIn .18s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-  .toast{transition:opacity .2s;}
+header{
+  background:#3f6ae0;
+  color:white;
+  padding:20px;
 }
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--navy2);outline-offset:2px;}
+.header-links{
+  margin-top:10px;
+}
+.hlink{
+  font-size:14px;
+  font-weight:bold;
+  padding:8px 16px;
+  border-radius:20px;
+  border:2px solid rgba(255,255,255,.4);
+  color:white;
+  text-decoration:none;
+  margin:4px;
+  display:inline-block;
+  background:rgba(255,255,255,.2);
+}
+.container{
+  max-width:800px;
+  margin:40px auto;
+  padding:20px;
+  background:white;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  text-align:left;
+}
+textarea{
+  width:90%;
+  height:120px;
+  font-size:18px;
+  padding:10px;
+  border-radius:8px;
+  border:2px solid #ccc;
+}
+button{
+  margin-top:15px;
+  padding:10px 20px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  background:#3f6ae0;
+  color:white;
+  cursor:pointer;
+}
+button:hover{
+  background:#2f54c4;
+}
+.feedback{
+  margin-top:20px;
+  text-align:left;
+  font-size:18px;
+}
+.good{
+  color:green;
+}
+.warn{
+  color:#c99700;
+}
+
+/* Drag & Drop Blocks */
+.word-pool, .sentence-area {
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding:10px;
+  margin-top:10px;
+  border:2px dashed #ccc;
+  min-height:60px;
+  border-radius:8px;
+}
+.word-block {
+  background:#3f6ae0;
+  color:white;
+  padding:8px 12px;
+  border-radius:20px;
+  cursor:grab;
+  user-select:none;
+}
+.word-block.dragging {
+  opacity:0.5;
+}
 </style>
 </head>
+
 <body>
 
-<div class="site-header">
-  <span class="header-title">✍️ Satzwerkstatt</span>
-  <span class="header-sub">Sätze verbessern · Adjektive · Zeitformen · Klasse 3/4 Bayern</span>
-  <span class="header-badge">📚 LehrplanPLUS Bayern · Deutsch 3/4 · LB 2.3</span>
-  <div class="header-links">
-    <a class="hlink" href="index.html">⛏ Blockwelt</a>
-    <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
-    <a class="hlink" href="builder.html">📖 Baukasten</a>
-  </div>
+<header>
+<h1>✏️ Satzwerkstatt</h1>
+<p>Schreibe einen guten Satz.</p>
+<div class="header-links">
+  <a class="hlink" href="index.html">⛏ Blockwelt</a>
+  <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
+  <a class="hlink" href="builder.html">🧱 Baukasten</a>
+</div>
+</header>
+
+<div class="container">
+<h2>Dein Satz</h2>
+<textarea id="satz" placeholder="Schreibe hier deinen Satz..."></textarea>
+<br>
+<button onclick="checkSentence()">Satz prüfen</button>
+<button onclick="speakSentence()">🔊 Vorlesen</button>
+<div class="feedback" id="feedback"></div>
 </div>
 
-<div class="wrap">
+<div class="container">
+<h2>🧩 Satzbau mit Blöcken</h2>
+<p>Ziehen Sie die Wörter in die richtige Reihenfolge:</p>
 
-<details class="help-card">
-  <summary class="help-summary">ℹ️ Wie benutze ich diese Seite?</summary>
-  <div class="help-body">
-    Diese Seite hat zwei Bereiche:
-    <ol>
-      <li><strong>📝 Mein Text analysieren</strong> — Gib deinen Text ein und klicke auf „Analysieren". Das Programm zeigt dir, ob deine Sätze unterschiedlich lang sind, ob du verschiedene Satzanfänge benutzt, wie viele Adjektive du hast, und ob die Zeitform stimmt.</li>
-      <li><strong>🎯 Übungen</strong> — Hier kannst du Satzanfänge üben, Adjektive einfügen und die richtige Zeitform erkennen. Jede Übung hat eine klare Aufgabe und sagt dir genau, ob deine Antwort richtig ist.</li>
-    </ol>
-  </div>
-</details>
-
-<div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('analyze')">📝 Mein Text analysieren</button>
-  <button class="tab-btn" onclick="switchTab('exercises')">🎯 Übungen</button>
+<div class="word-pool" id="wordPool">
+  <div class="word-block" draggable="true">Der Junge</div>
+  <div class="word-block" draggable="true">rennt</div>
+  <div class="word-block" draggable="true">zur</div>
+  <div class="word-block" draggable="true">Gans</div>
+  <div class="word-block" draggable="true">schnell</div>
+  <div class="word-block" draggable="true">im</div>
+  <div class="word-block" draggable="true">Park</div>
 </div>
 
-<!-- ══ TAB: ANALYZE ══ -->
-<div id="tab-analyze" class="tab-panel active">
-  <div class="card">
-    <div class="card-accent ca-navy"></div>
-    <div class="card-body">
-      <span class="card-eyebrow">Schritt 1 · Deinen Text eingeben</span>
-      <span class="card-title">Gib deinen Text hier ein</span>
-      <span class="card-desc">Schreibe oder kopiere deinen Text in das Feld unten. Dann klicke auf „Analysieren".</span>
-      <textarea class="main-textarea" id="analyze-input" placeholder="Schreibe hier deinen Text …&#10;&#10;Beispiel:&#10;Es war einmal ein mutiger Fuchs. Er lebte in einem dunklen Wald. Plötzlich hörte er ein lautes Geräusch. Er lief schnell durch die Büsche. Dann sah er einen kleinen Vogel mit einem gebrochenen Flügel."></textarea>
-      <button class="btn-analyze" onclick="runAnalysis()">🔎 Text analysieren</button>
-    </div>
-  </div>
-
-  <div class="result-section" id="result-section">
-
-    <!-- Marked text -->
-    <div class="card">
-      <div class="card-accent ca-plum"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Dein Text mit Markierungen</span>
-        <span class="card-title">📋 Übersicht</span>
-        <div class="hl-legend">
-          <span class="hl-badge hlb-prät">🟢 Präteritum (Vergangenheit)</span>
-          <span class="hl-badge hlb-präs">🟡 Präsens (Gegenwart)</span>
-          <span class="hl-badge hlb-adj">🟣 Adjektive</span>
-        </div>
-        <div class="marked-text" id="marked-text"></div>
-      </div>
-    </div>
-
-    <!-- Card 1: Sentence length -->
-    <div class="card">
-      <div class="card-accent ca-amber"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Analyse 1 · Satzlänge</span>
-        <span class="card-title">📏 Wie lang sind deine Sätze?</span>
-        <span class="card-desc">Kurze Sätze sind spannend. Lange Sätze erklären viel. Mische beides!</span>
-        <div class="sent-pills" id="sent-pills"></div>
-        <div class="feedback-box" id="fb-length"></div>
-      </div>
-    </div>
-
-    <!-- Card 2: Starters -->
-    <div class="card">
-      <div class="card-accent ca-navy"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Analyse 2 · Satzanfänge</span>
-        <span class="card-title">🔤 Wie beginnen deine Sätze?</span>
-        <span class="card-desc">Jeder Satz sollte anders beginnen. Dasselbe Wort am Anfang klingt langweilig.</span>
-        <div class="starter-badges" id="starter-badges"></div>
-        <div class="feedback-box" id="fb-starters"></div>
-        <div id="starter-suggestions" style="display:none;margin-top:.7rem;font-size:13px;color:var(--navy);">
-          <strong>Tipp — verschiedene Satzanfänge:</strong><br>
-          Plötzlich … · Langsam … · Mutig … · Da … · Im Wald … · Auf dem Berg … · Urplötzlich … · Erschöpft … · Mit einem lauten Knall …
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Adjectives -->
-    <div class="card">
-      <div class="card-accent ca-plum"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Analyse 3 · Adjektive</span>
-        <span class="card-title">🎨 Beschreibende Wörter</span>
-        <span class="card-desc">Adjektive beschreiben Personen, Tiere und Orte. Sie antworten auf: Wie ist es? Welches?</span>
-        <div class="feedback-box" id="fb-adj"></div>
-        <div id="adj-found" style="margin-top:.6rem;font-size:13px;color:var(--muted);"></div>
-      </div>
-    </div>
-
-    <!-- Card 4: Tense -->
-    <div class="card">
-      <div class="card-accent ca-forest"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Analyse 4 · Zeitform</span>
-        <span class="card-title">⏰ Präteritum oder Präsens?</span>
-        <span class="card-desc">Für Erzählungen (Geschichten) benutzen wir das <strong>Präteritum</strong> (Vergangenheit).</span>
-        <div class="rule-card" style="margin-top:.8rem;margin-bottom:0;">
-          <div class="rule-title">📖 Regel</div>
-          <div class="rule-body">
-            Geschichten erzählen wir im <strong>Präteritum</strong>:<br>
-            Er <strong>ging</strong> (nicht: geht) · Sie <strong>sah</strong> (nicht: sieht) · Es <strong>war</strong> (nicht: ist)
-          </div>
-        </div>
-        <div class="feedback-box" id="fb-tense" style="margin-top:.8rem;"></div>
-        <div id="tense-details" style="margin-top:.5rem;font-size:13px;color:var(--muted);"></div>
-      </div>
-    </div>
-
-  </div><!-- /result-section -->
-</div><!-- /tab-analyze -->
-
-<!-- ══ TAB: EXERCISES ══ -->
-<div id="tab-exercises" class="tab-panel">
-
-  <div class="ex-type-bar">
-    <button class="ex-type-btn active" onclick="switchExType('starters')">🔄 Satzanfänge</button>
-    <button class="ex-type-btn" onclick="switchExType('adjectives')">🎨 Adjektive</button>
-    <button class="ex-type-btn" onclick="switchExType('tense')">⏰ Zeitform</button>
-  </div>
-
-  <!-- ── EX TYPE: STARTERS ── -->
-  <div id="ex-starters" class="ex-panel active">
-    <div class="rule-card">
-      <div class="rule-title">📖 Regel: Satzanfänge variieren</div>
-      <div class="rule-body">
-        Beginne deine Sätze <strong>unterschiedlich</strong>. Nicht immer mit „Ich"!<br>
-        Du kannst beginnen mit:
-        <ul style="margin-left:1.2rem;margin-top:.3rem;">
-          <li>einem <strong>Wie-Wort</strong> (Adverb): <em>Langsam …, Plötzlich …, Mutig …</em></li>
-          <li>einem <strong>Wo-Wort</strong>: <em>Im Wald …, Auf dem Berg …, Am Fluss …</em></li>
-          <li>einem <strong>Wann-Wort</strong>: <em>Plötzlich …, Dann …, Danach …</em></li>
-        </ul>
-        <div class="rule-example">❌ „Ich ging in den Wald. Ich sah einen Fuchs. Ich hatte Angst."<br>✅ „Langsam ging ich in den Wald. Plötzlich sah ich einen Fuchs. Mein Herz schlug schnell."</div>
-      </div>
-    </div>
-    <div id="starter-ex-card"></div>
-  </div>
-
-  <!-- ── EX TYPE: ADJECTIVES ── -->
-  <div id="ex-adjectives" class="ex-panel">
-    <div class="rule-card">
-      <div class="rule-title">📖 Regel: Adjektive hinzufügen</div>
-      <div class="rule-body">
-        Adjektive beschreiben Nomen (Dinge, Personen, Orte). Sie stehen meist <strong>vor dem Nomen</strong>.<br>
-        Sie antworten auf die Frage: <strong>Wie? Welcher? Wie viele?</strong>
-        <div class="rule-example">❌ „Der Drache flog über den Wald."<br>✅ „Der <strong>riesige</strong> Drache flog über den <strong>dunklen</strong> Wald."</div>
-      </div>
-    </div>
-    <div id="adj-ex-card"></div>
-  </div>
-
-  <!-- ── EX TYPE: TENSE ── -->
-  <div id="ex-tense" class="ex-panel">
-    <div class="rule-card">
-      <div class="rule-title">📖 Regel: Die richtige Zeitform</div>
-      <div class="rule-body">
-        Für <strong>Erzählungen (Geschichten)</strong> benutzen wir immer das <strong>Präteritum</strong>.<br>
-        <table class="tense-table" style="margin-top:.5rem;">
-          <tr><th>Präsens (Gegenwart) ❌</th><th>Präteritum (Vergangenheit) ✅</th></tr>
-          <tr><td class="tt-präs">geht</td><td class="tt-prät">ging</td></tr>
-          <tr><td class="tt-präs">ist</td><td class="tt-prät">war</td></tr>
-          <tr><td class="tt-präs">hat</td><td class="tt-prät">hatte</td></tr>
-          <tr><td class="tt-präs">sieht</td><td class="tt-prät">sah</td></tr>
-          <tr><td class="tt-präs">ruft</td><td class="tt-prät">rief</td></tr>
-          <tr><td class="tt-präs">läuft</td><td class="tt-prät">lief</td></tr>
-          <tr><td class="tt-präs">springt</td><td class="tt-prät">sprang</td></tr>
-        </table>
-        <div class="rule-example">Aufgabe: Klicke auf den Satz, der im <strong>falschen</strong> Zeitform steht!</div>
-      </div>
-    </div>
-    <div id="tense-ex-card"></div>
-  </div>
-
-</div><!-- /tab-exercises -->
-</div><!-- /wrap -->
-
-<div class="toast" id="toast"></div>
+<div class="sentence-area" id="sentenceArea"></div>
+<button onclick="checkBlockSentence()">Block-Satz prüfen</button>
+<div class="feedback" id="blockFeedback"></div>
+</div>
 
 <script>
-// ═══════════════════════════════════════════════════
-// WORD LISTS
-// ═══════════════════════════════════════════════════
-const ADJ_SET = new Set([
-  'mutig','mutige','mutigen','mutigem','mutiger','mutiges',
-  'klug','kluge','klugen','kluger','kluges',
-  'stark','starke','starken','starker','starkes',
-  'freundlich','freundliche','freundlichen','freundlicher',
-  'neugierig','neugierige','neugierigen','neugieriger',
-  'ängstlich','ängstliche','ängstlichen',
-  'listig','listige','listigen','listiger',
-  'tapfer','tapfere','tapferen','tapferer',
-  'fröhlich','fröhliche','fröhlichen','fröhlicher',
-  'traurig','traurige','traurigen','trauriger',
-  'wütend','wütende','wütenden','wütender',
-  'stolz','stolze','stolzen','stolzer',
-  'glücklich','glückliche','glücklichen','glücklicher',
-  'böse','bösen','böser',
-  'nett','nette','netten','netter',
-  'groß','große','großen','großem','großer','großes',
-  'klein','kleine','kleinen','kleiner','kleines',
-  'lang','lange','langen','langer','langes',
-  'kurz','kurze','kurzen','kurzer','kurzes',
-  'hoch','hohe','hohen','hoher','hohes',
-  'tief','tiefe','tiefen','tiefer','tiefes',
-  'alt','alte','alten','alter','altes',
-  'jung','junge','jungen','junger','junges',
-  'neu','neue','neuen','neuer','neues',
-  'gut','gute','guten','guter','gutes',
-  'schlecht','schlechte','schlechten','schlechter',
-  'schön','schöne','schönen','schöner','schönes',
-  'dunkel','dunkle','dunklen','dunkler','dunkles','dunklem',
-  'hell','helle','hellen','heller','helles',
-  'warm','warme','warmen','warmer','warmes',
-  'kalt','kalte','kalten','kalter','kaltes',
-  'heiß','heiße','heißen','heißer',
-  'weich','weiche','weichen','weicher',
-  'hart','harte','harten','harter','hartes',
-  'laut','laute','lauten','lauter','lautes',
-  'leise','leisen','leiser',
-  'süß','süße','süßen','süßer',
-  'schnell','schnelle','schnellen','schneller',
-  'langsam','langsame','langsamen','langsamer',
-  'riesig','riesige','riesigen','riesiger','riesiges',
-  'winzig','winzige','winzigen','winziger',
-  'wild','wilde','wilden','wilder','wildes',
-  'zahm','zahme','zahmen','zahmer',
-  'geheimnisvoll','geheimnisvolle','geheimnisvollen','geheimnisvoller',
-  'gefährlich','gefährliche','gefährlichen','gefährlicher',
-  'schrecklich','schreckliche','schrecklichen',
-  'wunderbar','wunderbare','wunderbaren','wunderbarer',
-  'einsam','einsame','einsamen','einsamer',
-  'ruhig','ruhige','ruhigen','ruhiger',
-  'steil','steile','steilen','steiler',
-  'nass','nasse','nassen','nasser',
-  'trocken','trockene','trockenen','trockener',
-  'staubig','staubige','staubigen',
-  'feucht','feuchte','feuchten','feuchter',
-  'mächtig','mächtige','mächtigen','mächtiger',
-  'erschöpft','erschöpfte','erschöpften',
-  'golden','goldene','goldenen','goldener',
-  'silbern','silberne','silbernen','silberner',
-  'bunt','bunte','bunten','bunter',
-  'grau','graue','grauen','grauer',
-  'rot','rote','roten','roter','rotes',
-  'blau','blaue','blauen','blauer','blaues',
-  'grün','grüne','grünen','grüner',
-  'gelb','gelbe','gelben','gelber',
-  'weiß','weiße','weißen','weißer',
-  'schwarz','schwarze','schwarzen','schwarzer',
-  'braun','braune','braunen','brauner',
-  'seltsam','seltsame','seltsamen','seltsamer',
-  'komisch','komische','komischen','komischer',
-  'verlassen','verlassene','verlassenen','verlassener',
-  'morsch','morsche','morschen','morscher',
-  'stürmisch','stürmische','stürmischen',
-  'eisig','eisige','eisigen','eisiger',
-  'hungrig','hungrige','hungrigen','hungriger',
-  'mutig','zitternd','zitternde','zitternden',
-  'flink','flinke','flinken','flinker',
-  'sanft','sanfte','sanften','sanfter',
-  'rau','raue','rauen','rauer',
-  'glatt','glatte','glatten','glatter',
-  'spitz','spitze','spitzen','spitzer',
-  'frisch','frische','frischen','frischer',
-  'nass','feucht','leer','voll',
-  'lebendig','lebendige','lebendigen',
-  'mondlos','mondlose','mondlosen',
-  'verfallen','verfallene','verfallenen',
-  'brodelnde','brodelnden',
-  'dampfend','dampfende','dampfenden',
-  'glühend','glühende','glühenden',
-  'feuerspeiend','feuerspeiende','feuerspeienden',
-]);
+// Sentence Checker for textarea
+function checkSentence(){
+  let text = document.getElementById("satz").value.trim();
+  let words = text.split(" ");
+  let feedback = "";
 
-const PRÄT_SET = new Set([
-  'war','waren','warst','wart',
-  'hatte','hatten','hattest','hattet',
-  'wurde','wurden','wurdest','wurdet',
-  'ging','gingen','gingst','gingt',
-  'sah','sahen','sahst','saht',
-  'kam','kamen','kamst','kamt',
-  'stand','standen','standest','standet',
-  'lief','liefen','liefst','lieft',
-  'rannte','rannten','ranntest','ranntet',
-  'rief','riefen','riefst','rieft',
-  'fand','fanden','fandest','fandet',
-  'gab','gaben','gabst','gabt',
-  'nahm','nahmen','nahmst','nahmt',
-  'tat','taten','tatest','tatet',
-  'blieb','blieben','bliebst','bliebt',
-  'wollte','wollten','wolltest','wolltet',
-  'konnte','konnten','konntest','konntet',
-  'musste','mussten','musstest','musstet',
-  'durfte','durften','durftest','durftet',
-  'sollte','sollten','solltest','solltet',
-  'mochte','mochten','mochtest','mochtet',
-  'dachte','dachten','dachtest','dachtet',
-  'wusste','wussten','wusstest','wusstet',
-  'sagte','sagten','sagtest','sagtet',
-  'fragte','fragten','fragtest','fragtet',
-  'antwortete','antworteten',
-  'spielte','spielten','spieltest','spieltet',
-  'lachte','lachten','lachtest','lachtet',
-  'weinte','weinten','weintest','weintet',
-  'schrie','schrien','schriest','schriet',
-  'fiel','fielen','fielst','fielt',
-  'brachte','brachten','brachtest','brachtet',
-  'zog','zogen','zogst','zogt',
-  'trat','traten','tratst','tratet',
-  'bat','baten','batest','batet',
-  'flüsterte','flüsterten',
-  'schlich','schlichen',
-  'warf','warfen','warfst','warft',
-  'griff','griffen','griffst','grifft',
-  'ließ','ließen','ließt',
-  'las','lasen','last',
-  'schrieb','schrieben','schriebst','schriebt',
-  'baute','bauten','bautest','bautet',
-  'flog','flogen','flogst','flogt',
-  'sprang','sprangen','sprangst','sprangt',
-  'schwamm','schwammen','schwammst','schwammt',
-  'hörte','hörten','hörtest','hörtet',
-  'suchte','suchten','suchtest','suchtet',
-  'kämpfte','kämpften',
-  'rettete','retteten',
-  'kletterte','kletterten',
-  'öffnete','öffneten',
-  'begann','begannen',
-  'wartete','warteten',
-  'half','halfen','halfst','halft',
-  'schaute','schauten',
-  'bemerkte','bemerkten',
-  'entdeckte','entdeckten',
-  'holte','holten',
-  'stellte','stellten',
-  'setzte','setzten',
-  'legte','legten',
-  'zitterte','zitterten',
-  'flüchtete','flüchteten',
-  'versuchte','versuchten',
-  'wünschte','wünschten',
-  'träumte','träumten',
-  'erkannte','erkannten',
-  'berührte','berührten',
-  'stolperte','stolperten',
-  'seufzte','seufzten',
-  'strahlte','strahlten',
-  'plante','planten',
-  'schlief','schliefen',
-  'roch','rochen',
-  'zeigte','zeigten',
-  'landete','landeten',
-]);
-
-const PRÄS_SET = new Set([
-  'bin','ist','sind','bist','seid',
-  'habe','hat','haben','hast','habt',
-  'werde','wird','werden','wirst','werdet',
-  'gehe','geht','gehen','gehst',
-  'sehe','sieht','sehen','siehst',
-  'komme','kommt','kommen','kommst',
-  'stehe','steht','stehen','stehst',
-  'laufe','läuft','laufen','läufst',
-  'renne','rennt','rennen','rennst',
-  'rufe','ruft','rufen','rufst',
-  'finde','findet','finden','findest',
-  'gebe','gibt','geben','gibst',
-  'nehme','nimmt','nehmen','nimmst',
-  'tue','tut','tun','tust',
-  'bleibe','bleibt','bleiben','bleibst',
-  'will','wollen','willst','wollt',
-  'kann','können','kannst','könnt',
-  'muss','müssen','musst','müsst',
-  'darf','dürfen','darfst','dürft',
-  'soll','sollen','sollst','sollt',
-  'mag','mögen','magst','mögt',
-  'denke','denkt','denken','denkst',
-  'weiß','wissen','weißt','wisst',
-  'sage','sagt','sagen','sagst',
-  'frage','fragt','fragen','fragst',
-  'antworte','antwortet','antworten','antwortest',
-  'spiele','spielt','spielen','spielst',
-  'lache','lacht','lachen','lachst',
-  'weine','weint','weinen','weinst',
-  'esse','isst','essen',
-  'trinke','trinkt','trinken','trinkst',
-  'schlafe','schläft','schlafen','schläfst',
-  'schreie','schreit','schreien','schreist',
-  'falle','fällt','fallen','fällst',
-  'bringe','bringt','bringen','bringst',
-  'ziehe','zieht','ziehen','ziehst',
-  'höre','hört','hören','hörst',
-  'suche','sucht','suchen','suchst',
-  'kämpfe','kämpft','kämpfen','kämpfst',
-  'rette','rettet','retten','rettest',
-  'klettere','klettert','klettern','kletterst',
-  'öffne','öffnet','öffnen','öffnest',
-  'beginne','beginnt','beginnen','beginnst',
-  'warte','wartet','warten','wartest',
-  'helfe','hilft','helfen','hilfst',
-  'schaue','schaut','schauen','schaust',
-  'bemerke','bemerkt','bemerken','bemerkst',
-  'entdecke','entdeckt','entdecken','entdeckst',
-  'hole','holt','holen','holst',
-  'stelle','stellt','stellen','stellst',
-  'setze','setzt','setzen',
-  'lege','legt','legen','legst',
-  'zittere','zittert','zittern','zitterst',
-  'fliehe','flieht','fliehen','fliehst',
-  'versuche','versucht','versuchen','versuchst',
-  'wünsche','wünscht','wünschen','wünschst',
-  'träume','träumt','träumen','träumst',
-  'erkenne','erkennt','erkennen','erkennst',
-  'berühre','berührt','berühren','berührst',
-  'stolpere','stolpert','stolpern','stolperst',
-  'seufze','seufzt','seufzen',
-  'strahle','strahlt','strahlen','strahlst',
-  'springt','springe','springen','springst',
-  'fliegt','fliege','fliegen','fliegst',
-  'schwimmt','schwimme','schwimmen','schwimmst',
-  'riecht','rieche','riechen','riechst',
-  'schmeckt','schmecke','schmecken','schmeckst',
-  'plane','plant','planen','planst',
-  'zeigt','zeige','zeigen','zeigst',
-  'landet','lande','landen','landest',
-  'schläft','schlafe','schlafen','schläfst',
-]);
-
-// ═══════════════════════════════════════════════════
-// EXERCISE DATA
-// ═══════════════════════════════════════════════════
-const EX_STARTERS = [
-  { original:'Ich gehe langsam in den Wald.',
-    instruction:'Schreibe den Satz neu. Beginne mit: „<strong>Langsam</strong> …"',
-    required:'langsam',
-    hint:'Langsam gehe ich in den Wald.',
-    tip:'Wenn du mit einem Wie-Wort (Adverb) beginnst, klingt der Satz interessanter!' },
-  { original:'Ich sah den großen Drachen.',
-    instruction:'Schreibe den Satz neu. Beginne mit: „<strong>Plötzlich</strong> …"',
-    required:'plötzlich',
-    hint:'Plötzlich sah ich den großen Drachen.',
-    tip:'Spannungswörter am Anfang machen den Leser neugierig!' },
-  { original:'Ich lief durch den dunklen Tunnel.',
-    instruction:'Schreibe den Satz neu. Beginne mit: „<strong>Mutig</strong> …"',
-    required:'mutig',
-    hint:'Mutig lief ich durch den dunklen Tunnel.',
-    tip:'Mit einem Adjektiv am Anfang zeigst du sofort, wie jemand handelt!' },
-  { original:'Ich rief nach meinem Freund.',
-    instruction:'Schreibe den Satz neu. Beginne mit: „<strong>Laut</strong> …" oder „<strong>Im Wald</strong> …"',
-    required:['laut','im'],
-    hint:'Laut rief ich nach meinem Freund.',
-    tip:'Du kannst mit einem Wo-Wort oder einem Wie-Wort beginnen!' },
-  { original:'Ich fand die alte Schatzkarte.',
-    instruction:'Schreibe den Satz neu. Beginne mit: „<strong>Auf dem Boden</strong> …" oder „<strong>Beim Suchen</strong> …"',
-    required:['auf','beim'],
-    hint:'Auf dem Boden fand ich die alte Schatzkarte.',
-    tip:'Du kannst auch mit einem Ort oder einer Handlung beginnen!' },
-];
-
-const EX_ADJECTIVES = [
-  { template:'Der ___ Drache flog über den ___ Wald.',
-    labels:['Drache:','Wald:'],
-    bank:['riesig','klein','mutig','geheimnisvoll','alt','wild','golden','schwarz','feuerspeiend','mächtig'] },
-  { template:'Das ___ Mädchen lief durch die ___ Höhle.',
-    labels:['Mädchen:','Höhle:'],
-    bank:['tapfere','kleine','mutige','neugierige','ängstliche','dunkle','tiefe','alte','verlassene','kühle'] },
-  { template:'Der ___ Wolf heulte in der ___ Nacht.',
-    labels:['Wolf:','Nacht:'],
-    bank:['große','wilde','einsame','hungrige','gefährliche','dunkle','kalte','stille','mondlosen','stürmische'] },
-  { template:'Die ___ Hexe rührte in dem ___ Kessel.',
-    labels:['Hexe:','Kessel:'],
-    bank:['alte','böse','listige','kluge','kleine','große','dampfenden','brodelnden','glühenden','geheimnisvolle'] },
-  { template:'Der ___ Ritter ritt durch das ___ Tor.',
-    labels:['Ritter:','Tor:'],
-    bank:['tapfere','müde','stolze','junge','alte','riesige','schwere','enge','verfallene','goldene'] },
-];
-
-const EX_TENSE = [
-  { sentences:['Lena geht in die dunkle Höhle.','Sie hatte große Angst.','Plötzlich sah sie ein helles Licht.'],
-    wrongIdx:0, wrongVerb:'geht', correct:'ging',
-    explain:'„geht" ist Präsens. In Geschichten sagen wir: „ging" (Präteritum).' },
-  { sentences:['Max lief schnell durch den Wald.','Er ruft laut um Hilfe.','Niemand hörte ihn.'],
-    wrongIdx:1, wrongVerb:'ruft', correct:'rief',
-    explain:'„ruft" ist Präsens. In Geschichten sagen wir: „rief" (Präteritum).' },
-  { sentences:['Der Drache schläft auf dem Gipfel.','Er hatte riesige, scharfe Zähne.','Mia bemerkte ihn leider zu spät.'],
-    wrongIdx:0, wrongVerb:'schläft', correct:'schlief',
-    explain:'„schläft" ist Präsens. In Geschichten sagen wir: „schlief" (Präteritum).' },
-  { sentences:['Finn fand die alte Schatzkarte.','Er zeigt sie sofort seinem besten Freund.','Zusammen planten sie das Abenteuer.'],
-    wrongIdx:1, wrongVerb:'zeigt', correct:'zeigte',
-    explain:'„zeigt" ist Präsens. In Geschichten sagen wir: „zeigte" (Präteritum).' },
-  { sentences:['Die alte Brücke war sehr morsch.','Tom springt trotzdem mutig darüber.','Er landete sicher auf der anderen Seite.'],
-    wrongIdx:1, wrongVerb:'springt', correct:'sprang',
-    explain:'„springt" ist Präsens. In Geschichten sagen wir: „sprang" (Präteritum).' },
-];
-
-// ═══════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════
-let starterExIdx = 0;
-let adjExIdx = 0;
-let tenseExIdx = 0;
-let adjSlots = ['',''];  // current adjective exercise slot values
-let tenseAnswered = false;
-
-// ═══════════════════════════════════════════════════
-// TAB / SUBTAB SWITCHING
-// ═══════════════════════════════════════════════════
-function switchTab(tab){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active', (i===0&&tab==='analyze')||(i===1&&tab==='exercises'));
-  });
-  document.getElementById('tab-analyze').classList.toggle('active', tab==='analyze');
-  document.getElementById('tab-exercises').classList.toggle('active', tab==='exercises');
-}
-
-function switchExType(type){
-  document.querySelectorAll('.ex-type-btn').forEach((b,i)=>{
-    b.classList.toggle('active', ['starters','adjectives','tense'][i]===type);
-  });
-  document.querySelectorAll('.ex-panel').forEach((p,i)=>{
-    p.classList.toggle('active', ['ex-starters','ex-adjectives','ex-tense'][i]==='ex-'+type);
-  });
-}
-
-// ═══════════════════════════════════════════════════
-// TEXT ANALYSIS
-// ═══════════════════════════════════════════════════
-function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function tokenize(text){
-  // Split keeping word and non-word runs; use capturing group so both sides included
-  return text.split(/(\b[a-zA-ZäöüÄÖÜß]+\b)/);
-}
-
-function buildMarkedText(text){
-  const tokens = tokenize(text);
-  return tokens.map(tok=>{
-    const lower = tok.toLowerCase();
-    if(PRÄT_SET.has(lower)) return `<mark class="hl-prät" title="Präteritum">${escHtml(tok)}</mark>`;
-    if(PRÄS_SET.has(lower)) return `<mark class="hl-präs" title="Präsens">${escHtml(tok)}</mark>`;
-    if(ADJ_SET.has(lower))  return `<mark class="hl-adj" title="Adjektiv">${escHtml(tok)}</mark>`;
-    return escHtml(tok);
-  }).join('');
-}
-
-function splitSentences(text){
-  const parts = text.match(/[^.!?]+[.!?]+/g) || [];
-  if(!parts.length) parts.push(text.trim());
-  return parts.map(s=>s.trim()).filter(s=>s.length>1);
-}
-
-function wordCount(s){ return s.split(/\s+/).filter(w=>w.length>0).length; }
-
-function runAnalysis(){
-  const text = document.getElementById('analyze-input').value.trim();
-  if(!text){ showToast('Bitte schreib erst einen Text!'); return; }
-
-  document.getElementById('result-section').classList.add('on');
-
-  // Marked text
-  document.getElementById('marked-text').innerHTML = buildMarkedText(text);
-
-  const sentences = splitSentences(text);
-  const allWords = text.toLowerCase().match(/\b[a-zäöüß]+\b/g)||[];
-
-  // ── Card 1: Sentence length ──────────────────────
-  const counts = sentences.map(wordCount);
-  const nShort = counts.filter(c=>c<5).length;
-  const nMed   = counts.filter(c=>c>=5&&c<=12).length;
-  const nLong  = counts.filter(c=>c>12).length;
-
-  const pills = sentences.map((s,i)=>{
-    const c = counts[i];
-    const cls = c<5?'pill-short':c<=12?'pill-med':'pill-long';
-    const lbl = c<5?'Kurz':c<=12?'Mittel':'Lang';
-    return `<span class="sent-pill ${cls}" title="${escHtml(s)}">${lbl} · ${c} Wörter</span>`;
-  }).join('');
-  document.getElementById('sent-pills').innerHTML = pills;
-
-  let fbLen, fbLenCls;
-  const uniqueLengths = new Set(counts.map(c=>c<5?'k':c<=12?'m':'l')).size;
-  if(uniqueLengths===1 && sentences.length>1){
-    fbLen = `⚠️ Alle deine Sätze sind ungefähr gleich lang. Versuche, kurze und lange Sätze zu mischen!`;
-    fbLenCls = 'fb-tip';
-  } else if(nShort>0 && nLong>0){
-    fbLen = `✓ Sehr gut! Du hast kurze (${nShort}×), mittlere (${nMed}×) und lange (${nLong}×) Sätze. Das klingt lebendig!`;
-    fbLenCls = 'fb-good';
-  } else if(nMed > 0 && (nShort>0||nLong>0)){
-    fbLen = `✓ Gut! Du hast ${nShort>0?'kurze und':''} mittlere ${nLong>0?'und lange':''} Sätze. Noch mehr Abwechslung macht es noch besser.`;
-    fbLenCls = 'fb-good';
-  } else {
-    fbLen = `ℹ️ Du hast ${sentences.length} Sätze. Versuche, die Längen zu variieren — mische kurze und längere Sätze.`;
-    fbLenCls = 'fb-info';
+  if(text.length === 0){
+    feedback = "⚠ Bitte schreibe einen Satz.";
+    document.getElementById("feedback").innerHTML = feedback;
+    return;
   }
-  const fbLenEl = document.getElementById('fb-length');
-  fbLenEl.textContent=''; fbLenEl.className='feedback-box '+fbLenCls; fbLenEl.textContent=fbLen;
 
-  // ── Card 2: Starters ────────────────────────────
-  const starters = sentences.map(s=>s.replace(/^["„«\s]+/,'').split(/\s+/)[0]?.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase()||'');
-  const starterCount = {};
-  starters.forEach(w=>{ starterCount[w]=(starterCount[w]||0)+1; });
-  const badges = starters.map(w=>{
-    const cls = starterCount[w]>1 ? 'sb-rep' : 'sb-ok';
-    return `<span class="starter-badge ${cls}">${escHtml(w||'?')}</span>`;
-  }).join('');
-  document.getElementById('starter-badges').innerHTML = badges;
-
-  const uniqueStarters = Object.keys(starterCount).length;
-  const rep = Object.entries(starterCount).filter(([,v])=>v>1).map(([k])=>k);
-  let fbSt, fbStCls, showSugg=false;
-  if(rep.length===0){
-    fbSt = `✓ Sehr gut! Alle deine Sätze beginnen anders. Das klingt abwechslungsreich!`;
-    fbStCls='fb-good';
-  } else if(rep.length===1 && sentences.length>3){
-    fbSt = `⚠️ Das Wort „${rep[0]}" steht ${starterCount[rep[0]]}× am Anfang. Versuche es einmal anders zu beginnen.`;
-    fbStCls='fb-tip'; showSugg=true;
-  } else {
-    fbSt = `⚠️ Diese Wörter stehen mehrmals am Anfang: ${rep.map(w=>`„${w}"`).join(', ')}. Variiere deine Satzanfänge!`;
-    fbStCls='fb-tip'; showSugg=true;
+  if(text[0] === text[0].toUpperCase()){
+    feedback += "<div class='good'>✔ Satz beginnt mit Großbuchstaben</div>";
+  } else{
+    feedback += "<div class='warn'>⚠ Satzanfang groß schreiben</div>";
   }
-  document.getElementById('fb-starters').className='feedback-box '+fbStCls;
-  document.getElementById('fb-starters').textContent=fbSt;
-  document.getElementById('starter-suggestions').style.display=showSugg?'block':'none';
 
-  // ── Card 3: Adjectives ───────────────────────────
-  const foundAdj = allWords.filter(w=>ADJ_SET.has(w));
-  const uniqueAdj = [...new Set(foundAdj)];
-  let fbAdj, fbAdjCls;
-  if(uniqueAdj.length===0){
-    fbAdj=`⚠️ Ich habe keine Adjektive gefunden. Adjektive machen Sätze lebendiger! Beispiele: mutig, dunkel, riesig, still…`;
-    fbAdjCls='fb-tip';
-  } else if(uniqueAdj.length<3){
-    fbAdj=`ℹ️ Du hast ${uniqueAdj.length} Adjektiv${uniqueAdj.length===1?'':'e} gefunden: ${uniqueAdj.map(w=>`„${w}"`).join(', ')}. Versuche noch mehr einzubauen!`;
-    fbAdjCls='fb-info';
-  } else {
-    fbAdj=`✓ Sehr gut! Du hast ${uniqueAdj.length} verschiedene Adjektive benutzt. Das macht deinen Text lebendig!`;
-    fbAdjCls='fb-good';
+  if(text.endsWith(".")){
+    feedback += "<div class='good'>✔ Punkt am Ende</div>";
+  } else{
+    feedback += "<div class='warn'>⚠ Satz braucht einen Punkt</div>";
   }
-  document.getElementById('fb-adj').className='feedback-box '+fbAdjCls;
-  document.getElementById('fb-adj').textContent=fbAdj;
-  document.getElementById('adj-found').textContent=uniqueAdj.length>0?`Gefundene Adjektive: ${uniqueAdj.join(', ')}`:' ';
 
-  // ── Card 4: Tense ────────────────────────────────
-  const foundPrät = allWords.filter(w=>PRÄT_SET.has(w));
-  const foundPräs = allWords.filter(w=>PRÄS_SET.has(w));
-  const nPrät = foundPrät.length;
-  const nPräs = foundPräs.length;
-  let fbTense, fbTenseCls;
-  if(nPrät===0 && nPräs===0){
-    fbTense='ℹ️ Keine Verben erkannt. Schreibe mehr Sätze mit Verben (Tuwörtern)!';
-    fbTenseCls='fb-info';
-  } else if(nPräs===0){
-    fbTense=`✓ Sehr gut! Dein Text ist einheitlich im Präteritum (Vergangenheit). Das ist richtig für Erzählungen!`;
-    fbTenseCls='fb-good';
-  } else if(nPrät===0){
-    fbTense=`ℹ️ Dein Text ist im Präsens (Gegenwart). Für Erzählungen benutzen wir das Präteritum (Vergangenheit).`;
-    fbTenseCls='fb-info';
-  } else if(nPräs>0 && nPrät>0){
-    fbTense=`⚠️ Du hast Präteritum (${nPrät}×) und Präsens (${nPräs}×) gemischt! Für Geschichten: nur Präteritum benutzen.`;
-    fbTenseCls='fb-warn';
+  if(words.length >= 5){
+    feedback += "<div class='good'>✔ Gute Satzlänge</div>";
+  } else{
+    feedback += "<div class='warn'>⚠ Versuche einen längeren Satz</div>";
   }
-  document.getElementById('fb-tense').className='feedback-box '+fbTenseCls;
-  document.getElementById('fb-tense').textContent=fbTense;
-  const det = [];
-  if(foundPrät.length) det.push(`Präteritum-Verben: ${[...new Set(foundPrät)].join(', ')}`);
-  if(foundPräs.length) det.push(`Präsens-Verben: ${[...new Set(foundPräs)].join(', ')}`);
-  document.getElementById('tense-details').textContent=det.join(' · ');
 
-  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
-}
+  let verbs = ["ist","sind","läuft","rennt","geht","spielt","schaut","sieht","fliegt","springt"];
+  let foundVerb = verbs.some(v => text.includes(v));
 
-// ═══════════════════════════════════════════════════
-// EXERCISE: STARTERS
-// ═══════════════════════════════════════════════════
-function renderStarterEx(){
-  const ex = EX_STARTERS[starterExIdx];
-  const card = document.getElementById('starter-ex-card');
-  card.innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${starterExIdx+1} von ${EX_STARTERS.length}</span>
-      <div class="ex-original">${escHtml(ex.original)}</div>
-      <div class="ex-instruction">${ex.instruction}</div>
-      <input class="ex-input" id="s-input" type="text" placeholder="Schreibe hier deinen neuen Satz …" autocomplete="off">
-      <br>
-      <button class="btn-check" onclick="checkStarterEx()">✓ Prüfen</button>
-      <button class="btn-hint" onclick="showStarterHint()">💡 Tipp anzeigen</button>
-      <div class="ex-feedback" id="s-feedback"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('starter')" ${starterExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${starterExIdx+1} / ${EX_STARTERS.length}</span>
-        <button class="btn-nav" onclick="nextEx('starter')" ${starterExIdx===EX_STARTERS.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-  card.querySelector('#s-input').addEventListener('keydown',e=>{ if(e.key==='Enter') checkStarterEx(); });
-}
-
-function checkStarterEx(){
-  const ex = EX_STARTERS[starterExIdx];
-  const val = (document.getElementById('s-input').value||'').trim().toLowerCase();
-  if(!val){ showToast('Schreibe erst einen Satz!'); return; }
-  const required = Array.isArray(ex.required) ? ex.required : [ex.required];
-  const ok = required.some(r => val.startsWith(r));
-  const fb = document.getElementById('s-feedback');
-  fb.className = 'ex-feedback on ' + (ok?'ef-correct':'ef-wrong');
-  if(ok){
-    fb.innerHTML = `✓ Sehr gut! Du hast den Satz mit einem neuen Anfang geschrieben.<br><small style="opacity:.8">Tipp: ${escHtml(ex.tip)}</small>`;
-  } else {
-    const req = required.map(r=>`„${r}"`).join(' oder ');
-    fb.innerHTML = `✗ Dein Satz soll mit ${req} beginnen.<br>Du hast geschrieben: „${escHtml(val.slice(0,60))}…"<br><small style="opacity:.8">Schau dir die Aufgabe nochmal an.</small>`;
+  if(foundVerb){
+    feedback += "<div class='good'>✔ Verb gefunden</div>";
+  } else{
+    feedback += "<div class='warn'>⚠ Dein Satz braucht ein Verb</div>";
   }
+
+  document.getElementById("feedback").innerHTML = feedback;
 }
 
-function showStarterHint(){
-  const ex = EX_STARTERS[starterExIdx];
-  const fb = document.getElementById('s-feedback');
-  fb.className = 'ex-feedback on ef-hint';
-  fb.textContent = `💡 Tipp: ${ex.hint}`;
+function speakSentence(){
+  let text = document.getElementById("satz").value;
+  if(text.length === 0) return;
+  let speech = new SpeechSynthesisUtterance(text);
+  speech.lang = "de-DE";
+  speech.rate = 0.9;
+  speechSynthesis.speak(speech);
 }
 
-function prevEx(type){
-  if(type==='starter'){ if(starterExIdx>0){starterExIdx--;renderStarterEx();} }
-  if(type==='adj'){     if(adjExIdx>0){adjExIdx--;adjSlots=['',''];renderAdjEx();} }
-  if(type==='tense'){   if(tenseExIdx>0){tenseExIdx--;tenseAnswered=false;renderTenseEx();} }
-}
-function nextEx(type){
-  if(type==='starter'){ if(starterExIdx<EX_STARTERS.length-1){starterExIdx++;renderStarterEx();} }
-  if(type==='adj'){     if(adjExIdx<EX_ADJECTIVES.length-1){adjExIdx++;adjSlots=['',''];renderAdjEx();} }
-  if(type==='tense'){   if(tenseExIdx<EX_TENSE.length-1){tenseExIdx++;tenseAnswered=false;renderTenseEx();} }
-}
+// Drag & Drop for Blocks
+const pool = document.getElementById('wordPool');
+const area = document.getElementById('sentenceArea');
 
-// ═══════════════════════════════════════════════════
-// EXERCISE: ADJECTIVES
-// ═══════════════════════════════════════════════════
-function renderAdjEx(){
-  const ex = EX_ADJECTIVES[adjExIdx];
-  const parts = ex.template.split('___');
-  const bankHtml = ex.bank.map(w=>`<button class="wb-word${adjSlots.includes(w)?' used':''}" onclick="pickAdjWord('${w}')">${escHtml(w)}</button>`).join('');
+let dragged;
 
-  const slot0 = adjSlots[0]||'';
-  const slot1 = adjSlots[1]||'';
-  const preview = parts[0]+(slot0?`<strong style="color:var(--plum)">${escHtml(slot0)}</strong>`:' ___ ')+parts[1]+(slot1?`<strong style="color:var(--plum)">${escHtml(slot1)}</strong>`:' ___ ')+parts[2];
-
-  const card = document.getElementById('adj-ex-card');
-  card.innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${adjExIdx+1} von ${EX_ADJECTIVES.length}</span>
-      <div class="ex-instruction">Füge zwei Adjektive ein — klicke auf ein Wort oder tippe selbst:</div>
-      <div class="word-bank">${bankHtml}</div>
-      <div class="blank-row">
-        <div class="blank-slot">
-          <span class="blank-label">${escHtml(ex.labels[0])}</span>
-          <input class="blank-input" id="adj-slot-0" type="text" placeholder="Adjektiv 1" value="${escHtml(slot0)}" oninput="adjSlots[0]=this.value;renderAdjEx()">
-        </div>
-        <div class="blank-slot">
-          <span class="blank-label">${escHtml(ex.labels[1])}</span>
-          <input class="blank-input" id="adj-slot-1" type="text" placeholder="Adjektiv 2" value="${escHtml(slot1)}" oninput="adjSlots[1]=this.value;renderAdjEx()">
-        </div>
-      </div>
-      <div style="background:var(--plum4);border:1.5px solid var(--plum3);border-radius:var(--r2);padding:10px 14px;font-size:15px;line-height:1.8;">${preview}</div>
-      <br>
-      <button class="btn-check" onclick="checkAdjEx()">✓ Prüfen</button>
-      <div class="ex-feedback" id="adj-feedback"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('adj')" ${adjExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${adjExIdx+1} / ${EX_ADJECTIVES.length}</span>
-        <button class="btn-nav" onclick="nextEx('adj')" ${adjExIdx===EX_ADJECTIVES.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-}
-
-function pickAdjWord(w){
-  if(adjSlots[0]==='') adjSlots[0]=w;
-  else if(adjSlots[1]==='') adjSlots[1]=w;
-  else adjSlots[1]=w; // fill slot 1 if both already filled
-  renderAdjEx();
-}
-
-function checkAdjEx(){
-  const s0 = (document.getElementById('adj-slot-0')||{}).value||adjSlots[0];
-  const s1 = (document.getElementById('adj-slot-1')||{}).value||adjSlots[1];
-  const fb = document.getElementById('adj-feedback');
-  if(!s0&&!s1){ showToast('Klicke auf ein Wort oder tippe ein Adjektiv!'); return; }
-  const ex = EX_ADJECTIVES[adjExIdx];
-  const parts = ex.template.split('___');
-  const built = parts[0]+(s0||'___')+parts[1]+(s1||'___')+parts[2];
-  const bothFilled = s0.trim()&&s1.trim();
-  fb.className = 'ex-feedback on '+(bothFilled?'ef-correct':'ef-hint');
-  if(bothFilled){
-    fb.innerHTML = `✓ Sehr gut! Dein Satz lautet:<br><em>${escHtml(built)}</em><br><small style="opacity:.85">Adjektive machen Sätze viel lebendiger!</small>`;
-  } else {
-    fb.innerHTML = `ℹ️ Du hast erst ein Adjektiv. Füge noch eines hinzu! Dein Satz bisher:<br><em>${escHtml(built)}</em>`;
+document.addEventListener("dragstart", function(event){
+  if(event.target.classList.contains("word-block")){
+    dragged = event.target;
+    dragged.classList.add("dragging");
   }
-}
-
-// ═══════════════════════════════════════════════════
-// EXERCISE: TENSE
-// ═══════════════════════════════════════════════════
-function renderTenseEx(){
-  const ex = EX_TENSE[tenseExIdx];
-  const sentHtml = ex.sentences.map((s,i)=>`
-    <button class="tense-choice" id="tc-${i}" onclick="pickTenseAnswer(${i})" ${tenseAnswered?'disabled':''}>
-      ${escHtml(s)}
-    </button>`).join('');
-  const card = document.getElementById('tense-ex-card');
-  card.innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${tenseExIdx+1} von ${EX_TENSE.length}</span>
-      <div class="ex-instruction" style="margin-bottom:.4rem;">Klicke auf den Satz, der im <strong>falschen Zeitform</strong> steht.<br><small style="color:var(--muted);font-weight:600;">Tipp: Die Geschichte soll im Präteritum (Vergangenheit) sein.</small></div>
-      <div class="tense-choices">${sentHtml}</div>
-      <div class="ex-feedback" id="tense-feedback"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('tense')" ${tenseExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${tenseExIdx+1} / ${EX_TENSE.length}</span>
-        <button class="btn-nav" onclick="nextEx('tense')" ${tenseExIdx===EX_TENSE.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-}
-
-function pickTenseAnswer(i){
-  if(tenseAnswered) return;
-  tenseAnswered = true;
-  const ex = EX_TENSE[tenseExIdx];
-  const fb = document.getElementById('tense-feedback');
-  const correct = i === ex.wrongIdx;
-  document.querySelectorAll('.tense-choice').forEach((el,j)=>{
-    el.disabled = true;
-    if(j===ex.wrongIdx) el.classList.add('reveal-wrong');
-  });
-  if(correct){
-    document.getElementById('tc-'+i).className='tense-choice correct';
-    fb.className='ex-feedback on ef-correct';
-    fb.innerHTML=`✓ Richtig! ${escHtml(ex.explain)}`;
-  } else {
-    document.getElementById('tc-'+i).classList.add('wrong-pick');
-    fb.className='ex-feedback on ef-wrong';
-    fb.innerHTML=`✗ Das ist nicht der falsche Satz. Der falsche Satz ist Nummer ${ex.wrongIdx+1}.<br>${escHtml(ex.explain)}`;
-  }
-}
-
-// ═══════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(()=>t.classList.remove('show'), 2400);
-}
-
-// ═══════════════════════════════════════════════════
-// INIT
-// ═══════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded',()=>{
-  renderStarterEx();
-  renderAdjEx();
-  renderTenseEx();
 });
+
+document.addEventListener("dragend", function(event){
+  if(dragged){
+    dragged.classList.remove("dragging");
+    dragged = null;
+  }
+});
+
+area.addEventListener("dragover", function(event){
+  event.preventDefault();
+});
+
+area.addEventListener("drop", function(event){
+  event.preventDefault();
+  if(dragged){
+    area.appendChild(dragged);
+  }
+});
+
+pool.addEventListener("dragover", function(event){
+  event.preventDefault();
+});
+
+pool.addEventListener("drop", function(event){
+  event.preventDefault();
+  if(dragged){
+    pool.appendChild(dragged);
+  }
+});
+
+// Block sentence checker
+function checkBlockSentence(){
+  let blocks = area.querySelectorAll(".word-block");
+  if(blocks.length === 0){
+    document.getElementById("blockFeedback").innerHTML = "⚠ Bitte ziehe Wörter in die Satzfläche.";
+    return;
+  }
+  let sentence = Array.from(blocks).map(b => b.textContent).join(" ");
+  document.getElementById("satz").value = sentence + ".";
+  checkSentence();
+  document.getElementById("blockFeedback").innerHTML = "✅ Satz aus Blöcken geprüft!";
+}
 </script>
+
 </body>
 </html>
