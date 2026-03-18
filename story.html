@@ -435,6 +435,17 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .full-check-header{padding:10px 14px;background:var(--surface);border-bottom:2px solid var(--border);font-family:var(--fp);font-size:6px;color:var(--ink);}
 .full-check-header .err-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-family:var(--f);font-size:11px;font-weight:600;}
 
+/* ── PICTURE BOOK ── */
+.book-overlay{position:fixed;inset:0;background:rgba(10,10,30,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:12px;}
+.book-page{background:#fffdf4;border-radius:14px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.6);display:flex;flex-direction:column;}
+.book-page-img{width:100%;display:block;border-radius:14px 14px 0 0;overflow:hidden;line-height:0;}
+.book-page-img svg{width:100%;height:auto;display:block;}
+.book-page-body{padding:1.2rem 1.4rem .8rem;flex:1;}
+.book-page-title{font-family:var(--fp);font-size:9px;color:var(--green);display:block;margin-bottom:.6rem;}
+.book-page-text{font-size:15px;line-height:1.9;white-space:pre-wrap;color:var(--ink);}
+.book-nav{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;border-top:2px dashed var(--border);margin-top:auto;}
+.book-close-btn{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.15);border:none;color:white;font-size:22px;cursor:pointer;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;}
+
 /* ── STARS ── */
 .star-row{display:flex;justify-content:center;gap:6px;margin:.5rem 0 .9rem;}
 .star{font-size:20px;filter:grayscale(1) brightness(1.2);transition:filter .4s;}
@@ -1014,7 +1025,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
   <div class="btn-row">
     <button class="btn btn-secondary" onclick="goStep('capture')">◀ Zurück</button>
-    <button class="btn btn-primary" id="narrate-next-btn" onclick="completeNarrate()">🤖 KI macht daraus Schreibideen ▶</button>
+    <button class="btn btn-primary" id="narrate-next-btn" onclick="completeNarrate()">✏️ Schreibideen erstellen ▶</button>
   </div>
 </div>
 
@@ -1174,7 +1185,6 @@ const CRIT={
   ]
 };
 
-let apiKey=localStorage.getItem('anthropic-api-key')||'';
 let currentStep='play';
 let currentChapter=0;
 let writePhase='plan'; // plan | write | revise
@@ -1576,7 +1586,7 @@ async function completeNarrate(){
 // ═══════════════════════════════════════════════════════════
 // PHASE 4: AI SCAFFOLD
 // ═══════════════════════════════════════════════════════════
-async function buildScaffold(){
+function buildScaffold(){
   const buildDiv=document.getElementById('ai-building');
   const resultWrap=document.getElementById('scaffold-result-wrap');
   buildDiv.style.display='block';
@@ -1585,80 +1595,67 @@ async function buildScaffold(){
   const steps=['Lese deine Stichwörter …','Denke über dein Erlebnis nach …','Erstelle Schreibideen für dich …','Fast fertig …'];
   let si=0;
   const stepsEl=document.getElementById('ai-building-steps');
-  const stepInterval=setInterval(()=>{stepsEl.textContent=steps[si%steps.length];si++;},1200);
+  const stepInterval=setInterval(()=>{stepsEl.textContent=steps[si%steps.length];si++;},700);
 
-  const intensityLabel=['','ein bisschen','ziemlich','sehr'];
-  const feelingsStr=selectedFeelings.length
-    ?selectedFeelings.join(', ')+` (${intensityLabel[feelingIntensity]||''})`
-    :'(keine angegeben)';
-  const keywordsStr=keywords.join(', ')||'(keine Stichwörter angegeben)';
-  const narrationText=typedNarration||'(keine Texterzählung angegeben)';
+  return new Promise(resolve=>{
+    setTimeout(()=>{
+      clearInterval(stepInterval);
 
-  const system=`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern, LehrplanPLUS). Du hilfst einem Kind, sein echtes Blockwelt/Minecraft-Spielerlebnis in eine LP+-konforme Geschichte umzuwandeln.
+      // Build personalised scaffold from child's own keywords, feelings and narration
+      const kw=keywords.length?keywords:['Blockwelt'];
+      const k0=kw[0]||'das Abenteuer';
+      const k1=kw[1]||k0;
+      const k2=kw[kw.length-1]||k0;
+      const feel=selectedFeelings.length?selectedFeelings[0]:'aufgeregt';
+      const feelStr=selectedFeelings.length?selectedFeelings.slice(0,2).join(' und '):feel;
+      // Pick a meaningful phrase from the narration for extra personalisation
+      const narrWords=(typedNarration||'').split(/\s+/).filter(w=>w.length>4);
+      const narrPhrase=narrWords.length>=3?narrWords.slice(0,3).join(' '):'';
 
-Antworte NUR mit einem JSON-Objekt. Kein anderer Text, keine Markdown-Backticks.
-Format:
-{
-  "begin": {
-    "prompt": "2-3 kindgerechte Fragen die helfen die Erzählsituation zu schreiben (wer, wie, wo)",
-    "draft": "2-3 Sätze Schreibidee für die Erzählsituation basierend auf ihrem Erlebnis",
-    "stems": ["Einleitungsformel 1 passend zum Erlebnis", "Einleitungsformel 2", "Einleitungsformel 3"]
-  },
-  "middle": {
-    "prompt": "2-3 Fragen zum spannendsten Moment des Erlebnisses",
-    "draft": "2-3 Sätze Schreibidee für das Ereignis",
-    "stems": ["Spannungswort-Satzanfang 1 passend zum Erlebnis", "2", "3"]
-  },
-  "end": {
-    "prompt": "2-3 Fragen zum Ausgang und was der Held gelernt hat",
-    "draft": "2-3 Sätze Schreibidee für den Ausgang",
-    "stems": ["Schlussformel 1 passend zum Erlebnis", "2", "3"]
-  }
-}
+      const parsed={
+        begin:{
+          prompt:`Wer ist dein Held — wie heißt er/sie und wie sieht er/sie aus? Wo hast du „${k0}" in der Blockwelt erlebt? Beschreibe den Ort mit drei Wörtern. Was wollte dein Held am Anfang erreichen?`,
+          draft:`Eines Tages machte sich mein Held auf den Weg durch die Blockwelt${k0!=='Blockwelt'?' und entdeckte '+k0:''}. Er/Sie war ${feelStr} und voller Neugier.${narrPhrase?' „'+narrPhrase+' …", dachte er/sie.':''}`,
+          stems:[
+            `Eines Tages entdeckte ich in der Blockwelt ${k0} …`,
+            `Es war ein aufregender Tag, als ${k0} plötzlich auftauchte …`,
+            `Mitten in der Blockwelt, nicht weit von ${k0}, begann das Abenteuer …`
+          ]
+        },
+        middle:{
+          prompt:`Was war das spannendste Moment mit „${k1}"? Wie hat sich dein Held dabei gefühlt — ${feelStr}? Was hat er/sie gesagt oder gedacht? Gab es ein schwieriges Hindernis?`,
+          draft:`Plötzlich passierte etwas Unglaubliches: ${k1} tauchte auf und alles änderte sich! Mein Held war ${feelStr} und wusste zuerst nicht, was er/sie tun sollte. „Das schaffe ich!", rief er/sie — und handelte mutig.`,
+          stems:[
+            `Plötzlich tauchte ${k1} auf und alles änderte sich …`,
+            `Da passierte etwas, das mein Held nie vergessen wird: …`,
+            `„${k1}!", rief mein Held — denn nun war alles anders …`
+          ]
+        },
+        end:{
+          prompt:`Wie hat dein Held das Problem am Ende gelöst? Was ist mit „${k2}" passiert? Was hat er/sie durch das Abenteuer gelernt? Schreib einen wirkungsvollen letzten Satz!`,
+          draft:`Am Ende gelang es meinem Helden, ${k2} zu bewältigen. Er/Sie war ${feel} und stolz auf sich. Von da an wusste mein Held: Mut und Geduld helfen in jedem Abenteuer!`,
+          stems:[
+            `Von da an wusste mein Held: …`,
+            `Seitdem ist mein Held nie wieder ängstlich, denn …`,
+            `Das Abenteuer war zu Ende — aber die Erinnerung an ${k2} bleibt für immer …`
+          ]
+        }
+      };
 
-Mache alles sehr spezifisch zum Erlebnis des Kindes. Nutze die Stichwörter und die Erzählung.`;
+      ['begin','middle','end'].forEach(ch=>{
+        if(parsed[ch]){
+          scaffoldData[ch]=parsed[ch].draft||'';
+          scaffoldEdits[ch]=parsed[ch].draft||'';
+          if(parsed[ch].stems&&parsed[ch].stems.length)STEMS[ch]=parsed[ch].stems;
+        }
+      });
 
-  const userMsg=`Meine Blockwelt-Stichwörter: ${keywordsStr}\nMeine Gefühle beim Spielen: ${feelingsStr}\nMeine Erzählung: ${narrationText}`;
-
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1200,
-        system,
-        messages:[{role:'user',content:userMsg}]
-      })
-    });
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    let raw=data.content&&data.content[0]?data.content[0].text:'{}';
-    raw=raw.replace(/```json|```/g,'').trim();
-    let parsed={};
-    try{parsed=JSON.parse(raw);}catch(e){}
-    clearInterval(stepInterval);
-    buildDiv.style.display='none';
-
-    // Store scaffold data and update stems
-    ['begin','middle','end'].forEach(ch=>{
-      if(parsed[ch]){
-        scaffoldData[ch]=parsed[ch].draft||'';
-        scaffoldEdits[ch]=parsed[ch].draft||'';
-        if(parsed[ch].stems&&parsed[ch].stems.length)STEMS[ch]=parsed[ch].stems;
-      }
-    });
-
-    renderScaffoldResult(parsed);
-    resultWrap.style.display='block';
-  }catch(e){
-    clearInterval(stepInterval);
-    buildDiv.style.display='none';
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend! / API key invalid or missing!':'';
-    buildDiv.innerHTML=`<p style="color:#c0392b;padding:12px;font-size:13px;">⚠️ ${e.message}${hint}</p>`;
-    buildDiv.style.display='block';
-    resultWrap.style.display='block';
-  }
+      buildDiv.style.display='none';
+      renderScaffoldResult(parsed);
+      resultWrap.style.display='block';
+      resolve();
+    },1800);
+  });
 }
 
 function renderScaffoldResult(parsed){
@@ -2172,6 +2169,9 @@ function showComplete(){
         ✓ Realweltbezug: Eigenes Spielerlebnis → narrative Geschichte
       </div>
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="showPictureBook()" style="font-size:15px;padding:.55rem 1.1rem;">📖 Mein Bilderbuch / My Picture Book</button>
+      </div>
+      <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <button class="btn btn-secondary" onclick="restartAll()">🔄 Neues Abenteuer</button>
         <button class="btn btn-hint" onclick="window.print()">🖨️ Lernpass drucken</button>
         <a href="https://keithan-c.github.io/schreibwerkstatt-klasse3/index.html" class="btn" style="
@@ -2189,25 +2189,20 @@ async function checkFullStory(){
   btn.disabled=true;btn.classList.add('running');
   btn.innerHTML=`⏳ Wird geprüft … / Checking … <span style="opacity:.6;font-size:10px;font-weight:400;">einen Moment bitte</span>`;
   const fullText=CHAPTERS.map(ch=>answers[ch.id].trim()).filter(Boolean).join('\n\n');
-  const system=`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern). Prüfe den deutschen Text auf Rechtschreib-, Grammatik- und Satzbaufehler. Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
-Format: [{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fix":"Korrektur","explain":"kindgerechte Erklärung Deutsch max. 2 Sätze ermutigend","explainEN":"same explanation in English max. 2 sentences encouraging"}]
-Regeln: max. 8 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein netter Lehrer, keine Fehler → []`;
   const resultsDiv=document.getElementById('full-check-results');
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const params=new URLSearchParams({text:fullText,language:'de-DE'});
+    const res=await fetch('https://api.languagetool.org/v2/check',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system,messages:[{role:'user',content:fullText}]})
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:params
     });
+    if(!res.ok)throw new Error(`Prüfdienst nicht erreichbar (HTTP ${res.status})`);
     const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
-    raw=raw.replace(/```json|```/g,'').trim();
-    let errors=[];try{errors=JSON.parse(raw);}catch(e){}
+    const errors=ltMatchesToErrors(fullText,(data.matches||[]).slice(0,8));
     renderFullCheckResults(errors,resultsDiv);
   }catch(e){
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key ungültig oder fehlend! / API key invalid or missing!':'';
-    resultsDiv.innerHTML=`<p style="color:var(--coral2);padding:12px;font-size:13px;">⚠️ ${e.message}${hint}</p>`;
+    resultsDiv.innerHTML=`<p style="color:var(--coral2);padding:12px;font-size:13px;">⚠️ ${escH(e.message)}</p>`;
   }
   btn.disabled=false;btn.classList.remove('running');
   btn.innerHTML='🔎 Nochmal prüfen / Check again';
@@ -2268,6 +2263,145 @@ function scrollToFullSug(i){
   const el=document.getElementById(`full-sug-${i}`);
   if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
 }
+
+// ═══════════════════════════════════════════════════════════
+// PICTURE BOOK
+// ═══════════════════════════════════════════════════════════
+const BOOK_SVGS={
+  cover:`<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+    <rect width="320" height="130" fill="#87CEEB"/>
+    <rect y="95" width="320" height="35" fill="#7C5230"/>
+    <rect y="83" width="320" height="14" fill="#5C9E31"/>
+    <!-- Sun -->
+    <rect x="255" y="12" width="28" height="28" fill="#FFD700"/>
+    <!-- Cloud -->
+    <rect x="30" y="16" width="50" height="14" fill="white" rx="7"/><rect x="20" y="22" width="70" height="14" fill="white" rx="7"/>
+    <!-- Mountain -->
+    <polygon points="180,83 230,30 280,83" fill="#8D9FA6"/><polygon points="200,83 240,45 280,83" fill="#A0B4BB"/>
+    <!-- Tree -->
+    <rect x="80" y="55" width="10" height="30" fill="#7C4D00"/><rect x="60" y="28" width="50" height="32" fill="#2D7A1F" rx="4"/><rect x="66" y="20" width="38" height="16" fill="#3A9027" rx="4"/>
+    <!-- Steve -->
+    <rect x="130" y="51" width="22" height="22" fill="#C68642"/><rect x="133" y="58" width="6" height="6" fill="#3E2000"/><rect x="143" y="58" width="6" height="6" fill="#3E2000"/><rect x="135" y="67" width="12" height="3" fill="#8B4513"/>
+    <rect x="132" y="73" width="18" height="14" fill="#3A86FF"/><rect x="130" y="87" width="8" height="10" fill="#5C6BC0"/><rect x="142" y="87" width="8" height="10" fill="#5C6BC0"/>
+    <rect x="122" y="74" width="7" height="12" fill="#C68642"/><rect x="151" y="74" width="7" height="12" fill="#C68642"/>
+    <!-- Stars -->
+    <rect x="10" y="8" width="5" height="5" fill="#FFD700" opacity=".7"/><rect x="195" y="12" width="4" height="4" fill="white" opacity=".8"/><rect x="300" y="8" width="4" height="4" fill="#FFD700" opacity=".7"/>
+  </svg>`,
+  begin:`<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+    <rect width="320" height="130" fill="#B3E5FC"/>
+    <rect y="95" width="320" height="35" fill="#7C5230"/>
+    <rect y="83" width="320" height="14" fill="#5C9E31"/>
+    <!-- Morning sun -->
+    <rect x="260" y="10" width="26" height="26" fill="#FFD700"/><rect x="254" y="20" width="8" height="6" fill="#FFD700"/><rect x="278" y="20" width="8" height="6" fill="#FFD700"/><rect x="270" y="4" width="6" height="8" fill="#FFD700"/><rect x="270" y="34" width="6" height="8" fill="#FFD700"/>
+    <!-- Cloud -->
+    <rect x="40" y="14" width="60" height="16" fill="white" rx="8"/><rect x="30" y="20" width="80" height="16" fill="white" rx="8"/>
+    <!-- Tree 1 -->
+    <rect x="180" y="50" width="12" height="36" fill="#7C4D00"/><rect x="158" y="20" width="56" height="36" fill="#2D7A1F" rx="4"/><rect x="166" y="12" width="40" height="16" fill="#3A9027" rx="4"/>
+    <!-- Tree 2 small -->
+    <rect x="270" y="65" width="8" height="22" fill="#7C4D00"/><rect x="256" y="42" width="36" height="26" fill="#2D7A1F" rx="4"/>
+    <!-- Steve with map/arm pointing -->
+    <rect x="55" y="50" width="22" height="22" fill="#C68642"/><rect x="58" y="57" width="6" height="6" fill="#3E2000"/><rect x="68" y="57" width="6" height="6" fill="#3E2000"/><rect x="60" y="67" width="14" height="3" fill="#C68642"/>
+    <rect x="57" y="72" width="18" height="15" fill="#3A86FF"/><rect x="55" y="87" width="8" height="10" fill="#5C6BC0"/><rect x="67" y="87" width="8" height="10" fill="#5C6BC0"/>
+    <rect x="47" y="73" width="7" height="12" fill="#C68642"/>
+    <!-- Pointing arm extended -->
+    <rect x="75" y="68" width="20" height="6" fill="#C68642"/>
+    <!-- Path / road -->
+    <rect x="90" y="90" width="120" height="6" fill="#C8A464" opacity=".6"/>
+  </svg>`,
+  middle:`<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+    <rect width="320" height="130" fill="#1A1A4E"/>
+    <rect y="95" width="320" height="35" fill="#2D2D2D"/>
+    <rect y="83" width="320" height="14" fill="#333"/>
+    <!-- Moon -->
+    <rect x="240" y="8" width="22" height="22" fill="#FFFFF0"/><rect x="246" y="8" width="10" height="22" fill="#1A1A4E"/>
+    <!-- Stars -->
+    <rect x="14" y="8" width="5" height="5" fill="#FFD700"/><rect x="58" y="20" width="4" height="4" fill="white"/><rect x="110" y="6" width="5" height="5" fill="white"/><rect x="170" y="18" width="4" height="4" fill="#FFD700"/><rect x="290" y="10" width="4" height="4" fill="white"/><rect x="310" y="28" width="3" height="3" fill="#FFD700"/>
+    <!-- Creeper -->
+    <rect x="188" y="26" width="40" height="60" fill="#4CAF50"/><rect x="194" y="34" width="11" height="11" fill="#1B5E20"/><rect x="223" y="34" width="11" height="11" fill="#1B5E20"/><rect x="200" y="49" width="7" height="7" fill="#1B5E20"/><rect x="221" y="49" width="7" height="7" fill="#1B5E20"/><rect x="207" y="56" width="14" height="7" fill="#1B5E20"/>
+    <!-- TNT -->
+    <rect x="110" y="68" width="34" height="24" fill="#C62828"/><rect x="116" y="73" width="22" height="14" fill="#FFD700"/><rect x="125" y="60" width="4" height="10" fill="#888"/><rect x="124" y="54" width="6" height="8" fill="#FFA500"/><rect x="126" y="48" width="4" height="6" fill="#FFD700"/>
+    <!-- Steve with sword -->
+    <rect x="48" y="46" width="22" height="22" fill="#C68642"/><rect x="51" y="53" width="6" height="6" fill="#3E2000"/><rect x="63" y="53" width="6" height="6" fill="#3E2000"/><rect x="54" y="63" width="14" height="3" fill="#8B4513"/>
+    <rect x="50" y="68" width="18" height="15" fill="#3A86FF"/><rect x="48" y="83" width="8" height="10" fill="#5C6BC0"/><rect x="60" y="83" width="8" height="10" fill="#5C6BC0"/>
+    <!-- Sword -->
+    <rect x="30" y="54" width="5" height="28" fill="#C0C0C0"/><rect x="22" y="54" width="22" height="5" fill="#C0C0C0"/><rect x="32" y="46" width="5" height="12" fill="#8B6914"/>
+    <!-- Lightning bolt -->
+    <polygon points="158,10 148,38 162,38 152,66" fill="#FFD700" opacity=".9"/>
+  </svg>`,
+  end:`<svg viewBox="0 0 320 130" xmlns="http://www.w3.org/2000/svg">
+    <rect width="320" height="50" fill="#FF6B35"/>
+    <rect y="50" width="320" height="35" fill="#FFB347"/>
+    <rect y="85" width="320" height="10" fill="#FFD700" opacity=".7"/>
+    <rect y="95" width="320" height="35" fill="#7C5230"/>
+    <rect y="83" width="320" height="14" fill="#5C9E31"/>
+    <!-- Setting sun -->
+    <rect x="250" y="48" width="36" height="36" fill="#FFD700"/>
+    <!-- Diamond trophy -->
+    <rect x="144" y="52" width="32" height="6" fill="#00E5FF"/><rect x="140" y="58" width="40" height="6" fill="#00BCD4"/><rect x="144" y="64" width="32" height="16" fill="#00BCD4"/><rect x="150" y="80" width="20" height="6" fill="#0097A7"/>
+    <!-- Sparkles around diamond -->
+    <rect x="128" y="56" width="6" height="6" fill="#FFD700"/><rect x="186" y="56" width="6" height="6" fill="#FFD700"/><rect x="140" y="46" width="5" height="5" fill="white"/><rect x="175" y="46" width="5" height="5" fill="white"/>
+    <!-- Stars in sky -->
+    <rect x="20" y="6" width="5" height="5" fill="#FFD700" opacity=".8"/><rect x="80" y="14" width="4" height="4" fill="white" opacity=".9"/><rect x="130" y="8" width="5" height="5" fill="#FFD700" opacity=".8"/><rect x="200" y="18" width="4" height="4" fill="white" opacity=".9"/>
+    <!-- Steve arms up (victory) -->
+    <rect x="42" y="44" width="22" height="22" fill="#C68642"/><rect x="45" y="51" width="6" height="6" fill="#3E2000"/><rect x="57" y="51" width="6" height="6" fill="#3E2000"/><rect x="47" y="61" width="14" height="4" fill="#C68642"/>
+    <rect x="44" y="66" width="18" height="15" fill="#3A86FF"/><rect x="42" y="81" width="8" height="11" fill="#5C6BC0"/><rect x="54" y="81" width="8" height="11" fill="#5C6BC0"/>
+    <!-- Arms raised up -->
+    <rect x="28" y="50" width="7" height="14" fill="#C68642"/><rect x="71" y="50" width="7" height="14" fill="#C68642"/>
+  </svg>`
+};
+
+let bookPage=0;
+const BOOK_PAGES=['cover','begin','middle','end'];
+const BOOK_BG={cover:'#e8f5e9',begin:'#e3f2fd',middle:'#e8eaf6',end:'#fff8e1'};
+const BOOK_TITLE={
+  cover:'📖 Mein Blockwelt-Abenteuer / My Blockworld Adventure',
+  begin:'🌱 Erzählsituation / Story Setting',
+  middle:'⚡ Ereignis / The Event',
+  end:'🏆 Ausgang / The Ending'
+};
+
+function showPictureBook(){bookPage=0;renderBookPage();}
+
+function renderBookPage(){
+  const existing=document.getElementById('book-overlay');
+  if(existing)existing.remove();
+  const pid=BOOK_PAGES[bookPage];
+  const isFirst=bookPage===0;
+  const isLast=bookPage===BOOK_PAGES.length-1;
+  let bodyHTML;
+  if(pid==='cover'){
+    bodyHTML=`<p style="font-size:14px;color:#555;line-height:1.8;text-align:center;">
+      Deine Geschichte — von dir selbst geschrieben! 🎉<br>
+      <em style="font-size:12px;">Your very own story — written by you!</em>
+    </p>`;
+  }else{
+    const txt=answers[pid]&&answers[pid].trim()?esc(answers[pid].trim()):'<em style="color:#aaa">Noch kein Text geschrieben. / No text written yet.</em>';
+    bodyHTML=`<p class="book-page-text">${txt}</p>`;
+  }
+  const overlay=document.createElement('div');
+  overlay.id='book-overlay';
+  overlay.className='book-overlay';
+  overlay.innerHTML=`
+    <div class="book-page" style="background:${BOOK_BG[pid]};">
+      <div class="book-page-img">${BOOK_SVGS[pid]}</div>
+      <div class="book-page-body">
+        <span class="book-page-title">${BOOK_TITLE[pid]}</span>
+        ${bodyHTML}
+      </div>
+      <div class="book-nav">
+        <button class="btn btn-secondary" style="min-height:36px;padding:.4rem .9rem;" onclick="prevBookPage()" ${isFirst?'disabled':''}>◀ Zurück</button>
+        <span style="font-size:12px;color:#888;">${bookPage+1} / ${BOOK_PAGES.length}</span>
+        <button class="btn ${isLast?'btn-secondary':'btn-primary'}" style="min-height:36px;padding:.4rem .9rem;" onclick="${isLast?'closePictureBook()':'nextBookPage()'}">
+          ${isLast?'✓ Fertig':'Weiter ▶'}
+        </button>
+      </div>
+    </div>
+    <button class="book-close-btn" onclick="closePictureBook()" title="Schließen / Close">✕</button>`;
+  document.body.appendChild(overlay);
+}
+function nextBookPage(){if(bookPage<BOOK_PAGES.length-1){bookPage++;renderBookPage();}}
+function prevBookPage(){if(bookPage>0){bookPage--;renderBookPage();}}
+function closePictureBook(){const el=document.getElementById('book-overlay');if(el)el.remove();}
 
 function buildLernpass(totalW,stars){
   const date=new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
@@ -2346,28 +2480,48 @@ async function checkWriting(){
   const btn=document.getElementById('check-btn');
   btn.disabled=true;btn.classList.add('running');
   btn.innerHTML=`⏳ Wird geprüft … <span style="opacity:.6;font-size:10px;font-weight:400;">einen Moment bitte</span>`;
-  const system=`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern). Prüfe den deutschen Text auf Rechtschreib-, Grammatik- und Satzbaufehler. Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
-Format: [{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fix":"Korrektur","explain":"kindgerechte Erklärung Deutsch max. 2 Sätze ermutigend","explainEN":"same in English"}]
-Regeln: max. 6 Fehler, "original" muss exakt im Text vorkommen, erkläre wie ein netter Lehrer, keine Fehler → []`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system,messages:[{role:'user',content:text}]})
+    const params=new URLSearchParams({text,language:'de-DE'});
+    const res=await fetch('https://api.languagetool.org/v2/check',{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:params
     });
+    if(!res.ok)throw new Error(`Prüfdienst nicht erreichbar (HTTP ${res.status})`);
     const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
-    raw=raw.replace(/```json|```/g,'').trim();
-    let errors=[];try{errors=JSON.parse(raw);}catch(e){}
+    const errors=ltMatchesToErrors(text,data.matches||[]);
     lastCheckErrors=errors;
     renderCheckResults(text,errors);
   }catch(e){
-    const hint=/auth|key|invalid/i.test(e.message)?' – API-Key prüfen! / Please check your API key!':'';
     document.getElementById('check-panel').classList.add('on');
-    document.getElementById('check-highlighted').innerHTML=`<em style="color:var(--coral2);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
+    document.getElementById('check-highlighted').innerHTML=`<em style="color:var(--coral2);padding:12px;display:block;">⚠️ ${escH(e.message)}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
   }
-  btn.disabled=false;btn.classList.remove('running');btn.innerHTML='🔎 Nochmal prüfen';
+  btn.disabled=false;btn.classList.remove('running');btn.innerHTML='🔎 Nochmal prüfen / Check again';
+}
+
+function ltMatchesToErrors(text,matches){
+  const catMap={
+    'TYPOS':'spell','GRAMMAR':'grammar','STYLE':'style',
+    'PUNCTUATION':'grammar','CASING':'grammar',
+    'COMPOUNDING':'spell','CONFUSED_WORDS':'spell','COLLOCATIONS':'style'
+  };
+  const hintDE={
+    spell:'Schau dir dieses Wort genau an — probiere die Verbesserung aus! 😊',
+    grammar:'Hier stimmt etwas mit der Grammatik nicht — schau dir den Tipp an! 😊',
+    style:'Du kannst diesen Teil noch schöner schreiben! 😊'
+  };
+  const hintEN={
+    spell:'Look at this word carefully and try the correction! 😊',
+    grammar:'There\'s a small grammar issue here — check the tip! 😊',
+    style:'You can make this part even better! 😊'
+  };
+  return matches.slice(0,6).map(m=>{
+    const original=text.slice(m.offset,m.offset+m.length);
+    const fix=m.replacements&&m.replacements[0]?m.replacements[0].value:'';
+    const type=catMap[m.rule?.category?.id||'']||'grammar';
+    return{type,original,fix,explain:hintDE[type],explainEN:hintEN[type]};
+  }).filter(e=>e.original&&e.fix&&e.original!==e.fix);
 }
 
 function renderCheckResults(text,errors){
