@@ -1544,6 +1544,17 @@ function renderWrite(){
     :'Don\'t always start with "I" or "He/She"! Tap a suggestion.';
   const starterLabel=l==='de'?'🔤 Satzanfänge variieren':'🔤 Vary your sentence starters';
 
+  // Build previous-part text reference panel
+  const prevIdx=PARTS.indexOf(part)-1;
+  const prevPart=prevIdx>=0?PARTS[prevIdx]:null;
+  const prevText=prevPart?answers[prevPart]:'';
+  const prevLabel=prevPart?T[l].partLabels[prevPart]:'';
+  const prevTextHTML=prevPart&&prevText.trim()?`
+    <details class="plan-notes-panel">
+      <summary>📖 ${l==='de'?`Mein Text — ${prevLabel}`:`My text — ${prevLabel}`}</summary>
+      <div class="plan-notes-inner" style="white-space:pre-wrap;font-size:13px;line-height:1.6;color:var(--ink)">${esc(prevText)}</div>
+    </details>`:'';
+
   // Build Stichwortzettel reference from plan phase
   const filledFields=T[l].planFields[part].filter(f=>planData[part][f.key]&&planData[part][f.key].trim());
   const planNotesHTML=filledFields.length?`
@@ -1576,6 +1587,7 @@ function renderWrite(){
         <p class="starters-note">${starterNote}</p>
         <div class="starters-body">${starterGroups}</div>
       </details>
+      ${prevTextHTML}
       ${planNotesHTML}
       <div class="hint-box ${hints[part]?'on':''}" id="hint-box">${T[l].hints[part]}</div>
       <div class="write-toolbar">
