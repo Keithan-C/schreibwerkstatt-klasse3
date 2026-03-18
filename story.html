@@ -1025,7 +1025,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
   <div class="btn-row">
     <button class="btn btn-secondary" onclick="goStep('capture')">◀ Zurück</button>
-    <button class="btn btn-primary" id="narrate-next-btn" onclick="completeNarrate()">🤖 KI macht daraus Schreibideen ▶</button>
+    <button class="btn btn-primary" id="narrate-next-btn" onclick="completeNarrate()">✏️ Schreibideen erstellen ▶</button>
   </div>
 </div>
 
@@ -1185,7 +1185,6 @@ const CRIT={
   ]
 };
 
-let apiKey=localStorage.getItem('anthropic-api-key')||'';
 let currentStep='play';
 let currentChapter=0;
 let writePhase='plan'; // plan | write | revise
