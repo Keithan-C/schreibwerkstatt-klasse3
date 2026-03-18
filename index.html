@@ -1544,16 +1544,13 @@ function renderWrite(){
     :'Don\'t always start with "I" or "He/She"! Tap a suggestion.';
   const starterLabel=l==='de'?'🔤 Satzanfänge variieren':'🔤 Vary your sentence starters';
 
-  // Build previous-part text reference panel
-  const prevIdx=PARTS.indexOf(part)-1;
-  const prevPart=prevIdx>=0?PARTS[prevIdx]:null;
-  const prevText=prevPart?answers[prevPart]:'';
-  const prevLabel=prevPart?T[l].partLabels[prevPart]:'';
-  const prevTextHTML=prevPart&&prevText.trim()?`
-    <details class="plan-notes-panel">
-      <summary>📖 ${l==='de'?`Mein Text — ${prevLabel}`:`My text — ${prevLabel}`}</summary>
-      <div class="plan-notes-inner" style="white-space:pre-wrap;font-size:13px;line-height:1.6;color:var(--ink)">${esc(prevText)}</div>
-    </details>`:'';
+  // Build previous-part text reference panel(s) — show ALL parts written so far
+  const partIdx=PARTS.indexOf(part);
+  const prevPartsHTML=PARTS.slice(0,partIdx).filter(p=>answers[p]&&answers[p].trim()).map(p=>`
+    <details class="plan-notes-panel" open>
+      <summary>📖 ${l==='de'?`Mein Text — ${T[l].partLabels[p]}`:`My text — ${T[l].partLabels[p]}`}</summary>
+      <div class="plan-notes-inner" style="white-space:pre-wrap;font-size:13px;line-height:1.6;color:var(--ink)">${esc(answers[p])}</div>
+    </details>`).join('');
 
   // Build Stichwortzettel reference from plan phase
   const filledFields=T[l].planFields[part].filter(f=>planData[part][f.key]&&planData[part][f.key].trim());
@@ -1587,7 +1584,7 @@ function renderWrite(){
         <p class="starters-note">${starterNote}</p>
         <div class="starters-body">${starterGroups}</div>
       </details>
-      ${prevTextHTML}
+      ${prevPartsHTML}
       ${planNotesHTML}
       <div class="hint-box ${hints[part]?'on':''}" id="hint-box">${T[l].hints[part]}</div>
       <div class="write-toolbar">
@@ -1739,7 +1736,8 @@ function liveUpdate(text){
   // Grammar detection debounce (merged here to avoid duplicate declaration)
   clearTimeout(_gramDetectTimer);
   _gramDetectTimer=setTimeout(()=>{
-    if(document.getElementById('gram-modal-bg').classList.contains('open'))return;
+    const gmBg=document.getElementById('gram-modal-bg');
+    if(gmBg&&gmBg.classList.contains('open'))return;
     if(text.length<40)return;
     const topic=detectGrammarTopic(text);
     if(topic)openGramModal(topic);
