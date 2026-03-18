@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<base href="/schreibwerkstatt-klasse3/">
 <title>Satzwerkstatt – Klasse 3</title>
 
 <style>
@@ -98,6 +97,14 @@ button:hover{
 .word-block.dragging {
   opacity:0.5;
 }
+
+.suggestion{
+  margin-top:15px;
+  font-size:16px;
+  color:#2f54c4;
+  cursor:pointer;
+  text-decoration:underline;
+}
 </style>
 </head>
 
@@ -120,6 +127,7 @@ button:hover{
 <button onclick="checkSentence()">Satz prüfen</button>
 <button onclick="speakSentence()">🔊 Vorlesen</button>
 <div class="feedback" id="feedback"></div>
+<div class="suggestion" id="suggestion" onclick="applySuggestion()" style="display:none;">💡 Klicke hier für einen Vorschlag</div>
 </div>
 
 <div class="container">
@@ -139,49 +147,58 @@ button:hover{
 <div class="sentence-area" id="sentenceArea"></div>
 <button onclick="checkBlockSentence()">Block-Satz prüfen</button>
 <div class="feedback" id="blockFeedback"></div>
+<div class="suggestion" id="blockSuggestion" onclick="applyBlockSuggestion()" style="display:none;">💡 Klicke hier für einen Vorschlag</div>
 </div>
 
 <script>
-// Sentence Checker for textarea
+// --- Correct sentence to suggest ---
+const correctSentence = "Der Junge rennt schnell zur Gans im Park.";
+
+// --- Sentence Checker for textarea ---
 function checkSentence(){
   let text = document.getElementById("satz").value.trim();
   let words = text.split(" ");
   let feedback = "";
+  let allGood = true;
 
   if(text.length === 0){
     feedback = "⚠ Bitte schreibe einen Satz.";
-    document.getElementById("feedback").innerHTML = feedback;
-    return;
-  }
+    allGood = false;
+  } else {
+    if(text[0] === text[0].toUpperCase()){
+      feedback += "<div class='good'>✔ Satz beginnt mit Großbuchstaben</div>";
+    } else{
+      feedback += "<div class='warn'>⚠ Satzanfang groß schreiben</div>";
+      allGood = false;
+    }
 
-  if(text[0] === text[0].toUpperCase()){
-    feedback += "<div class='good'>✔ Satz beginnt mit Großbuchstaben</div>";
-  } else{
-    feedback += "<div class='warn'>⚠ Satzanfang groß schreiben</div>";
-  }
+    if(text.endsWith(".")){
+      feedback += "<div class='good'>✔ Punkt am Ende</div>";
+    } else{
+      feedback += "<div class='warn'>⚠ Satz braucht einen Punkt</div>";
+      allGood = false;
+    }
 
-  if(text.endsWith(".")){
-    feedback += "<div class='good'>✔ Punkt am Ende</div>";
-  } else{
-    feedback += "<div class='warn'>⚠ Satz braucht einen Punkt</div>";
-  }
+    if(words.length >= 5){
+      feedback += "<div class='good'>✔ Gute Satzlänge</div>";
+    } else{
+      feedback += "<div class='warn'>⚠ Versuche einen längeren Satz</div>";
+      allGood = false;
+    }
 
-  if(words.length >= 5){
-    feedback += "<div class='good'>✔ Gute Satzlänge</div>";
-  } else{
-    feedback += "<div class='warn'>⚠ Versuche einen längeren Satz</div>";
-  }
+    let verbs = ["ist","sind","läuft","rennt","geht","spielt","schaut","sieht","fliegt","springt"];
+    let foundVerb = verbs.some(v => text.includes(v));
 
-  let verbs = ["ist","sind","läuft","rennt","geht","spielt","schaut","sieht","fliegt","springt"];
-  let foundVerb = verbs.some(v => text.includes(v));
-
-  if(foundVerb){
-    feedback += "<div class='good'>✔ Verb gefunden</div>";
-  } else{
-    feedback += "<div class='warn'>⚠ Dein Satz braucht ein Verb</div>";
+    if(foundVerb){
+      feedback += "<div class='good'>✔ Verb gefunden</div>";
+    } else{
+      feedback += "<div class='warn'>⚠ Dein Satz braucht ein Verb</div>";
+      allGood = false;
+    }
   }
 
   document.getElementById("feedback").innerHTML = feedback;
+  document.getElementById("suggestion").style.display = allGood ? "none" : "block";
 }
 
 function speakSentence(){
@@ -193,10 +210,14 @@ function speakSentence(){
   speechSynthesis.speak(speech);
 }
 
-// Drag & Drop for Blocks
+function applySuggestion(){
+  document.getElementById("satz").value = correctSentence;
+  checkSentence();
+}
+
+// --- Drag & Drop for Blocks ---
 const pool = document.getElementById('wordPool');
 const area = document.getElementById('sentenceArea');
-
 let dragged;
 
 document.addEventListener("dragstart", function(event){
@@ -216,7 +237,6 @@ document.addEventListener("dragend", function(event){
 area.addEventListener("dragover", function(event){
   event.preventDefault();
 });
-
 area.addEventListener("drop", function(event){
   event.preventDefault();
   if(dragged){
@@ -227,7 +247,6 @@ area.addEventListener("drop", function(event){
 pool.addEventListener("dragover", function(event){
   event.preventDefault();
 });
-
 pool.addEventListener("drop", function(event){
   event.preventDefault();
   if(dragged){
@@ -240,12 +259,33 @@ function checkBlockSentence(){
   let blocks = area.querySelectorAll(".word-block");
   if(blocks.length === 0){
     document.getElementById("blockFeedback").innerHTML = "⚠ Bitte ziehe Wörter in die Satzfläche.";
+    document.getElementById("blockSuggestion").style.display = "none";
     return;
   }
   let sentence = Array.from(blocks).map(b => b.textContent).join(" ");
   document.getElementById("satz").value = sentence + ".";
   checkSentence();
   document.getElementById("blockFeedback").innerHTML = "✅ Satz aus Blöcken geprüft!";
+  // show suggestion if wrong
+  if(sentence !== correctSentence.slice(0, -1)){
+    document.getElementById("blockSuggestion").style.display = "block";
+  } else{
+    document.getElementById("blockSuggestion").style.display = "none";
+  }
+}
+
+function applyBlockSuggestion(){
+  // Reset blocks to correct sentence
+  let words = correctSentence.slice(0,-1).split(" "); // remove period
+  area.innerHTML = "";
+  words.forEach(word=>{
+    let div = document.createElement("div");
+    div.className="word-block";
+    div.draggable=true;
+    div.textContent=word;
+    area.appendChild(div);
+  });
+  checkBlockSentence();
 }
 </script>
 
