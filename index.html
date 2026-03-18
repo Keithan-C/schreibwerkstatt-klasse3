@@ -1337,6 +1337,7 @@ function planFilled(p){return Object.values(planData[p]).filter(v=>v&&v.trim().l
 function render(){
   const l=lang==='both'?'de':lang;
   updateTopbar();
+  buildSchreibplanPanel();
 
   // Progress
   const idx=PARTS.indexOf(part);
@@ -1835,45 +1836,74 @@ document.addEventListener('DOMContentLoaded',()=>{
         bannerText.textContent=parts.join(' · ');
         banner.style.display='block';
       }
-      // Build Schreibplan panel
-      buildSchreibplanPanel(bd);
+      // Build outline panel (always shown, independent of Baukasten)
+      buildSchreibplanPanel();
     }catch(e){}
   }
+  // Always render the outline panel even without builder data
+  buildSchreibplanPanel();
 });
 
-function buildSchreibplanPanel(bd){
+function buildSchreibplanPanel(){
   const el=document.getElementById('schreibplan-panel');
-  if(!el||!bd)return;
-  const ch=bd.choices||{};
-  const choices=[ch.character,ch.place,ch.problem].filter(x=>x&&x.l);
-  const choiceHTML=choices.map(x=>`<span class="sp-choice-tag">${x.e} ${x.l}</span>`).join('');
+  if(!el)return;
 
-  let mtnHTML='';
-  const mtn=bd.storyMountain||{};
-  const mtnLabels={anfang:'🌅 Anfang',aufbau:'📈 Aufbau',hoehepunkt:'⚡ Höhepunkt',loesung:'💡 Lösung',schluss:'🏁 Schluss'};
-  const mtnColors={anfang:'#edf8e6',aufbau:'#f0fbf0',hoehepunkt:'#fdf5de',loesung:'#e4f0fb',schluss:'#f0ebff'};
-  const mtnParts=Object.entries(mtnLabels).filter(([k])=>mtn[k]&&mtn[k].trim());
-  if(mtnParts.length){
-    mtnHTML=`<div class="sp-mtn">${mtnParts.map(([k,label])=>
-      `<div class="sp-mtn-item" style="background:${mtnColors[k]}">${label}: ${mtn[k]}</div>`
-    ).join('')}</div>`;
-  }
+  const isDE=lang==='en'?false:true;
+  const isEN=lang==='de'?false:true;
 
-  let wordsHTML='';
-  const words=bd.selectedWords||[];
-  if(words.length){
-    wordsHTML=`<div class="sp-words-row">${words.map(w=>`<span class="sp-word-tag">${w}</span>`).join('')}</div>`;
-  }
+  // Story outline sections — each with label, expectation, and example
+  const sections=[
+    {
+      icon:'🌱',
+      labelDE:'Erzählsituation — Anfang',
+      labelEN:'Setting — Beginning',
+      descDE:'Wer ist der Held? Wie sieht er/sie aus? Wo beginnt die Geschichte? Nutze eine <strong>Einleitungsformel</strong>.',
+      descEN:'Who is the hero? What do they look like? Where does the story begin? Use an <strong>opening phrase</strong>.',
+      exDE:'„Es war einmal ein mutiger Junge namens Leo. Er hatte braune Haare und trug immer seine rote Mütze. Er wohnte am Rand eines großen, dunklen Waldes und träumte davon, ein Held zu sein."',
+      exEN:'"Once upon a time there was a brave boy called Leo. He had brown hair and always wore his red cap. He lived at the edge of a great dark forest and dreamed of being a hero."',
+      color:'#edf8e6',border:'#5cb85c',labelColor:'#2a5c1a'
+    },
+    {
+      icon:'⚡',
+      labelDE:'Ereignis — Mitte',
+      labelEN:'Event — Middle',
+      descDE:'Was passiert <strong>plötzlich</strong>? Nutze ein Spannungswort und mindestens eine <strong>wörtliche Rede</strong> mit „…".',
+      descEN:'What happens <strong>suddenly</strong>? Use a tension word and at least one piece of <strong>direct speech</strong>.',
+      exDE:'„Plötzlich hörte Leo ein lautes Knacken hinter den Bäumen. Sein Herz klopfte bis zum Hals. Er schluckte und rief: „Wer ist da?" Eine Gestalt trat aus dem Schatten — es war sein bester Freund Tim."',
+      exEN:'"Suddenly Leo heard a loud crack behind the trees. His heart pounded in his chest. He swallowed hard and called out: "Who\'s there?" A figure stepped from the shadows — it was his best friend Tim."',
+      color:'#fdf5de',border:'#e6b800',labelColor:'#7a5900'
+    },
+    {
+      icon:'🌟',
+      labelDE:'Ausgang — Ende',
+      labelEN:'Resolution — Ending',
+      descDE:'Wie löst sich das Problem? Was hat der Held gelernt? Nutze eine <strong>Schlussformel</strong> und einen wirkungsvollen letzten Satz.',
+      descEN:'How is the problem solved? What did the hero learn? Use a <strong>closing phrase</strong> and a powerful final sentence.',
+      exDE:'„Von da an wusste Leo, dass er sich auf seinen Freund Tim verlassen konnte. Die beiden erkundeten den Wald noch viele Male — und hatten nie mehr Angst."',
+      exEN:'"From that day on Leo knew he could always count on his friend Tim. The two of them explored the forest many more times — and were never afraid again."',
+      color:'#ede7f6',border:'#7c4dff',labelColor:'#4527a0'
+    }
+  ];
 
-  if(!choiceHTML&&!mtnHTML&&!wordsHTML) return;
+  const sectHTML=sections.map(s=>`
+    <div style="border:1.5px solid ${s.border};border-radius:10px;background:${s.color};padding:10px 12px;margin-bottom:8px;">
+      <div style="font-weight:700;font-size:13px;color:${s.labelColor};margin-bottom:4px;">
+        ${s.icon}${isDE?` ${s.labelDE}`:''}${isDE&&isEN?' / ':''}${isEN?` ${s.labelEN}`:''}
+      </div>
+      <p style="font-size:12px;color:#333;margin-bottom:6px;line-height:1.55;">
+        ${isDE?s.descDE:''}${isDE&&isEN?'<br>':''}${isEN?s.descEN:''}
+      </p>
+      <div style="font-size:12px;color:#555;font-style:italic;line-height:1.6;background:rgba(255,255,255,.6);border-radius:6px;padding:6px 9px;">
+        <span style="font-size:10px;font-weight:700;color:${s.labelColor};font-style:normal;display:block;margin-bottom:2px;">
+          ${isDE?'Beispiel':''}${isDE&&isEN?' / ':''}${isEN?'Example':''}:
+        </span>
+        ${isDE?s.exDE:''}${isDE&&isEN?'<br>':''}${isEN?s.exEN:''}
+      </div>
+    </div>`).join('');
 
   el.innerHTML=`<details class="schreibplan-panel" open>
-    <summary>📋 Mein Schreibplan <span style="font-size:11px;font-weight:400;opacity:.7;">(vom Baukasten)</span></summary>
-    <div class="sp-inner">
-      ${choiceHTML?`<div class="sp-choices-row">${choiceHTML}</div>`:''}
-      ${mtnHTML}
-      ${wordsHTML}
-    </div>
+    <summary>📖 ${isDE?'Aufbau meiner Geschichte':''}${isDE&&isEN?' / ':''}${isEN?'Story Structure':''}</summary>
+    <div class="sp-inner">${sectHTML}</div>
   </details>`;
 }
 
