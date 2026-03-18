@@ -9,20 +9,21 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --green:#2d7a1b;--green2:#4aaa2a;--green3:#c8f0a0;--green4:#eafade;
-  --blue:#1a3a7a;--blue2:#2e6ab8;--blue3:#e0f0ff;
-  --amber:#7a4000;--amber2:#e09010;--amber3:#ffd070;--amber4:#fff5d8;
-  --purple:#3a1a8a;--purple2:#6a4adf;--purple3:#ede0ff;
-  --coral:#8a2010;--coral2:#e05030;--coral3:#ffe0d8;
-  --ink:#1a1a18;--ink2:#3a3a35;--muted:#7a7870;
-  --surface:#fff;--bg:#f2efe8;--border:#d8d4c8;
+  /* Roblox × Blockwelt palette */
+  --green:#0f7a38;--green2:#1dba59;--green3:#a8f0ce;--green4:#e0faf0;
+  --blue:#0a4080;--blue2:#1565c0;--blue3:#dbeeff;
+  --amber:#7a4800;--amber2:#d4830a;--amber3:#ffc44a;--amber4:#fff3d0;
+  --purple:#3a0a8a;--purple2:#6e3adf;--purple3:#ede8ff;
+  --coral:#8a0a0a;--coral2:#e53535;--coral3:#ffe0e0;
+  --ink:#1a1d24;--ink2:#3a3d48;--muted:#6a6d78;
+  --surface:#fff;--bg:#f0f4f8;--border:#dce2ea;
   --fp:'Press Start 2P',monospace;--fb:'Nunito',sans-serif;
-  --r:12px;--r2:8px;
-  --sh:0 4px 24px rgba(0,0,0,.10);
+  --r:14px;--r2:9px;
+  --sh:0 4px 24px rgba(0,0,0,.12);
 }
 
 /* ── BASE ── */
-body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;font-size:15px;line-height:1.7;}
 .wrap{max-width:760px;margin:0 auto;padding:0 1rem 6rem;}
 
 /* ── PIXEL HEADER ── */
@@ -47,8 +48,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 .header-content{padding:1rem 1.5rem 0;text-align:center;position:relative;}
 .header-char{font-size:32px;animation:bob 1.6s ease-in-out infinite;display:inline-block;margin-bottom:.5rem;}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.header-title{font-family:var(--fp);font-size:clamp(6px,2.2vw,11px);color:#ffd060;line-height:2.2;text-shadow:2px 2px 0 #2a4a00;display:block;}
-.header-sub{font-family:var(--fp);font-size:5px;color:#a8d860;line-height:2;margin-top:4px;display:block;letter-spacing:.3px;}
+.header-title{font-family:var(--fp);font-size:clamp(7px,2.5vw,13px);color:#ffd060;line-height:2.2;text-shadow:3px 3px 0 #1a3a00,0 0 24px rgba(255,208,96,.45);display:block;}
+.header-sub{font-family:var(--fp);font-size:5.5px;color:#5eff90;line-height:2;margin-top:4px;display:block;letter-spacing:.5px;text-shadow:0 0 12px rgba(94,255,144,.5);}
 .header-badges{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;}
 .hbadge{font-family:var(--fp);font-size:5px;padding:4px 10px;border:2px solid;line-height:1.8;}
 .hbadge-lp{background:#1a3a60;color:#80c0ff;border-color:#2a5a90;}
@@ -61,25 +62,37 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 }
 .story-link:hover{background:rgba(90,60,200,.5);}
 
-/* ── ADVENTURE FLOW STEPPER ── */
+/* ── ADVENTURE FLOW STEPPER (Roblox game-HUD style) ── */
 .stepper{
   display:grid;grid-template-columns:repeat(5,1fr);gap:0;
-  margin-bottom:1.5rem;background:var(--surface);border:3px solid var(--ink);
-  border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);
+  margin-bottom:1.5rem;background:#0d1b2a;border:3px solid #1e3a5c;
+  border-radius:var(--r);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
 .step{
-  padding:10px 4px 10px;text-align:center;border-right:2px solid var(--border);
-  cursor:pointer;transition:background .2s;position:relative;
+  padding:12px 4px;text-align:center;border-right:1px solid #1e3a5c;
+  cursor:pointer;transition:background .2s;position:relative;background:#0d1b2a;
 }
 .step:last-child{border-right:none;}
-.step-icon{font-size:18px;display:block;margin-bottom:4px;}
-.step-label{font-family:var(--fp);font-size:4.5px;color:var(--muted);line-height:1.6;display:block;}
-.step.active{background:var(--green4);}
-.step.active .step-label{color:var(--green);}
-.step.done{background:#f0fff0;}
-.step.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:8px;color:var(--green);font-weight:900;}
-.step.locked{opacity:.4;cursor:not-allowed;}
+.step-icon{font-size:20px;display:block;margin-bottom:5px;}
+.step-label{font-family:var(--fp);font-size:4.5px;color:#4a7aa8;line-height:1.6;display:block;}
+.step.active{background:var(--green2);}
+.step.active .step-icon{filter:drop-shadow(0 0 8px rgba(29,186,89,.9));}
+.step.active .step-label{color:#fff;}
+.step.done{background:#0d4a28;}
+.step.done .step-label{color:#80d0a0;}
+.step.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:10px;color:#1dba59;font-weight:900;}
+.step.locked{opacity:.32;cursor:not-allowed;}
 .step-connector{display:none;}
+/* step-progress banner shown inside each phase */
+.step-banner{
+  background:#0d1b2a;border:2px solid #1e3a5c;border-radius:var(--r2);
+  padding:8px 14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;
+  font-family:var(--fp);font-size:5.5px;color:#90c8ff;line-height:1.8;
+}
+.step-banner-dots{display:flex;gap:5px;}
+.sbd{width:10px;height:10px;border-radius:50%;background:#1e3a5c;}
+.sbd.done{background:#1dba59;}
+.sbd.active{background:#00b0ff;box-shadow:0 0 6px #00b0ff;}
 
 /* ── PHASE PANELS ── */
 .phase{display:none;}
@@ -88,8 +101,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 
 /* ── CARDS ── */
 .card{
-  background:var(--surface);border:2.5px solid var(--ink);border-radius:var(--r);
-  margin-bottom:1rem;overflow:hidden;box-shadow:var(--sh);
+  background:var(--surface);border:2.5px solid var(--border);border-radius:var(--r);
+  margin-bottom:1.1rem;overflow:hidden;box-shadow:var(--sh);
 }
 .card-stripe{height:6px;}
 .cs-green{background:repeating-linear-gradient(90deg,var(--green2) 0,var(--green2) 8px,var(--green) 8px,var(--green) 16px);}
@@ -101,37 +114,37 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 .card-title{font-family:var(--fp);font-size:7px;color:var(--ink);display:block;margin-bottom:8px;line-height:1.8;}
 .card-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:.8rem;}
 
-/* ── STEP 1: PLAY ── */
+/* ── STEP 1: PLAY (Roblox game-lobby style) ── */
 .play-card{
-  background:linear-gradient(135deg,#1a2a0a,#2a4a15);
-  border:3px solid var(--green);border-radius:var(--r);
+  background:linear-gradient(160deg,#0d1b2a 0%,#112240 70%,#1a2a40 100%);
+  border:3px solid #1565c0;border-radius:var(--r);
   padding:1.5rem;text-align:center;margin-bottom:1rem;
-  box-shadow:0 8px 32px rgba(42,90,20,.3);
+  box-shadow:0 8px 32px rgba(21,101,192,.35),inset 0 1px 0 rgba(255,255,255,.07);
 }
-.play-emoji{font-size:52px;display:block;margin-bottom:.75rem;animation:bob 1.8s ease-in-out infinite;}
-.play-title{font-family:var(--fp);font-size:9px;color:#ffd060;line-height:2;display:block;margin-bottom:.5rem;}
-.play-text{font-size:14px;color:#a8d860;line-height:1.7;margin-bottom:1.2rem;}
+.play-emoji{font-size:52px;display:block;margin-bottom:.75rem;animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(0,176,255,.6));}
+.play-title{font-family:var(--fp);font-size:9px;color:#00b0ff;line-height:2;display:block;margin-bottom:.5rem;text-shadow:0 0 20px rgba(0,176,255,.6);}
+.play-text{font-size:14px;color:#90caf9;line-height:1.75;margin-bottom:1.2rem;}
 .play-checklist{
-  text-align:left;background:rgba(0,0,0,.3);border:1.5px solid var(--green);
+  text-align:left;background:rgba(0,0,0,.35);border:1.5px solid rgba(21,101,192,.5);
   border-radius:var(--r2);padding:.9rem 1rem;margin-bottom:1.2rem;
 }
 .play-check-item{
   display:flex;align-items:flex-start;gap:8px;
-  font-size:13px;color:#c8f0a0;line-height:1.5;margin-bottom:7px;
+  font-size:14px;color:#90caf9;line-height:1.6;margin-bottom:8px;
 }
 .play-check-item:last-child{margin-bottom:0;}
 .play-check-item .pci{font-size:16px;flex-shrink:0;}
-.pci-box{width:20px;height:20px;border:2px solid var(--green2);background:rgba(255,255,255,.1);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.pci-box{width:22px;height:22px;border:2.5px solid #1877cc;background:rgba(255,255,255,.07);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
 .pci-box.checked{background:var(--green2);border-color:var(--green);}
 .play-ready-btn{
-  width:100%;padding:14px;border:3px solid #ffd060;border-radius:var(--r2);
-  background:linear-gradient(135deg,#e09010,#c07000);
-  color:#fff;font-family:var(--fp);font-size:8px;cursor:pointer;
+  width:100%;padding:16px;border:3px solid #ffd060;border-radius:10px;
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  color:#fff;font-family:var(--fp);font-size:9px;cursor:pointer;
   line-height:1.6;transition:transform .15s,box-shadow .15s;
-  box-shadow:0 4px 0 #805000;
+  box-shadow:0 6px 0 #92500a;text-shadow:0 1px 2px rgba(0,0,0,.4);letter-spacing:.5px;
 }
-.play-ready-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 #805000;}
-.play-ready-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #805000;}
+.play-ready-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #92500a;}
+.play-ready-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #92500a;}
 
 /* ── STEP 2: CAPTURE ── */
 .capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.9rem;}
@@ -187,9 +200,9 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
   100%{box-shadow:0 0 0 0 rgba(224,80,48,0);}
 }
 .mic-btn.done{background:var(--green4);border-color:var(--green2);}
-.record-status{font-family:var(--fp);font-size:7px;color:#c0a0ff;line-height:2;display:block;margin-bottom:.5rem;}
+.record-status{font-family:var(--fp);font-size:9px;color:#e8d8ff;line-height:2;display:block;margin-bottom:.5rem;}
 .record-timer{font-family:var(--fp);font-size:14px;color:#fff;display:block;margin-bottom:.75rem;}
-.record-hint{font-size:13px;color:rgba(200,160,255,.8);line-height:1.6;margin-bottom:1rem;}
+.record-hint{font-size:15px;color:#f0e4ff;line-height:1.6;margin-bottom:1rem;}
 .audio-playback{width:100%;margin:.5rem 0;border-radius:var(--r2);}
 .narrate-prompts{
   display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.9rem;
@@ -199,8 +212,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
   background:rgba(255,255,255,.08);border:1.5px solid rgba(192,160,255,.3);
   border-radius:var(--r2);padding:8px 10px;
 }
-.prompt-q{font-family:var(--fp);font-size:5px;color:#c0a0ff;display:block;margin-bottom:4px;line-height:1.6;}
-.prompt-a{font-size:12px;color:#e8e0ff;line-height:1.5;}
+.prompt-q{font-family:var(--fp);font-size:8px;color:#e8d8ff;display:block;margin-bottom:4px;line-height:1.6;}
+.prompt-a{font-size:14px;color:#f5f0ff;line-height:1.5;}
 
 /* ── STEP 4: AI SCAFFOLD ── */
 .ai-building{
@@ -391,27 +404,40 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .gate-notice{background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);padding:8px 12px;font-size:13px;color:var(--amber);margin-bottom:.7rem;display:none;line-height:1.6;}
 .gate-notice.on{display:block;}
 
-/* ── BUTTONS ── */
-.btn-row{display:flex;gap:7px;flex-wrap:wrap;}
+/* ── BUTTONS (chunky Roblox 3-D style) ── */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
 .btn{
-  font-family:var(--fp);font-size:6.5px;padding:11px 14px;border-radius:var(--r2);
-  border:2.5px solid;cursor:pointer;line-height:1.5;transition:transform .1s,box-shadow .1s;
+  font-family:var(--fp);font-size:7px;padding:13px 18px;border-radius:10px;
+  border:3px solid;cursor:pointer;line-height:1.5;
+  transition:transform .1s,box-shadow .1s;letter-spacing:.3px;min-height:52px;
 }
-.btn:active{transform:scale(.97);}
-.btn-primary{background:var(--green2);color:#fff;border-color:var(--green);flex:1;box-shadow:0 3px 0 var(--green);}
-.btn-primary:hover{background:var(--green);box-shadow:0 1px 0 var(--green);transform:translateY(2px);}
-.btn-secondary{background:var(--bg);color:var(--ink2);border-color:var(--border);}
-.btn-secondary:hover{background:var(--border);}
-.btn-hint{background:var(--amber4);color:var(--amber);border-color:var(--amber2);}
-.btn-hint:hover{background:var(--amber3);}
-.btn-ai{background:var(--purple3);color:var(--purple);border-color:var(--purple2);}
-.btn-ai:hover{background:var(--purple2);color:#fff;}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn:active{transform:translateY(4px);}
+.btn-primary{
+  background:var(--green2);color:#fff;border-color:var(--green);flex:1;
+  box-shadow:0 5px 0 #0a5a30;text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.btn-primary:hover{box-shadow:0 2px 0 #0a5a30;transform:translateY(3px);}
+.btn-secondary{
+  background:#e8ecf2;color:var(--ink2);border-color:#c0c8d4;
+  box-shadow:0 4px 0 #a0aab8;
+}
+.btn-secondary:hover{box-shadow:0 2px 0 #a0aab8;transform:translateY(2px);}
+.btn-hint{
+  background:var(--amber4);color:var(--amber);border-color:var(--amber2);
+  box-shadow:0 4px 0 #9a5800;
+}
+.btn-hint:hover{background:var(--amber3);box-shadow:0 2px 0 #9a5800;transform:translateY(2px);}
+.btn-ai{
+  background:var(--purple3);color:var(--purple);border-color:var(--purple2);
+  box-shadow:0 4px 0 #2a0a6a;
+}
+.btn-ai:hover{background:var(--purple2);color:#fff;box-shadow:0 2px 0 #2a0a6a;transform:translateY(2px);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 
 /* ── CELEBRATION ── */
 .celebrate{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999;}
 .celebrate.show{display:flex;}
-.cel-card{background:var(--surface);border:4px solid var(--green);border-radius:var(--r);padding:2rem;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cel-card{background:var(--surface);border:4px solid var(--green2);border-radius:var(--r);padding:2rem;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(29,186,89,.3);}
 @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 .cel-emoji{font-size:52px;display:block;margin-bottom:.75rem;}
 .cel-title{font-family:var(--fp);font-size:9px;color:var(--green);line-height:1.8;margin-bottom:.5rem;}
@@ -551,11 +577,11 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
 /* ── FOCUS MODE ── */
 .focus-overlay{position:fixed;inset:0;background:#0a0a12;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;}
 .focus-overlay.open{display:flex;}
-.focus-eyebrow{color:rgba(200,240,160,.35);font-family:var(--fp);font-size:6px;text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem;max-width:640px;width:100%;}
-.focus-prompt{color:rgba(200,240,160,.7);font-family:var(--fb);font-size:14px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.07);border-radius:12px;padding:12px 20px;border:1px solid rgba(200,240,160,.15);}
-.focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:16px;padding:20px;color:#f0fff0;font-family:var(--fb);font-size:17px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
-.focus-area:focus{border-color:rgba(74,170,42,.5);}
-.focus-wc{color:rgba(255,255,255,.28);font-size:11px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
+.focus-eyebrow{color:rgba(200,240,160,.85);font-family:var(--fp);font-size:8px;text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem;max-width:640px;width:100%;}
+.focus-prompt{color:#d8f5b0;font-family:var(--fb);font-size:16px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.1);border-radius:12px;padding:12px 20px;border:1px solid rgba(200,240,160,.25);}
+.focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:20px;color:#f5fff5;font-family:var(--fb);font-size:18px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
+.focus-area:focus{border-color:rgba(74,170,42,.6);}
+.focus-wc{color:rgba(255,255,255,.6);font-size:12px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
 .focus-close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.75);border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;transition:background .2s;display:flex;align-items:center;justify-content:center;}
 .focus-close:hover{background:rgba(255,255,255,.2);}
 /* ── ILLUSTRATOR ── */
@@ -662,8 +688,8 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
     <span class="step-label">3. Erzählen</span>
   </div>
   <div class="step locked" id="step-scaffold" onclick="goStep('scaffold')">
-    <span class="step-icon">🤖</span>
-    <span class="step-label">4. KI hilft</span>
+    <span class="step-icon">💡</span>
+    <span class="step-label">4. Ideen</span>
   </div>
   <div class="step locked" id="step-write" onclick="goStep('write')">
     <span class="step-icon">✏️</span>
@@ -693,6 +719,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
 <div class="phase active" id="phase-play">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 1 von 5: Spielen / Step 1 of 5: Play your game first</div>
   <!-- Builder banner (shown when launched from builder.html) -->
   <div id="builder-banner" style="display:none;background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;line-height:1.7;">
     ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
@@ -766,6 +793,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 2: FESTHALTEN — choice-first, Asperger-sensitive
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-capture">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 2 von 5: Festhalten / Step 2 of 5: Capture your adventure</div>
 
   <!-- Calm intro banner -->
   <div class="card">
@@ -963,6 +991,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 3: ERZÄHLEN
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-narrate">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 3 von 5: Erzählen / Step 3 of 5: Tell your story</div>
   <div class="card">
     <div class="card-stripe cs-purple"></div>
     <div class="card-body">
@@ -1033,6 +1062,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 4: KI SCAFFOLD
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-scaffold">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div></div>Schritt 4 von 5: Ideen / Step 4 of 5: Get your writing ideas</div>
   <div class="ai-building" id="ai-building">
     <span class="ai-building-emoji">⚙️</span>
     <span class="ai-building-title">KI liest dein Abenteuer …</span>
@@ -1059,6 +1089,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 5: SCHREIBEN
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-write">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div></div>Schritt 5 von 5: Schreiben / Step 5 of 5: Write your story!</div>
   <div id="schreibplan-panel"></div>
   <!-- Chapter tabs -->
   <div class="chapter-tabs" id="chapter-tabs"></div>
@@ -1537,12 +1568,14 @@ async function toggleRecording(){
 async function startRecording(){
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    mediaRecorder=new MediaRecorder(stream);
+    // Detect best supported MIME type (Safari needs audio/mp4)
+    const mimeType=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+    mediaRecorder=new MediaRecorder(stream,mimeType?{mimeType}:{});
     recordChunks=[];
     mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordChunks.push(e.data);};
     mediaRecorder.onstop=()=>{
       stream.getTracks().forEach(t=>t.stop());
-      audioBlob=new Blob(recordChunks,{type:'audio/webm'});
+      audioBlob=new Blob(recordChunks,{type:mimeType||'audio/webm'});
       const url=URL.createObjectURL(audioBlob);
       const ap=document.getElementById('audio-playback');
       ap.src=url;ap.style.display='block';
@@ -1592,7 +1625,7 @@ function buildScaffold(){
   buildDiv.style.display='block';
   resultWrap.style.display='none';
 
-  const steps=['Lese deine Stichwörter …','Denke über dein Erlebnis nach …','Erstelle Schreibideen für dich …','Fast fertig …'];
+  const steps=['Lese deine Erzählung …','Schaue, was du erzählt hast …','Teile dein Erlebnis in drei Teile …','Fast fertig …'];
   let si=0;
   const stepsEl=document.getElementById('ai-building-steps');
   const stepInterval=setInterval(()=>{stepsEl.textContent=steps[si%steps.length];si++;},700);
@@ -1601,44 +1634,50 @@ function buildScaffold(){
     setTimeout(()=>{
       clearInterval(stepInterval);
 
-      // Build personalised scaffold from child's own keywords, feelings and narration
-      const kw=keywords.length?keywords:['Blockwelt'];
-      const k0=kw[0]||'das Abenteuer';
-      const k1=kw[1]||k0;
-      const k2=kw[kw.length-1]||k0;
-      const feel=selectedFeelings.length?selectedFeelings[0]:'aufgeregt';
-      const feelStr=selectedFeelings.length?selectedFeelings.slice(0,2).join(' und '):feel;
-      // Pick a meaningful phrase from the narration for extra personalisation
-      const narrWords=(typedNarration||'').split(/\s+/).filter(w=>w.length>4);
-      const narrPhrase=narrWords.length>=3?narrWords.slice(0,3).join(' '):'';
+      // Only use what the student narrated in step 3 — no pre-generated text
+      const narr=(typedNarration||'').trim();
+
+      if(!narr){
+        // Student said/typed nothing — leave all sections blank
+        ['begin','middle','end'].forEach(ch=>{
+          scaffoldData[ch]='';
+          scaffoldEdits[ch]='';
+          STEMS[ch]=[];
+        });
+        buildDiv.style.display='none';
+        renderScaffoldResult({
+          begin:{prompt:'Was ist am Anfang passiert? Schreib deine eigenen Ideen hier rein.',draft:'',stems:[]},
+          middle:{prompt:'Was war der spannendste Moment? Was ist dann passiert?',draft:'',stems:[]},
+          end:{prompt:'Wie ist es am Ende ausgegangen? Was hast du dabei gelernt?',draft:'',stems:[]}
+        });
+        resultWrap.style.display='block';
+        resolve();
+        return;
+      }
+
+      // Split the student's own narration into thirds → Anfang / Mitte / Schluss
+      const sentences=narr.split(/(?<=[.!?])\s+/).filter(s=>s.trim().length>0);
+      const t=Math.ceil(sentences.length/3);
+      const beginText=sentences.slice(0,t).join(' ');
+      const middleText=sentences.slice(t,t*2).join(' ');
+      const endText=sentences.slice(t*2).join(' ');
+      const firstWords=(str,n=6)=>str.split(/\s+/).slice(0,n).join(' ');
 
       const parsed={
         begin:{
-          prompt:`Wer ist dein Held — wie heißt er/sie und wie sieht er/sie aus? Wo hast du „${k0}" in der Blockwelt erlebt? Beschreibe den Ort mit drei Wörtern. Was wollte dein Held am Anfang erreichen?`,
-          draft:`Eines Tages machte sich mein Held auf den Weg durch die Blockwelt${k0!=='Blockwelt'?' und entdeckte '+k0:''}. Er/Sie war ${feelStr} und voller Neugier.${narrPhrase?' „'+narrPhrase+' …", dachte er/sie.':''}`,
-          stems:[
-            `Eines Tages entdeckte ich in der Blockwelt ${k0} …`,
-            `Es war ein aufregender Tag, als ${k0} plötzlich auftauchte …`,
-            `Mitten in der Blockwelt, nicht weit von ${k0}, begann das Abenteuer …`
-          ]
+          prompt:'Was ist am Anfang passiert? Erzähl den Beginn deines Abenteuers in eigenen Worten:',
+          draft:beginText,
+          stems:beginText?[firstWords(beginText)+' …','Am Anfang war …','Ich habe mich auf den Weg gemacht, als …']:[]
         },
         middle:{
-          prompt:`Was war das spannendste Moment mit „${k1}"? Wie hat sich dein Held dabei gefühlt — ${feelStr}? Was hat er/sie gesagt oder gedacht? Gab es ein schwieriges Hindernis?`,
-          draft:`Plötzlich passierte etwas Unglaubliches: ${k1} tauchte auf und alles änderte sich! Mein Held war ${feelStr} und wusste zuerst nicht, was er/sie tun sollte. „Das schaffe ich!", rief er/sie — und handelte mutig.`,
-          stems:[
-            `Plötzlich tauchte ${k1} auf und alles änderte sich …`,
-            `Da passierte etwas, das mein Held nie vergessen wird: …`,
-            `„${k1}!", rief mein Held — denn nun war alles anders …`
-          ]
+          prompt:'Was war der spannendste Moment? Was hast du gefühlt und getan?',
+          draft:middleText,
+          stems:middleText?[firstWords(middleText)+' …','Plötzlich passierte …','Ich war überrascht, als …']:[]
         },
         end:{
-          prompt:`Wie hat dein Held das Problem am Ende gelöst? Was ist mit „${k2}" passiert? Was hat er/sie durch das Abenteuer gelernt? Schreib einen wirkungsvollen letzten Satz!`,
-          draft:`Am Ende gelang es meinem Helden, ${k2} zu bewältigen. Er/Sie war ${feel} und stolz auf sich. Von da an wusste mein Held: Mut und Geduld helfen in jedem Abenteuer!`,
-          stems:[
-            `Von da an wusste mein Held: …`,
-            `Seitdem ist mein Held nie wieder ängstlich, denn …`,
-            `Das Abenteuer war zu Ende — aber die Erinnerung an ${k2} bleibt für immer …`
-          ]
+          prompt:'Wie ist es am Ende ausgegangen? Was hast du dabei gelernt oder gefühlt?',
+          draft:endText,
+          stems:endText?[firstWords(endText)+' …','Am Ende war ich froh, dass …','Von da an wusste ich: …']:[]
         }
       };
 
@@ -1663,7 +1702,7 @@ function renderScaffoldResult(parsed){
   wrap.innerHTML=CHAPTERS.map(ch=>{
     const chData=parsed[ch.id]||{};
     const prompt=chData.prompt||'Was war das Besonderste an diesem Teil deines Abenteuers?';
-    const draft=chData.draft||'Schreib hier deine Ideen …';
+    const draft=chData.draft||'';
     return`
       <div class="scaffold-section">
         <span class="scaffold-label">${ch.icon} ${ch.label}</span>
@@ -1775,6 +1814,25 @@ function tryWritePhase(p){
   writePhase=p;renderWritePhase();
 }
 
+// ── PLANNING REFERENCE PANEL (steps 2–4) ─────────────────
+function buildPlanningRef(chId){
+  const kwHTML=keywords.length?keywords.map(k=>`<span class="sp-word-tag">${esc(k)}</span>`).join(''):'';
+  const feelHTML=selectedFeelings.length?selectedFeelings.map(f=>`<span class="sp-word-tag" style="background:#ede8ff;border-color:#a07adf;color:#3a0a8a;">${esc(f)}</span>`).join(''):'';
+  const narrSnip=typedNarration?`<p style="font-size:13px;color:var(--ink2);line-height:1.6;margin:4px 0 0;">"${esc(typedNarration.slice(0,220))}${typedNarration.length>220?'…':''}"</p>`:'';
+  const scEdit=scaffoldEdits[chId]?`<p style="font-size:13px;color:var(--ink2);line-height:1.6;margin:4px 0 0;font-style:italic;">${esc(scaffoldEdits[chId].slice(0,220))}${scaffoldEdits[chId].length>220?'…':''}</p>`:'';
+  if(!kwHTML&&!feelHTML&&!narrSnip&&!scEdit)return'';
+  return`
+    <details class="schreibplan-panel" open style="margin-bottom:.8rem;">
+      <summary>📚 Meine Vorbereitung (Schritte 2–4)</summary>
+      <div class="sp-inner">
+        ${kwHTML?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">🗝️ Schritt 2 — Meine Stichwörter:</span><div class="sp-words-row">${kwHTML}</div></div>`:''}
+        ${feelHTML?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">💜 Schritt 2 — Meine Gefühle:</span><div class="sp-words-row">${feelHTML}</div></div>`:''}
+        ${narrSnip?`<div style="margin-bottom:6px;"><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">🎙️ Schritt 3 — Was ich erzählt habe:</span>${narrSnip}</div>`:''}
+        ${scEdit?`<div><span style="font-family:var(--fp);font-size:5px;color:var(--muted);display:block;margin-bottom:4px;">💡 Schritt 4 — Meine Idee für diesen Teil:</span>${scEdit}</div>`:''}
+      </div>
+    </details>`;
+}
+
 // ── PLAN ──────────────────────────────────────────────────
 function renderPlan(){
   const ch=CHAPTERS[currentChapter];
@@ -1800,9 +1858,7 @@ function renderPlan(){
       </div>
     </div>
 
-    ${scaffoldHint?`<div class="my-adventure-callout">
-      💡 <strong>KI-Idee für diesen Teil:</strong> ${esc(scaffoldHint)}
-    </div>`:''}
+    ${buildPlanningRef(chId)}
 
     <div class="card">
       <div class="card-stripe cs-amber"></div>
@@ -1864,8 +1920,10 @@ function renderWrite(){
       </div>
     </div>
 
+    ${buildPlanningRef(chId)}
+
     ${scaffoldHint?`<div class="my-adventure-callout">
-      💡 <strong>Meine KI-Idee als Starthilfe:</strong> ${esc(scaffoldHint)}
+      💡 <strong>Meine Idee aus Schritt 4:</strong> ${esc(scaffoldHint)}
     </div>`:''}
 
     <div class="card">
