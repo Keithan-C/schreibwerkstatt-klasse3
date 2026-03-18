@@ -319,6 +319,35 @@ button:focus-visible,a:focus-visible,textarea:focus-visible{
 .ach-xp{font-size:18px;font-weight:800;color:var(--forest);display:block;margin-top:.4rem;}
 .ach-bar-wrap{background:var(--border-lt);border-radius:6px;height:10px;margin:.6rem auto 0;max-width:200px;overflow:hidden;}
 .ach-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));}
+
+/* ── PLAN SUMMARY (Step 5) ── */
+.plan-summary{display:flex;flex-direction:column;gap:7px;}
+.ps-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border-lt);border-radius:var(--r2);}
+.ps-icon{font-size:20px;flex-shrink:0;line-height:1.35;}
+.ps-label{font-size:11px;font-weight:800;color:var(--muted);display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;}
+.ps-value{font-size:14px;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;}
+.ps-section-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin:.8rem 0 .35rem;padding:0 2px;}
+
+/* ── PHOTO UPLOAD (Step 5) ── */
+.photo-upload-box{
+  border:2.5px dashed var(--border);border-radius:var(--r);
+  padding:1.6rem 1rem;text-align:center;background:var(--surface);
+  cursor:pointer;transition:border-color .2s,background .2s;
+}
+.photo-upload-box:hover,.photo-upload-box.drag{border-color:var(--forest2);background:var(--forest4);}
+.pu-icon{font-size:40px;display:block;margin-bottom:.5rem;}
+.pu-title{font-size:15px;font-weight:800;color:var(--ink);display:block;margin-bottom:.3rem;}
+.pu-sub{font-size:13px;color:var(--muted);line-height:1.5;}
+.photo-preview-wrap{text-align:center;}
+.photo-preview{width:100%;max-height:380px;object-fit:contain;border-radius:var(--r2);border:2px solid var(--forest3);display:block;margin:0 auto;}
+.photo-remove-btn{
+  display:block;width:100%;text-align:center;margin-top:.6rem;
+  padding:8px;border-radius:var(--r2);border:2px solid var(--border);
+  background:var(--surface);color:var(--muted);font-size:13px;font-weight:700;
+  cursor:pointer;font-family:var(--font);
+}
+.photo-remove-btn:hover{background:var(--clay4);color:var(--clay);border-color:var(--clay3);}
+.photo-saved-preview{width:100%;max-height:300px;object-fit:contain;border-radius:var(--r2);border:2px solid var(--forest3);display:block;margin:.7rem auto 0;}
 </style>
 </head>
 <body>
@@ -541,6 +570,7 @@ let rubric      = {};
 let interest    = null;   // 'minecraft' | 'tiere' | 'weltraum' | 'magie' | null
 let xp          = 0;
 let earnedSteps = new Set();
+let capturedPhoto = null; // data URL of the child's handwritten story photo
 
 // ══════════════════════════════════════════════════
 // CONFIDENCE
@@ -807,45 +837,191 @@ function renderStep4(){
 }
 
 // ══════════════════════════════════════════════════
-// STEP 5 — SELF-CHECK RUBRIC
+// STEP 5 — WRITE ON PAPER + PHOTO UPLOAD
 // ══════════════════════════════════════════════════
 function renderStep5(){
-  const items = RUBRIC.map(r=>`
+  const ch        = choices;
+  const charName  = ch.character ? ch.character.l : 'Figur';
+  const placeName = ch.place     ? ch.place.l     : 'Ort';
+
+  // ── Choice summary rows ──────────────────────────
+  const choiceRows = [
+    {icon:ch.character.e, label:'Figur',   value:ch.character.l},
+    {icon:ch.place.e,     label:'Ort',     value:ch.place.l},
+    {icon:ch.problem.e,   label:'Problem', value:ch.problem.l},
+  ].map(r=>`
+    <div class="ps-row">
+      <span class="ps-icon">${r.icon}</span>
+      <div><span class="ps-label">${r.label}</span><span class="ps-value">${r.value}</span></div>
+    </div>`).join('');
+
+  // ── Story mountain rows ──────────────────────────
+  const mountainRows = MOUNTAIN_FIELDS.map(f=>{
+    const v = (mountain[f.id]||'').trim();
+    if(!v) return '';
+    return `<div class="ps-row">
+      <span class="ps-icon">${f.icon}</span>
+      <div><span class="ps-label">${f.label}</span><span class="ps-value">${v}</span></div>
+    </div>`;
+  }).join('');
+
+  // ── Selected starters ────────────────────────────
+  const starterTexts = [...starters].map(id=>{
+    for(const key of Object.keys(SENTENCE_STARTERS)){
+      const s = SENTENCE_STARTERS[key].find(x=>x.id===id);
+      if(s) return s.text.replace(/\[Figur\]/g,charName).replace(/\[Ort\]/g,placeName);
+    }
+    return null;
+  }).filter(Boolean);
+
+  // ── Selected words ───────────────────────────────
+  const wordList = [...wordPicks];
+
+  // ── Rubric items ─────────────────────────────────
+  const rubricItems = RUBRIC.map(r=>`
     <div class="rubric-item${rubric[r.id]?' checked':''}" onclick="toggleRubric('${r.id}')" role="checkbox" aria-checked="${!!rubric[r.id]}">
       <span class="rub-icon">${r.icon}</span>
       <div class="rub-box">${rubric[r.id]?'✓':''}</div>
       <span class="rub-text">${r.text}</span>
     </div>`).join('');
 
-  const score  = RUBRIC.filter(r=>rubric[r.id]).length;
-  const total  = RUBRIC.length;
-  const msgIdx = score < 3 ? 0 : score < 6 ? 1 : 2;
-  const msgs   = [
-    'Lies deinen Schreibberg noch einmal durch. Dann fang an zu schreiben!',
-    'Fast fertig! Überprüfe noch die fehlenden Punkte.',
-    'Sehr gut! Du bist bereit zu schreiben. Klicke auf „Schreibplan fertig".',
-  ];
+  // ── Photo section ────────────────────────────────
+  const photoSection = capturedPhoto
+    ? `<div class="photo-preview-wrap">
+        <img class="photo-preview" src="${capturedPhoto}" alt="Deine Geschichte">
+        <button class="photo-remove-btn" onclick="removePhoto()">✕ Foto entfernen</button>
+       </div>`
+    : `<label for="photo-input" style="display:block;">
+        <div class="photo-upload-box" id="photo-drop-zone">
+          <span class="pu-icon">📷</span>
+          <span class="pu-title">Foto aufnehmen oder hochladen</span>
+          <span class="pu-sub">Tippe hier, um ein Foto zu machen oder aus deiner Bibliothek zu wählen.</span>
+        </div>
+       </label>
+       <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(this)">`;
 
   return `
     <div class="step-panel active" id="panel-5">
+
+      <!-- Header card -->
       <div class="step-card">
         <div class="step-accent sa-plum"></div>
         <div class="step-body">
-          <span class="step-eyebrow">Schritt 5 von 5 · Selbstcheck · LehrplanPLUS D3/4</span>
-          <span class="step-title">✅ Selbstcheck</span>
-          <span class="step-desc">Lies jeden Punkt. Hake ab, was du in deiner Geschichte machen wirst. Du musst nicht alles haben — es sind Tipps.</span>
+          <span class="step-eyebrow">Schritt 5 von 5 · Schreiben &amp; Abgeben · LehrplanPLUS D3/4</span>
+          <span class="step-title">✍️ Jetzt auf Papier schreiben!</span>
+          <span class="step-desc">Hier ist dein vollständiger Schreibplan. Schreibe jetzt deine Geschichte auf ein Blatt Papier. Wenn du fertig bist, mache ein Foto und lade es hoch.</span>
         </div>
       </div>
-      <div class="rubric-score">
-        <div><span class="rs-num">${score}</span><span class="rs-of"> / ${total}</span></div>
-        <div class="rs-msg">${msgs[msgIdx]}</div>
+
+      <!-- Plan summary card -->
+      <div class="step-card" style="border-color:var(--forest3);">
+        <div class="step-accent" style="background:var(--forest);"></div>
+        <div class="step-body" style="padding-bottom:.3rem;">
+          <span class="step-title" style="font-size:17px;margin-bottom:0;">📋 Dein Schreibplan</span>
+        </div>
+        <div style="padding:0 1.1rem 1.1rem;">
+          <span class="ps-section-title">Figur · Ort · Problem</span>
+          <div class="plan-summary">${choiceRows}</div>
+
+          ${mountainRows ? `<span class="ps-section-title">Dein Erzählberg</span>
+          <div class="plan-summary">${mountainRows}</div>` : ''}
+
+          ${starterTexts.length ? `<span class="ps-section-title">Deine Satzanfänge</span>
+          <div style="background:var(--navy4);border:1.5px solid var(--navy3);border-radius:var(--r2);padding:10px 12px;font-size:14px;color:var(--navy);line-height:1.9;">
+            ${starterTexts.map(s=>`• ${s}`).join('<br>')}
+          </div>` : ''}
+
+          ${wordList.length ? `<span class="ps-section-title">Deine Wörter</span>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;">
+            ${wordList.map(w=>{
+              const b = WORD_BANK.find(x=>x.words.includes(w));
+              const t = b ? b.type : 'adj';
+              return `<span class="word-chip wc-${t}" style="font-size:13px;padding:5px 11px;min-height:32px;cursor:default;">${w}</span>`;
+            }).join('')}
+          </div>` : ''}
+        </div>
       </div>
-      <div class="rubric-list">${items}</div>
+
+      <!-- Rubric self-check card -->
+      <div class="step-card">
+        <div class="step-accent sa-forest"></div>
+        <div class="step-body" style="padding-bottom:.3rem;">
+          <span class="step-title" style="font-size:17px;margin-bottom:0;">✅ Selbstcheck</span>
+          <span class="step-desc" style="font-size:13px;margin-top:.3rem;">Hake ab, was du in deiner Geschichte eingebaut hast oder einbauen möchtest.</span>
+        </div>
+        <div style="padding:0 1rem 1rem;">
+          <div class="rubric-list" style="gap:6px;">${rubricItems}</div>
+        </div>
+      </div>
+
+      <!-- Photo upload card -->
+      <div class="step-card">
+        <div class="step-accent sa-clay"></div>
+        <div class="step-body" style="padding-bottom:.3rem;">
+          <span class="step-title" style="font-size:17px;margin-bottom:0;">📷 Foto deiner Geschichte</span>
+          <span class="step-desc" style="font-size:13px;margin-top:.3rem;">Fertig geschrieben? Mache ein Foto von deiner Geschichte und lade es hoch. Das Foto wird gespeichert, damit deine Lehrkraft oder deine Eltern es später ansehen können.</span>
+        </div>
+        <div style="padding:0 1.1rem 1.1rem;">
+          ${photoSection}
+        </div>
+      </div>
+
       <div class="step-nav">
         <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
-        <button class="nav-btn nav-next" onclick="nextStep()">Schreibplan fertig! →</button>
+        <button class="nav-btn nav-next" onclick="nextStep()">${capturedPhoto ? '✅ Fertig &amp; Speichern →' : 'Weiter →'}</button>
       </div>
     </div>`;
+}
+
+function handlePhotoUpload(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev){
+    const img = new Image();
+    img.onload = function(){
+      // Resize to max 900px to keep localStorage usage reasonable
+      const MAX = 900;
+      let w = img.width, h = img.height;
+      if(w > MAX || h > MAX){
+        if(w > h){ h = Math.round(h * MAX / w); w = MAX; }
+        else { w = Math.round(w * MAX / h); h = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      capturedPhoto = canvas.toDataURL('image/jpeg', 0.78);
+      renderCurrentStep();
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(){
+  capturedPhoto = null;
+  renderCurrentStep();
+}
+
+function savePhoto(){
+  if(!capturedPhoto) return;
+  try{
+    const saved = JSON.parse(localStorage.getItem('builder-photos') || '[]');
+    const entry = {
+      date:  new Date().toISOString(),
+      theme: choices.character && choices.place
+        ? `${choices.character.e} ${choices.character.l} in ${choices.place.e} ${choices.place.l}`
+        : 'Geschichte',
+      photo: capturedPhoto,
+    };
+    saved.push(entry);
+    // Keep the last 8 entries
+    if(saved.length > 8) saved.splice(0, saved.length - 8);
+    localStorage.setItem('builder-photos', JSON.stringify(saved));
+  }catch(e){
+    // localStorage may be full (large photos); silently skip
+    console.warn('builder-photos save failed:', e.message);
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -895,8 +1071,9 @@ function nextStep(){
     render();
     window.scrollTo({top:0,behavior:'smooth'});
   } else {
-    // Save mountain textarea values before showing result
+    // Save mountain textarea values then save photo + show result
     saveMountainValues();
+    savePhoto();
     currentStep = 6;
     render();
     window.scrollTo({top:0,behavior:'smooth'});
@@ -985,6 +1162,30 @@ function renderResult(){
   if(existing) existing.remove();
   const hero = resultPanel.querySelector('.result-hero');
   if(hero) hero.insertAdjacentElement('afterend', achEl);
+
+  // Show saved photo if one was uploaded
+  const existingPhotoCard = resultPanel.querySelector('.saved-photo-card');
+  if(existingPhotoCard) existingPhotoCard.remove();
+  if(capturedPhoto){
+    const photoCard = document.createElement('div');
+    photoCard.className = 'step-card saved-photo-card';
+    photoCard.style.marginBottom = '1rem';
+    const dateStr = new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
+    photoCard.innerHTML = `
+      <div class="step-accent" style="background:var(--forest);"></div>
+      <div class="step-body" style="padding-bottom:.3rem;">
+        <span class="step-title" style="font-size:16px;margin-bottom:0;">📷 Deine handgeschriebene Geschichte</span>
+        <span class="step-desc" style="font-size:12px;margin-top:.3rem;">Gespeichert am ${dateStr} · Für Lehrkraft / Eltern zur Bewertung</span>
+      </div>
+      <div style="padding:0 1rem 1rem;">
+        <img class="photo-saved-preview" src="${capturedPhoto}" alt="Handgeschriebene Geschichte">
+        <a href="${capturedPhoto}" download="meine-geschichte-${Date.now()}.jpg"
+           style="display:block;text-align:center;margin-top:.6rem;padding:9px 16px;border-radius:var(--r2);border:2px solid var(--forest3);background:var(--forest4);color:var(--forest);font-size:13px;font-weight:800;text-decoration:none;">
+          ⬇️ Foto herunterladen
+        </a>
+      </div>`;
+    achEl.insertAdjacentElement('afterend', photoCard);
+  }
 }
 
 function launchApp(target){
@@ -1028,7 +1229,7 @@ function launchApp(target){
 
 function resetBuilder(){
   choices = {}; mountain = {}; starters = new Set(); wordPicks = new Set(); rubric = {};
-  interest = null; xp = 0; earnedSteps = new Set();
+  interest = null; xp = 0; earnedSteps = new Set(); capturedPhoto = null;
   currentStep = 1;
   render();
   window.scrollTo({top:0,behavior:'smooth'});
