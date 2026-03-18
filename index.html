@@ -1706,6 +1706,7 @@ function bindEvents(){
   if(ri)ri.addEventListener('input',saveRev);
 }
 
+let _gramDetectTimer=null;
 function liveUpdate(text){
   const l=lang==='both'?'de':lang;
   const count=wc(text);
@@ -1723,6 +1724,14 @@ function liveUpdate(text){
   if(qp[1])qp[1].classList.toggle('on',hasPunct);
   if(qp[2])qp[2].classList.toggle('on',good);
   if(qp[3])qp[3].classList.toggle('on',hasRede);
+  // Grammar detection debounce (merged here to avoid duplicate declaration)
+  clearTimeout(_gramDetectTimer);
+  _gramDetectTimer=setTimeout(()=>{
+    if(document.getElementById('gram-modal-bg').classList.contains('open'))return;
+    if(text.length<40)return;
+    const topic=detectGrammarTopic(text);
+    if(topic)openGramModal(topic);
+  },1500);
 }
 
 function toggleCrit(i){
@@ -2389,22 +2398,6 @@ function detectGrammarTopic(text){
   return null;
 }
 
-// Hook into liveUpdate — debounced detection
-let gramDetectTimer=null;
-const _origLiveUpdate=liveUpdate;
-function liveUpdate(text){
-  _origLiveUpdate(text);
-  // Debounce detection — wait 1.5s after typing stops
-  clearTimeout(gramDetectTimer);
-  gramDetectTimer=setTimeout(()=>{
-    // Only trigger if modal not already open and text long enough
-    if(document.getElementById('gram-modal-bg').classList.contains('open'))return;
-    if(text.length<40)return;
-    // Only trigger occasionally (every ~50 chars of new content)
-    const topic=detectGrammarTopic(text);
-    if(topic)openGramModal(topic);
-  },1500);
-}
 
 // ── Open modal ────────────────────────────────────────────
 function openGramModal(topic){
