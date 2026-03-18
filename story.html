@@ -9,20 +9,21 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
-  --green:#2d7a1b;--green2:#4aaa2a;--green3:#c8f0a0;--green4:#eafade;
-  --blue:#1a3a7a;--blue2:#2e6ab8;--blue3:#e0f0ff;
-  --amber:#7a4000;--amber2:#e09010;--amber3:#ffd070;--amber4:#fff5d8;
-  --purple:#3a1a8a;--purple2:#6a4adf;--purple3:#ede0ff;
-  --coral:#8a2010;--coral2:#e05030;--coral3:#ffe0d8;
-  --ink:#1a1a18;--ink2:#3a3a35;--muted:#7a7870;
-  --surface:#fff;--bg:#f2efe8;--border:#d8d4c8;
+  /* Roblox × Blockwelt palette */
+  --green:#0f7a38;--green2:#1dba59;--green3:#a8f0ce;--green4:#e0faf0;
+  --blue:#0a4080;--blue2:#1565c0;--blue3:#dbeeff;
+  --amber:#7a4800;--amber2:#d4830a;--amber3:#ffc44a;--amber4:#fff3d0;
+  --purple:#3a0a8a;--purple2:#6e3adf;--purple3:#ede8ff;
+  --coral:#8a0a0a;--coral2:#e53535;--coral3:#ffe0e0;
+  --ink:#1a1d24;--ink2:#3a3d48;--muted:#6a6d78;
+  --surface:#fff;--bg:#f0f4f8;--border:#dce2ea;
   --fp:'Press Start 2P',monospace;--fb:'Nunito',sans-serif;
-  --r:12px;--r2:8px;
-  --sh:0 4px 24px rgba(0,0,0,.10);
+  --r:14px;--r2:9px;
+  --sh:0 4px 24px rgba(0,0,0,.12);
 }
 
 /* ── BASE ── */
-body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;font-size:15px;line-height:1.7;}
 .wrap{max-width:760px;margin:0 auto;padding:0 1rem 6rem;}
 
 /* ── PIXEL HEADER ── */
@@ -47,8 +48,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 .header-content{padding:1rem 1.5rem 0;text-align:center;position:relative;}
 .header-char{font-size:32px;animation:bob 1.6s ease-in-out infinite;display:inline-block;margin-bottom:.5rem;}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.header-title{font-family:var(--fp);font-size:clamp(6px,2.2vw,11px);color:#ffd060;line-height:2.2;text-shadow:2px 2px 0 #2a4a00;display:block;}
-.header-sub{font-family:var(--fp);font-size:5px;color:#a8d860;line-height:2;margin-top:4px;display:block;letter-spacing:.3px;}
+.header-title{font-family:var(--fp);font-size:clamp(7px,2.5vw,13px);color:#ffd060;line-height:2.2;text-shadow:3px 3px 0 #1a3a00,0 0 24px rgba(255,208,96,.45);display:block;}
+.header-sub{font-family:var(--fp);font-size:5.5px;color:#5eff90;line-height:2;margin-top:4px;display:block;letter-spacing:.5px;text-shadow:0 0 12px rgba(94,255,144,.5);}
 .header-badges{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;}
 .hbadge{font-family:var(--fp);font-size:5px;padding:4px 10px;border:2px solid;line-height:1.8;}
 .hbadge-lp{background:#1a3a60;color:#80c0ff;border-color:#2a5a90;}
@@ -61,25 +62,37 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 }
 .story-link:hover{background:rgba(90,60,200,.5);}
 
-/* ── ADVENTURE FLOW STEPPER ── */
+/* ── ADVENTURE FLOW STEPPER (Roblox game-HUD style) ── */
 .stepper{
   display:grid;grid-template-columns:repeat(5,1fr);gap:0;
-  margin-bottom:1.5rem;background:var(--surface);border:3px solid var(--ink);
-  border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);
+  margin-bottom:1.5rem;background:#0d1b2a;border:3px solid #1e3a5c;
+  border-radius:var(--r);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
 .step{
-  padding:10px 4px 10px;text-align:center;border-right:2px solid var(--border);
-  cursor:pointer;transition:background .2s;position:relative;
+  padding:12px 4px;text-align:center;border-right:1px solid #1e3a5c;
+  cursor:pointer;transition:background .2s;position:relative;background:#0d1b2a;
 }
 .step:last-child{border-right:none;}
-.step-icon{font-size:18px;display:block;margin-bottom:4px;}
-.step-label{font-family:var(--fp);font-size:4.5px;color:var(--muted);line-height:1.6;display:block;}
-.step.active{background:var(--green4);}
-.step.active .step-label{color:var(--green);}
-.step.done{background:#f0fff0;}
-.step.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:8px;color:var(--green);font-weight:900;}
-.step.locked{opacity:.4;cursor:not-allowed;}
+.step-icon{font-size:20px;display:block;margin-bottom:5px;}
+.step-label{font-family:var(--fp);font-size:4.5px;color:#4a7aa8;line-height:1.6;display:block;}
+.step.active{background:var(--green2);}
+.step.active .step-icon{filter:drop-shadow(0 0 8px rgba(29,186,89,.9));}
+.step.active .step-label{color:#e0faf0;}
+.step.done{background:#0d4a28;}
+.step.done .step-label{color:#80d0a0;}
+.step.done::after{content:'✓';position:absolute;top:4px;right:5px;font-size:10px;color:#1dba59;font-weight:900;}
+.step.locked{opacity:.32;cursor:not-allowed;}
 .step-connector{display:none;}
+/* step-progress banner shown inside each phase */
+.step-banner{
+  background:#0d1b2a;border:2px solid #1e3a5c;border-radius:var(--r2);
+  padding:8px 14px;margin-bottom:1rem;display:flex;align-items:center;gap:10px;
+  font-family:var(--fp);font-size:5.5px;color:#90c8ff;line-height:1.8;
+}
+.step-banner-dots{display:flex;gap:5px;}
+.sbd{width:10px;height:10px;border-radius:50%;background:#1e3a5c;}
+.sbd.done{background:#1dba59;}
+.sbd.active{background:#00b0ff;box-shadow:0 0 6px #00b0ff;}
 
 /* ── PHASE PANELS ── */
 .phase{display:none;}
@@ -88,8 +101,8 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 
 /* ── CARDS ── */
 .card{
-  background:var(--surface);border:2.5px solid var(--ink);border-radius:var(--r);
-  margin-bottom:1rem;overflow:hidden;box-shadow:var(--sh);
+  background:var(--surface);border:2.5px solid var(--border);border-radius:var(--r);
+  margin-bottom:1.1rem;overflow:hidden;box-shadow:var(--sh);
 }
 .card-stripe{height:6px;}
 .cs-green{background:repeating-linear-gradient(90deg,var(--green2) 0,var(--green2) 8px,var(--green) 8px,var(--green) 16px);}
@@ -101,37 +114,37 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 .card-title{font-family:var(--fp);font-size:7px;color:var(--ink);display:block;margin-bottom:8px;line-height:1.8;}
 .card-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:.8rem;}
 
-/* ── STEP 1: PLAY ── */
+/* ── STEP 1: PLAY (Roblox game-lobby style) ── */
 .play-card{
-  background:linear-gradient(135deg,#1a2a0a,#2a4a15);
-  border:3px solid var(--green);border-radius:var(--r);
+  background:linear-gradient(160deg,#0d1b2a 0%,#112240 70%,#1a2a40 100%);
+  border:3px solid #1565c0;border-radius:var(--r);
   padding:1.5rem;text-align:center;margin-bottom:1rem;
-  box-shadow:0 8px 32px rgba(42,90,20,.3);
+  box-shadow:0 8px 32px rgba(21,101,192,.35),inset 0 1px 0 rgba(255,255,255,.07);
 }
-.play-emoji{font-size:52px;display:block;margin-bottom:.75rem;animation:bob 1.8s ease-in-out infinite;}
-.play-title{font-family:var(--fp);font-size:9px;color:#ffd060;line-height:2;display:block;margin-bottom:.5rem;}
-.play-text{font-size:14px;color:#a8d860;line-height:1.7;margin-bottom:1.2rem;}
+.play-emoji{font-size:52px;display:block;margin-bottom:.75rem;animation:bob 1.8s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(0,176,255,.6));}
+.play-title{font-family:var(--fp);font-size:9px;color:#00b0ff;line-height:2;display:block;margin-bottom:.5rem;text-shadow:0 0 20px rgba(0,176,255,.6);}
+.play-text{font-size:14px;color:#90caf9;line-height:1.75;margin-bottom:1.2rem;}
 .play-checklist{
-  text-align:left;background:rgba(0,0,0,.3);border:1.5px solid var(--green);
+  text-align:left;background:rgba(0,0,0,.35);border:1.5px solid rgba(21,101,192,.5);
   border-radius:var(--r2);padding:.9rem 1rem;margin-bottom:1.2rem;
 }
 .play-check-item{
   display:flex;align-items:flex-start;gap:8px;
-  font-size:13px;color:#c8f0a0;line-height:1.5;margin-bottom:7px;
+  font-size:14px;color:#90caf9;line-height:1.6;margin-bottom:8px;
 }
 .play-check-item:last-child{margin-bottom:0;}
 .play-check-item .pci{font-size:16px;flex-shrink:0;}
-.pci-box{width:20px;height:20px;border:2px solid var(--green2);background:rgba(255,255,255,.1);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
+.pci-box{width:22px;height:22px;border:2.5px solid #1877cc;background:rgba(255,255,255,.07);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .2s;}
 .pci-box.checked{background:var(--green2);border-color:var(--green);}
 .play-ready-btn{
-  width:100%;padding:14px;border:3px solid #ffd060;border-radius:var(--r2);
-  background:linear-gradient(135deg,#e09010,#c07000);
-  color:#fff;font-family:var(--fp);font-size:8px;cursor:pointer;
+  width:100%;padding:16px;border:3px solid #ffd060;border-radius:10px;
+  background:linear-gradient(135deg,#f59e0b,#d97706);
+  color:#fff;font-family:var(--fp);font-size:9px;cursor:pointer;
   line-height:1.6;transition:transform .15s,box-shadow .15s;
-  box-shadow:0 4px 0 #805000;
+  box-shadow:0 6px 0 #92500a;text-shadow:0 1px 2px rgba(0,0,0,.4);letter-spacing:.5px;
 }
-.play-ready-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 #805000;}
-.play-ready-btn:active{transform:translateY(2px);box-shadow:0 2px 0 #805000;}
+.play-ready-btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #92500a;}
+.play-ready-btn:active{transform:translateY(4px);box-shadow:0 2px 0 #92500a;}
 
 /* ── STEP 2: CAPTURE ── */
 .capture-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.9rem;}
@@ -391,27 +404,40 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .gate-notice{background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);padding:8px 12px;font-size:13px;color:var(--amber);margin-bottom:.7rem;display:none;line-height:1.6;}
 .gate-notice.on{display:block;}
 
-/* ── BUTTONS ── */
-.btn-row{display:flex;gap:7px;flex-wrap:wrap;}
+/* ── BUTTONS (chunky Roblox 3-D style) ── */
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
 .btn{
-  font-family:var(--fp);font-size:6.5px;padding:11px 14px;border-radius:var(--r2);
-  border:2.5px solid;cursor:pointer;line-height:1.5;transition:transform .1s,box-shadow .1s;
+  font-family:var(--fp);font-size:7px;padding:13px 18px;border-radius:10px;
+  border:3px solid;cursor:pointer;line-height:1.5;
+  transition:transform .1s,box-shadow .1s;letter-spacing:.3px;min-height:52px;
 }
-.btn:active{transform:scale(.97);}
-.btn-primary{background:var(--green2);color:#fff;border-color:var(--green);flex:1;box-shadow:0 3px 0 var(--green);}
-.btn-primary:hover{background:var(--green);box-shadow:0 1px 0 var(--green);transform:translateY(2px);}
-.btn-secondary{background:var(--bg);color:var(--ink2);border-color:var(--border);}
-.btn-secondary:hover{background:var(--border);}
-.btn-hint{background:var(--amber4);color:var(--amber);border-color:var(--amber2);}
-.btn-hint:hover{background:var(--amber3);}
-.btn-ai{background:var(--purple3);color:var(--purple);border-color:var(--purple2);}
-.btn-ai:hover{background:var(--purple2);color:#fff;}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn:active{transform:translateY(4px);}
+.btn-primary{
+  background:var(--green2);color:#fff;border-color:var(--green);flex:1;
+  box-shadow:0 5px 0 #0a5a30;text-shadow:0 1px 2px rgba(0,0,0,.3);
+}
+.btn-primary:hover{box-shadow:0 2px 0 #0a5a30;transform:translateY(3px);}
+.btn-secondary{
+  background:#e8ecf2;color:var(--ink2);border-color:#c0c8d4;
+  box-shadow:0 4px 0 #a0aab8;
+}
+.btn-secondary:hover{box-shadow:0 2px 0 #a0aab8;transform:translateY(2px);}
+.btn-hint{
+  background:var(--amber4);color:var(--amber);border-color:var(--amber2);
+  box-shadow:0 4px 0 #9a5800;
+}
+.btn-hint:hover{background:var(--amber3);box-shadow:0 2px 0 #9a5800;transform:translateY(2px);}
+.btn-ai{
+  background:var(--purple3);color:var(--purple);border-color:var(--purple2);
+  box-shadow:0 4px 0 #2a0a6a;
+}
+.btn-ai:hover{background:var(--purple2);color:#fff;box-shadow:0 2px 0 #2a0a6a;transform:translateY(2px);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none!important;box-shadow:none!important;}
 
 /* ── CELEBRATION ── */
 .celebrate{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:999;}
 .celebrate.show{display:flex;}
-.cel-card{background:var(--surface);border:4px solid var(--green);border-radius:var(--r);padding:2rem;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 20px 60px rgba(0,0,0,.35);}
+.cel-card{background:var(--surface);border:4px solid var(--green2);border-radius:var(--r);padding:2rem;max-width:400px;width:90%;text-align:center;animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(29,186,89,.3);}
 @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
 .cel-emoji{font-size:52px;display:block;margin-bottom:.75rem;}
 .cel-title{font-family:var(--fp);font-size:9px;color:var(--green);line-height:1.8;margin-bottom:.5rem;}
@@ -662,8 +688,8 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
     <span class="step-label">3. Erzählen</span>
   </div>
   <div class="step locked" id="step-scaffold" onclick="goStep('scaffold')">
-    <span class="step-icon">🤖</span>
-    <span class="step-label">4. KI hilft</span>
+    <span class="step-icon">💡</span>
+    <span class="step-label">4. Ideen</span>
   </div>
   <div class="step locked" id="step-write" onclick="goStep('write')">
     <span class="step-icon">✏️</span>
@@ -693,6 +719,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
 <div class="phase active" id="phase-play">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 1 von 5: Spielen / Step 1 of 5: Play your game first</div>
   <!-- Builder banner (shown when launched from builder.html) -->
   <div id="builder-banner" style="display:none;background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;line-height:1.7;">
     ✅ <strong>Geschichte aus dem Baukasten geladen!</strong><br>
@@ -766,6 +793,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 2: FESTHALTEN — choice-first, Asperger-sensitive
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-capture">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 2 von 5: Festhalten / Step 2 of 5: Capture your adventure</div>
 
   <!-- Calm intro banner -->
   <div class="card">
@@ -963,6 +991,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 3: ERZÄHLEN
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-narrate">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 3 von 5: Erzählen / Step 3 of 5: Tell your story</div>
   <div class="card">
     <div class="card-stripe cs-purple"></div>
     <div class="card-body">
@@ -1033,6 +1062,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 4: KI SCAFFOLD
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-scaffold">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div><div class="sbd"></div></div>Schritt 4 von 5: Ideen / Step 4 of 5: Get your writing ideas</div>
   <div class="ai-building" id="ai-building">
     <span class="ai-building-emoji">⚙️</span>
     <span class="ai-building-title">KI liest dein Abenteuer …</span>
@@ -1059,6 +1089,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
      PHASE 5: SCHREIBEN
 ══════════════════════════════════════════════ -->
 <div class="phase" id="phase-write">
+  <div class="step-banner"><div class="step-banner-dots"><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd done"></div><div class="sbd active"></div></div>Schritt 5 von 5: Schreiben / Step 5 of 5: Write your story!</div>
   <div id="schreibplan-panel"></div>
   <!-- Chapter tabs -->
   <div class="chapter-tabs" id="chapter-tabs"></div>
@@ -1537,12 +1568,14 @@ async function toggleRecording(){
 async function startRecording(){
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-    mediaRecorder=new MediaRecorder(stream);
+    // Detect best supported MIME type (Safari needs audio/mp4)
+    const mimeType=['audio/webm;codecs=opus','audio/webm','audio/ogg;codecs=opus','audio/mp4'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+    mediaRecorder=new MediaRecorder(stream,mimeType?{mimeType}:{});
     recordChunks=[];
     mediaRecorder.ondataavailable=e=>{if(e.data.size>0)recordChunks.push(e.data);};
     mediaRecorder.onstop=()=>{
       stream.getTracks().forEach(t=>t.stop());
-      audioBlob=new Blob(recordChunks,{type:'audio/webm'});
+      audioBlob=new Blob(recordChunks,{type:mimeType||'audio/webm'});
       const url=URL.createObjectURL(audioBlob);
       const ap=document.getElementById('audio-playback');
       ap.src=url;ap.style.display='block';
