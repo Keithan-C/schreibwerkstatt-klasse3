@@ -891,7 +891,7 @@ let lang='de'; // 'de','en','both'
 let role='teacher'; // 'teacher' or 'parent'
 let theme='';
 let className='';
-let apiKey=localStorage.getItem('anthropic-api-key')||'';
+let apiKey=''; // no longer used — all AI features use free LanguageTool or offline responses
 let part='begin'; // begin, middle, end
 let celebCallback=null;
 
@@ -1770,6 +1770,101 @@ function restartApp(){
 }
 
 // ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════
+// LANGUAGETOOL HELPER (free public API – no key needed)
+// ═══════════════════════════════════════════════════════════
+function ltMatchesToErrorsIndex(text,matches,l){
+  const catMap={TYPOS:'spell',GRAMMAR:'grammar',STYLE:'style',PUNCTUATION:'grammar',CASING:'grammar',COMPOUNDING:'spell',CONFUSED_WORDS:'spell',COLLOCATIONS:'style'};
+  return matches.map(m=>{
+    const type=catMap[m.rule?.category?.id]||'style';
+    const original=text.substr(m.offset,m.length);
+    const fix=(m.replacements||[])[0]?.value||'';
+    if(!original||!fix||original===fix)return null;
+    const explain=type==='spell'
+      ?`Schau dir das Wort genau an — versuch: „${fix}". 😊`
+      :type==='grammar'
+      ?`Hier stimmt etwas nicht — so geht es besser: „${fix}". 😊`
+      :`Du könntest das noch schöner schreiben: „${fix}". 😊`;
+    const explainEN=type==='spell'
+      ?`Look at this word carefully — try: "${fix}". 😊`
+      :type==='grammar'
+      ?`There's a small issue — it could be: "${fix}". 😊`
+      :`You could write this more nicely: "${fix}". 😊`;
+    return{type,original,fix,explain,explainEN};
+  }).filter(Boolean);
+}
+
+// ═══════════════════════════════════════════════════════════
+// OFFLINE AI RESPONSE BANK (no API key needed)
+// ═══════════════════════════════════════════════════════════
+const OFFLINE_TIPS={
+  de:{
+    hero:[
+      '💡 Wie wäre es mit einem mutigen Mädchen namens Lena? Sie hat lange rote Haare, trägt immer ihre Lieblingsmütze und ist für jedes Abenteuer bereit!',
+      '💡 Stell dir einen klugen Jungen namens Ben vor: kurze braune Haare, alter Rucksack – darin steckt immer etwas Nützliches.',
+      '💡 Vielleicht ist dein Held eine tapfere Abenteurerin: Zara hat dunkle lockige Haare, strahlende Augen und traut sich fast alles – außer Spinnen!',
+      '💡 Wie wäre es mit einem ruhigen, nachdenklichen Jungen namens Finn? Er beobachtet alles genau und hat immer einen guten Plan.'
+    ],
+    place:[
+      '🌍 Eine Lichtung am Rand eines geheimnisvollen Waldes – mit alten, knorrigen Bäumen und einem alten Brunnen in der Mitte.',
+      '🌍 Ein kleines Dorf am Fuß eines hohen Berges – bunte Häuser, ein Bäcker der nach frischem Brot riecht, ein Fluss, der hindurchfließt.',
+      '🌍 Ein verlassenes Schloss auf einem Hügel – hinter jeder Tür könnte sich ein Geheimnis verbergen!',
+      '🌍 Eine magische Höhle in den Bergen – von außen unscheinbar, aber innen funkelt es wie tausend Sterne.'
+    ],
+    event:[
+      '⚡ Plötzlich hört dein Held ein lautes Geräusch aus dem Wald – ein unbekanntes Wesen ruft um Hilfe!',
+      '⚡ Urplötzlich bricht eine Brücke zusammen, und dein Held muss schnell einen anderen Weg finden.',
+      '⚡ Auf einmal entdeckt dein Held eine geheimnisvolle Schatzkarte – aber jemand anderes will sie auch haben!',
+      '⚡ Da liegt ein Brief vor der Tür: „Nur du kannst uns retten." Ein Abenteuer beginnt!'
+    ],
+    speech:'🗣️ Wörtliche Rede zeigt genau, was jemand sagt. So geht\'s:\n\n„Was war das?", flüsterte Lena.\nODER: Max rief: „Hilf mir bitte!"\n\n✓ „ am Anfang, " am Ende\n✓ Dann kommt Komma oder Doppelpunkt + Begleitsatz\n✓ Begleitsätze: sagte er, rief sie, flüsterte er, fragte sie …',
+    generic:[
+      '✍️ Schreib einfach drauf los! Stell dir vor, du bist dabei – was siehst, hörst, fühlst du? Das macht Geschichten lebendig!',
+      '✍️ Schau dir die Satzanfänge an – sie helfen, wenn du nicht weißt, wie du anfangen sollst!',
+      '✍️ Dein Stichwortzettel hat all deine Ideen – schau dort nach!',
+      '✍️ Lies deinen Text laut vor. Klingt er gut? Dann ist er gut!'
+    ]
+  },
+  en:{
+    hero:[
+      '💡 How about a brave girl named Lena? She has long red hair, always wears her favourite cap and is ready for any adventure!',
+      '💡 Imagine a clever boy named Ben: short brown hair, old backpack – there\'s always something useful inside.',
+      '💡 Maybe your hero is a daring adventurer: Zara has dark curly hair, bright eyes and is afraid of almost nothing – except spiders!',
+      '💡 How about a quiet, thoughtful boy named Finn? He notices everything and always has a good plan.'
+    ],
+    place:[
+      '🌍 A clearing at the edge of a mysterious forest – with old, gnarled trees and an ancient well in the middle.',
+      '🌍 A small village at the foot of a tall mountain – colourful houses, a baker\'s smelling of fresh bread, a river running through.',
+      '🌍 An abandoned castle on a hill – behind every door could be hiding a secret!',
+      '🌍 A magical cave in the mountains – plain from outside, but inside it sparkles like a thousand stars.'
+    ],
+    event:[
+      '⚡ Suddenly your hero hears a loud noise from the forest – an unknown creature is calling for help!',
+      '⚡ All at once a bridge collapses, and your hero has to quickly find another way.',
+      '⚡ Out of nowhere your hero discovers a mysterious treasure map – but someone else wants it too!',
+      '⚡ A letter lies at the door: "Only you can save us." An adventure begins!'
+    ],
+    speech:'🗣️ Direct speech shows exactly what someone says. Here\'s how:\n\n"What was that?" whispered Lena.\nOR: Max shouted: "Help me please!"\n\n✓ Opening " at the start, closing " at the end\n✓ Then comma or colon + reporting clause\n✓ Reporting clauses: she said, he cried, they whispered, she asked …',
+    generic:[
+      '✍️ Just start writing! Imagine you\'re right there – what do you see, hear, feel? That\'s what makes stories come alive!',
+      '✍️ Check the sentence starters – they help when you don\'t know how to begin!',
+      '✍️ Your planning notes have all your ideas – take a look!',
+      '✍️ Read your text out loud. Does it sound good? Then it is good!'
+    ]
+  }
+};
+
+function pickOfflineResponse(question,l,currentText){
+  const q=question.toLowerCase();
+  const tips=OFFLINE_TIPS[l]||OFFLINE_TIPS.de;
+  if(/verbessere|improve|prüf|check|fehler|error|mein.*(satz|text)|my.*(sentence|text)/.test(q))return'__LT__';
+  if(/held|hero|name|figur|charakt|person|mädchen|junge|girl|boy|aussehen|wesen/.test(q))return tips.hero[~~(Math.random()*tips.hero.length)];
+  if(/ort|place|setting|wo |where|landschaft|location|dorf|wald|berg|schloss|höhle/.test(q))return tips.place[~~(Math.random()*tips.place.length)];
+  if(/ereignis|event|plötzlich|sudden|abenteuer|passiert|happen|problem|action/.test(q))return tips.event[~~(Math.random()*tips.event.length)];
+  if(/rede|speech|anführung|quote|„|sagte|rief|whisper|said|cried|dialog/.test(q))return tips.speech;
+  return tips.generic[~~(Math.random()*tips.generic.length)];
+}
+
 // AI HELP
 // ═══════════════════════════════════════════════════════════
 function openAI(){
@@ -1810,47 +1905,48 @@ async function askAI(){
   document.getElementById('ai-response').classList.remove('on');
 
   const currentText=answers[part]||'';
-  const partLabel=T[l].partLabels[part];
-  const childRef=className||(lang==='de'?'das Kind':'the child');
-  const contextDE=role==='parent'
-    ?`Du hilfst einem Kind (3. Klasse, 8–9 Jahre) zuhause beim Schreiben. Das Kind heißt ${childRef}. Sprich es direkt und herzlich an.`
-    :`Du bist ein freundlicher Schreibhelfer für Kinder der 3. Klasse (8–9 Jahre) in Bayern.`;
-  const contextEN=role==='parent'
-    ?`You are helping a child (Year 3, age 8–9) write at home. The child's name is ${childRef}. Address them directly and warmly.`
-    :`You are a friendly writing helper for Year 3 children (age 8–9) in Bavaria (Germany).`;
-  const systemPrompt=l==='de'
-    ?`${contextDE} Die Geschichte hat das Thema: "${theme}". Der Schüler arbeitet gerade am Teil: ${partLabel}. Du kennst den LehrplanPLUS Bayern Deutsch 3/4 und weißt, dass die Struktur lautet: Erzählsituation – Ereignis – Ausgang. Die Figur soll nach Äußerem und Wesen beschrieben werden. Das Ereignis soll erzählenswert sein und im Zentrum stehen. Spannungswörter (plötzlich, urplötzlich), wörtliche Rede mit Anführungszeichen und Redebegleitsatz sowie Einleitungs- und Schlussformeln sind die wichtigsten sprachlichen Mittel. Sei aufmunternd, sehr einfach, konkret und kindgerecht. Antworte auf Deutsch in max. 3–4 kurzen Sätzen. Wenn ein Satz zur Verbesserung geschickt wird, gib 1–2 konkrete Verbesserungsvorschläge passend zum LP+.`
-    :`${contextEN} The story theme is: "${theme}". The student is working on the: ${partLabel}. You are familiar with the LehrplanPLUS Bayern Deutsch 3/4 curriculum: the story structure is Setting – Event – Resolution. The character should be described by appearance and personality. The event should be noteworthy and placed at the centre. Key language tools are: tension words (suddenly, all at once), direct speech with speech marks and a reporting clause, and opening/closing phrases. Be encouraging, very simple, concrete and age-appropriate. Answer in English in max. 3–4 short sentences. If a sentence is submitted for improvement, give 1–2 concrete suggestions aligned with the LP+ expectations.`;
+  // Small pause so the thinking indicator shows
+  await new Promise(r=>setTimeout(r,350));
 
-  const userMsg=currentText
-    ?`${question}\n\nMein bisheriger Text:\n${currentText}`
-    :question;
+  const responseKey=pickOfflineResponse(question,l,currentText);
+  const respEl=document.getElementById('ai-response');
 
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system:systemPrompt,
-        messages:[{role:'user',content:userMsg}]
-      })
-    });
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    const reply=data.content&&data.content[0]?data.content[0].text:'…';
-    document.getElementById('ai-response').textContent=reply;
-    document.getElementById('ai-response').classList.add('on');
-  }catch(e){
-    const hint=/auth|key|invalid/i.test(e.message)
-      ?(l==='de'?' Bitte API-Key prüfen (⚙️ Thema).'
-                :' Please check your API key (⚙️ Theme).'):'';
-    document.getElementById('ai-response').textContent=
-      (l==='de'?`⚠️ Fehler: ${e.message}`:`⚠️ Error: ${e.message}`)+hint;
-    document.getElementById('ai-response').classList.add('on');
+  if(responseKey==='__LT__'){
+    // "Improve my text" — run LanguageTool on the current writing
+    if(!currentText.trim()){
+      respEl.textContent=l==='de'
+        ?'✏️ Schreib zuerst etwas in dein Textfeld, dann kann ich es prüfen!'
+        :'✏️ Write something in the text box first, then I can check it!';
+    }else{
+      try{
+        const params=new URLSearchParams({text:currentText,language:l==='de'?'de-DE':'en-GB'});
+        const res=await fetch('https://api.languagetool.org/v2/check',{
+          method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params
+        });
+        if(!res.ok)throw new Error('no');
+        const data=await res.json();
+        const errors=ltMatchesToErrorsIndex(currentText,data.matches||[],l);
+        if(!errors.length){
+          respEl.textContent=l==='de'
+            ?'🌟 Toll! Ich habe keine Fehler in deinem Text gefunden. Weiter so!'
+            :'🌟 Great! I found no errors in your text. Keep it up!';
+        }else{
+          const list=errors.slice(0,3).map(e=>`• „${e.original}" → „${e.fix}": ${l==='de'?e.explain:e.explainEN}`).join('\n');
+          respEl.textContent=(l==='de'
+            ?`Ich habe ${errors.length} Stelle${errors.length===1?'':'n'} gefunden:\n\n`
+            :`I found ${errors.length} item${errors.length===1?'':'s'}:\n\n`)+list;
+        }
+      }catch(e){
+        respEl.textContent=l==='de'
+          ?'😅 Prüfdienst gerade nicht erreichbar. Schau deinen Text nochmal durch – passt alles?'
+          :'😅 Checker not available right now. Read through your text – does everything look right?';
+      }
+    }
+  }else{
+    respEl.textContent=responseKey;
   }
 
+  respEl.classList.add('on');
   document.getElementById('ai-thinking').classList.remove('on');
   btn.disabled=false;
   inputEl.value='';
@@ -2363,14 +2459,31 @@ async function checkGramAnswer(){
     if(correct)awardGramXP();
     document.getElementById('gram-check-lbl').textContent=l==='de'?'✓ Fertig!':'✓ Done!';
 
-  }else{
-    // AI-checked (fill or free)
-    let answer='';
-    if(ex.type==='fill'){
-      answer=(document.getElementById('gram-fill-answer')||{}).value||'';
-    }else{
-      answer=(document.getElementById('gram-free-answer')||{}).value||'';
+  }else if(ex.type==='fill'){
+    // Local matching against expected blanks — no API key needed
+    const answer=(document.getElementById('gram-fill-answer')||{}).value||'';
+    if(!answer.trim()){
+      cb.disabled=false;
+      document.getElementById('gram-check-lbl').textContent=l==='de'?'Antwort prüfen':'Check answer';
+      fb.innerHTML=l==='de'?'✏️ Bitte schreib zuerst eine Antwort.':'✏️ Please write an answer first.';
+      fb.className='gram-feedback partial';fb.style.display='block';return;
     }
+    // Each blank may have alternatives separated by '/' — accept any match
+    const norm=answer.toLowerCase();
+    const correct=(ex.blanks||[]).every(blank=>
+      blank.split('/').map(s=>s.trim().toLowerCase()).some(alt=>norm.includes(alt))
+    );
+    fb.innerHTML=correct
+      ?`✓ <strong>${l==='de'?'Richtig!':'Correct!'}</strong> ${l==='de'?(ex.hintDE||''):(ex.hintEN||'')}`
+      :`✗ <strong>${l==='de'?'Fast!':'Almost!'}</strong> ${l==='de'?(ex.hintDE||''):(ex.hintEN||'')}`;
+    fb.className='gram-feedback '+(correct?'correct':'partial');
+    fb.style.display='block';
+    if(correct)awardGramXP();
+    document.getElementById('gram-check-lbl').textContent=l==='de'?'✓ Fertig!':'✓ Done!';
+
+  }else{
+    // Free text — check with LanguageTool + quick topic-specific local check
+    const answer=(document.getElementById('gram-free-answer')||{}).value||'';
     if(!answer.trim()){
       cb.disabled=false;
       document.getElementById('gram-check-lbl').textContent=l==='de'?'Antwort prüfen':'Check answer';
@@ -2378,29 +2491,56 @@ async function checkGramAnswer(){
       fb.className='gram-feedback partial';fb.style.display='block';return;
     }
 
-    const prompt=l==='de'?ex.checkPromptDE:ex.checkPromptEN;
-    try{
-      const res=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({
-          model:'claude-sonnet-4-6',
-          max_tokens:200,
-          system:`Du bist ein freundlicher Deutschlehrer für Klasse 3 (Bayern, LehrplanPLUS). Grammatik-Thema: ${topic.label}. Antworte kurz, ermutigend, max. 3 Sätze.`,
-          messages:[{role:'user',content:`${prompt}\n\nAntwort des Kindes: ${answer}`}]
-        })
-      });
-      const data=await res.json();
-      const reply=data.content&&data.content[0]?data.content[0].text:'…';
-      const isCorrect=reply.startsWith('✓');
-      fb.innerHTML=reply;
-      fb.className='gram-feedback '+(isCorrect?'correct':reply.includes('✗')?'partial':'partial');
-      fb.style.display='block';
-      if(isCorrect)awardGramXP();
-    }catch(e){
-      fb.innerHTML=l==='de'?'Ups — Verbindungsfehler. Versuch es nochmal.':'Oops — connection error. Try again.';
-      fb.className='gram-feedback partial';fb.style.display='block';
+    // Topic-specific local structural check
+    let localFeedback='';
+    let localOk=true;
+    if(topic.id==='rede'){
+      const hasSpeech=/„|"/.test(answer);
+      const hasVerb=/sagte|rief|flüsterte|fragte|schrie|said|cried|whispered|asked/i.test(answer);
+      localOk=hasSpeech;
+      localFeedback=hasSpeech
+        ?(hasVerb
+          ?(l==='de'?'✓ Super! Anführungszeichen und Begleitsatz gefunden!':'✓ Great! Speech marks and reporting clause found!')
+          :(l==='de'?'✓ Gut! Füge noch einen Begleitsatz hinzu (sagte er, rief sie …).':'✓ Good! Add a reporting clause (she said, he cried…).'))
+        :(l==='de'?'⚠️ Vergiss die Anführungszeichen nicht: „…", sagte er/sie.':'⚠️ Don\'t forget the speech marks: "…", they said.');
+    }else if(topic.id==='prät'){
+      const hasPast=/\b(ging|sah|war|hatte|kam|stand|lief|rannte|rief|fand|gab|nahm|\w+te\b|went|saw|was|had|came|ran|called|found)\b/i.test(answer);
+      localOk=hasPast;
+      localFeedback=hasPast
+        ?(l==='de'?'✓ Gut! Du hast Vergangenheitsformen verwendet!':'✓ Good! You used past tense forms!')
+        :(l==='de'?'⚠️ Tipp: Nutze Präteritum-Formen — z.B. ging, sah, war, hatte …':'⚠️ Tip: Use simple past forms — e.g. went, saw, was, had …');
+    }else if(topic.id==='bindew'){
+      const hasBind=/\b(weil|obwohl|because|although|though)\b/i.test(answer);
+      localOk=hasBind;
+      localFeedback=hasBind
+        ?(l==='de'?'✓ Gut! Du hast ein Bindewort verwendet!':'✓ Good! You used a connective!')
+        :(l==='de'?'⚠️ Vergiss nicht ein Bindewort: weil oder obwohl.':'⚠️ Don\'t forget a connective: because or although.');
     }
+
+    // LanguageTool check
+    let ltErrors=[];
+    try{
+      const params=new URLSearchParams({text:answer,language:l==='de'?'de-DE':'en-GB'});
+      const res=await fetch('https://api.languagetool.org/v2/check',{
+        method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:params
+      });
+      if(res.ok){const data=await res.json();ltErrors=ltMatchesToErrorsIndex(answer,data.matches||[],l);}
+    }catch(e){}
+
+    let html=localFeedback?`<div style="margin-bottom:5px;">${localFeedback}</div>`:'';
+    if(ltErrors.length){
+      html+=ltErrors.slice(0,2).map(e=>
+        `<div style="font-size:12px;margin-top:3px;">• <del>${e.original}</del> → <strong>${e.fix}</strong>: ${l==='de'?e.explain:e.explainEN}</div>`
+      ).join('');
+    }else if(!html){
+      html=`✓ <strong>${l==='de'?'Toll! Kein Fehler gefunden. Weiter so!':'Great! No errors found. Keep it up!'}</strong>`;
+    }
+
+    const correct=localOk&&!ltErrors.length;
+    fb.innerHTML=html;
+    fb.className='gram-feedback '+(correct?'correct':'partial');
+    fb.style.display='block';
+    if(correct)awardGramXP();
     document.getElementById('gram-check-lbl').textContent=l==='de'?'✓ Fertig!':'✓ Done!';
   }
 
@@ -2435,59 +2575,23 @@ async function checkWriting(){
       <span style="width:7px;height:7px;border-radius:50%;background:var(--lavender2);animation:pulse 1.2s ease-in-out infinite;animation-delay:.4s;display:inline-block;"></span>
     </div>`;
 
-  const partLabel=T[l].partLabels[part];
-
-  const systemPrompt=l==='de'
-    ?`Du bist ein einfühlsamer Schreibcoach für Kinder der 3. Klasse (Bayern, LehrplanPLUS). Prüfe den deutschen Text auf Rechtschreibfehler, Grammatikfehler und Satzbauproblemen. Das Thema ist: "${theme}". Abschnitt: ${partLabel}.
-
-Antworte NUR mit einem JSON-Array. Kein anderer Text, keine Markdown-Backticks.
-Format:
-[{"type":"spell"|"grammar"|"style","original":"genauer Originaltext","fix":"Korrektur","explain":"Kindgerechte Erklärung auf Deutsch, max. 2 Sätze, ermutigend","explainEN":"same in simple English"}]
-
-Regeln:
-- Maximal 6 Fehler, wichtigste zuerst
-- "original" muss exakt so im Text vorkommen
-- Erkläre wie ein netter Lehrer – ermutigend, nie kritisch
-- Platzhalter wie "…" ignorieren
-- Keine Fehler → leeres Array []`
-    :`You are a kind writing coach for Year 3 children (Bavaria, LehrplanPLUS). Check the child's text for spelling, grammar and sentence issues. Theme: "${theme}". Section: ${partLabel}.
-
-Reply ONLY with a JSON array. No other text, no markdown backticks.
-Format:
-[{"type":"spell"|"grammar"|"style","original":"exact text from original","fix":"corrected version","explain":"Kind explanation in simple German, max 2 sentences, encouraging","explainEN":"same in simple English, max 2 sentences"}]
-
-Rules:
-- Maximum 6 errors, most important first
-- "original" must appear exactly in the text
-- Explain like a kind teacher – never harsh
-- Ignore placeholder text like "…"
-- No errors → empty array []`;
-
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
+    const params=new URLSearchParams({text,language:l==='de'?'de-DE':'en-GB'});
+    const res=await fetch('https://api.languagetool.org/v2/check',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system:systemPrompt,
-        messages:[{role:'user',content:text}]
-      })
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:params
     });
+    if(!res.ok)throw new Error(`Prüfdienst: HTTP ${res.status}`);
     const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||`HTTP ${res.status}`);
-    let raw=data.content&&data.content[0]?data.content[0].text:'[]';
-    raw=raw.replace(/```json|```/g,'').trim();
-    let errors=[];
-    try{errors=JSON.parse(raw);}catch(e){errors=[];}
+    const errors=ltMatchesToErrorsIndex(text,data.matches||[],l);
     lastCheckErrors=errors;
     renderCheckResults(text,errors,l);
   }catch(e){
     const panel=document.getElementById('check-panel');
     panel.classList.add('on');
-    const hint=/auth|key|invalid/i.test(e.message)?' (API-Key prüfen!)':'';
     document.getElementById('check-highlighted').innerHTML=
-      `<em style="color:var(--coral3);padding:12px;display:block;">⚠️ ${e.message}${hint}</em>`;
+      `<em style="color:var(--coral3);padding:12px;display:block;">⚠️ ${l==='de'?'Prüfdienst nicht erreichbar':'Checker not available'} — ${e.message}</em>`;
     document.getElementById('suggestions-panel').style.display='none';
   }
 
