@@ -161,6 +161,15 @@ mark.hl-adj{background:#d8ccf8;color:#2d1a60;border-radius:3px;padding:1px 3px;}
 .tense-choice.wrong-pick{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
 .tense-choice.reveal-wrong{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
 
+/* ── FREE SENTENCE CHECK ── */
+.fsc-row{display:flex;flex-direction:column;gap:.7rem;margin-top:.8rem;}
+.fsc-card{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;line-height:1.7;border:2px solid;}
+.fsc-ok  {background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
+.fsc-info{background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
+.fsc-warn{background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
+.fsc-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;opacity:.75;display:block;margin-bottom:2px;}
+.fsc-hl-adj{background:var(--plum3);color:var(--plum);border-radius:4px;padding:1px 4px;}
+
 /* ── TOAST ── */
 .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;font-size:14px;font-weight:800;padding:10px 22px;border-radius:40px;box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;}
@@ -183,6 +192,7 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
     <a class="hlink" href="index.html">⛏ Blockwelt</a>
     <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
     <a class="hlink" href="builder.html">📖 Baukasten</a>
+    <a class="hlink" href="grammatik.html">🎨 Grammatik</a>
   </div>
 </div>
 
@@ -303,6 +313,7 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
     <button class="ex-type-btn active" onclick="switchExType('starters')">🔄 Satzanfänge</button>
     <button class="ex-type-btn" onclick="switchExType('adjectives')">🎨 Adjektive</button>
     <button class="ex-type-btn" onclick="switchExType('tense')">⏰ Zeitform</button>
+    <button class="ex-type-btn" onclick="switchExType('free')">✍️ Dein Satz</button>
   </div>
 
   <!-- ── EX TYPE: STARTERS ── -->
@@ -356,6 +367,18 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
       </div>
     </div>
     <div id="tense-ex-card"></div>
+  </div>
+
+  <!-- ── EX TYPE: FREE SENTENCE ── -->
+  <div id="ex-free" class="ex-panel">
+    <div class="ex-card">
+      <span class="ex-num">Dein eigener Satz</span>
+      <div class="ex-instruction">Schreibe einen Satz aus deiner Geschichte — ganz egal welchen. Der Satz wird dann geprüft.</div>
+      <input class="ex-input" id="free-input" type="text" placeholder="Schreibe hier einen Satz …" autocomplete="off">
+      <br><br>
+      <button class="btn-check" onclick="checkFreeSentence()">🔎 Satz prüfen</button>
+      <div id="free-results" class="fsc-row" style="display:none;"></div>
+    </div>
   </div>
 
 </div><!-- /tab-exercises -->
@@ -702,10 +725,10 @@ function switchTab(tab){
 
 function switchExType(type){
   document.querySelectorAll('.ex-type-btn').forEach((b,i)=>{
-    b.classList.toggle('active', ['starters','adjectives','tense'][i]===type);
+    b.classList.toggle('active', ['starters','adjectives','tense','free'][i]===type);
   });
   document.querySelectorAll('.ex-panel').forEach((p,i)=>{
-    p.classList.toggle('active', ['ex-starters','ex-adjectives','ex-tense'][i]==='ex-'+type);
+    p.classList.toggle('active', ['ex-starters','ex-adjectives','ex-tense','ex-free'][i]==='ex-'+type);
   });
 }
 
@@ -1034,6 +1057,91 @@ function showToast(msg){
   clearTimeout(t._t);
   t._t = setTimeout(()=>t.classList.remove('show'), 2400);
 }
+
+// ═══════════════════════════════════════════════════
+// FREE SENTENCE CHECK
+// ═══════════════════════════════════════════════════
+function checkFreeSentence(){
+  const raw = (document.getElementById('free-input').value||'').trim();
+  if(!raw){ showToast('Schreibe erst einen Satz!'); return; }
+
+  const words = raw.split(/\s+/).filter(Boolean);
+  const count = words.length;
+  const lower = words.map(w=>w.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase());
+
+  // 1 · Satzlänge
+  let lenCls, lenText;
+  if(count < 5){
+    lenCls='fsc-warn';
+    lenText=`Dein Satz hat ${count} Wörter — das ist sehr kurz. Versuche 5–12 Wörter zu schreiben.`;
+  } else if(count <= 12){
+    lenCls='fsc-ok';
+    lenText=`Dein Satz hat ${count} Wörter — das ist eine gute Länge! ✓`;
+  } else {
+    lenCls='fsc-info';
+    lenText=`Dein Satz hat ${count} Wörter — das ist ein langer Satz. Manchmal ist das gut, aber kurze Sätze machen mehr Spannung.`;
+  }
+
+  // 2 · Satzanfang
+  const first = lower[0] || '';
+  let startCls, startText;
+  if(first==='ich'){
+    startCls='fsc-warn';
+    startText=`Dein Satz beginnt mit „Ich". Versuche einen anderen Anfang: z.B. mit einem Wann-Wort (Plötzlich…), einem Wie-Wort (Langsam…) oder einem Wo-Wort (Im Wald…).`;
+  } else if(first){
+    startCls='fsc-ok';
+    startText=`Guter Satzanfang: „${words[0]}" ✓`;
+  }
+
+  // 3 · Adjektive
+  const foundAdj = lower.filter(w=>ADJ_SET.has(w));
+  const uniqueAdj = [...new Set(foundAdj)];
+  let adjCls, adjHtml;
+  if(uniqueAdj.length===0){
+    adjCls='fsc-warn';
+    adjHtml=`Keine Adjektive gefunden. Adjektive machen Sätze lebendiger — z.B. „der <em>große</em> Hund", „der <em>dunkle</em> Wald".`;
+  } else {
+    adjCls='fsc-ok';
+    const highlighted = raw.replace(/([a-zA-ZäöüÄÖÜß]+)/g, m=>{
+      return ADJ_SET.has(m.toLowerCase()) ? `<span class="fsc-hl-adj">${escHtml(m)}</span>` : escHtml(m);
+    });
+    adjHtml=`${uniqueAdj.length} Adjektiv${uniqueAdj.length===1?'':'e'} gefunden ✓: ${highlighted}`;
+  }
+
+  // 4 · Zeitform
+  const hasPrät = lower.some(w=>PRÄT_SET.has(w));
+  const hasPräs = lower.some(w=>PRÄS_SET.has(w));
+  let tenseCls, tenseText;
+  if(hasPrät && !hasPräs){
+    tenseCls='fsc-ok';
+    tenseText=`Zeitform: Präteritum (Vergangenheit) ✓ — richtig für Geschichten!`;
+  } else if(hasPräs && !hasPrät){
+    tenseCls='fsc-warn';
+    const pv = lower.filter(w=>PRÄS_SET.has(w));
+    tenseText=`Zeitform: Präsens gefunden („${[...new Set(pv)].join('", „')}"). Für Geschichten benutze das Präteritum (Vergangenheit).`;
+  } else if(hasPrät && hasPräs){
+    tenseCls='fsc-warn';
+    tenseText=`Beide Zeitformen im Satz! Wähle entweder Präteritum oder Präsens — für Geschichten: Präteritum.`;
+  } else {
+    tenseCls='fsc-info';
+    tenseText=`Kein Verb erkannt. Schreibe einen Satz mit einem Tuwort (Verb), z.B. „lief", „sah", „hatte".`;
+  }
+
+  // Build result cards
+  const out = document.getElementById('free-results');
+  out.style.display = 'flex';
+  out.innerHTML = [
+    {cls:lenCls,   label:'📏 Satzlänge',  html:escHtml(lenText)},
+    {cls:startCls, label:'🔤 Satzanfang', html:escHtml(startText)},
+    {cls:adjCls,   label:'🎨 Adjektive',  html:adjHtml},
+    {cls:tenseCls, label:'⏰ Zeitform',   html:escHtml(tenseText)},
+  ].map(c=>`<div class="fsc-card ${c.cls}"><span class="fsc-label">${c.label}</span>${c.html}</div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  const fi = document.getElementById('free-input');
+  if(fi) fi.addEventListener('keydown', e=>{ if(e.key==='Enter') checkFreeSentence(); });
+});
 
 // ═══════════════════════════════════════════════════
 // INIT

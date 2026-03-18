@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammatikwerkstatt – Klasse 3/4 Bayern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --forest:#2a5c1a; --forest2:#4a9c2a; --forest3:#c8ecb0; --forest4:#edf8e6;
+  --navy:#1c3f6e;   --navy2:#2e6ab8;   --navy3:#b8d8f0;   --navy4:#e4f0fb;
+  --amber:#6b4c1a;  --amber2:#b07828;  --amber3:#f0d080;  --amber4:#fdf5de;
+  --plum:#4a2d8a;   --plum2:#7a5adf;   --plum3:#d8ccf8;   --plum4:#f0ebff;
+  --clay:#8a3020;   --clay3:#f8ddd8;   --clay4:#fdf0ee;
+  --ink:#1c1a18;    --ink2:#3c3a36;    --muted:#6a6660;
+  --surface:#ffffff;--page:#f4f2ed;
+  --border:#ccc8be; --border-lt:#e4e2d8;
+  --font:'Nunito',sans-serif;
+  --r:14px; --r2:8px;
+  --sh:0 2px 10px rgba(0,0,0,.07);
+}
+body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:100vh;}
+.wrap{max-width:700px;margin:0 auto;padding:0 1rem 6rem;}
+
+/* ── HEADER ── */
+.site-header{background:var(--forest);padding:1.2rem 1.5rem 1.4rem;margin-bottom:1.6rem;text-align:center;}
+.header-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:#fff;display:block;margin-bottom:.3rem;}
+.header-sub{font-size:14px;color:rgba(255,255,255,.78);display:block;margin-bottom:.6rem;}
+.header-badge{display:inline-block;font-size:12px;font-weight:700;background:rgba(255,255,255,.18);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:20px;padding:4px 14px;}
+.header-links{display:flex;gap:8px;justify-content:center;margin-top:.8rem;flex-wrap:wrap;}
+.hlink{font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.9);text-decoration:none;background:rgba(255,255,255,.12);}
+.hlink:hover{background:rgba(255,255,255,.22);}
+
+/* ── LEGEND ── */
+.legend-bar{display:flex;gap:12px 20px;justify-content:center;flex-wrap:wrap;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:1.4rem;box-shadow:var(--sh);}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:800;}
+.leg-dot{width:20px;height:20px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.leg-nomen .leg-dot{background:var(--navy2);}
+.leg-verb  .leg-dot{background:var(--forest2);}
+.leg-adj   .leg-dot{background:var(--amber2);}
+.leg-nomen{color:var(--navy);}
+.leg-verb {color:var(--forest);}
+.leg-adj  {color:var(--amber);}
+.leg-sub{font-size:12px;color:var(--muted);font-weight:600;}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:0;margin-bottom:1.4rem;border:2px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--sh);}
+.tab-btn{flex:1;padding:12px 8px;border:none;background:var(--surface);color:var(--muted);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;border-right:2px solid var(--border);transition:background .15s;}
+.tab-btn:last-child{border-right:none;}
+.tab-btn.active{background:var(--forest4);color:var(--forest);}
+.tab-btn:hover:not(.active){background:var(--page);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);margin-bottom:1.2rem;box-shadow:var(--sh);overflow:hidden;}
+.card-accent{height:5px;}
+.ca-forest{background:var(--forest);}
+.ca-navy  {background:var(--navy);}
+.ca-amber {background:var(--amber2);}
+.card-body{padding:1.1rem 1.2rem .9rem;}
+.card-eyebrow{font-size:11px;font-weight:800;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.card-title{font-size:18px;font-weight:900;color:var(--ink);display:block;margin-bottom:.5rem;}
+
+/* ── GRAMMAR HIGHLIGHT TOKENS (static display) ── */
+.sent-display{font-size:22px;font-weight:700;line-height:2.4;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin-bottom:.8rem;}
+.w{display:inline-block;padding:3px 9px;border-radius:7px;}
+.w-nomen{background:var(--navy4);color:var(--navy);border-bottom:3px solid var(--navy2);}
+.w-verb {background:var(--forest4);color:var(--forest);border-bottom:3px solid var(--forest2);}
+.w-adj  {background:var(--amber4);color:var(--amber);border-bottom:3px solid var(--amber2);}
+.w-plain{color:var(--ink);}
+.w-punct{color:var(--muted);}
+
+/* ── WORD LABEL TAGS ── */
+.word-labels{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.4rem;}
+.wl-tag{font-size:12px;font-weight:800;padding:3px 10px;border-radius:12px;}
+.wl-nomen{background:var(--navy4);color:var(--navy);border:1.5px solid var(--navy3);}
+.wl-verb {background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
+.wl-adj  {background:var(--amber4);color:var(--amber);border:1.5px solid var(--amber3);}
+
+/* ── EXAMPLE NAV ── */
+.ex-step{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:.6rem;display:block;}
+.ex-nav{display:flex;gap:10px;align-items:center;margin-top:1rem;}
+.ex-nav-btn{flex:1;padding:10px;border:2px solid var(--border);border-radius:var(--r2);background:var(--surface);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;color:var(--ink2);}
+.ex-nav-btn:hover{background:var(--page);}
+.ex-counter{font-size:13px;font-weight:800;color:var(--muted);white-space:nowrap;}
+
+/* ── MODE BAR ── */
+.mode-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem;}
+.mode-btn{padding:9px 18px;border:2.5px solid var(--border);border-radius:20px;background:var(--surface);font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:7px;color:var(--ink2);transition:all .15s;}
+.mode-btn:hover{background:var(--page);}
+.mode-btn.m-active-nomen{background:var(--navy4);border-color:var(--navy2);color:var(--navy);}
+.mode-btn.m-active-verb {background:var(--forest4);border-color:var(--forest2);color:var(--forest);}
+.mode-btn.m-active-adj  {background:var(--amber4);border-color:var(--amber2);color:var(--amber);}
+.mode-btn.m-active-erase{background:var(--page);border-color:var(--border);color:var(--muted);}
+.mode-dot{width:13px;height:13px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.md-nomen{background:var(--navy2);}
+.md-verb {background:var(--forest2);}
+.md-adj  {background:var(--amber2);}
+
+/* ── CLICKABLE TOKENS (exercise) ── */
+.tokens-wrap{line-height:2.4;margin-bottom:1rem;}
+.tok{display:inline-block;padding:5px 11px;border-radius:8px;font-size:22px;font-weight:700;cursor:pointer;border:2px solid transparent;margin:3px;transition:background .12s,border-color .12s;user-select:none;}
+.tok:hover{border-color:var(--border);background:var(--page);}
+.tok.tok-nomen{background:var(--navy4);color:var(--navy);border-color:var(--navy2);}
+.tok.tok-verb {background:var(--forest4);color:var(--forest);border-color:var(--forest2);}
+.tok.tok-adj  {background:var(--amber4);color:var(--amber);border-color:var(--amber2);}
+.tok.tok-correct{outline:3px solid var(--forest2);outline-offset:2px;}
+.tok.tok-wrong  {outline:3px solid #c03030;outline-offset:2px;}
+.tok-punct{font-size:22px;font-weight:700;color:var(--muted);margin:3px;}
+
+/* ── BUTTONS ── */
+.btn{padding:10px 22px;border:none;border-radius:var(--r2);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;transition:opacity .15s;}
+.btn-forest{background:var(--forest);color:#fff;}
+.btn-navy  {background:var(--navy);color:#fff;}
+.btn-ghost {background:var(--page);color:var(--ink2);border:2px solid var(--border);}
+.btn:hover{opacity:.85;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+/* ── FEEDBACK ── */
+.feedback{margin-top:.9rem;padding:12px 14px;border-radius:var(--r2);font-size:14px;font-weight:700;line-height:1.75;display:none;}
+.fb-ok  {background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
+.fb-warn{background:var(--amber4);color:var(--amber);border:1.5px solid var(--amber3);}
+
+/* ── MODE HINT ── */
+.mode-hint{font-size:13px;color:var(--muted);margin-bottom:.7rem;font-weight:600;}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <span class="header-title">🎨 Grammatikwerkstatt</span>
+  <span class="header-sub">Wortarten erkennen · Klasse 3/4 Bayern</span>
+  <span class="header-badge">📚 LehrplanPLUS Bayern · Deutsch 3/4 · LB 2.1</span>
+  <div class="header-links">
+    <a class="hlink" href="index.html">⛏ Blockwelt</a>
+    <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
+    <a class="hlink" href="builder.html">📖 Baukasten</a>
+    <a class="hlink" href="satzwerkstatt.html">✍️ Satzwerkstatt</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- LEGEND (always visible) -->
+  <div class="legend-bar" role="note" aria-label="Farblegende">
+    <div class="leg-item leg-nomen">
+      <span class="leg-dot"></span>
+      <span>Nomen</span>
+    </div>
+    <span class="leg-sub">Ding · Tier · Person</span>
+    <div class="leg-item leg-verb">
+      <span class="leg-dot"></span>
+      <span>Verb</span>
+    </div>
+    <span class="leg-sub">Tun · Sein</span>
+    <div class="leg-item leg-adj">
+      <span class="leg-dot"></span>
+      <span>Adjektiv</span>
+    </div>
+    <span class="leg-sub">Wie ist es?</span>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar" role="tablist">
+    <button class="tab-btn active" role="tab" onclick="switchTab('examples',this)">👁 Beispiele anschauen</button>
+    <button class="tab-btn" role="tab" onclick="switchTab('exercises',this)">✋ Selber markieren</button>
+  </div>
+
+  <!-- ══════════ TAB 1: EXAMPLES ══════════ -->
+  <div id="tab-examples" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-accent ca-navy"></div>
+      <div class="card-body">
+        <span class="card-eyebrow">So funktioniert es</span>
+        <span class="card-title">Schau dir die Farben an</span>
+        <p style="font-size:14px;color:var(--muted);line-height:1.75;">
+          Jedes Wort hat eine Farbe.
+          <strong style="color:var(--navy);">Blau = Nomen</strong> (ein Ding, ein Tier oder eine Person — Nomen schreibt man groß).
+          <strong style="color:var(--forest);">Grün = Verb</strong> (was jemand tut oder ist).
+          <strong style="color:var(--amber);">Orange = Adjektiv</strong> (wie etwas ist).
+          Klicke auf → und ← um mehr Sätze zu sehen.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-accent ca-forest"></div>
+      <div class="card-body">
+        <span class="ex-step" id="ex-step">Beispiel 1 von 9</span>
+        <div class="sent-display" id="ex-sent"></div>
+        <div class="word-labels" id="ex-labels"></div>
+        <div class="ex-nav">
+          <button class="ex-nav-btn" onclick="exNav(-1)">← Vorheriger Satz</button>
+          <span class="ex-counter" id="ex-counter">1 / 9</span>
+          <button class="ex-nav-btn" onclick="exNav(1)">Nächster Satz →</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-examples -->
+
+  <!-- ══════════ TAB 2: EXERCISES ══════════ -->
+  <div id="tab-exercises" class="tab-panel">
+
+    <div class="card">
+      <div class="card-accent ca-amber"></div>
+      <div class="card-body">
+        <span class="card-eyebrow">Deine Aufgabe</span>
+        <span class="card-title">Wähle eine Farbe, dann klicke ein Wort</span>
+        <p style="font-size:14px;color:var(--muted);line-height:1.75;">
+          Schritt 1: Klicke auf eine Farbe (z.B. <strong style="color:var(--navy);">Nomen</strong>).<br>
+          Schritt 2: Klicke dann auf das passende Wort im Satz.<br>
+          Schritt 3: Wenn du fertig bist, klicke auf <strong>Prüfen</strong>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Mode selector -->
+    <div class="mode-bar" id="mode-bar" role="group" aria-label="Wortart auswählen">
+      <button class="mode-btn" id="mode-nomen" onclick="setMode('nomen')">
+        <span class="mode-dot md-nomen"></span> Nomen
+      </button>
+      <button class="mode-btn" id="mode-verb" onclick="setMode('verb')">
+        <span class="mode-dot md-verb"></span> Verb
+      </button>
+      <button class="mode-btn" id="mode-adj" onclick="setMode('adj')">
+        <span class="mode-dot md-adj"></span> Adjektiv
+      </button>
+      <button class="mode-btn" id="mode-erase" onclick="setMode('erase')">
+        ✕ Farbe entfernen
+      </button>
+    </div>
+
+    <!-- Exercise card -->
+    <div class="card">
+      <div class="card-accent ca-forest"></div>
+      <div class="card-body">
+        <span class="ex-step" id="exr-step">Übung 1 von 5</span>
+        <p class="mode-hint" id="mode-hint">Wähle zuerst eine Farbe oben.</p>
+        <div class="tokens-wrap" id="exr-tokens"></div>
+        <div class="btn-row">
+          <button class="btn btn-forest" onclick="checkExercise()">✓ Prüfen</button>
+          <button class="btn btn-ghost"  onclick="resetExercise()">↺ Zurücksetzen</button>
+          <button class="btn btn-navy"   onclick="showAnswer()">👁 Antwort zeigen</button>
+        </div>
+        <div class="feedback" id="exr-feedback"></div>
+        <div class="ex-nav" style="margin-top:1rem;">
+          <button class="ex-nav-btn" onclick="exrNav(-1)">← Vorherige</button>
+          <span class="ex-counter" id="exr-counter">1 / 5</span>
+          <button class="ex-nav-btn" onclick="exrNav(1)">Nächste →</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-exercises -->
+
+</div><!-- /wrap -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+// Token types: "nomen" | "verb" | "adj" | null (articles, prepositions — no colour)
+const EXAMPLES = [
+  { tokens: [
+    {w:"Der",t:null},{w:"große",t:"adj"},{w:"Hund",t:"nomen"},
+    {w:"läuft",t:"verb"},{w:"schnell",t:"adj"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Die",t:null},{w:"kleine",t:"adj"},{w:"Katze",t:"nomen"},
+    {w:"schläft",t:"verb"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Das",t:null},{w:"Kind",t:"nomen"},{w:"malt",t:"verb"},
+    {w:"ein",t:null},{w:"buntes",t:"adj"},{w:"Bild",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Der",t:null},{w:"alte",t:"adj"},{w:"Mann",t:"nomen"},
+    {w:"sitzt",t:"verb"},{w:"im",t:null},{w:"grünen",t:"adj"},
+    {w:"Garten",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Die",t:null},{w:"fleißige",t:"adj"},{w:"Schülerin",t:"nomen"},
+    {w:"liest",t:"verb"},{w:"ein",t:null},{w:"spannendes",t:"adj"},
+    {w:"Buch",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Der",t:null},{w:"kleine",t:"adj"},{w:"Vogel",t:"nomen"},
+    {w:"singt",t:"verb"},{w:"ein",t:null},{w:"fröhliches",t:"adj"},
+    {w:"Lied",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Das",t:null},{w:"rote",t:"adj"},{w:"Auto",t:"nomen"},
+    {w:"fährt",t:"verb"},{w:"auf",t:null},{w:"der",t:null},
+    {w:"langen",t:"adj"},{w:"Straße",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Die",t:null},{w:"netten",t:"adj"},{w:"Kinder",t:"nomen"},
+    {w:"spielen",t:"verb"},{w:"im",t:null},{w:"großen",t:"adj"},
+    {w:"Hof",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Ein",t:null},{w:"wilder",t:"adj"},{w:"Sturm",t:"nomen"},
+    {w:"bricht",t:"verb"},{w:"los",t:null},{w:".",t:null,punct:true}
+  ]}
+];
+
+const EXERCISES = [
+  { tokens: [
+    {w:"Die",t:null},{w:"süße",t:"adj"},{w:"Katze",t:"nomen"},
+    {w:"trinkt",t:"verb"},{w:"Milch",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Der",t:null},{w:"große",t:"adj"},{w:"Baum",t:"nomen"},
+    {w:"wächst",t:"verb"},{w:"im",t:null},{w:"Garten",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Das",t:null},{w:"kleine",t:"adj"},{w:"Mädchen",t:"nomen"},
+    {w:"rennt",t:"verb"},{w:"schnell",t:"adj"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Der",t:null},{w:"alte",t:"adj"},{w:"Hund",t:"nomen"},
+    {w:"liegt",t:"verb"},{w:"auf",t:null},{w:"dem",t:null},
+    {w:"warmen",t:"adj"},{w:"Teppich",t:"nomen"},{w:".",t:null,punct:true}
+  ]},
+  { tokens: [
+    {w:"Die",t:null},{w:"bunten",t:"adj"},{w:"Schmetterlinge",t:"nomen"},
+    {w:"fliegen",t:"verb"},{w:"über",t:null},{w:"den",t:null},
+    {w:"grünen",t:"adj"},{w:"Wiesen",t:"nomen"},{w:".",t:null,punct:true}
+  ]}
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let exIdx  = 0;
+let exrIdx = 0;
+let curMode = null;
+let exrState = [];
+
+// ── TAB SWITCHING ─────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── EXAMPLE RENDERING ─────────────────────────────────────────────────────────
+function renderExample() {
+  const ex = EXAMPLES[exIdx];
+  const total = EXAMPLES.length;
+  document.getElementById('ex-step').textContent    = `Beispiel ${exIdx+1} von ${total}`;
+  document.getElementById('ex-counter').textContent = `${exIdx+1} / ${total}`;
+
+  const sentEl   = document.getElementById('ex-sent');
+  const labelsEl = document.getElementById('ex-labels');
+  sentEl.innerHTML = '';
+  labelsEl.innerHTML = '';
+
+  const nouns = [], verbs = [], adjs = [];
+
+  ex.tokens.forEach(tok => {
+    const s = document.createElement('span');
+    if (tok.punct) {
+      s.className   = 'w w-punct';
+      s.textContent = tok.w;
+    } else {
+      s.className   = 'w';
+      s.textContent = tok.w;
+      if      (tok.t === 'nomen') { s.classList.add('w-nomen'); nouns.push(tok.w); }
+      else if (tok.t === 'verb')  { s.classList.add('w-verb');  verbs.push(tok.w); }
+      else if (tok.t === 'adj')   { s.classList.add('w-adj');   adjs.push(tok.w);  }
+      else                        { s.classList.add('w-plain'); }
+    }
+    sentEl.appendChild(s);
+  });
+
+  // Label summary below sentence
+  nouns.forEach(w => { const t = document.createElement('span'); t.className='wl-tag wl-nomen'; t.textContent=w; labelsEl.appendChild(t); });
+  verbs.forEach(w => { const t = document.createElement('span'); t.className='wl-tag wl-verb';  t.textContent=w; labelsEl.appendChild(t); });
+  adjs.forEach (w => { const t = document.createElement('span'); t.className='wl-tag wl-adj';   t.textContent=w; labelsEl.appendChild(t); });
+}
+
+function exNav(dir) {
+  exIdx = (exIdx + dir + EXAMPLES.length) % EXAMPLES.length;
+  renderExample();
+}
+
+// ── EXERCISE RENDERING ────────────────────────────────────────────────────────
+function renderExercise() {
+  const ex = EXERCISES[exrIdx];
+  exrState = ex.tokens.map(() => null);
+
+  const total = EXERCISES.length;
+  document.getElementById('exr-step').textContent    = `Übung ${exrIdx+1} von ${total}`;
+  document.getElementById('exr-counter').textContent = `${exrIdx+1} / ${total}`;
+
+  const fb = document.getElementById('exr-feedback');
+  fb.style.display = 'none';
+
+  renderTokens();
+}
+
+function renderTokens() {
+  const ex   = EXERCISES[exrIdx];
+  const wrap = document.getElementById('exr-tokens');
+  wrap.innerHTML = '';
+
+  ex.tokens.forEach((tok, i) => {
+    if (tok.punct) {
+      const s = document.createElement('span');
+      s.className   = 'tok-punct';
+      s.textContent = tok.w;
+      wrap.appendChild(s);
+      return;
+    }
+    const s = document.createElement('span');
+    s.className        = 'tok';
+    s.textContent      = tok.w;
+    s.dataset.idx      = i;
+
+    const type = exrState[i];
+    if      (type === 'nomen') s.classList.add('tok-nomen');
+    else if (type === 'verb')  s.classList.add('tok-verb');
+    else if (type === 'adj')   s.classList.add('tok-adj');
+
+    s.addEventListener('click', () => applyMode(i));
+    wrap.appendChild(s);
+  });
+}
+
+// ── MODE SELECTION ────────────────────────────────────────────────────────────
+function setMode(mode) {
+  curMode = mode;
+  ['nomen','verb','adj','erase'].forEach(m => {
+    document.getElementById('mode-' + m).className = 'mode-btn';
+    if (m === mode) document.getElementById('mode-' + m).classList.add('m-active-' + m);
+  });
+  const labels = {nomen:'Nomen gewählt — klicke jetzt ein Nomen im Satz.', verb:'Verb gewählt — klicke jetzt ein Verb im Satz.', adj:'Adjektiv gewählt — klicke jetzt ein Adjektiv im Satz.', erase:'Farbe entfernen gewählt — klicke ein farbiges Wort.'};
+  document.getElementById('mode-hint').textContent = labels[mode];
+}
+
+function applyMode(idx) {
+  if (!curMode) {
+    // Flash mode-bar to signal: pick a mode first
+    const bar = document.getElementById('mode-bar');
+    bar.style.outline = '2.5px solid var(--amber2)';
+    bar.style.borderRadius = 'var(--r2)';
+    setTimeout(() => { bar.style.outline = ''; bar.style.borderRadius = ''; }, 700);
+    document.getElementById('mode-hint').textContent = 'Wähle zuerst eine Farbe oben!';
+    return;
+  }
+  exrState[idx] = curMode === 'erase' ? null : curMode;
+  // Hide feedback when user changes an answer
+  document.getElementById('exr-feedback').style.display = 'none';
+  renderTokens();
+}
+
+// ── CHECK ─────────────────────────────────────────────────────────────────────
+function checkExercise() {
+  const ex = EXERCISES[exrIdx];
+  const fb = document.getElementById('exr-feedback');
+  let correct = 0, total = 0, mistakes = [];
+
+  const typeLabel = {nomen:'Nomen', verb:'Verb', adj:'Adjektiv'};
+
+  ex.tokens.forEach((tok, i) => {
+    if (!tok.t) return; // articles / prepositions — skip
+    total++;
+    if (exrState[i] === tok.t) {
+      correct++;
+    } else {
+      const want = typeLabel[tok.t];
+      const got  = exrState[i] ? typeLabel[exrState[i]] : 'keine Farbe';
+      mistakes.push(`„${tok.w}" ist ein ${want} — du hast ${got} gewählt.`);
+    }
+  });
+
+  // Outline tokens
+  document.getElementById('exr-tokens').querySelectorAll('.tok').forEach(s => {
+    s.classList.remove('tok-correct','tok-wrong');
+    const i   = parseInt(s.dataset.idx);
+    const tok = ex.tokens[i];
+    if (!tok.t) return;
+    s.classList.add(exrState[i] === tok.t ? 'tok-correct' : 'tok-wrong');
+  });
+
+  fb.style.display = 'block';
+  if (correct === total && total > 0) {
+    fb.className  = 'feedback fb-ok';
+    fb.textContent = `Sehr gut! Alle ${total} Wörter sind richtig markiert. ✓`;
+  } else {
+    fb.className = 'feedback fb-warn';
+    fb.innerHTML = `${correct} von ${total} Wörtern sind richtig.<br>` +
+                   mistakes.map(m => `• ${m}`).join('<br>');
+  }
+}
+
+function resetExercise() {
+  exrState = EXERCISES[exrIdx].tokens.map(() => null);
+  document.getElementById('exr-feedback').style.display = 'none';
+  renderTokens();
+}
+
+function showAnswer() {
+  EXERCISES[exrIdx].tokens.forEach((tok, i) => {
+    if (tok.t) exrState[i] = tok.t;
+  });
+  renderTokens();
+  const fb = document.getElementById('exr-feedback');
+  fb.style.display = 'block';
+  fb.className  = 'feedback fb-ok';
+  fb.textContent = 'Das ist die richtige Antwort. Schau dir die Farben gut an.';
+}
+
+function exrNav(dir) {
+  exrIdx = (exrIdx + dir + EXERCISES.length) % EXERCISES.length;
+  renderExercise();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderExample();
+renderExercise();
+</script>
+</body>
+</html>
