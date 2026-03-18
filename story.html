@@ -1223,6 +1223,7 @@ let playChecks={1:false,2:false,3:false,4:false};
 let keywords=[];
 let screenshotData=null;
 let mediaRecorder=null,recordChunks=[],audioBlob=null,recordTimer=null,recordSecs=0;
+let narrateSpeechRec=null,narrateTranscriptFinal='';
 let typedNarration='';
 let scaffoldData={begin:'',middle:'',end:''};
 let scaffoldEdits={begin:'',middle:'',end:''};
@@ -1598,6 +1599,34 @@ async function startRecording(){
       const m=Math.floor(recordSecs/60),s=recordSecs%60;
       document.getElementById('record-timer').textContent=`${m}:${s<10?'0':''}${s}`;
     },1000);
+
+    // Start speech recognition for live transcription into textarea
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(SR){
+      narrateTranscriptFinal='';
+      narrateSpeechRec=new SR();
+      narrateSpeechRec.lang='de-DE';
+      narrateSpeechRec.continuous=true;
+      narrateSpeechRec.interimResults=true;
+      narrateSpeechRec.onresult=ev=>{
+        let interim='';
+        for(let i=ev.resultIndex;i<ev.results.length;i++){
+          if(ev.results[i].isFinal)narrateTranscriptFinal+=ev.results[i][0].transcript+' ';
+          else interim+=ev.results[i][0].transcript;
+        }
+        const ta=document.getElementById('typed-narration');
+        ta.value=narrateTranscriptFinal+interim;
+      };
+      narrateSpeechRec.onerror=()=>{};
+      narrateSpeechRec.onend=()=>{
+        // Restart if still recording (browser sometimes stops it mid-session)
+        if(mediaRecorder&&mediaRecorder.state==='recording'){
+          try{narrateSpeechRec.start();}catch(e){}
+        }
+      };
+      narrateSpeechRec.start();
+      document.getElementById('record-status').textContent='🔴 Aufnahme + Transkription läuft …';
+    }
   }catch(e){
     document.getElementById('record-status').textContent='❌ Mikrofon nicht verfügbar — bitte tippe deine Geschichte.';
   }
@@ -1605,6 +1634,7 @@ async function startRecording(){
 function stopRecording(){
   if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();
   clearInterval(recordTimer);
+  if(narrateSpeechRec){try{narrateSpeechRec.stop();}catch(e){}narrateSpeechRec=null;}
 }
 
 async function completeNarrate(){
@@ -1697,9 +1727,34 @@ function buildScaffold(){
   });
 }
 
+function insertIntoScaffold(chId,word){
+  const ta=document.querySelector(`.scaffold-edit[data-ch="${chId}"]`);
+  if(!ta)return;
+  const pos=ta.selectionStart||ta.value.length;
+  const before=ta.value.slice(0,pos);
+  const after=ta.value.slice(pos);
+  const insert=(before&&!before.endsWith(' ')?' ':'')+word+(after&&!after.startsWith(' ')?' ':' ');
+  ta.value=before+insert+after;
+  scaffoldEdits[chId]=ta.value;
+  ta.focus();ta.selectionStart=ta.selectionEnd=(before+insert).length;
+}
+
 function renderScaffoldResult(parsed){
   const wrap=document.getElementById('scaffold-sections');
-  wrap.innerHTML=CHAPTERS.map(ch=>{
+
+  // Build keyword chips from Part 2 (keywords + feelings) to show across all sections
+  const allWords=[...keywords,...selectedFeelings];
+  const kwChipsHTML=allWords.length
+    ?`<div style="margin-bottom:.5rem;">
+        <span style="font-size:11px;color:var(--muted);font-family:var(--fp);">💡 Deine Wörter aus Schritt 2 — antippen zum Einfügen:</span>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;">
+          ${allWords.map(w=>`<button onclick="insertIntoScaffold(currentSection,'${esc(w).replace(/'/g,"\\'")}');return false;" style="padding:3px 10px;border:1.5px solid var(--amber);border-radius:99px;background:var(--amber4);color:var(--amber);font-size:12px;cursor:pointer;font-family:var(--fb);">${esc(w)}</button>`).join('')}
+        </div>
+      </div>`
+    :'';
+
+  wrap.innerHTML=(kwChipsHTML?`<div id="kw-chip-bar" style="margin-bottom:.6rem;">${kwChipsHTML}</div>`:'')
+    +CHAPTERS.map(ch=>{
     const chData=parsed[ch.id]||{};
     const prompt=chData.prompt||'Was war das Besonderste an diesem Teil deines Abenteuers?';
     const draft=chData.draft||'';
@@ -1708,11 +1763,13 @@ function renderScaffoldResult(parsed){
         <span class="scaffold-label">${ch.icon} ${ch.label}</span>
         <p style="font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.5;">${esc(prompt)}</p>
         <textarea class="scaffold-edit" data-ch="${ch.id}" rows="3"
-          oninput="scaffoldEdits['${ch.id}']=this.value"
+          oninput="scaffoldEdits['${ch.id}']=this.value;currentSection='${ch.id}'"
+          onfocus="currentSection='${ch.id}'"
           placeholder="Deine Ideen …">${esc(draft)}</textarea>
       </div>`;
   }).join('');
 }
+let currentSection=CHAPTERS[0].id;
 
 function completeScaffold(){
   // Persist edits from textareas
@@ -2508,7 +2565,7 @@ function buildLernpass(totalW,stars){
 function restartAll(){
   currentStep='play';currentChapter=0;writePhase='plan';
   playChecks={1:false,2:false,3:false,4:false};
-  keywords=[];screenshotData=null;audioBlob=null;typedNarration='';
+  keywords=[];screenshotData=null;audioBlob=null;narrateSpeechRec=null;narrateTranscriptFinal='';typedNarration='';
   scaffoldData={begin:'',middle:'',end:''};scaffoldEdits={begin:'',middle:'',end:''};
   answers={begin:'',middle:'',end:''};
   planData={begin:{held:'',wesen:'',ort:'',ziel:''},middle:{ereignis:'',gefuehl:'',hindernis:'',dialog:''},end:{loesung:'',veraenderung:'',schlussformel:'',letzterSatz:''}};
