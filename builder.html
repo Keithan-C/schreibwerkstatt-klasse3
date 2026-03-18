@@ -267,6 +267,27 @@ body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:
 .ab-reset:hover{background:var(--border-lt);}
 @media(max-width:440px){.action-row{flex-direction:column;}}
 
+/* ── SATZ-CHECK ── */
+.satz-check-wrap{background:var(--surface);border:2.5px solid var(--plum3);border-radius:var(--r);margin-top:1.8rem;margin-bottom:1rem;box-shadow:var(--sh);overflow:hidden;}
+.satz-check-summary{padding:13px 16px;cursor:pointer;font-weight:900;font-size:16px;color:var(--plum);list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
+.satz-check-summary::-webkit-details-marker{display:none;}
+details[open].satz-check-wrap>.satz-check-summary{border-bottom:2px solid var(--plum3);}
+.satz-check-body{padding:1rem 1.2rem 1.1rem;}
+.sc-desc{font-size:13px;color:var(--muted);display:block;margin-bottom:.8rem;line-height:1.65;}
+.sc-textarea{width:100%;min-height:88px;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--font);font-size:15px;line-height:1.8;resize:vertical;outline:none;background:var(--surface);}
+.sc-textarea:focus{border-color:var(--plum2);background:var(--plum4);}
+.sc-btn{display:block;width:100%;margin-top:.6rem;padding:12px;border:none;border-radius:var(--r2);background:var(--plum);color:#fff;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;}
+.sc-btn:hover{background:var(--plum2);}
+.sc-results{display:none;flex-direction:column;gap:.55rem;margin-top:.9rem;}
+.sc-results.on{display:flex;}
+.sc-card{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:600;line-height:1.7;border:2px solid;}
+.sc-ok  {background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
+.sc-warn{background:var(--clay4);color:var(--clay);border-color:var(--clay3);}
+.sc-info{background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
+.sc-tip {background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
+.sc-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;opacity:.7;display:block;margin-bottom:2px;}
+.sc-hl-adj{background:var(--plum3);color:var(--plum);border-radius:4px;padding:1px 4px;}
+
 /* ── GLOBAL ACCESSIBILITY ── */
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;}
@@ -406,6 +427,18 @@ button:focus-visible,a:focus-visible,textarea:focus-visible{
   </div>
   <button class="action-btn ab-reset" onclick="resetBuilder()">↩ Neu anfangen</button>
 </div>
+
+<!-- ══ SATZ-CHECK ══ -->
+<details class="satz-check-wrap" open>
+  <summary class="satz-check-summary">✍️ Satz prüfen — Grammatik &amp; Schreibtipps</summary>
+  <div class="satz-check-body">
+    <span class="sc-desc">Schreibe einen Satz aus deiner Geschichte hier rein. Klicke auf „Prüfen" — das Programm sagt dir sofort, was gut ist und was du verbessern kannst.</span>
+    <textarea class="sc-textarea" id="sc-input" rows="3" spellcheck="true" lang="de"
+      placeholder="Schreibe hier einen Satz …&#10;Beispiel: Plötzlich sah der mutige Ritter einen riesigen Drachen."></textarea>
+    <button class="sc-btn" onclick="checkSentence()">🔎 Satz prüfen</button>
+    <div class="sc-results" id="sc-results"></div>
+  </div>
+</details>
 
 </div><!-- /wrap -->
 
@@ -1293,6 +1326,276 @@ function setInterest(key){
 }
 
 // ══════════════════════════════════════════════════
+// SATZ-CHECK
+// ══════════════════════════════════════════════════
+const SC_ADJ = new Set([
+  'mutig','mutige','mutigen','mutigem','mutiger','mutiges',
+  'klug','kluge','klugen','kluger','kluges',
+  'stark','starke','starken','starker','starkes',
+  'freundlich','freundliche','freundlichen','freundlicher',
+  'neugierig','neugierige','neugierigen','neugieriger',
+  'ängstlich','ängstliche','ängstlichen',
+  'listig','listige','listigen','listiger',
+  'tapfer','tapfere','tapferen','tapferer',
+  'fröhlich','fröhliche','fröhlichen','fröhlicher',
+  'traurig','traurige','traurigen','trauriger',
+  'wütend','wütende','wütenden','wütender',
+  'stolz','stolze','stolzen','stolzer',
+  'glücklich','glückliche','glücklichen','glücklicher',
+  'böse','bösen','böser','nett','nette','netten','netter',
+  'groß','große','großen','großem','großer','großes',
+  'klein','kleine','kleinen','kleiner','kleines',
+  'lang','lange','langen','langer','langes',
+  'kurz','kurze','kurzen','kurzer','kurzes',
+  'hoch','hohe','hohen','hoher','hohes',
+  'tief','tiefe','tiefen','tiefer','tiefes',
+  'alt','alte','alten','alter','altes',
+  'jung','junge','jungen','junger','junges',
+  'neu','neue','neuen','neuer','neues',
+  'gut','gute','guten','guter','gutes',
+  'schlecht','schlechte','schlechten','schlechter',
+  'schön','schöne','schönen','schöner','schönes',
+  'dunkel','dunkle','dunklen','dunkler','dunkles','dunklem',
+  'hell','helle','hellen','heller','helles',
+  'warm','warme','warmen','warmer','warmes',
+  'kalt','kalte','kalten','kalter','kaltes',
+  'laut','laute','lauten','lauter','lautes',
+  'leise','leisen','leiser',
+  'schnell','schnelle','schnellen','schneller',
+  'langsam','langsame','langsamen','langsamer',
+  'riesig','riesige','riesigen','riesiger','riesiges',
+  'winzig','winzige','winzigen','winziger',
+  'wild','wilde','wilden','wilder','wildes',
+  'geheimnisvoll','geheimnisvolle','geheimnisvollen','geheimnisvoller',
+  'gefährlich','gefährliche','gefährlichen','gefährlicher',
+  'schrecklich','schreckliche','schrecklichen',
+  'wunderbar','wunderbare','wunderbaren','wunderbarer',
+  'einsam','einsame','einsamen','einsamer',
+  'ruhig','ruhige','ruhigen','ruhiger',
+  'mächtig','mächtige','mächtigen','mächtiger',
+  'erschöpft','erschöpfte','erschöpften',
+  'golden','goldene','goldenen','goldener',
+  'bunt','bunte','bunten','bunter',
+  'rot','rote','roten','roter','rotes',
+  'blau','blaue','blauen','blauer','blaues',
+  'grün','grüne','grünen','grüner',
+  'schwarz','schwarze','schwarzen','schwarzer',
+  'weiß','weiße','weißen','weißer',
+  'seltsam','seltsame','seltsamen','seltsamer',
+  'verlassen','verlassene','verlassenen','verlassener',
+  'stürmisch','stürmische','stürmischen',
+  'eisig','eisige','eisigen','eisiger',
+  'hungrig','hungrige','hungrigen','hungriger',
+  'flink','flinke','flinken','flinker',
+  'sanft','sanfte','sanften','sanfter',
+  'golden','silbern','silberne','silbernen',
+  'brodelnde','brodelnden','dampfende','dampfenden',
+  'glühende','glühenden','feuerspeiende','feuerspeienden',
+]);
+
+const SC_PRÄT = new Set([
+  'war','waren','warst','wart',
+  'hatte','hatten','hattest','hattet',
+  'wurde','wurden','wurdest','wurdet',
+  'ging','gingen','gingst','gingt',
+  'sah','sahen','sahst','saht',
+  'kam','kamen','kamst','kamt',
+  'stand','standen','standest','standet',
+  'lief','liefen','liefst','lieft',
+  'rannte','rannten','ranntest','ranntet',
+  'rief','riefen','riefst','rieft',
+  'fand','fanden','fandest','fandet',
+  'gab','gaben','gabst','gabt',
+  'nahm','nahmen','nahmst','nahmt',
+  'blieb','blieben','bliebst','bliebt',
+  'wollte','wollten','wolltest','wolltet',
+  'konnte','konnten','konntest','konntet',
+  'musste','mussten','musstest','musstet',
+  'durfte','durften','durftest','durftet',
+  'sollte','sollten','solltest','solltet',
+  'dachte','dachten','dachtest','dachtet',
+  'wusste','wussten','wusstest','wusstet',
+  'sagte','sagten','sagtest','sagtet',
+  'fragte','fragten','fragtest','fragtet',
+  'spielte','spielten','spieltest','spieltet',
+  'lachte','lachten','lachtest','lachtet',
+  'weinte','weinten','weintest','weintet',
+  'schrie','schrien','schriest','schriet',
+  'fiel','fielen','fielst','fielt',
+  'brachte','brachten','brachtest','brachtet',
+  'zog','zogen','zogst','zogt',
+  'griff','griffen','griffst','grifft',
+  'ließ','ließen','ließt',
+  'schrieb','schrieben','schriebst','schriebt',
+  'flog','flogen','flogst','flogt',
+  'sprang','sprangen','sprangst','sprangt',
+  'schwamm','schwammen','schwammst','schwammt',
+  'hörte','hörten','hörtest','hörtet',
+  'suchte','suchten','suchtest','suchtet',
+  'kämpfte','kämpften','rettete','retteten',
+  'kletterte','kletterten','öffnete','öffneten',
+  'begann','begannen','wartete','warteten',
+  'half','halfen','schaute','schauten',
+  'bemerkte','bemerkten','entdeckte','entdeckten',
+  'holte','holten','stellte','stellten',
+  'legte','legten','zitterte','zitterten',
+  'versuchte','versuchten','erkannte','erkannten',
+  'stolperte','stolperten','seufzte','seufzten',
+  'strahlte','strahlten','schlief','schliefen',
+  'flüsterte','flüsterten','schlich','schlichen',
+  'warf','warfen','bat','baten','las','lasen',
+  'baute','bauten','trat','traten',
+  'träumte','träumten','wünschte','wünschten',
+  'berührte','berührten','landete','landeten',
+  'zeigte','zeigten','roch','rochen',
+]);
+
+const SC_PRÄS = new Set([
+  'bin','ist','sind','bist','seid',
+  'habe','hat','haben','hast','habt',
+  'werde','wird','werden','wirst','werdet',
+  'gehe','geht','gehen','gehst',
+  'sehe','sieht','sehen','siehst',
+  'komme','kommt','kommen','kommst',
+  'stehe','steht','stehen','stehst',
+  'laufe','läuft','laufen','läufst',
+  'renne','rennt','rennen','rennst',
+  'rufe','ruft','rufen','rufst',
+  'finde','findet','finden','findest',
+  'gebe','gibt','geben','gibst',
+  'nehme','nimmt','nehmen','nimmst',
+  'bleibe','bleibt','bleiben','bleibst',
+  'will','wollen','willst','wollt',
+  'kann','können','kannst','könnt',
+  'muss','müssen','musst','müsst',
+  'darf','dürfen','darfst','dürft',
+  'soll','sollen','sollst','sollt',
+  'mag','mögen','magst','mögt',
+  'denke','denkt','denken','denkst',
+  'weiß','wissen','weißt','wisst',
+  'sage','sagt','sagen','sagst',
+  'frage','fragt','fragen','fragst',
+  'spiele','spielt','spielen','spielst',
+  'lache','lacht','lachen','lachst',
+  'weine','weint','weinen','weinst',
+  'schreie','schreit','schreien','schreist',
+  'falle','fällt','fallen','fällst',
+  'bringe','bringt','bringen','bringst',
+  'ziehe','zieht','ziehen','ziehst',
+  'höre','hört','hören','hörst',
+  'suche','sucht','suchen','suchst',
+  'kämpfe','kämpft','kämpfen','kämpfst',
+  'rette','rettet','retten','rettest',
+  'klettere','klettert','klettern','kletterst',
+  'öffne','öffnet','öffnen','öffnest',
+  'beginne','beginnt','beginnen','beginnst',
+  'warte','wartet','warten','wartest',
+  'helfe','hilft','helfen','hilfst',
+  'schaue','schaut','schauen','schaust',
+  'bemerke','bemerkt','bemerken','bemerkst',
+  'entdecke','entdeckt','entdecken','entdeckst',
+  'hole','holt','holen','holst',
+  'stelle','stellt','stellen','stellst',
+  'lege','legt','legen','legst',
+  'zittere','zittert','zittern','zitterst',
+  'versuche','versucht','versuchen','versuchst',
+  'träume','träumt','träumen','träumst',
+  'erkenne','erkennt','erkennen','erkennst',
+  'stolpere','stolpert','stolpern','stolperst',
+  'springt','springe','springen','springst',
+  'fliegt','fliege','fliegen','fliegst',
+  'schwimmt','schwimme','schwimmen','schwimmst',
+  'riecht','rieche','riechen','riechst',
+  'zeigt','zeige','zeigen','zeigst',
+  'landet','lande','landen','landest',
+  'strahle','strahlt','strahlen','strahlst',
+]);
+
+function scEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function checkSentence(){
+  const raw = (document.getElementById('sc-input').value||'').trim();
+  if(!raw){ showToast('Schreibe erst einen Satz!'); return; }
+
+  const words = raw.split(/\s+/).filter(Boolean);
+  const lower = words.map(w=>w.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase());
+  const results = [];
+
+  // 1. Capital letter
+  if(/^[A-ZÄÖÜ„"]/.test(raw)){
+    results.push({cls:'sc-ok',  label:'✓ Großbuchstabe', text:'Dein Satz beginnt mit einem Großbuchstaben. ✓'});
+  } else {
+    results.push({cls:'sc-warn', label:'✗ Großbuchstabe', text:'Dein Satz muss mit einem Großbuchstaben beginnen!'});
+  }
+
+  // 2. End punctuation
+  const lc = raw.trimEnd().slice(-1);
+  if(['.','!','?','"'].includes(lc)){
+    results.push({cls:'sc-ok',  label:'✓ Satzzeichen', text:'Das Satzzeichen am Ende ist richtig. ✓'});
+  } else {
+    results.push({cls:'sc-warn', label:'✗ Satzzeichen', text:'Vergiss das Satzzeichen am Ende nicht! Benutze  .  !  oder  ?'});
+  }
+
+  // 3. Word count
+  const count = words.length;
+  if(count < 4){
+    results.push({cls:'sc-warn', label:'📏 Satzlänge', text:`Dein Satz hat nur ${count} Wörter — das ist sehr kurz. Versuche 5–12 Wörter.`});
+  } else if(count <= 14){
+    results.push({cls:'sc-ok',  label:'📏 Satzlänge', text:`Dein Satz hat ${count} Wörter — das ist eine gute Länge! ✓`});
+  } else {
+    results.push({cls:'sc-info', label:'📏 Satzlänge', text:`Dein Satz hat ${count} Wörter — das ist sehr lang. Kurze Sätze erzeugen mehr Spannung!`});
+  }
+
+  // 4. Sentence starter — warn if starts with "Ich"
+  const first = lower[0]||'';
+  if(first==='ich'){
+    results.push({cls:'sc-tip', label:'🔤 Satzanfang', text:'Dein Satz beginnt mit „Ich". Versuche einen anderen Anfang: z.B. „Plötzlich …", „Langsam …", „Im Wald …".'});
+  } else if(first){
+    results.push({cls:'sc-ok',  label:'🔤 Satzanfang', text:`Guter Satzanfang: „${words[0]}" ✓`});
+  }
+
+  // 5. Adjectives
+  const foundAdj = lower.filter(w=>SC_ADJ.has(w));
+  const uniqueAdj = [...new Set(foundAdj)];
+  if(uniqueAdj.length===0){
+    results.push({cls:'sc-tip', label:'🎨 Adjektive', text:'Keine Adjektive (Eigenschaftswörter) gefunden. Adjektive machen Sätze lebendiger — z.B. „der mutige Ritter", „der dunkle Wald".'});
+  } else {
+    const hl = raw.replace(/([a-zA-ZäöüÄÖÜß]+)/g, m =>
+      SC_ADJ.has(m.toLowerCase()) ? `<span class="sc-hl-adj">${scEsc(m)}</span>` : scEsc(m));
+    results.push({cls:'sc-ok', label:'🎨 Adjektive',
+      html:`${uniqueAdj.length} Adjektiv${uniqueAdj.length===1?'':'e'} gefunden ✓: ${hl}`});
+  }
+
+  // 6. Tense
+  const hasPrät = lower.some(w=>SC_PRÄT.has(w));
+  const hasPräs = lower.some(w=>SC_PRÄS.has(w));
+  if(hasPrät && !hasPräs){
+    results.push({cls:'sc-ok',  label:'⏰ Zeitform', text:'Vergangenheit (Präteritum) ✓ — richtig für Geschichten!'});
+  } else if(hasPräs && !hasPrät){
+    const pv = [...new Set(lower.filter(w=>SC_PRÄS.has(w)))];
+    results.push({cls:'sc-tip', label:'⏰ Zeitform',
+      text:`Gegenwart erkannt: „${pv.join('", „')}". Für Geschichten benutze die Vergangenheit — z.B. „ging" statt „geht", „war" statt „ist".`});
+  } else if(hasPrät && hasPräs){
+    results.push({cls:'sc-warn', label:'⏰ Zeitform', text:'Zwei verschiedene Zeitformen! Für Geschichten immer die Vergangenheit (Präteritum) benutzen.'});
+  } else {
+    results.push({cls:'sc-info', label:'⏰ Zeitform', text:'Kein Tuwort (Verb) erkannt. Schreibe einen Satz mit einem Verb — z.B. „lief", „sah", „hatte", „rief".'});
+  }
+
+  // 7. Wörtliche Rede (bonus)
+  if(/„|"/.test(raw)){
+    results.push({cls:'sc-ok', label:'💬 Wörtliche Rede', text:'Wörtliche Rede mit Anführungszeichen gefunden ✓ — sehr gut!'});
+  }
+
+  const out = document.getElementById('sc-results');
+  out.className = 'sc-results on';
+  out.innerHTML = results.map(r=>`
+    <div class="sc-card ${r.cls}">
+      <span class="sc-label">${r.label}</span>
+      ${r.html||scEsc(r.text||'')}
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', ()=>{
@@ -1302,6 +1605,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(el) el.classList.toggle('active', i===confidence);
   });
   render();
+  // Sentence checker: Shift+Enter = new line, Enter alone = check
+  const sci = document.getElementById('sc-input');
+  if(sci) sci.addEventListener('keydown', e=>{
+    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); checkSentence(); }
+  });
 });
 </script>
 </body>
