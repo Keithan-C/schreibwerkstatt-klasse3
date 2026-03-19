@@ -1650,7 +1650,7 @@ function bindEvents(){
   if(ri)ri.addEventListener('input',saveRev);
 }
 
-function liveUpdate(text){
+function _liveUpdateBase(text){
   const l=lang==='both'?'de':lang;
   const count=wc(text);
   const min=T[l].minWords[part];
@@ -2332,9 +2332,8 @@ function detectGrammarTopic(text){
 
 // Hook into liveUpdate — debounced detection
 let gramDetectTimer=null;
-const _origLiveUpdate=liveUpdate;
 function liveUpdate(text){
-  _origLiveUpdate(text);
+  _liveUpdateBase(text);
   // Debounce detection — wait 1.5s after typing stops
   clearTimeout(gramDetectTimer);
   gramDetectTimer=setTimeout(()=>{
