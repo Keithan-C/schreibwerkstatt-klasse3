@@ -759,7 +759,12 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
     <button class="setup-btn" id="start-btn" onclick="startApp()">✏️ Für Schüler öffnen / Open for Students</button>
 
-    <div style="text-align:center;margin-top:1rem;display:flex;flex-direction:column;gap:8px;">
+    <!-- Datenschutz link within setup card -->
+    <div style="text-align:center;margin-top:.6rem;">
+      <button onclick="sw_showPrivacy()" style="background:none;border:none;cursor:pointer;font-size:11px;color:var(--muted);font-family:var(--font-body);text-decoration:underline;padding:0;">🔒 Datenschutzerklärung / Privacy Notice</button>
+    </div>
+
+    <div style="text-align:center;margin-top:.6rem;display:flex;flex-direction:column;gap:8px;">
       <a href="builder.html" style="
         display:inline-flex;align-items:center;justify-content:center;gap:7px;
         font-family:var(--font-head);font-size:11px;font-weight:700;

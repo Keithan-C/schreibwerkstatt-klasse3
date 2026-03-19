@@ -204,23 +204,30 @@ body {
   display: flex; flex-wrap: wrap; gap: 8px;
   padding: 12px; border: 2.5px dashed var(--border);
   min-height: 56px; border-radius: var(--radius-sm);
-  transition: border-color .2s;
+  transition: border-color .25s, background .25s;
 }
 .word-pool.over, .sentence-area.over { border-color: var(--blue); background: var(--blue-lt); }
+.sentence-area.success { border-color: var(--green); background: var(--green-bg); }
 .word-block {
-  background: var(--blue); color: #fff;
+  color: #fff;
   padding: 7px 14px; border-radius: 40px;
   cursor: grab; user-select: none;
   font-size: .9rem; font-weight: 700;
   font-family: 'Nunito', sans-serif;
   transition: opacity .15s, transform .15s;
-  box-shadow: 0 2px 8px rgba(79,110,247,.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,.18);
 }
 .word-block:hover { transform: translateY(-2px); }
 .word-block.dragging { opacity: .45; }
 .block-feedback {
-  font-size: .9rem; font-weight: 700; padding: 10px 0;
-  color: var(--green);
+  font-size: .95rem; font-weight: 700; padding: 10px 0;
+  min-height: 2rem;
+}
+.block-counter {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .82rem; font-weight: 800;
+  color: var(--muted); text-align: right;
+  margin-bottom: 4px;
 }
 
 /* ── SPINNER ── */
@@ -291,6 +298,7 @@ body {
       </div>
     </div>
     <div class="card-body">
+      <div class="block-counter" id="blockCounter"></div>
       <div>
         <div class="dnd-label">Wörter</div>
         <div class="word-pool" id="wordPool"></div>
@@ -301,7 +309,8 @@ body {
       </div>
       <div class="btn-row">
         <button class="btn btn-primary" onclick="checkBlockSentence()">🔍 Prüfen</button>
-        <button class="btn btn-outline" onclick="resetBlocks()">🔄 Zurücksetzen</button>
+        <button class="btn btn-outline" onclick="resetBlocks()">🔀 Neu mischen</button>
+        <button class="btn btn-outline" onclick="skipBlock()">⏭ Überspringen</button>
       </div>
       <div class="block-feedback" id="blockFeedback"></div>
     </div>
@@ -311,10 +320,41 @@ body {
 
 <script>
 /* ════════════════════════════════════════
-   DATA
+   BLOCK SENTENCES DATA  (correct order → joined with spaces + '.')
 ════════════════════════════════════════ */
-const BLOCK_SENTENCE = "Der Junge rennt schnell zur Gans im Park.";
-const BLOCK_WORDS    = ["Der Junge","rennt","zur","Gans","schnell","im","Park"];
+const BLOCK_SENTENCES = [
+  { s: "Die Sonne scheint hell am Himmel.",
+    w: ["Die Sonne","scheint","hell","am","Himmel"] },
+  { s: "Wir spielen heute im Garten.",
+    w: ["Wir","spielen","heute","im","Garten"] },
+  { s: "Die Katze schläft auf dem Sofa.",
+    w: ["Die Katze","schläft","auf","dem","Sofa"] },
+  { s: "Das Mädchen malt ein buntes Bild.",
+    w: ["Das Mädchen","malt","ein buntes","Bild"] },
+  { s: "Der Junge rennt schnell zur Gans im Park.",
+    w: ["Der Junge","rennt","schnell","zur","Gans","im","Park"] },
+  { s: "Meine Schwester liest gerne Bücher.",
+    w: ["Meine Schwester","liest","gerne","Bücher"] },
+  { s: "Im Sommer fahren wir ans Meer.",
+    w: ["Im Sommer","fahren","wir","ans","Meer"] },
+  { s: "Der Lehrer schreibt die Aufgabe an die Tafel.",
+    w: ["Der Lehrer","schreibt","die Aufgabe","an","die","Tafel"] },
+  { s: "Die Kinder bauen eine große Schneeburg.",
+    w: ["Die Kinder","bauen","eine große","Schneeburg"] },
+  { s: "Heute backen wir einen leckeren Kuchen.",
+    w: ["Heute","backen","wir","einen leckeren","Kuchen"] },
+  { s: "Der Hund bringt dem Mann den Ball.",
+    w: ["Der Hund","bringt","dem Mann","den","Ball"] },
+  { s: "Das kleine Häschen hüpft über die Wiese.",
+    w: ["Das kleine","Häschen","hüpft","über","die","Wiese"] },
+];
+
+/* A colour per sentence so blocks look fresh each round */
+const BLOCK_COLORS = [
+  "#4f6ef7","#16a34a","#7c3aed","#d97706",
+  "#0891b2","#be185d","#dc2626","#059669",
+  "#2563eb","#9333ea","#ca8a04","#0369a1"
+];
 
 /* ════════════════════════════════════════
    STATE
@@ -498,27 +538,64 @@ function escAttr(s) {
 ════════════════════════════════════════ */
 const pool = document.getElementById('wordPool');
 const area = document.getElementById('sentenceArea');
-let dragged = null;
+let dragged     = null;
+let blockQueue  = [];   // shuffled index order
+let blockPos    = 0;    // current position in queue
+let blockBusy   = false; // prevents double-advance while animating
 
-function buildBlocks() {
-  pool.innerHTML = '';
-  // Shuffle words for the puzzle
-  const shuffled = [...BLOCK_WORDS].sort(() => Math.random() - .5);
-  shuffled.forEach(w => pool.appendChild(makeBlock(w)));
+/* Shuffle the sentence order so every round is different */
+function initQueue() {
+  blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  blockPos   = 0;
 }
 
-function makeBlock(text) {
+function currentEntry() {
+  return BLOCK_SENTENCES[blockQueue[blockPos]];
+}
+
+function buildBlocks() {
+  const { w } = currentEntry();
+  const color  = BLOCK_COLORS[blockPos % BLOCK_COLORS.length];
+  pool.innerHTML = '';
+  area.innerHTML = '';
+  area.classList.remove('success');
+  document.getElementById('blockFeedback').textContent = '';
+  blockBusy = false;
+  // Shuffle word order for the puzzle
+  [...w].sort(() => Math.random() - .5).forEach(word => pool.appendChild(makeBlock(word, color)));
+  updateCounter();
+}
+
+function makeBlock(text, color) {
   const d = document.createElement('div');
   d.className   = 'word-block';
   d.draggable   = true;
   d.textContent = text;
+  if (color) d.style.background = color;
   return d;
 }
 
+function updateCounter() {
+  const el = document.getElementById('blockCounter');
+  if (el) el.textContent = `Satz ${blockPos + 1} von ${BLOCK_SENTENCES.length}`;
+}
+
+/* Reset = reshuffle current sentence (same puzzle, new block order) */
 function resetBlocks() {
-  pool.innerHTML = '';
-  area.innerHTML = '';
-  document.getElementById('blockFeedback').textContent = '';
+  buildBlocks();
+}
+
+/* Skip = advance to next sentence immediately */
+function skipBlock() {
+  advanceBlock();
+}
+
+function advanceBlock() {
+  blockPos = (blockPos + 1) % BLOCK_SENTENCES.length;
+  // When we've cycled through all sentences, re-shuffle for next round
+  if (blockPos === 0) {
+    blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  }
   buildBlocks();
 }
 
@@ -534,7 +611,7 @@ document.addEventListener('dragend', e => {
 });
 
 [pool, area].forEach(el => {
-  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
+  el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('over'); });
   el.addEventListener('dragleave', () => el.classList.remove('over'));
   el.addEventListener('drop', e => {
     e.preventDefault();
@@ -544,24 +621,30 @@ document.addEventListener('dragend', e => {
 });
 
 function checkBlockSentence() {
-  const blocks   = area.querySelectorAll('.word-block');
-  const fb       = document.getElementById('blockFeedback');
+  if (blockBusy) return;
+  const blocks = area.querySelectorAll('.word-block');
+  const fb     = document.getElementById('blockFeedback');
   if (!blocks.length) {
     fb.style.color = 'var(--amber)';
     fb.textContent = '⚠ Ziehe zuerst Wörter in die Satzfläche!';
     return;
   }
-  const built = Array.from(blocks).map(b => b.textContent).join(' ') + '.';
-  if (built.trim() === BLOCK_SENTENCE.trim()) {
+  const { s } = currentEntry();
+  const built  = Array.from(blocks).map(b => b.textContent).join(' ') + '.';
+  if (built.trim() === s.trim()) {
+    blockBusy = true;
+    area.classList.add('success');
     fb.style.color = 'var(--green)';
-    fb.textContent = '🌟 Richtig! Perfekter Satz!';
+    fb.textContent = '🌟 Richtig! Super gemacht! Weiter geht\'s …';
+    setTimeout(advanceBlock, 1800);
   } else {
     fb.style.color = 'var(--amber)';
     fb.textContent = '🔄 Noch nicht ganz richtig – versuche es nochmal!';
   }
 }
 
-// Init blocks on load
+// Init on load
+initQueue();
 buildBlocks();
 </script>
 <script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap';</script>
