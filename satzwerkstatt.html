@@ -1,509 +1,188 @@
-```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Satzwerkstatt ✏️</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
-
 <style>
-
-/* RESET */
-
-*,*::before,*::after{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
-
-/* DESIGN TOKENS */
-
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-
---blue:#4f6ef7;
---blue-light:#eef0ff;
-
---green:#16a34a;
---green-bg:#f0fdf4;
-
---red:#dc2626;
---red-bg:#fef2f2;
-
---amber:#d97706;
---amber-bg:#fffbeb;
-
---surface:#ffffff;
---bg:#f3f5ff;
-
---text:#1a1f36;
---muted:#64748b;
-
---border:#e3e8f3;
-
---radius:18px;
---shadow:0 4px 20px rgba(79,110,247,.08);
-
+--blue:#4f6ef7; --blue-lt:#eef0ff;
+--green:#16a34a; --green-bg:#f0fdf4; --green-mid:#86efac;
+--amber:#d97706; --amber-bg:#fffbeb; --amber-mid:#fcd34d;
+--red:#dc2626; --red-bg:#fef2f2;
+--surface:#ffffff; --bg:#f2f5ff; --text:#1a1f36; --muted:#64748b;
+--border:#e0e7f0; --radius:18px; --radius-sm:10px;
+--shadow:0 2px 16px rgba(79,110,247,.09); --shadow-md:0 6px 28px rgba(79,110,247,.13);
 }
-
-/* BODY */
-
-body{
-
-font-family:"Nunito",sans-serif;
-background:var(--bg);
-color:var(--text);
-min-height:100vh;
-
-display:flex;
-flex-direction:column;
-
-}
-
-/* TOPBAR */
-
-.topbar{
-
-background:linear-gradient(135deg,#1a1a2e,#2d2d5e);
-padding:14px 24px;
-
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-}
-
-.topbar-title{
-
-font-family:"Baloo 2";
-font-weight:800;
-font-size:1.2rem;
-color:white;
-
-}
-
-.tlink{
-
-font-size:.8rem;
-padding:6px 14px;
-
-border-radius:40px;
-
-border:1px solid rgba(255,255,255,.3);
-
-color:white;
-text-decoration:none;
-
-}
-
-/* PAGE */
-
-.page{
-
-max-width:900px;
-margin:30px auto;
-padding:20px;
-
-display:flex;
-flex-direction:column;
-gap:24px;
-
-}
-
-/* CARD */
-
-.card{
-
-background:var(--surface);
-border-radius:var(--radius);
-
-padding:20px;
-
-box-shadow:var(--shadow);
-
-transition:.2s;
-
-}
-
-.card:hover{
-
-transform:translateY(-2px);
-
-}
-
-/* HEADER */
-
-.card h2{
-
-font-size:1.1rem;
-margin-bottom:12px;
-
-}
-
-/* WELCOME */
-
-.welcome{
-
-background:var(--blue-light);
-border-left:6px solid var(--blue);
-padding:14px;
-
-border-radius:12px;
-font-weight:700;
-
-}
-
-/* TEXTAREA */
-
-textarea{
-
-width:100%;
-padding:12px;
-
-border-radius:10px;
-border:1px solid var(--border);
-
-font-size:1rem;
-
-margin-top:8px;
-
-}
-
-/* BUTTON */
-
-.btn{
-
-margin-top:12px;
-
-background:linear-gradient(135deg,#4f6ef7,#6366f1);
-
-color:white;
-
-padding:10px 16px;
-
-border:none;
-border-radius:40px;
-
-cursor:pointer;
-font-weight:700;
-
-}
-
-/* SCORE BAR */
-
-.scorebar{
-
-height:10px;
-background:#e6eaf5;
-
-border-radius:10px;
-
-overflow:hidden;
-
-margin-top:12px;
-
-}
-
-.scorefill{
-
-height:100%;
-width:0;
-
-background:linear-gradient(90deg,#22c55e,#4ade80);
-
-transition:.4s;
-
-}
-
-/* FEEDBACK */
-
-.feedback{
-
-margin-top:12px;
-font-weight:700;
-
-}
-
-/* WORD BLOCKS */
-
-.word-pool{
-
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-
-padding:10px;
-border:2px dashed var(--border);
-
-border-radius:12px;
-
-margin-top:12px;
-
-}
-
-.word{
-
-padding:8px 14px;
-
-border-radius:30px;
-
-background:linear-gradient(135deg,#4f6ef7,#6366f1);
-
-color:white;
-
-cursor:grab;
-
-font-weight:700;
-
-}
-
-/* SENTENCE AREA */
-
-.sentence{
-
-margin-top:12px;
-
-min-height:60px;
-
-border:2px dashed var(--border);
-
-border-radius:12px;
-
-padding:12px;
-
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-
-}
-
-/* MOBILE */
-
-@media(max-width:600px){
-
-.page{
-
-padding:12px;
-
-}
-
-.btn{
-
-width:100%;
-
-}
-
-}
-
+body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.topbar{background:linear-gradient(135deg,#1a1a2e,#2d2d5e);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;}
+.topbar-title{font-family:"Baloo 2";font-weight:800;color:#fff;font-size:1.2rem;}
+.tlink{font-size:.8rem;padding:6px 14px;border-radius:40px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;margin-left:6px;}
+.tlink:hover{background:rgba(255,255,255,.2);}
+.page{max-width:860px;margin:0 auto;padding:32px 16px 60px;display:flex;flex-direction:column;gap:24px;}
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+.card-hd{padding:18px 22px 14px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px;}
+.card-icon{font-size:1.6rem;}
+.card-title{font-family:'Baloo 2';font-size:1.2rem;font-weight:800;color:var(--text);}
+.card-sub{font-size:.82rem;font-weight:600;color:var(--muted);margin-top:1px;}
+.card-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.s-ta{width:100%;min-height:110px;border:2.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;resize:none;font-family:'Nunito';font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.7;background:#fafcff;outline:none;transition:border-color .2s;spellcheck:true;}
+.s-ta:focus{border-color:var(--blue);background:#fff;}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{display:flex;align-items:center;gap:6px;border:none;border-radius:40px;padding:10px 20px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .2s;}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(79,110,247,.25);}
+.btn-primary:hover{background:#3a55e0;transform:translateY(-1px);}
+.btn-outline{background:none;border:2px solid var(--border);color:var(--muted);}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt);}
+.assess{border-radius:var(--radius-sm);overflow:hidden;animation:fadeUp .25s ease;border:2px solid var(--border);display:none;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.assess-head{padding:12px 16px;font-family:'Baloo 2';font-size:.92rem;font-weight:800;background:var(--bg);border-bottom:2px solid var(--border);}
+.checks-list{display:flex;flex-direction:column;}
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.9rem;font-weight:600;}
+.check-row:last-child{border-bottom:none;}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;flex-shrink:0;margin-top:1px;}
+.check-ok{background:var(--green-bg);color:var(--green);border:2px solid var(--green-mid);}
+.check-warn{background:var(--amber-bg);color:var(--amber);border:2px solid var(--amber-mid);}
+.check-info{background:var(--blue-lt);color:var(--blue);border:2px solid #a5b4fc;}
+.lt-section{background:#fffbeb;border-top:2px solid var(--amber-mid);padding:14px 16px;display:flex;flex-direction:column;gap:8px;}
+.lt-head{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--text);}
+.lt-list{display:flex;flex-direction:column;gap:6px;}
+.lt-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface);border-radius:8px;padding:6px 10px;border:1.5px solid var(--border);}
+.lt-wrong{color:var(--red);font-weight:700;font-size:.88rem;text-decoration:line-through;}
+.lt-arrow{color:var(--muted);font-size:.85rem;}
+.lt-sugs{display:flex;gap:5px;flex-wrap:wrap;}
+.lt-sug{background:var(--green-bg);border:2px solid var(--green-mid);color:var(--green);border-radius:20px;padding:3px 11px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .18s;}
+.lt-sug:hover{background:var(--green);color:#fff;}
+.lt-fixall{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 18px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:background .2s;align-self:flex-start;}
+.lt-fixall:hover{background:#15803d;}
+.verdict{padding:14px 16px;border-top:2px solid var(--border);font-family:'Baloo 2';font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px;}
+.verdict.v-great{background:var(--green-bg);color:var(--green);}
+.verdict.v-good{background:var(--amber-bg);color:var(--amber);}
+.verdict.v-keep{background:var(--red-bg);color:var(--red);}
+.dnd-label{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.word-pool,.sentence-area{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:2.5px dashed var(--border);min-height:56px;border-radius:var(--radius-sm);transition:border-color .25s,background .25s;}
+.word-pool.over,.sentence-area.over{border-color:var(--blue);background:var(--blue-lt);}
+.sentence-area.success{border-color:var(--green);background:var(--green-bg);}
+.word-block{color:#fff;padding:7px 14px;border-radius:40px;cursor:grab;user-select:none;font-size:.9rem;font-weight:700;font-family:'Nunito';transition:opacity .15s,transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.18);}
+.word-block:hover{transform:translateY(-2px);}
+.word-block.dragging{opacity:.45;}
+.block-feedback{font-size:.95rem;font-weight:700;padding:10px 0;min-height:2rem;}
+.block-counter{font-family:'Baloo 2';font-size:.82rem;font-weight:800;color:var(--muted);text-align:right;margin-bottom:4px;}
+@keyframes spin{to{transform:rotate(360deg);}}.spinner{display:inline-block;animation:spin .8s linear infinite;}
 </style>
 </head>
-
 <body>
 
-<div class="topbar">
-
-<div class="topbar-title">
-Satzwerkstatt ✏️
-</div>
-
-<a class="tlink" href="#">
-Deutsch lernen
-</a>
-
-</div>
-
+<header class="topbar">
+<div class="topbar-title">✏️ Satzwerkstatt</div>
+<nav class="topbar-links">
+<a class="tlink" href="#">📖 Blockwelt</a>
+<a class="tlink" href="#">📝 Schreibwerkstatt</a>
+<a class="tlink" href="#">🧱 Baukasten</a>
+</nav>
+</header>
 
 <div class="page">
 
-<div class="welcome">
-👋 Willkommen in der Satzwerkstatt!  
-Schreibe einen Satz oder baue einen mit Blöcken.
-</div>
-
-
+<!-- Dein Satz -->
 <div class="card">
-
-<h2>✏️ Satz schreiben</h2>
-
-<p>1️⃣ Schreibe einen Satz → 2️⃣ Klicke „Satz prüfen“</p>
-
-<textarea id="sentenceInput" rows="3" placeholder="Die Katze schläft auf dem Sofa."></textarea>
-
-<button class="btn" onclick="checkSentence()">
-Satz prüfen
-</button>
-
-<div class="scorebar">
-<div class="scorefill" id="scoreFill"></div>
+<div class="card-hd">
+<span class="card-icon">🖊️</span>
+<div>
+<div class="card-title">Dein Satz</div>
+<div class="card-sub">Schreibe irgendeinen Satz – ich prüfe ihn für dich!</div>
+</div>
+</div>
+<div class="card-body">
+<textarea id="satz" class="s-ta" placeholder="Schreibe hier deinen Satz …" oninput="clearAssess()"></textarea>
+<div class="btn-row">
+<button class="btn btn-primary" id="checkBtn" onclick="checkSentence()">🔍 Satz prüfen</button>
+<button class="btn btn-outline" onclick="speakSentence()">🔊 Vorlesen</button>
 </div>
 
-<div class="feedback" id="feedback"></div>
-
+<div id="assess" class="assess">
+<div class="assess-head">📋 Meine Prüfung</div>
+<div class="checks-list" id="checks-list"></div>
+<div id="lt-section" class="lt-section" style="display:none">
+<div class="lt-head" id="lt-head"></div>
+<div class="lt-list" id="lt-list"></div>
+<button class="lt-fixall" id="lt-fixall" onclick="applyAllLT()" style="display:none">✨ Alle auf einmal korrigieren</button>
 </div>
-
-
-<div class="card">
-
-<h2>🧩 Satz bauen</h2>
-
-<p>Ziehe die Wörter in die richtige Reihenfolge.</p>
-
-<div class="word-pool" id="pool">
-
-<div class="word" draggable="true">Die</div>
-<div class="word" draggable="true">Katze</div>
-<div class="word" draggable="true">schläft</div>
-<div class="word" draggable="true">auf</div>
-<div class="word" draggable="true">dem</div>
-<div class="word" draggable="true">Sofa</div>
-
+<div class="verdict" id="verdict"></div>
 </div>
-
-<div class="sentence" id="sentenceArea"></div>
-
-<button class="btn" onclick="checkBlocks()">
-Satz prüfen
-</button>
-
-<div class="feedback" id="blockFeedback"></div>
-
+</div>
 </div>
 
 </div>
 
 <script>
+let _ltMatches = [];
 
-/* SENTENCE CHECKER */
+function clearAssess(){document.getElementById('assess').style.display='none';_ltMatches=[];}
 
-function checkSentence(){
+function mkCheck(type,icon,text){return `<div class="check-row"><span class="check-icon check-${type}">${icon}</span><span>${text}</span></div>`;}
 
-let input=document.getElementById("sentenceInput").value.trim()
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
 
-let feedback=document.getElementById("feedback")
+async function checkSentence(){
+  const ta=document.getElementById('satz');
+  const btn=document.getElementById('checkBtn');
+  const text=ta.value.trim();
+  const checks=[]; let structureOk=true;
 
-let score=0
-let checks=3
+  if(!text){document.getElementById('checks-list').innerHTML=mkCheck('warn','!','Schreibe zuerst einen Satz.');document.getElementById('assess').style.display='block';return;}
 
-if(input.length===0){
+  // Capital start
+  if(text[0]===text[0].toUpperCase()&&text[0]!==text[0].toLowerCase()){checks.push(mkCheck('ok','✓','Satzanfang ist großgeschrieben'));}
+  else{checks.push(mkCheck('warn','!','Beginne deinen Satz mit einem Großbuchstaben'));structureOk=false;}
 
-feedback.innerHTML="⚠️ Bitte schreibe einen Satz."
-return
+  // Ends with period
+  if(/[.!?]$/.test(text)){checks.push(mkCheck('ok','✓',`Satzzeichen am Ende (${text.slice(-1)})`));}
+  else{checks.push(mkCheck('warn','!','Dein Satz braucht ein Satzzeichen am Ende (. ! ?)'));structureOk=false;}
 
+  // Word count
+  const wc=text.split(/\s+/).filter(Boolean).length;
+  if(wc>=5){checks.push(mkCheck('ok','✓',`Gute Satzlänge – ${wc} Wörter`));}
+  else{checks.push(mkCheck('warn','!',`Dein Satz hat ${wc} Wörter – versuche 5 oder mehr`));structureOk=false;}
+
+  // ── Local semantic / word order checks ──
+  const words = text.split(/\s+/);
+  if(words[0] && words[1] && /^[A-Z]/.test(words[0]) && /^[Ss]ie$/.test(words[1])){
+    checks.push(mkCheck('warn','!','Achtung: Redundantes Subjekt oder falsche Wortstellung am Satzanfang'));structureOk=false;
+  }
+  const nameAfterVerb=text.match(/(getroffen|traf)\s+[A-Z][a-z]+/);
+  if(nameAfterVerb){checks.push(mkCheck('warn','!','Name erscheint am Ende – üblicherweise vorher oder mit "namens"'));structureOk=false;}
+
+  // LanguageTool API
+  btn.innerHTML='<span class="spinner">⏳</span> …'; btn.disabled=true;
+  let ltOk=true;
+  try{
+    const resp=await fetch('https://api.languagetool.org/v2/check',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({text,language:'de-DE'})});
+    if(!resp.ok)throw new Error();
+    const data=await resp.json();
+    _ltMatches=(data.matches||[]).filter(m=>m.replacements&&m.replacements.length>0);
+    if(_ltMatches.length===0){checks.push(mkCheck('ok','✓','Keine Rechtschreib- oder Grammatikfehler'));}
+    else{ltOk=false;checks.push(mkCheck('warn','!',`${_ltMatches.length} Rechtschreib- oder Grammatikvorschlag(e) gefunden`));}
+  }catch(e){checks.push(mkCheck('info','i','Grammatikprüfung nicht verfügbar (offline?)'));}
+  finally{btn.innerHTML='🔍 Satz prüfen';btn.disabled=false;}
+
+  // Verdict
+  let vClass,vText;
+  if(structureOk&&ltOk){vClass='v-great';vText='🌟 Perfekt! Dein Satz ist super!';}
+  else if(structureOk&&!ltOk){vClass='v-good';vText='👍 Fast perfekt! Schau dir die Vorschläge an.';}
+  else{vClass='v-keep';vText='💪 Guter Anfang! Verbessere die markierten Punkte.';}
+
+  // Show assess
+  document.getElementById('checks-list').innerHTML=checks.join('');
+  const v=document.getElementById('verdict');v.className=`verdict ${vClass}`;v.textContent=vText;
+  document.getElementById('assess').style.display='block';
+  document.getElementById('assess').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* Capital letter */
-
-if(input[0]===input[0].toUpperCase()){
-score++
-}
-
-/* punctuation */
-
-if(/[.!?]$/.test(input)){
-score++
-}
-
-/* word count */
-
-let words=input.split(" ")
-
-if(words.length>=3){
-score++
-}
-
-let percent=(score/checks)*100
-
-document.getElementById("scoreFill").style.width=percent+"%"
-
-if(score===3){
-
-feedback.innerHTML="🌟 Super Satz!"
-
-}
-
-else if(score===2){
-
-feedback.innerHTML="👍 Fast perfekt!"
-
-}
-
-else{
-
-feedback.innerHTML="💡 Versuche Großbuchstabe und Punkt."
-
-}
-
-}
-
-/* DRAG AND DROP */
-
-let words=document.querySelectorAll(".word")
-
-let sentenceArea=document.getElementById("sentenceArea")
-
-words.forEach(word=>{
-
-word.addEventListener("dragstart",dragStart)
-
-})
-
-function dragStart(e){
-
-e.dataTransfer.setData("text",e.target.innerText)
-
-}
-
-sentenceArea.addEventListener("dragover",e=>{
-
-e.preventDefault()
-
-})
-
-sentenceArea.addEventListener("drop",e=>{
-
-e.preventDefault()
-
-let word=e.dataTransfer.getData("text")
-
-let el=document.createElement("div")
-
-el.className="word"
-el.innerText=word
-
-sentenceArea.appendChild(el)
-
-})
-
-/* BLOCK CHECK */
-
-function checkBlocks(){
-
-let words=[...sentenceArea.children].map(w=>w.innerText)
-
-let correct="Die Katze schläft auf dem Sofa"
-
-let user=words.join(" ")
-
-let fb=document.getElementById("blockFeedback")
-
-if(user===correct){
-
-fb.innerHTML="🌟 Richtig! Super gemacht!"
-
-}
-
-else{
-
-fb.innerHTML="💡 Versuche die Wörter neu zu ordnen."
-
-}
-
-}
-
+function speakSentence(){const t=document.getElementById('satz').value.trim();if(!t||!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';u.rate=0.9;speechSynthesis.speak(u);}
 </script>
-
 </body>
 </html>
-```
