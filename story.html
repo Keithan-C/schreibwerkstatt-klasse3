@@ -460,6 +460,17 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .full-check-header{padding:10px 14px;background:var(--surface);border-bottom:2px solid var(--border);font-family:var(--fp);font-size:6px;color:var(--ink);}
 .full-check-header .err-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-family:var(--f);font-size:11px;font-weight:600;}
 
+/* ── EDIT SCREEN ── */
+.edit-screen{background:var(--surface);border:3px solid var(--green);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);}
+.edit-screen h2{font-family:var(--fp);font-size:10px;color:var(--green);line-height:1.8;margin-bottom:.4rem;text-align:center;}
+.edit-screen-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:1.2rem;line-height:1.6;}
+.edit-ch{margin-bottom:1.2rem;}
+.edit-ch-label{font-family:var(--fp);font-size:6px;color:var(--green);display:block;margin-bottom:5px;}
+.edit-ta{width:100%;min-height:120px;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--fb);font-size:15px;line-height:1.8;resize:vertical;outline:none;background:var(--bg);color:var(--ink);}
+.edit-ta:focus{border-color:var(--green2);background:var(--green4);}
+.edit-wc{font-size:12px;color:var(--muted);margin-top:3px;text-align:right;}
+.edit-wc.good{color:var(--green);}
+
 /* ── PICTURE BOOK ── */
 .book-overlay{position:fixed;inset:0;background:rgba(10,10,30,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:12px;}
 .book-page{background:#fffdf4;border-radius:14px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.6);display:flex;flex-direction:column;}
@@ -2232,7 +2243,7 @@ function showComplete(){
         ✓ Realweltbezug: Eigenes Spielerlebnis → narrative Geschichte
       </div>
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="showPictureBook()" style="font-size:15px;padding:.55rem 1.1rem;">📖 Mein Bilderbuch / My Picture Book</button>
+        <button class="btn btn-primary" onclick="showEditScreen()" style="font-size:15px;padding:.55rem 1.1rem;">✏️ Geschichte überarbeiten / Edit Story</button>
       </div>
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <button class="btn btn-secondary" onclick="restartAll()">🔄 Neues Abenteuer</button>
@@ -2430,6 +2441,48 @@ const BOOK_TITLE={
   get middle(){return _bt('middle');},
   get end(){return _bt('end');}
 };
+
+// ═══════════════════════════════════════════════════════════
+// EDIT SCREEN
+// ═══════════════════════════════════════════════════════════
+function showEditScreen(){
+  const content=document.getElementById('write-content');
+  const fields=CHAPTERS.map(ch=>`
+    <div class="edit-ch">
+      <span class="edit-ch-label">${ch.icon} ${ch.label}</span>
+      <textarea class="edit-ta" id="edit-ta-${ch.id}" oninput="updateEditWc('${ch.id}',${ch.minWords})">${esc(answers[ch.id])}</textarea>
+      <div class="edit-wc" id="edit-wc-${ch.id}"></div>
+    </div>`).join('');
+  content.innerHTML=`
+    <div class="edit-screen">
+      <h2>✏️ Geschichte überarbeiten</h2>
+      <p class="edit-screen-sub">Lies deine Geschichte noch einmal durch und verbessere sie — dann geht es zum Bilderbuch! 📖</p>
+      ${fields}
+      <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:.5rem;">
+        <button class="btn btn-secondary" onclick="showComplete()">◀ Zurück</button>
+        <button class="btn btn-primary" onclick="saveEditsAndShowBook()" style="font-size:15px;padding:.55rem 1.4rem;">📖 Zum Bilderbuch ▶</button>
+      </div>
+    </div>`;
+  CHAPTERS.forEach(ch=>updateEditWc(ch.id,ch.minWords));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateEditWc(chId,minWords){
+  const ta=document.getElementById('edit-ta-'+chId);
+  const el=document.getElementById('edit-wc-'+chId);
+  if(!ta||!el)return;
+  const count=wc(ta.value);
+  el.textContent=count+' Wörter';
+  el.className='edit-wc'+(count>=minWords?' good':'');
+}
+
+function saveEditsAndShowBook(){
+  CHAPTERS.forEach(ch=>{
+    const ta=document.getElementById('edit-ta-'+ch.id);
+    if(ta)answers[ch.id]=ta.value;
+  });
+  showPictureBook();
+}
 
 function showPictureBook(){bookPage=0;renderBookPage();}
 
