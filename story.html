@@ -578,7 +578,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
 .focus-overlay{position:fixed;inset:0;background:#0a0a12;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;}
 .focus-overlay.open{display:flex;}
 .focus-eyebrow{color:rgba(200,240,160,.85);font-family:var(--fp);font-size:8px;text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem;max-width:640px;width:100%;}
-.focus-prompt{color:#d8f5b0;font-family:var(--fb);font-size:16px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.1);border-radius:12px;padding:12px 20px;border:1px solid rgba(200,240,160,.25);}
+.focus-prompt{color:#d8f5b0;font-family:var(--fb);font-size:16px;max-width:640px;width:100%;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.1);border-radius:12px;padding:14px 22px;border:1px solid rgba(200,240,160,.25);}
 .focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:20px;color:#f5fff5;font-family:var(--fb);font-size:18px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
 .focus-area:focus{border-color:rgba(74,170,42,.6);}
 .focus-wc{color:rgba(255,255,255,.6);font-size:12px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
@@ -1122,7 +1122,7 @@ const CHAPTERS=[
       {key:'ort',label:'Ort – wo war ich? (3 Stichwörter)'},
       {key:'ziel',label:'Ziel – was wollte ich in meinem Spiel erreichen?'}
     ],
-    taskText:'Schreib <strong>4–6 Sätze</strong>: Stelle deinen Helden vor und beschreibe den Ort aus deinem Spiel. Nutze eine <strong>Einleitungsformel</strong>.',
+    taskText:['Schreib 4–6 Sätze','Stelle deinen Helden vor (Aussehen & Wesen)','Beschreibe den Ort aus deinem Spiel','Nutze eine Einleitungsformel'],
     lpRef:'LP+ D3/4 LB 2.1 – Erzählsituation · Figur nach Äußerem und Wesen',
     minWords:30,
     goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine Einleitung klingt sehr lebendig.','Der Satz über … ist toll.'],
@@ -1140,7 +1140,7 @@ const CHAPTERS=[
       {key:'hindernis',label:'Was hat es schwierig gemacht?'},
       {key:'dialog',label:'Was hat der Held gesagt? (wörtliche Rede „…")'}
     ],
-    taskText:'Schreib <strong>5–7 Sätze</strong>: Beschreibe das spannendste Moment aus deinem Spiel. Nutze ein <strong>Spannungswort</strong> und <strong>wörtliche Rede</strong>.',
+    taskText:['Schreib 5–7 Sätze','Beschreibe das spannendste Moment aus deinem Spiel','Nutze ein Spannungswort (z.B. plötzlich …)','Nutze wörtliche Rede'],
     lpRef:'LP+ D3/4 LB 2.1 – Ereignis · LB 4.2 – Wörtliche Rede',
     minWords:40,
     goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine wörtliche Rede klingt sehr echt.','Das Spannungswort … wirkt sehr gut.'],
@@ -1158,7 +1158,7 @@ const CHAPTERS=[
       {key:'schlussformel',label:'Schlussformel – z.B. „Von da an …", „Seitdem …"'},
       {key:'letzterSatz',label:'Mein letzter Satz – wirkungsvoll!'}
     ],
-    taskText:'Schreib <strong>4–6 Sätze</strong>: Beschreibe den Ausgang deines Abenteuers. Nutze eine <strong>Schlussformel</strong> und zeige, was dein Held gelernt hat.',
+    taskText:['Schreib 4–6 Sätze','Beschreibe den Ausgang deines Abenteuers','Nutze eine Schlussformel (z.B. Von da an …)','Zeige, was dein Held gelernt hat'],
     lpRef:'LP+ D3/4 LB 2.1 – Ausgang der Erzählung · Schlussformeln',
     minWords:30,
     goodStems:['Ich finde gut, dass du den Ausgang so … beschrieben hast.','Dein letzter Satz ist sehr wirkungsvoll.','Die Botschaft wird klar: …'],
@@ -2751,7 +2751,8 @@ function openFocusMode(){
   const ch=CHAPTERS[currentChapter];
   const fa=document.getElementById('focus-area');
   const fp=document.getElementById('focus-prompt');
-  fp.textContent=ch.taskText;
+  const items=Array.isArray(ch.taskText)?ch.taskText:[ch.taskText];
+  fp.innerHTML='<ul style="list-style:none;padding:0;margin:0;text-align:left;">'+items.map((t,i)=>`<li style="display:flex;align-items:baseline;gap:8px;padding:3px 0;${i===0?'font-weight:800;font-size:18px;margin-bottom:2px;':''}">${i===0?'':'<span style="color:rgba(200,240,160,.6);font-size:14px;">✦</span>'}${i===0?t:`<span>${t}</span>`}</li>`).join('')+'</ul>';
   fa.lang='de';
   fa.value=answers[chId]||'';
   document.getElementById('focus-overlay').classList.add('open');
