@@ -812,6 +812,7 @@ body {
     <div class="hero-chip empty" id="chipSet"><span class="chip-icon">🗺️</span><span id="chipSetLabel">Ort wählen…</span></div>
   </div>
   <a href="index.html">← Zurück</a>
+  <button id="bl-lang-toggle" onclick="blToggleLang()" style="background:var(--blue,#4C8EF7);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
 </header>
 
 <!-- ══════════════════════════════════════════
@@ -2158,7 +2159,19 @@ function confetti() {
     const el = document.getElementById('clCount');
     if (el) { el.textContent = tf('clProgress', done, total); el.className = done===total?'cl-count all-done':'cl-count'; }
   };
+  // Lang toggle button label
+  (function(){
+    const btn = document.getElementById('bl-lang-toggle');
+    if (btn) btn.textContent = _bL === 'en' ? '🌐 EN' : '🌐 DE';
+  })();
 })();
+
+function blToggleLang() {
+  const cur = localStorage.getItem('sw_lang') || 'de';
+  const next = cur === 'en' ? 'de' : 'en';
+  localStorage.setItem('sw_lang', next);
+  location.reload();
+}
 </script>
 <script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap';</script>
 <script src="gdpr.js"></script>
