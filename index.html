@@ -744,9 +744,12 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
     <span class="setup-sublabel" id="lbl-theme-sub">z.B. „Ein Tier rettet den Tag" · e.g. „A Superhero Dog"</span>
     <input class="setup-input" id="theme-input" type="text" placeholder="Thema eingeben / Enter theme …" maxlength="80">
 
-    <!-- Teacher: class name | Parent: child name -->
-    <span class="setup-label" id="lbl-name">Klasse / Class Name <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
+    <!-- Teacher: class name | Parent: anonymous pupil ID -->
+    <span class="setup-label" id="lbl-name">Klasse / Class <span style="font-weight:400;color:var(--muted)">(optional)</span></span>
     <input class="setup-input" id="class-input" type="text" placeholder="z.B. Klasse 3a …" maxlength="40">
+    <span id="anon-id-hint" style="display:none;font-size:11px;color:#c47a00;background:#fff8e1;border:1px solid #ffe082;border-radius:6px;padding:4px 10px;margin-top:-6px;line-height:1.5;">
+      🔒 Bitte keinen echten Namen eingeben – nutze eine anonyme ID (z.B. S-01). / Use an anonymous ID, not a real name.
+    </span>
 
     <!-- Builder banner (shown when launched from builder.html) -->
     <div id="builder-banner" style="display:none;background:var(--grass);border:2px solid var(--grass2);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--grass3);margin-bottom:.8rem;line-height:1.6;">
@@ -1229,13 +1232,14 @@ function setRole(r){
   document.getElementById('lbl-theme-sub').textContent=isParent
     ?'z.B. „Mein Hund rettet die Welt" · e.g. „My Dog Saves the Day"'
     :'z.B. „Ein Tier rettet den Tag" · e.g. „A Superhero Dog"';
-  // Name label & placeholder
+  // ID label & placeholder — always anonymous, never real names
   document.getElementById('lbl-name').innerHTML=isParent
-    ?'Name deines Kindes · Child\'s Name <span style="font-weight:400;color:var(--muted)">(optional)</span>'
-    :'Klasse / Class Name <span style="font-weight:400;color:var(--muted)">(optional)</span>';
+    ?'Anonyme ID des Kindes · Anonymous Pupil ID <span style="font-weight:400;color:var(--muted)">(optional)</span>'
+    :'Klasse / Class <span style="font-weight:400;color:var(--muted)">(optional)</span>';
   document.getElementById('class-input').placeholder=isParent
-    ?'z.B. Lena, Max …'
+    ?'z.B. S-01, Kind-A, K-03 …'
     :'z.B. Klasse 3a …';
+  document.getElementById('anon-id-hint').style.display=isParent?'block':'none';
   // Start button
   document.getElementById('start-btn').textContent=isParent
     ?'✏️ Für mein Kind starten / Start for my Child'
