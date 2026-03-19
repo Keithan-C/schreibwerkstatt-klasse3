@@ -3,677 +3,1674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satzwerkstatt ✏️</title>
+<title>Geschichten-Baumeister 📖</title>
+<!-- Google Fonts loaded after GDPR consent via gdpr.js -->
 <style>
-/* ── RESET & TOKENS ── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
---blue:#4f6ef7;--blue-lt:#eef0ff;
---green:#16a34a;--green-bg:#f0fdf4;--green-mid:#86efac;
---amber:#d97706;--amber-bg:#fffbeb;--amber-mid:#fcd34d;
---red:#dc2626;--red-bg:#fef2f2;
---surface:#ffffff;--bg:#f2f5ff;--text:#1a1f36;--muted:#64748b;--border:#e0e7f0;
---radius:18px;--radius-sm:10px;--shadow:0 2px 16px rgba(79,110,247,.09)
+/* ══════════════════════════════════════════════
+   RESET & TOKENS
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --begin:    #16a34a;  --begin-bg:  #f0fdf4;  --begin-mid: #86efac;
+  --middle:   #d97706;  --middle-bg: #fffbeb;  --middle-mid:#fcd34d;
+  --end:      #7c3aed;  --end-bg:    #faf5ff;  --end-mid:  #c4b5fd;
+
+  --blue:     #4f6ef7;  --blue-lt:   #eef0ff;
+  --green:    #16a34a;  --green-bg:  #f0fdf4;  --green-mid:#86efac;
+  --surface:  #ffffff;
+  --bg:       #f2f5ff;
+  --text:     #1a1f36;
+  --muted:    #64748b;
+  --border:   #e0e7f0;
+  --radius-sm:10px;
+  --radius:   18px;
+  --radius-lg:26px;
+  --shadow:   0 2px 16px rgba(79,110,247,0.09);
+  --shadow-md:0 6px 28px rgba(79,110,247,0.13);
 }
-body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.topbar{background:linear-gradient(135deg,#1a1a2e,#2d2d5e);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
-.topbar-title{font-family:"Baloo 2";font-weight:800;color:#fff;font-size:1.2rem}
-.tlink{font-size:.8rem;padding:6px 14px;border-radius:40px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;transition:all .2s}
-.tlink:hover{background:rgba(255,255,255,.2);color:#fff}
-.page{max-width:860px;margin:32px auto 60px;padding:0 16px;display:flex;flex-direction:column;gap:24px}
-.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
-.card-hd{padding:18px 22px 14px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
-.card-icon{font-size:1.6rem}
-.card-title{font-family:'Baloo 2';font-size:1.2rem;font-weight:800;color:var(--text)}
-.card-sub{font-size:.82rem;font-weight:600;color:var(--muted);margin-top:1px}
-.card-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
-.s-ta{width:100%;min-height:110px;border:2.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-family:'Nunito';font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.7;background:#fafcff;outline:none;transition:border-color .2s;spellcheck:true}
-.s-ta:focus{border-color:var(--blue);background:#fff}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap}
-.btn{display:flex;align-items:center;gap:6px;border:none;border-radius:40px;padding:10px 20px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .2s}
-.btn-primary{background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(79,110,247,.25)}
-.btn-primary:hover{background:#3a55e0;transform:translateY(-1px)}
-.btn-primary:disabled{opacity:.55;cursor:wait;transform:none}
-.btn-outline{background:none;border:2px solid var(--border);color:var(--muted)}
-.btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
-.assess{border-radius:var(--radius-sm);overflow:hidden;animation:fadeUp .25s ease;border:2px solid var(--border);display:none}
-@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.assess-head{padding:12px 16px;font-family:'Baloo 2';font-size:.92rem;font-weight:800;background:var(--bg);border-bottom:2px solid var(--border)}
-.checks-list{display:flex;flex-direction:column}
-.check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.9rem;font-weight:600}
-.check-row:last-child{border-bottom:none}
-.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;flex-shrink:0;margin-top:1px}
-.check-ok{background:var(--green-bg);color:var(--green);border:2px solid var(--green-mid)}
-.check-warn{background:var(--amber-bg);color:var(--amber);border:2px solid var(--amber-mid)}
-.check-info{background:var(--blue-lt);color:var(--blue);border:2px solid #a5b4fc}
-.lt-section{background:#fffbeb;border-top:2px solid var(--amber-mid);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.lt-head{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--text)}
-.lt-list{display:flex;flex-direction:column;gap:6px}
-.lt-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface);border-radius:8px;padding:6px 10px;border:1.5px solid var(--border)}
-.lt-wrong{color:var(--red);font-weight:700;font-size:.88rem;text-decoration:line-through}
-.lt-arrow{color:var(--muted);font-size:.85rem}
-.lt-sugs{display:flex;gap:5px;flex-wrap:wrap}
-.lt-sug{background:var(--green-bg);border:2px solid var(--green-mid);color:var(--green);border-radius:20px;padding:3px 11px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .18s}
-.lt-sug:hover{background:var(--green);color:#fff}
-.lt-fixall{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 18px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:background .2s;align-self:flex-start}
-.lt-fixall:hover{background:#15803d}
-.verdict{padding:14px 16px;border-top:2px solid var(--border);font-family:'Baloo 2';font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px}
-.verdict.v-great{background:var(--green-bg);color:var(--green)}
-.verdict.v-good{background:var(--amber-bg);color:var(--amber)}
-.verdict.v-keep{background:var(--red-bg);color:var(--red)}
-.dnd-label{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.word-pool,.sentence-area{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:2.5px dashed var(--border);min-height:56px;border-radius:var(--radius-sm);transition:border-color .25s,background .25s}
-.word-pool.over,.sentence-area.over{border-color:var(--blue);background:var(--blue-lt)}
-.sentence-area.success{border-color:var(--green);background:var(--green-bg)}
-.word-block{color:#fff;padding:7px 14px;border-radius:40px;cursor:grab;user-select:none;font-size:.9rem;font-weight:700;font-family:'Nunito';transition:opacity .15s,transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-.word-block:hover{transform:translateY(-2px)}
-.word-block.dragging{opacity:.45}
-.block-feedback{font-size:.95rem;font-weight:700;padding:10px 0;min-height:2rem}
-.block-counter{font-family:'Baloo 2';font-size:.82rem;font-weight:800;color:var(--muted);text-align:right;margin-bottom:4px}
-.spinner{display:inline-block;animation:spin .8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--blue);
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 12px rgba(39,60,200,0.18);
+}
+.topbar-logo {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 800;
+  color: #fff;
+  flex: 1;
+}
+.topbar a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+.topbar a:hover { color: #fff; }
+
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 40px;
+  padding: 4px 12px;
+  font-size: .82rem; font-weight: 700; color: #fff;
+  backdrop-filter: blur(6px);
+  transition: background .2s;
+}
+.hero-chip.empty { opacity: .55; }
+.hero-chip .chip-icon { font-size: 1.1rem; }
+
+/* ══════════════════════════════════════════════
+   SETUP ZONE
+══════════════════════════════════════════════ */
+.setup-zone {
+  background: var(--surface);
+  border-bottom: 3px solid var(--border);
+  padding: 18px 20px 16px;
+}
+.setup-row-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+.setup-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue);
+  font-size: .8rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.setup-num.done { background: var(--begin-bg); color: var(--begin); }
+
+.mini-grid {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.mini-card {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 2.5px solid var(--border);
+  border-radius: 40px;
+  padding: 6px 14px 6px 8px;
+  cursor: pointer;
+  font-weight: 700; font-size: .88rem;
+  transition: all .2s;
+  user-select: none;
+}
+.mini-card .mc-emoji { font-size: 1.3rem; line-height: 1; }
+.mini-card:hover { border-color: var(--blue); background: var(--blue-lt); color: var(--blue); transform: translateY(-2px); }
+.mini-card.selected {
+  background: var(--blue-lt);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
+}
+.mini-card.selected::after {
+  content: '✓';
+  font-size: .75rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.setup-divider { border: none; border-top: 2px solid var(--border); margin: 14px 0; }
+
+/* ══════════════════════════════════════════════
+   STORY TRACK
+══════════════════════════════════════════════ */
+.canvas-zone {
+  padding: 24px 16px 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.story-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -14px;
+  position: relative;
+  z-index: 5;
+  padding: 0 60px;
+}
+.track-node {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  border: 3px solid;
+  flex-shrink: 0;
+  transition: all .4s;
+  background: var(--surface);
+  position: relative;
+  z-index: 2;
+}
+.track-node.n-begin { border-color: var(--begin-mid); color: var(--begin); }
+.track-node.n-middle { border-color: var(--middle-mid); color: var(--middle); }
+.track-node.n-end   { border-color: var(--end-mid); color: var(--end); }
+.track-node.lit { box-shadow: 0 0 0 5px; }
+.track-node.n-begin.lit { background: var(--begin-bg); box-shadow: 0 0 0 5px rgba(22,163,74,0.18); }
+.track-node.n-middle.lit{ background: var(--middle-bg); box-shadow: 0 0 0 5px rgba(217,119,6,0.18); }
+.track-node.n-end.lit   { background: var(--end-bg);   box-shadow: 0 0 0 5px rgba(124,58,237,0.18); }
+
+.track-line {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background .4s;
+}
+.track-line .line-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0%; border-radius: 4px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.track-line.tl-1 .line-fill { background: linear-gradient(90deg, var(--begin), var(--middle)); }
+.track-line.tl-2 .line-fill { background: linear-gradient(90deg, var(--middle), var(--end)); }
+
+/* ══════════════════════════════════════════════
+   PANELS
+══════════════════════════════════════════════ */
+.panels-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
+}
+
+.panel-arrow {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 4px;
+  margin-top: 72px;
+  color: var(--border);
+  font-size: 1.4rem;
+  transition: color .4s;
+  flex-shrink: 0;
+}
+.panel-arrow svg { width: 36px; height: 36px; }
+.panel-arrow.active { color: var(--begin); }
+.panel-arrow.active2 { color: var(--middle); }
+
+.s-panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  transition: border-color .3s, box-shadow .3s;
+  position: relative;
+}
+.s-panel.p-begin  { border-color: var(--begin-mid); }
+.s-panel.p-middle { border-color: var(--middle-mid); }
+.s-panel.p-end    { border-color: var(--end-mid); }
+.s-panel.p-middle.locked, .s-panel.p-end.locked {
+  border-color: var(--border);
+  opacity: .7;
+}
+.s-panel.p-middle.locked .panel-body,
+.s-panel.p-end.locked .panel-body { pointer-events: none; filter: blur(1.5px); }
+
+.panel-hd {
+  padding: 16px 18px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-hd.hd-begin  { background: var(--begin-bg); }
+.panel-hd.hd-middle { background: var(--middle-bg); }
+.panel-hd.hd-end    { background: var(--end-bg); }
+.ph-icon { font-size: 1.6rem; }
+.ph-info { flex: 1; }
+.ph-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.1rem; font-weight: 800;
+}
+.p-begin  .ph-title { color: var(--begin); }
+.p-middle .ph-title { color: var(--middle); }
+.p-end    .ph-title { color: var(--end); }
+.ph-sub { font-size: .78rem; font-weight: 600; color: var(--muted); margin-top: 1px; }
+.ph-badge {
+  font-size: .7rem; font-weight: 800;
+  border-radius: 40px; padding: 3px 10px;
+  border: 2px solid;
+}
+.p-begin  .ph-badge { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .ph-badge { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .ph-badge { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
+
+.panel-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+.scene-prev {
+  background: linear-gradient(135deg, var(--bg), #e8eeff);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  min-height: 70px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+}
+.scene-emojis { font-size: 2.2rem; display: flex; gap: 6px; justify-content: center; }
+.scene-emojis .se { animation: bob 2.8s ease-in-out infinite; }
+.scene-emojis .se:nth-child(2) { animation-delay: .7s; }
+.scene-emojis .se:nth-child(3) { animation-delay: 1.4s; }
+@keyframes bob {
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-6px); }
+}
+.scene-label { font-size: .72rem; font-weight: 700; color: var(--muted); }
+
+.starters-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.starter {
+  font-size: .78rem; font-weight: 700;
+  border-radius: 40px; padding: 5px 12px;
+  cursor: pointer; border: 2px solid; font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.p-begin  .starter { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .starter { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .starter { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
+.p-begin  .starter:hover { background: var(--begin);  color: #fff; }
+.p-middle .starter:hover { background: var(--middle); color: #fff; }
+.p-end    .starter:hover { background: var(--end);    color: #fff; }
+
+.s-textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  color: var(--text);
+  line-height: 1.7;
+  resize: none;
+  transition: border-color .2s;
+  background: #fafcff;
+}
+.s-textarea:focus { outline: none; border-color: var(--blue); background: #fff; }
+.s-textarea::placeholder { color: #b0bcda; font-weight: 500; }
+
+.write-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.wc-pill {
+  font-size: .75rem; font-weight: 800;
+  border-radius: 40px; padding: 4px 12px;
+  background: var(--bg); color: var(--muted);
+  border: 2px solid var(--border);
+  transition: all .3s;
+  white-space: nowrap;
+}
+.wc-pill.ok {
+  color: var(--begin); border-color: var(--begin-mid); background: var(--begin-bg);
+}
+.speak-btn {
+  background: none; border: 2px solid var(--border);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .85rem; color: var(--muted);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s;
+}
+.speak-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+
+.check-btn {
+  background: none; border: 2px solid var(--end-mid);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .82rem; color: var(--end);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s; white-space: nowrap;
+}
+.check-btn:hover  { background: var(--end); color: #fff; border-color: var(--end); }
+.check-btn:disabled { opacity: .55; cursor: wait; }
+
+.cp {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: #fffbeb;
+  border: 2px solid #fcd34d;
+  animation: fadeUp .2s ease;
+}
+.cp-ok    { color: var(--begin); font-weight: 800; font-size: .92rem; }
+.cp-noop  { color: var(--muted); font-weight: 600; font-size: .88rem; }
+.cp-err   { color: #dc2626;      font-weight: 700; font-size: .88rem; }
+.cp-head  {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .9rem; font-weight: 800; color: var(--text);
+  margin-bottom: 8px;
+}
+.cp-list  { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.cp-row   {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  background: var(--surface); border-radius: 8px;
+  padding: 6px 10px; border: 1.5px solid var(--border);
+}
+.cp-wrong { color: #dc2626; font-weight: 700; font-size: .85rem; text-decoration: line-through; }
+.cp-arrow { color: var(--muted); }
+.cp-sugs  { display: flex; gap: 5px; flex-wrap: wrap; }
+.cp-sug {
+  background: var(--begin-bg); border: 2px solid var(--begin-mid);
+  color: var(--begin); border-radius: 20px; padding: 3px 11px;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: all .18s;
+}
+.cp-sug:hover { background: var(--begin); color: #fff; }
+.cp-fixall {
+  width: 100%; background: var(--begin); color: #fff;
+  border: none; border-radius: 20px; padding: 8px 16px;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: background .2s;
+}
+.cp-fixall:hover { background: #15803d; }
+
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 10;
+  background: rgba(242,245,255,0.82);
+  backdrop-filter: blur(3px);
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  transition: opacity .4s;
+}
+.lock-overlay.hidden { opacity: 0; pointer-events: none; }
+.lock-icon { font-size: 2.5rem; }
+.lock-msg {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: var(--muted); text-align: center;
+  max-width: 180px; line-height: 1.4;
+}
+
+/* ══════════════════════════════════════════════
+   PREVIEW
+══════════════════════════════════════════════ */
+.preview-zone {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+.preview-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.preview-header .ph-live {
+  font-size: .7rem; font-weight: 800;
+  background: #ef4444; color: #fff;
+  border-radius: 40px; padding: 2px 8px;
+  letter-spacing: .05em;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:.5; } }
+
+.preview-book {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 3px solid var(--blue-lt);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.pv-part {
+  padding: 20px;
+  min-height: 120px;
+  border-right: 2px solid var(--border);
+  position: relative;
+  transition: background .3s;
+}
+.pv-part:last-child { border-right: none; }
+.pv-part-label {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: 10px;
+}
+.pv-begin  .pv-part-label { color: var(--begin); }
+.pv-middle .pv-part-label { color: var(--middle); }
+.pv-end    .pv-part-label { color: var(--end); }
+
+.pv-begin  { border-top: 4px solid var(--begin); }
+.pv-middle { border-top: 4px solid var(--middle); }
+.pv-end    { border-top: 4px solid var(--end); }
+
+.pv-text {
+  font-size: .9rem; font-weight: 600; line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+.pv-text.empty { color: #c8d3e8; font-style: italic; }
+
+.pv-lines {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 4px;
+}
+.pv-line {
+  height: 10px; border-radius: 5px;
+  background: var(--border);
+  opacity: .5;
+}
+.pv-line:nth-child(1){ width:85%; }
+.pv-line:nth-child(2){ width:70%; }
+.pv-line:nth-child(3){ width:55%; }
+
+.celebrate-bar {
+  background: linear-gradient(135deg, var(--begin-bg), var(--end-bg));
+  border-radius: var(--radius);
+  border: 3px solid var(--end-mid);
+  padding: 22px 28px;
+  display: flex; align-items: center; gap: 18px;
+  margin-top: 20px;
+  animation: fadeUp .4s ease;
+  display: none;
+}
+.celebrate-bar.show { display: flex; }
+.cel-emoji { font-size: 3rem; animation: pop .5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes pop { 0%{ transform:scale(0); } 70%{ transform:scale(1.2); } 100%{ transform:scale(1); } }
+.cel-text { flex: 1; }
+.cel-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--end);
+  margin-bottom: 3px;
+}
+.cel-sub { font-size: .88rem; font-weight: 600; color: var(--muted); }
+.cel-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-speak-all {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--end-bg); color: var(--end);
+  border: 2px solid var(--end-mid); border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.btn-speak-all:hover { background: var(--end); color: #fff; }
+.btn-paper {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg,#1a1a2e,#2d2d5e); color: #fff;
+  border: none; border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 4px 14px rgba(26,26,46,0.3);
+  transition: all .2s;
+}
+.btn-paper:hover { opacity: .88; transform: translateY(-2px); }
+
+/* ══════════════════════════════════════════════
+   PAPER ZONE
+══════════════════════════════════════════════ */
+.paper-zone {
+  max-width: 1100px; margin: 0 auto; padding: 0 16px 60px;
+  display: none;
+}
+.paper-zone.show { display: block; }
+
+.paper-cta {
+  background: linear-gradient(135deg,#1a1a2e 0%,#2d2d5e 60%,#1a3a5e 100%);
+  border-radius: var(--radius-lg); padding: 26px 30px;
+  display: flex; align-items: center; gap: 20px; margin-bottom: 20px;
+  color: #fff;
+}
+.paper-cta-icon { font-size: 3rem; flex-shrink: 0; }
+.paper-cta-text { flex: 1; }
+.paper-cta-title {
+  font-family: 'Baloo 2', sans-serif; font-size: 1.35rem; font-weight: 800;
+  margin-bottom: 4px;
+}
+.paper-cta-sub { font-size: .88rem; font-weight: 600; opacity: .82; line-height: 1.5; }
+
+.step-card {
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px;
+  border: 2px solid var(--border);
+}
+.step-hd {
+  padding: 15px 20px; display: flex; align-items: center; gap: 14px;
+  border-bottom: 2px solid var(--border); background: var(--bg);
+}
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  font-family: 'Baloo 2', sans-serif; font-size: .95rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-title { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+.step-sub   { font-size: .78rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+.step-body  { padding: 18px 20px; }
+
+.cl-group { margin-bottom: 18px; }
+.cl-items { display: flex; flex-direction: column; gap: 3px; }
+.cl-item  {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s; user-select: none;
+}
+.cl-item:hover   { background: var(--bg); }
+.cl-item.checked { background: var(--green-bg); }
+.cl-box {
+  width: 22px; height: 22px; min-width: 22px;
+  border: 2.5px solid var(--border); border-radius: 6px;
+  background: var(--surface); display: flex; align-items: center;
+  justify-content: center; font-size: .8rem; color: var(--green);
+  transition: all .2s; margin-top: 1px; font-weight: 900;
+}
+.cl-item.checked .cl-box  { background: var(--green); border-color: var(--green); color: #fff; }
+.cl-label                 { font-size: .9rem; font-weight: 600; line-height: 1.5; }
+.cl-item.checked .cl-label{ color: var(--green); }
+
+.cl-progress {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+  margin-top: 6px; border: 2px solid var(--border);
+}
+.cl-bar-wrap { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.cl-bar      { height: 100%; border-radius: 5px; width: 0%; transition: width .4s ease;
+               background: linear-gradient(90deg, var(--begin), #06b6d4); }
+.cl-count    { font-family: 'Baloo 2', sans-serif; font-size: .88rem; font-weight: 800;
+               color: var(--muted); white-space: nowrap; }
+.cl-count.all-done { color: var(--green); }
+
+.improve-banner {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: linear-gradient(135deg, #fffbeb 0%, #faf5ff 100%);
+  border: 2.5px solid var(--middle-mid);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.improve-banner-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.improve-banner-body { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.improve-banner-title {
+  font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800;
+  color: var(--text);
+}
+.improve-banner-steps {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  font-size: .85rem; font-weight: 700; color: var(--muted);
+}
+.improve-step {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 40px; padding: 4px 12px;
+  color: var(--text); font-weight: 700; font-size: .82rem;
+}
+.improve-arrow { color: var(--middle); font-size: 1rem; }
+.improve-back-btn {
+  align-self: flex-start;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 40px; padding: 9px 18px;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 3px 10px rgba(79,110,247,.22);
+  transition: all .2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.improve-back-btn:hover { background: #3a55e0; transform: translateY(-1px); }
+
+.cl-group-title {
+  font-family: 'Baloo 2', sans-serif; font-size: .78rem; font-weight: 800;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.cl-back-link {
+  margin-left: auto;
+  background: none; border: 1.5px solid var(--border); border-radius: 40px;
+  padding: 2px 10px; font-size: .72rem; font-weight: 700; cursor: pointer;
+  color: var(--blue); font-family: 'Nunito', sans-serif;
+  transition: all .18s; white-space: nowrap; text-transform: none; letter-spacing: 0;
+}
+.cl-back-link:hover { background: var(--blue-lt); border-color: var(--blue); }
+
+.cl-alldone-msg {
+  display: none; align-items: center; gap: 10px;
+  background: var(--green-bg); border: 2px solid var(--green-mid);
+  border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 10px;
+  animation: fadeUp .3s ease;
+}
+.cl-alldone-msg.show { display: flex; }
+.cl-alldone-msg-text {
+  font-family: 'Baloo 2', sans-serif; font-size: .92rem; font-weight: 800;
+  color: var(--green);
+}
+
+.upload-drop {
+  border: 3px dashed var(--border); border-radius: var(--radius);
+  padding: 32px 20px; text-align: center; cursor: pointer;
+  transition: all .2s; background: var(--bg);
+}
+.upload-drop:hover { border-color: var(--blue); background: var(--blue-lt); }
+.upload-drop input { display: none; }
+.upload-icon  { font-size: 2.4rem; margin-bottom: 8px; }
+.upload-label { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.upload-sub   { font-size: .8rem; font-weight: 600; color: var(--muted); }
+
+.photo-preview     { margin-top: 16px; border-radius: var(--radius); overflow: hidden;
+                     box-shadow: var(--shadow-md); display: none; }
+.photo-preview img { width: 100%; display: block; }
+
+.feedback-zone     { border-top: 3px solid var(--border); padding: 20px; display: none; }
+.feedback-zone.show{ display: block; }
+.feedback-zone-hd  {
+  font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800;
+  color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.star-row { display: flex; gap: 6px; margin-bottom: 16px; }
+.star     { font-size: 2rem; cursor: pointer; transition: transform .15s;
+            filter: grayscale(1) opacity(.35); }
+.star:hover, .star.on { filter: none; transform: scale(1.15); }
+.fb-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.fb-label  { font-size: .76rem; font-weight: 800; color: var(--muted);
+             text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 5px; }
+.fb-ta {
+  width: 100%; min-height: 72px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px; resize: none;
+  font-family: 'Nunito', sans-serif; font-size: .92rem; font-weight: 600;
+  line-height: 1.6; outline: none; transition: border-color .2s; background: var(--surface);
+}
+.fb-ta:focus { border-color: var(--blue); }
+.fb-btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.fb-save {
+  background: var(--blue); color: #fff; border: none; border-radius: 40px;
+  padding: 10px 22px; font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; box-shadow: 0 3px 10px rgba(79,110,247,.25);
+  transition: all .2s;
+}
+.fb-save:hover { background: #3a55e0; transform: translateY(-1px); }
+.fb-print {
+  background: none; border: 2px solid var(--border); border-radius: 40px;
+  padding: 10px 22px; font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; color: var(--muted); transition: all .2s;
+}
+.fb-print:hover { border-color: var(--blue); color: var(--blue); }
+.saved-fb { background: var(--green-bg); border: 2px solid var(--green-mid);
+            border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; display: none; }
+.saved-fb.show  { display: block; }
+.saved-fb-title { font-family: 'Baloo 2', sans-serif; font-size: .88rem;
+                  font-weight: 800; color: var(--green); margin-bottom: 6px; }
+.saved-fb-body  { font-size: .88rem; font-weight: 600; color: var(--text); line-height: 1.7;
+                  white-space: pre-wrap; }
+
+/* ══════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════ */
+.confetti-piece {
+  position: fixed; pointer-events: none; z-index: 9999;
+  border-radius: 2px;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  from { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+  to   { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .panels-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .panel-arrow {
+    margin-top: 0; padding: 6px 0;
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+  .story-track { display: none; }
+  .preview-book { grid-template-columns: 1fr; }
+  .pv-part { border-right: none; border-bottom: 2px solid var(--border); }
+  .pv-part:last-child { border-bottom: none; }
+  .celebrate-bar { flex-direction: column; text-align: center; }
+  .cel-btns { justify-content: center; }
+}
+
+/* ══════════════════════════════════════════════
+   PRINT
+══════════════════════════════════════════════ */
+@media print {
+  .topbar, .setup-zone, .story-track, .panels-row,
+  .panel-arrow, .celebrate-bar, .preview-header { display: none !important; }
+  .preview-zone { padding: 0; max-width: 100%; }
+  .preview-book { box-shadow: none; border: 1px solid #ccc; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
 
 <header class="topbar">
-  <div class="topbar-title" data-i18n="topbarTitle">✏️ Satzwerkstatt</div>
-  <nav class="topbar-links">
-    <a class="tlink" href="index.html" data-i18n="navBlockwelt">📖 Blockwelt</a>
-    <a class="tlink" href="story.html" data-i18n="navSchreib">📝 Schreibwerkstatt</a>
-    <a class="tlink" href="builder.html" data-i18n="navBaukasten">🧱 Baukasten</a>
-    <button id="sw-lang-toggle" onclick="swToggleLang()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
-  </nav>
+  <div class="topbar-logo">📖 Geschichten-Baumeister</div>
+  <div class="hero-chips">
+    <div class="hero-chip empty" id="chipChar"><span class="chip-icon">🧒</span><span id="chipCharLabel">Figur wählen…</span></div>
+    <div class="hero-chip empty" id="chipSet"><span class="chip-icon">🗺️</span><span id="chipSetLabel">Ort wählen…</span></div>
+  </div>
+  <a href="index.html">← Zurück</a>
+  <button id="bl-lang-toggle" onclick="blToggleLang()" style="background:var(--blue,#4C8EF7);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
 </header>
 
-<div class="page">
-
-<!-- Schreibwerkstatt -->
-<div class="card">
-  <div class="card-hd"><span class="card-icon">🖊️</span>
-    <div><div class="card-title">Dein Satz</div>
-         <div class="card-sub">Schreibe irgendeinen Satz – ich prüfe ihn für dich!</div></div>
+<section class="setup-zone">
+  <div class="setup-row-header">
+    <span class="setup-num" id="numChar">1</span>
+    Wähle deine Hauptfigur
   </div>
-  <div class="card-body">
-    <textarea class="s-ta" id="satz" placeholder="Schreibe hier deinen Satz …" oninput="clearAssess()"></textarea>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="checkBtn" onclick="checkSentence()">🔍 Satz prüfen</button>
-      <button class="btn btn-outline" onclick="speakSentence()">🔊 Vorlesen</button>
-    </div>
-    <div id="assess" class="assess">
-      <div class="assess-head">📋 Meine Prüfung</div>
-      <div class="checks-list" id="checks-list"></div>
-      <div id="lt-section" class="lt-section" style="display:none">
-        <div class="lt-head" id="lt-head"></div>
-        <div class="lt-list" id="lt-list"></div>
-        <button class="lt-fixall" id="lt-fixall" onclick="applyAllLT()" style="display:none">✨ Alle auf einmal korrigieren</button>
+  <div class="mini-grid" id="charGrid"></div>
+
+  <hr class="setup-divider">
+
+  <div class="setup-row-header">
+    <span class="setup-num" id="numSet">2</span>
+    Wähle deinen Ort
+  </div>
+  <div class="mini-grid" id="settingGrid"></div>
+</section>
+
+<div class="canvas-zone">
+  <div class="story-track">
+    <div class="track-node n-begin" id="tn-begin">🌅</div>
+    <div class="track-line tl-1" id="tl1"><div class="line-fill" id="lf1"></div></div>
+    <div class="track-node n-middle" id="tn-middle">⚡</div>
+    <div class="track-line tl-2" id="tl2"><div class="line-fill" id="lf2"></div></div>
+    <div class="track-node n-end" id="tn-end">⭐</div>
+  </div>
+
+  <div class="panels-row">
+    <div class="s-panel p-begin" id="panelBegin">
+      <div class="panel-hd hd-begin">
+        <span class="ph-icon">🌅</span>
+        <div class="ph-info">
+          <div class="ph-title">Anfang</div>
+          <div class="ph-sub">Stell die Figur und den Ort vor</div>
+        </div>
+        <div class="ph-badge" id="badge-begin">Schritt 1</div>
       </div>
-      <div class="verdict" id="verdict"></div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-begin">
+          <div class="scene-emojis">
+            <span class="se" id="se-b-char">🧒</span>
+            <span class="se" id="se-b-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-begin-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-begin"></div>
+        <textarea class="s-textarea" id="ta-begin"
+          placeholder="Schreibe hier den Anfang der Geschichte …"
+          spellcheck="true"
+          oninput="onType('begin')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-begin">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-begin" onclick="checkSpelling('begin')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('begin')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-begin" style="display:none"></div>
+      </div>
+    </div>
+
+    <div class="panel-arrow" id="arr1">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="s-panel p-middle locked" id="panelMiddle">
+      <div class="panel-hd hd-middle">
+        <span class="ph-icon">⚡</span>
+        <div class="ph-info">
+          <div class="ph-title">Ereignis</div>
+          <div class="ph-sub">Was passiert? Was ist das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-middle">Schritt 2</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-middle">
+          <div class="scene-emojis">
+            <span class="se" id="se-m-char">🧒</span>
+            <span class="se">❗</span>
+            <span class="se" id="se-m-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-middle-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-middle"></div>
+        <textarea class="s-textarea" id="ta-middle"
+          placeholder="Schreibe hier das Ereignis …"
+          spellcheck="true"
+          oninput="onType('middle')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-middle">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-middle" onclick="checkSpelling('middle')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('middle')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-middle" style="display:none"></div>
+      </div>
+      <div class="lock-overlay" id="lock-middle">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst den Anfang fertig!</div>
+      </div>
+    </div>
+
+    <div class="panel-arrow" id="arr2">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="s-panel p-end locked" id="panelEnd">
+      <div class="panel-hd hd-end">
+        <span class="ph-icon">⭐</span>
+        <div class="ph-info">
+          <div class="ph-title">Ende</div>
+          <div class="ph-sub">Wie löst sich das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-end">Schritt 3</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-end">
+          <div class="scene-emojis">
+            <span class="se" id="se-e-char">🧒</span>
+            <span class="se">✨</span>
+            <span class="se" id="se-e-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-end-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-end"></div>
+        <textarea class="s-textarea" id="ta-end"
+          placeholder="Schreibe hier das Ende der Geschichte …"
+          spellcheck="true"
+          oninput="onType('end')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-end">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-end" onclick="checkSpelling('end')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('end')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-end" style="display:none"></div>
+      </div>
+      <div class="lock-overlay" id="lock-end">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst das Ereignis fertig!</div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Blockwelt -->
-<div class="card">
-  <div class="card-hd"><span class="card-icon">🧩</span>
-    <div><div class="card-title">Satzbau mit Blöcken</div>
-         <div class="card-sub">Ziehe die Wörter in die richtige Reihenfolge</div></div>
+<div class="preview-zone">
+  <div class="preview-header">
+    📖 Meine Geschichte
+    <span class="ph-live">LIVE</span>
   </div>
-  <div class="card-body">
-    <div class="block-counter" id="blockCounter"></div>
-    <div>
-      <div class="dnd-label">Wörter</div>
-      <div class="word-pool" id="wordPool"></div>
+
+  <div class="preview-book">
+    <div class="pv-part pv-begin">
+      <div class="pv-part-label">🌅 Anfang</div>
+      <div class="pv-text empty" id="pv-begin">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
     </div>
-    <div>
-      <div class="dnd-label">Dein Satz</div>
-      <div class="sentence-area" id="sentenceArea"></div>
+    <div class="pv-part pv-middle">
+      <div class="pv-part-label">⚡ Ereignis</div>
+      <div class="pv-text empty" id="pv-middle">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="checkBlockSentence()">🔍 Prüfen</button>
-      <button class="btn btn-outline" onclick="resetBlocks()">🔀 Neu mischen</button>
-      <button class="btn btn-outline" onclick="skipBlock()">⏭ Überspringen</button>
+    <div class="pv-part pv-end">
+      <div class="pv-part-label">⭐ Ende</div>
+      <div class="pv-text empty" id="pv-end">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
     </div>
-    <div class="block-feedback" id="blockFeedback"></div>
+  </div>
+
+  <div class="celebrate-bar" id="celebBar">
+    <span class="cel-emoji">🎉</span>
+    <div class="cel-text">
+      <div class="cel-title">Fantastisch! Deine Geschichte ist fertig!</div>
+      <div class="cel-sub">Du hast eine tolle Geschichte geschrieben. Weiter so!</div>
+    </div>
+    <div class="cel-btns">
+      <button class="btn-speak-all" onclick="speakAll()">🔊 Alles vorlesen</button>
+      <button class="btn-paper" onclick="scrollToPaper()">✏️ Auf Papier schreiben →</button>
+    </div>
   </div>
 </div>
 
+<div class="paper-zone" id="paperZone">
+  <div class="paper-cta">
+    <span class="paper-cta-icon">✏️</span>
+    <div class="paper-cta-text">
+      <div class="paper-cta-title">Jetzt auf Papier schreiben!</div>
+      <div class="paper-cta-sub">Deine Geschichte ist fertig – schreibe sie schön auf Papier ab, mache ein Foto davon und lade es für deinen Lehrer / deine Eltern hoch.</div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">1</span>
+      <div>
+        <div class="step-title">✏️ Schreibe deine Geschichte auf Papier ab</div>
+        <div class="step-sub">Nimm ein liniertes Blatt und schreibe die Geschichte sauber und leserlich ab</div>
+      </div>
+    </div>
+    <div class="step-body" style="font-size:.9rem;font-weight:600;color:var(--muted);line-height:1.7">
+      📌 Schreibe jeden Abschnitt (Anfang / Ereignis / Ende) in einen eigenen Absatz.
+      Lass am Anfang jedes Absatzes eine kleine Einrückung.
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">2</span>
+      <div>
+        <div class="step-title">✍️ Text verbessern – lies nach und überarbeite!</div>
+        <div class="step-sub">Geh jeden Punkt durch → verbessere deinen Text → dann erst abhaken</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="improve-banner">
+        <div class="improve-banner-icon">💡</div>
+        <div class="improve-banner-body">
+          <div class="improve-banner-title">So verbesserst du deinen Text:</div>
+          <div class="improve-banner-steps">
+            <span class="improve-step">1️⃣ Lies den Punkt</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">2️⃣ Schau in deinen Text oben</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">3️⃣ Verbessere ihn</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">4️⃣ Hake ab ☑</span>
+          </div>
+          <button class="improve-back-btn" onclick="scrollToStory()">⬆ Zum Text zurück</button>
+        </div>
+      </div>
+
+      <div class="cl-group">
+        <div class="cl-group-title">
+          📖 Inhalt &amp; Aufbau
+          <button class="cl-back-link" onclick="scrollToStory()">⬆ Text ansehen &amp; verbessern</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Geschichte hat einen Anfang, ein Ereignis und ein Ende</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Die Hauptfigur wird am Anfang vorgestellt</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Das Problem / Ereignis ist deutlich und spannend beschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Das Ende passt zur Geschichte und löst das Ereignis</span></div>
+        </div>
+      </div>
+
+      <div class="cl-group">
+        <div class="cl-group-title">
+          ✍️ Sprache &amp; Ausdruck
+          <button class="cl-back-link" onclick="scrollToStory()">⬆ Text ansehen &amp; verbessern</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe Verbindungswörter verwendet (und, aber, dann, deshalb, weil …)</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe Adjektive (Wiewörter) zur Beschreibung der Figuren und des Ortes verwendet</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Sätze sind abwechslungsreich – kurze und lange Sätze sind gemischt</span></div>
+        </div>
+      </div>
+
+      <div class="cl-group">
+        <div class="cl-group-title">
+          📝 Rechtschreibung
+          <button class="cl-back-link" onclick="scrollToSpelling()">⬆ Text prüfen &amp; korrigieren</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Jeder Satzanfang ist großgeschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Alle Nomen (Namenwörter) sind großgeschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Jeder Satz hat ein Satzzeichen am Ende (. ! ?)</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe auf die richtige Schreibung von s / ss / ß geachtet</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe auf Dehnung (aa, ee, oo, ie, h) und Schärfung (Doppelkonsonant) geachtet</span></div>
+        </div>
+      </div>
+
+      <div class="cl-group">
+        <div class="cl-group-title">🖊️ Handschrift &amp; Gestaltung <span style="font-size:.7rem;opacity:.65;text-transform:none;letter-spacing:0">(nach dem Abschreiben)</span></div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Handschrift ist gut lesbar und gleichmäßig</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe gleichmäßige Abstände zwischen den Wörtern gelassen</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Die Geschichte ist in Absätze gegliedert (Anfang / Ereignis / Ende)</span></div>
+        </div>
+      </div>
+
+      <div class="cl-progress">
+        <div class="cl-bar-wrap"><div class="cl-bar" id="clBar"></div></div>
+        <span class="cl-count" id="clCount">0 / 15 verbessert</span>
+      </div>
+
+      <div class="cl-alldone-msg" id="clAlldoneMsg">
+        <span style="font-size:1.6rem">🌟</span>
+        <div class="cl-alldone-msg-text">Super! Alle Punkte erledigt – dein Text ist jetzt richtig toll! Jetzt abschreiben!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">3</span>
+      <div>
+        <div class="step-title">📸 Foto hochladen &amp; Feedback erhalten</div>
+        <div class="step-sub">Mach ein Foto deiner handgeschriebenen Geschichte – dann kann der Lehrer / die Eltern Feedback geben</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="upload-drop" onclick="document.getElementById('photoInput').click()">
+        <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhoto(event)">
+        <div class="upload-icon">📷</div>
+        <div class="upload-label">Hier klicken oder Foto aufnehmen</div>
+        <div class="upload-sub">Auf dem Handy direkt mit der Kamera · JPG oder PNG</div>
+      </div>
+      <div class="photo-preview" id="photoPreview">
+        <img id="photoImg" src="" alt="Handgeschriebene Geschichte">
+      </div>
+    </div>
+
+    <div class="feedback-zone" id="feedbackZone">
+      <div class="feedback-zone-hd">👨‍🏫 Feedback vom Lehrer / von den Eltern</div>
+
+      <div class="star-row" id="starRow">
+        <span class="star" data-v="1" onclick="setStar(1)">⭐</span>
+        <span class="star" data-v="2" onclick="setStar(2)">⭐</span>
+        <span class="star" data-v="3" onclick="setStar(3)">⭐</span>
+        <span class="star" data-v="4" onclick="setStar(4)">⭐</span>
+        <span class="star" data-v="5" onclick="setStar(5)">⭐</span>
+      </div>
+
+      <div class="fb-fields">
+        <div>
+          <label class="fb-label">✅ Das war besonders gut</label>
+          <textarea class="fb-ta" id="fbGood" placeholder="z. B. Tolle Adjektive, schöne Handschrift, spannende Geschichte …"></textarea>
+        </div>
+        <div>
+          <label class="fb-label">💡 Das kannst du noch verbessern</label>
+          <textarea class="fb-ta" id="fbImprove" placeholder="z. B. Achte noch auf die Großschreibung der Nomen …"></textarea>
+        </div>
+      </div>
+
+      <div class="fb-btn-row">
+        <button class="fb-save" onclick="saveFeedback()">💾 Feedback speichern</button>
+        <button class="fb-print" onclick="printReview()">🖨️ Alles drucken</button>
+      </div>
+
+      <div class="saved-fb" id="savedFb">
+        <div class="saved-fb-title">✅ Feedback gespeichert</div>
+        <div class="saved-fb-body" id="savedFbBody"></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   SENTENCE CHECKER WITH IMPROVED LOCAL LOGIC
-════════════════════════════════════════ */
-let _ltMatches = [];
-
-function clearAssess(){document.getElementById('assess').style.display='none';_ltMatches=[]}
-
-function checkSentence(){
-const ta=document.getElementById('satz');
-const btn=document.getElementById('checkBtn');
-const text=ta.value.trim();
-if(!text){
-showAssess([mkCheck('warn','!','Schreibe zuerst einen Satz.')],'','v-keep','✏️ Schreibe zuerst einen Satz.');
-return;
-}
-let checks=[],structureOk=true;
-
-// Capital
-if(text[0]===text[0].toUpperCase()){checks.push(mkCheck('ok','✓','Satzanfang ist großgeschrieben'))}else{checks.push(mkCheck('warn','!','Beginne deinen Satz mit einem Großbuchstaben'));structureOk=false}
-
-// Punctuation
-if(/[.!?]$/.test(text)){checks.push(mkCheck('ok','✓','Satzzeichen am Ende ('+text.slice(-1)+')'))}else{checks.push(mkCheck('warn','!','Dein Satz braucht ein Satzzeichen am Ende (. ! ?)'));structureOk=false}
-
-// Word count
-const wc=text.split(/\s+/).filter(Boolean).length;
-if(wc>=5){checks.push(mkCheck('ok','✓','Gute Satzlänge – '+wc+' Wörter'))}else{checks.push(mkCheck('warn','!','Dein Satz hat '+wc+' Wörter – versuche 5 oder mehr'));structureOk=false}
-
-// Simple repeated subject detection
-const lower=text.toLowerCase();
-if(/(ein|eine|der|die|das)\s+\w+\s+\1/.test(lower)){checks.push(mkCheck('warn','!','Achtung: Wiederholtes Subjekt erkannt'));structureOk=false}
-
-// LanguageTool
-btn.innerHTML='<span class="spinner">⏳</span> …';btn.disabled=true;
-fetch('https://api.languagetool.org/v2/check',{
-method:'POST',
-headers:{'Content-Type':'application/x-www-form-urlencoded'},
-body:new URLSearchParams({text,language:'de-DE'})
-})
-.then(resp=>resp.json())
-.then(data=>{
-_ltMatches=(data.matches||[]).filter(m=>m.replacements&&m.replacements.length>0);
-if(_ltMatches.length===0){checks.push(mkCheck('ok','✓','Keine Rechtschreib- oder Grammatikfehler'))}else{checks.push(mkCheck('warn','!',_ltMatches.length+' Vorschläge gefunden')}}
-showAssess(checks,_ltMatches,structureOk&&_ltMatches.length===0?'v-great':structureOk?'v-good':'v-keep',structureOk&&_ltMatches.length===0?'🌟 Perfekt! Dein Satz ist super!':'💪 Prüfe die markierten Punkte')}
-).catch(e=>{checks.push(mkCheck('info','i','Grammatikprüfung nicht verfügbar'));showAssess(checks,_ltMatches,'v-keep','💪 Prüfe die markierten Punkte')})
-.finally(()=>{btn.innerHTML='🔍 Satz prüfen';btn.disabled=false})
-}
-
-function mkCheck(type,icon,text){return `<div class="check-row"><span class="check-icon check-${type}">${icon}</span><span>${text}</span></div>`}
-
-function showAssess(checks,ltMatches,vClass,vText){
-document.getElementById('checks-list').innerHTML=checks.join('');
-const ltSec=document.getElementById('lt-section');
-const ltHead=document.getElementById('lt-head');
-const ltList=document.getElementById('lt-list');
-const ltFix=document.getElementById('lt-fixall');
-const ta=document.getElementById('satz');
-if(Array.isArray(ltMatches)&&ltMatches.length>0){
-ltHead.textContent=`✏️ ${ltMatches.length} Verbesserungsvorschlag${ltMatches.length>1?'e':''}:`;
-ltList.innerHTML=ltMatches.map((m,i)=>{
-const wrong=ta.value.substring(m.offset,m.offset+m.length);
-const sugs=m.replacements.slice(0,3).map(r=>r.value);
-const btns=sugs.map(s=>`<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`).join('');
-return `<div class="lt-row"><span class="lt-wrong">${escHtml(wrong)}</span><span class="lt-arrow">→</span><span class="lt-sugs">${btns}</span></div>`}).join('');
-ltFix.style.display=ltMatches.length>1?'inline-block':'none';
-ltSec.style.display='flex'}else{ltSec.style.display='none'}
-const v=document.getElementById('verdict');v.className=`verdict ${vClass}`;v.textContent=vText;
-document.getElementById('assess').style.display='block';
-document.getElementById('assess').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function applyOneLT(idx,replacement){
-const ta=document.getElementById('satz');const m=_ltMatches[idx];if(!m)return;
-ta.value=ta.value.substring(0,m.offset)+replacement+ta.value.substring(m.offset+m.length);
-checkSentence()
-}
-
-function applyAllLT(){
-const ta=document.getElementById('satz');const sorted=[..._ltMatches].sort((a,b)=>b.offset-a.offset);
-let text=ta.value;
-sorted.forEach(m=>{if(m.replacements.length>0){text=text.substring(0,m.offset)+m.replacements[0].value+text.substring(m.offset+m.length)}});
-ta.value=text;checkSentence()
-}
-
-function speakSentence(){const text=document.getElementById('satz').value.trim();if(!text||!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,'\\\'').replace(/"/g,'&quot;')}
-
-/* ════════════════════════════════════════
-   BLOCKWELT DRAG & DROP
-════════════════════════════════════════ */
-const BLOCK_SENTENCES = [
-  { s: "Die Sonne scheint hell am Himmel.",
-    w: ["Die Sonne","scheint","hell","am","Himmel"] },
-  { s: "Wir spielen heute im Garten.",
-    w: ["Wir","spielen","heute","im","Garten"] },
-  { s: "Die Katze schläft auf dem Sofa.",
-    w: ["Die Katze","schläft","auf","dem","Sofa"] },
-  { s: "Das Mädchen malt ein buntes Bild.",
-    w: ["Das Mädchen","malt","ein buntes","Bild"] },
-  { s: "Der Junge rennt schnell zur Gans im Park.",
-    w: ["Der Junge","rennt","schnell","zur","Gans","im","Park"] },
-  { s: "Meine Schwester liest gerne Bücher.",
-    w: ["Meine Schwester","liest","gerne","Bücher"] },
-  { s: "Im Sommer fahren wir ans Meer.",
-    w: ["Im Sommer","fahren","wir","ans","Meer"] },
-  { s: "Der Lehrer schreibt die Aufgabe an die Tafel.",
-    w: ["Der Lehrer","schreibt","die Aufgabe","an","die","Tafel"] },
-  { s: "Die Kinder bauen eine große Schneeburg.",
-    w: ["Die Kinder","bauen","eine große","Schneeburg"] },
-  { s: "Heute backen wir einen leckeren Kuchen.",
-    w: ["Heute","backen","wir","einen leckeren","Kuchen"] },
-  { s: "Der Hund bringt dem Mann den Ball.",
-    w: ["Der Hund","bringt","dem Mann","den","Ball"] },
-  { s: "Das kleine Häschen hüpft über die Wiese.",
-    w: ["Das kleine","Häschen","hüpft","über","die","Wiese"] },
+const CHARS = [
+  { emoji:'👧', name:'Emma',   desc:'Mutiges Mädchen',    pronoun:'Sie' },
+  { emoji:'👦', name:'Luca',   desc:'Neugieriger Junge',   pronoun:'Er' },
+  { emoji:'🐕', name:'Bello',  desc:'Freundlicher Hund',   pronoun:'Er' },
+  { emoji:'🐱', name:'Mia',    desc:'Schlaue Katze',       pronoun:'Sie' },
+  { emoji:'🦊', name:'Felix',  desc:'Schlauer Fuchs',      pronoun:'Er' },
+  { emoji:'🐉', name:'Drako',  desc:'Freundlicher Drache', pronoun:'Er' },
 ];
 
-/* A colour per sentence so blocks look fresh each round */
-const BLOCK_COLORS = [
-  "#4f6ef7","#16a34a","#7c3aed","#d97706",
-  "#0891b2","#be185d","#dc2626","#059669",
-  "#2563eb","#9333ea","#ca8a04","#0369a1"
+const SETS = [
+  { emoji:'🌲', name:'Im Wald',           desc:'Große Bäume' },
+  { emoji:'🏫', name:'In der Schule',     desc:'Klassenzimmer' },
+  { emoji:'🏖️', name:'Am Strand',         desc:'Sand und Meer' },
+  { emoji:'🏙️', name:'In der Stadt',      desc:'Straßen und Häuser' },
+  { emoji:'🏡', name:'Auf dem Bauernhof', desc:'Tiere und Felder' },
+  { emoji:'⛰️', name:'In den Bergen',     desc:'Schnee und Gipfel' },
 ];
 
-/* ════════════════════════════════════════
-   STATE
-════════════════════════════════════════ */
-let _ltMatches = []; // LanguageTool matches for current sentence
+const STARTERS = {
+  begin: [
+    'Es war einmal …',
+    'An einem sonnigen Morgen …',
+    'Eines Tages …',
+    'In [ORT] lebte …',
+    '[FIGUR] wachte auf und …',
+  ],
+  middle: [
+    'Plötzlich …',
+    'Da sah [FIGUR] …',
+    'Auf einmal …',
+    'Oh nein! …',
+    'Dann passierte etwas …',
+  ],
+  end: [
+    'Zum Glück …',
+    'Am Ende …',
+    'Danach war alles …',
+    '[FIGUR] war sehr froh, weil …',
+    'Von nun an …',
+  ],
+};
 
-/* ════════════════════════════════════════
-   SENTENCE CHECKER
-════════════════════════════════════════ */
-function clearAssess() {
-  document.getElementById('assess').style.display = 'none';
-  _ltMatches = [];
+let st = { charIdx: null, setIdx: null };
+let _starRating = 0;
+const MIN_WORDS = 5;
+const _corrections = {};
+
+buildCharGrid();
+buildSettingGrid();
+updateAll();
+
+function buildCharGrid() {
+  const g = document.getElementById('charGrid');
+  CHARS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `cc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${c.emoji}</span>${c.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${c.desc}</span>`;
+    el.onclick = () => { st.charIdx = i; selectMini('cc', i, CHARS.length); onCharSetChange(); };
+    g.appendChild(el);
+  });
 }
 
-async function checkSentence() {
-  const ta  = document.getElementById('satz');
-  const btn = document.getElementById('checkBtn');
-  const text = ta.value.trim();
+function buildSettingGrid() {
+  const g = document.getElementById('settingGrid');
+  SETS.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `sc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${s.emoji}</span>${s.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${s.desc}</span>`;
+    el.onclick = () => { st.setIdx = i; selectMini('sc', i, SETS.length); onCharSetChange(); };
+    g.appendChild(el);
+  });
+}
 
-  if (!text) {
-    showAssess([`<div class="check-row"><span class="check-icon check-warn">!</span>${sw_t('writeSentenceFirst')}</div>`], '', 'v-keep', '✏️ ' + sw_t('writeSentenceFirst'));
+function selectMini(prefix, idx, total) {
+  for (let i = 0; i < total; i++) {
+    const el = document.getElementById(`${prefix}-${i}`);
+    if (el) el.className = i === idx ? 'mini-card selected' : 'mini-card';
+  }
+}
+
+function onCharSetChange() {
+  const char = st.charIdx !== null ? CHARS[st.charIdx] : null;
+  const set  = st.setIdx !== null ? SETS[st.setIdx] : null;
+
+  const chipChar = document.getElementById('chipChar');
+  const chipSet = document.getElementById('chipSet');
+  const chipCLbl = document.getElementById('chipCharLabel');
+  const chipSLbl = document.getElementById('chipSetLabel');
+
+  if (char) {
+    chipChar.classList.remove('empty');
+    chipCLbl.textContent = char.name;
+    chipChar.querySelector('.chip-icon').textContent = char.emoji;
+  } else {
+    chipChar.classList.add('empty');
+    chipCLbl.textContent = 'Figur wählen…';
+    chipChar.querySelector('.chip-icon').textContent = '🧒';
+  }
+
+  if (set) {
+    chipSet.classList.remove('empty');
+    chipSLbl.textContent = set.name;
+    chipSet.querySelector('.chip-icon').textContent = set.emoji;
+  } else {
+    chipSet.classList.add('empty');
+    chipSLbl.textContent = 'Ort wählen…';
+    chipSet.querySelector('.chip-icon').textContent = '🗺️';
+  }
+
+  document.getElementById('numChar').className = 'setup-num' + (char ? ' done' : '');
+  document.getElementById('numSet').className = 'setup-num' + (set ? ' done' : '');
+
+  ['b','m','e'].forEach(k => {
+    const ce = document.getElementById(`se-${k}-char`);
+    const se = document.getElementById(`se-${k}-set`);
+    if (ce) ce.textContent = char ? char.emoji : '🧒';
+    if (se) se.textContent = set ? set.emoji : '🌲';
+  });
+
+  const name = char ? char.name : 'die Figur';
+  const place = set ? set.name : 'dem Ort';
+
+  ['begin','middle','end'].forEach(part => {
+    const lbl = document.getElementById(`scene-${part}-label`);
+    if (lbl) lbl.textContent = `${name} ${part === 'begin' ? 'erkundet' : part === 'middle' ? 'erlebt etwas bei' : 'endet in'} ${place}`;
+  });
+
+  buildStarters('begin', name, place);
+  buildStarters('middle', name, place);
+  buildStarters('end', name, place);
+  updateAll();
+}
+
+function buildStarters(part, name, place) {
+  const wrap = document.getElementById(`starters-${part}`);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  (STARTERS[part] || []).forEach(s => {
+    const text = s.replace('[FIGUR]', name).replace('[ORT]', place);
+    const btn = document.createElement('button');
+    btn.className = 'starter';
+    btn.textContent = text;
+    btn.onclick = () => insertStarter(part, text);
+    wrap.appendChild(btn);
+  });
+}
+
+function insertStarter(part, text) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const cur = ta.value.trim();
+  ta.value = cur ? cur + ' ' + text + ' ' : text + ' ';
+  ta.focus();
+  onType(part);
+}
+
+function onType(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const words = countWords(ta.value);
+  const pill = document.getElementById(`wc-${part}`);
+  pill.textContent = `${words} ${words === 1 ? 'Wort' : 'Wörter'}`;
+  pill.className = words >= MIN_WORDS ? 'wc-pill ok' : 'wc-pill';
+  updatePreview(part, ta.value.trim());
+  updateAll();
+}
+
+function updatePreview(part, text) {
+  const pv = document.getElementById(`pv-${part}`);
+  if (!pv) return;
+  if (text) {
+    pv.className = 'pv-text';
+    pv.textContent = text;
+  } else {
+    pv.className = 'pv-text empty';
+    pv.innerHTML = '<div class="pv-lines"><div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div></div>';
+  }
+}
+
+function countWords(str) {
+  return str.trim().split(/\s+/).filter(w => w.length > 0).length;
+}
+
+function updateAll() {
+  const beginWords = countWords(document.getElementById('ta-begin').value);
+  const middleWords = countWords(document.getElementById('ta-middle').value);
+  const endWords = countWords(document.getElementById('ta-end').value);
+
+  const beginDone = beginWords >= MIN_WORDS;
+  const middleDone = middleWords >= MIN_WORDS;
+  const endDone = endWords >= MIN_WORDS;
+
+  const lockM = document.getElementById('lock-middle');
+  const lockE = document.getElementById('lock-end');
+  const panelM = document.getElementById('panelMiddle');
+  const panelE = document.getElementById('panelEnd');
+
+  if (beginDone) {
+    lockM.classList.add('hidden');
+    panelM.classList.remove('locked');
+    document.getElementById('arr1').classList.add('active');
+    document.getElementById('tn-begin').classList.add('lit');
+    document.getElementById('lf1').style.width = '100%';
+  } else {
+    lockM.classList.remove('hidden');
+    panelM.classList.add('locked');
+    document.getElementById('arr1').classList.remove('active');
+    document.getElementById('tn-begin').classList.remove('lit');
+    document.getElementById('lf1').style.width = '0%';
+  }
+
+  if (beginDone && middleDone) {
+    lockE.classList.add('hidden');
+    panelE.classList.remove('locked');
+    document.getElementById('arr2').classList.add('active2');
+    document.getElementById('tn-middle').classList.add('lit');
+    document.getElementById('lf2').style.width = '100%';
+  } else {
+    lockE.classList.remove('hidden');
+    panelE.classList.add('locked');
+    document.getElementById('arr2').classList.remove('active2');
+    document.getElementById('tn-middle').classList.remove('lit');
+    document.getElementById('lf2').style.width = '0%';
+  }
+
+  document.getElementById('tn-end').classList.toggle('lit', endDone);
+
+  const allDone = beginDone && middleDone && endDone;
+  const bar = document.getElementById('celebBar');
+  if (allDone && !bar.classList.contains('show')) {
+    bar.classList.add('show');
+    confetti();
+    setTimeout(() => document.getElementById('paperZone').classList.add('show'), 1200);
+  }
+}
+
+function speak(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta || !ta.value.trim()) return;
+  tts(ta.value.trim());
+}
+
+function speakAll() {
+  const parts = ['begin','middle','end'].map(p => {
+    const ta = document.getElementById(`ta-${p}`);
+    return ta ? ta.value.trim() : '';
+  }).filter(Boolean).join(' … ');
+  if (parts) tts(parts);
+}
+
+function tts(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE';
+  u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+function scrollToPaper() {
+  const z = document.getElementById('paperZone');
+  z.classList.add('show');
+  z.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToStory() {
+  document.querySelector('.canvas-zone').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToSpelling() {
+  const btn = document.getElementById('chk-begin');
+  if (btn) {
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    btn.style.outline = '3px solid var(--blue)';
+    setTimeout(() => { btn.style.outline = ''; }, 1800);
+  }
+}
+
+function toggleCL(item) {
+  item.classList.toggle('checked');
+  item.querySelector('.cl-box').textContent = item.classList.contains('checked') ? '✓' : '';
+  updateCLProgress();
+}
+
+function updateCLProgress() {
+  const items = document.querySelectorAll('#paperZone .cl-item');
+  const total = items.length;
+  const done = document.querySelectorAll('#paperZone .cl-item.checked').length;
+  document.getElementById('clBar').style.width = total ? (done / total * 100) + '%' : '0%';
+  const el = document.getElementById('clCount');
+  el.textContent = done === total ? `${done} / ${total} – Alles verbessert! 🌟` : `${done} / ${total} verbessert`;
+  el.className = done === total ? 'cl-count all-done' : 'cl-count';
+  const msg = document.getElementById('clAlldoneMsg');
+  if (msg) msg.classList.toggle('show', done === total);
+}
+
+function handlePhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('photoImg').src = e.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+    const fz = document.getElementById('feedbackZone');
+    fz.classList.add('show');
+    setTimeout(() => fz.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  };
+  reader.readAsDataURL(file);
+}
+
+function setStar(n) {
+  _starRating = n;
+  document.querySelectorAll('.star').forEach(s =>
+    s.classList.toggle('on', parseInt(s.dataset.v, 10) <= n)
+  );
+}
+
+function saveFeedback() {
+  const good = document.getElementById('fbGood').value.trim();
+  const improve = document.getElementById('fbImprove').value.trim();
+  if (!_starRating && !good && !improve) return;
+
+  const parts = [];
+  if (_starRating) parts.push('Bewertung: ' + '⭐'.repeat(_starRating));
+  if (good) parts.push('✅ Besonders gut:\n' + good);
+  if (improve) parts.push('💡 Noch verbessern:\n' + improve);
+
+  const body = parts.join('\n\n');
+  document.getElementById('savedFbBody').textContent = body;
+  document.getElementById('savedFb').classList.add('show');
+  try {
+    localStorage.setItem('sw_fb', JSON.stringify({ rating: _starRating, good, improve, ts: Date.now() }));
+  } catch (e) {}
+}
+
+function printReview() {
+  saveFeedback();
+
+  const char = st.charIdx !== null ? CHARS[st.charIdx] : null;
+  const set = st.setIdx !== null ? SETS[st.setIdx] : null;
+  const title = char ? char.emoji + ' ' + char.name : 'Meine Geschichte';
+  const place = set ? set.name : '';
+  const begin = document.getElementById('ta-begin').value.trim();
+  const middle = document.getElementById('ta-middle').value.trim();
+  const end = document.getElementById('ta-end').value.trim();
+  const photoSrc = document.getElementById('photoImg').src;
+  const hasPhoto = Boolean(photoSrc);
+  const good = document.getElementById('fbGood').value.trim();
+  const improve = document.getElementById('fbImprove').value.trim();
+  const stars = '⭐'.repeat(_starRating);
+
+  const groups = [...document.querySelectorAll('#paperZone .cl-group')].map(g => ({
+    title: g.querySelector('.cl-group-title').textContent.trim(),
+    items: [...g.querySelectorAll('.cl-item')].map(el => ({
+      done: el.classList.contains('checked'),
+      label: el.querySelector('.cl-label').textContent.trim()
+    }))
+  }));
+
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<title>${escHtml(title)} – Meine Geschichte</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 720px; margin: 36px auto; padding: 0 20px; color: #1a1f36; }
+  h1  { font-size: 1.6rem; color: #4f6ef7; margin-bottom: 2px; }
+  .meta { font-size: .82rem; color: #64748b; margin-bottom: 22px; }
+  h2  { font-size: .95rem; font-weight: bold; margin: 20px 0 6px; color: #1a1f36; border-bottom: 2px solid #e0e7f0; padding-bottom: 3px; }
+  p   { line-height: 1.85; font-size: .97rem; white-space: pre-wrap; margin-bottom: 8px; }
+  img { max-width: 100%; border-radius: 8px; margin: 12px 0; box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+  .cl-group-hd { font-size: .76rem; font-weight: bold; text-transform: uppercase; letter-spacing: .06em; color: #64748b; margin: 14px 0 6px; }
+  .cl-row  { display: flex; gap: 8px; align-items: flex-start; font-size: .87rem; padding: 3px 0; }
+  .ok  { color: #16a34a; font-weight: 900; }
+  .no  { color: #dc2626; font-weight: 900; }
+  .fb-box { border-radius: 4px; padding: 10px 14px; margin: 6px 0; }
+  .fb-good    { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .fb-improve { background: #fffbeb; border-left: 4px solid #d97706; }
+  .fb-lbl  { font-size: .73rem; text-transform: uppercase; letter-spacing: .06em; color: #64748b; font-weight: bold; margin-bottom: 4px; }
+  .fb-body { font-size: .93rem; line-height: 1.6; }
+  @media print { body { margin: 16px; } }
+</style></head><body>
+<h1>📖 ${escHtml(title)}</h1>
+<div class="meta">${place ? escHtml(place) + ' · ' : ''}${new Date().toLocaleDateString('de-DE')}</div>
+${begin ? `<h2 style="color:#16a34a">🌅 Anfang</h2><p>${escHtml(begin)}</p>` : ''}
+${middle ? `<h2 style="color:#d97706">⚡ Ereignis</h2><p>${escHtml(middle)}</p>` : ''}
+${end ? `<h2 style="color:#7c3aed">⭐ Ende</h2><p>${escHtml(end)}</p>` : ''}
+${hasPhoto ? `<h2>Handgeschriebene Geschichte</h2><img src="${photoSrc}" alt="Foto">` : ''}
+<h2>Selbst-Check (Bayern Klasse 3 / 4)</h2>
+${groups.map(g => `<div class="cl-group-hd">${escHtml(g.title)}</div>` +
+  g.items.map(it => `<div class="cl-row"><span class="${it.done ? 'ok' : 'no'}">${it.done ? '✓' : '✗'}</span><span>${escHtml(it.label)}</span></div>`).join('')
+).join('')}
+${(good || improve || _starRating) ? `<h2>Feedback</h2>
+${stars ? `<p style="font-size:1.3rem;margin-bottom:4px">${stars}</p>` : ''}
+${good ? `<div class="fb-box fb-good"><div class="fb-lbl">Besonders gut</div><div class="fb-body">${escHtml(good)}</div></div>` : ''}
+${improve ? `<div class="fb-box fb-improve"><div class="fb-lbl">Noch verbessern</div><div class="fb-body">${escHtml(improve)}</div></div>` : ''}` : ''}
+</body></html>`);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
+}
+
+async function checkSpelling(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  const cp = document.getElementById(`cp-${part}`);
+  const btn = document.getElementById(`chk-${part}`);
+
+  if (!ta.value.trim()) {
+    showCP(cp, '<div class="cp-noop">✏️ Schreibe zuerst etwas, dann kann ich helfen!</div>');
     return;
   }
 
-  // ── Local structural checks ──────────────────────
-  const checks = [];
-  let structureOk = true;
-
-  // Capital start
-  if (text[0] === text[0].toUpperCase() && text[0] !== text[0].toLowerCase()) {
-    checks.push(mkCheck('ok', '✓', sw_t('capitalOk')));
-  } else {
-    checks.push(mkCheck('warn', '!', sw_t('capitalWarn')));
-    structureOk = false;
-  }
-
-  // Ends with period
-  if (/[.!?]$/.test(text)) {
-    checks.push(mkCheck('ok', '✓', sw_t('punctOk', text.slice(-1))));
-  } else {
-    checks.push(mkCheck('warn', '!', sw_t('punctWarn')));
-    structureOk = false;
-  }
-
-  // Word count
-  const wc = text.split(/\s+/).filter(Boolean).length;
-  if (wc >= 5) {
-    checks.push(mkCheck('ok', '✓', sw_t('wordsOk', wc)));
-  } else {
-    checks.push(mkCheck('warn', '!', sw_t('wordsWarn', wc)));
-    structureOk = false;
-  }
-
-  // ── LanguageTool API ─────────────────────────────
-  btn.innerHTML = '<span class="spinner">⏳</span> …';
+  btn.textContent = '⏳ …';
   btn.disabled = true;
 
-  let ltOk = true;
   try {
     const resp = await fetch('https://api.languagetool.org/v2/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ text, language: 'de-DE' })
+      body: new URLSearchParams({ text: ta.value, language: 'de-DE' })
     });
-    if (!resp.ok) throw new Error();
+    if (!resp.ok) throw new Error('api');
     const data = await resp.json();
-
-    _ltMatches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
-
-    if (_ltMatches.length === 0) {
-      checks.push(mkCheck('ok', '✓', sw_t('noErrors')));
-    } else {
-      ltOk = false;
-      checks.push(mkCheck('warn', '!', sw_t('ltFound', _ltMatches.length)));
-    }
-  } catch(e) {
-    checks.push(mkCheck('info', 'i', sw_t('ltUnavailable')));
+    const matches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+    _corrections[part] = matches;
+    renderCorrections(part, matches);
+  } catch (e) {
+    showCP(cp, '<div class="cp-err">😕 Keine Verbindung – bitte versuche es nochmal!</div>');
   } finally {
-    btn.innerHTML = sw_t('checkSentenceBtn');
+    btn.textContent = '🔍 Prüfen';
     btn.disabled = false;
   }
+}
 
-  // ── Verdict ──────────────────────────────────────
-  let vClass, vText;
-  if (structureOk && ltOk) {
-    vClass = 'v-great'; vText = sw_t('verdictPerfect');
-  } else if (structureOk && !ltOk) {
-    vClass = 'v-good';  vText = sw_t('verdictGood');
-  } else {
-    vClass = 'v-keep';  vText = sw_t('verdictKeep');
+function renderCorrections(part, matches) {
+  const ta = document.getElementById(`ta-${part}`);
+  const cp = document.getElementById(`cp-${part}`);
+
+  if (!matches.length) {
+    showCP(cp, '<div class="cp-ok">🌟 Super! Keine Fehler gefunden!</div>');
+    return;
   }
 
-  showAssess(checks, _ltMatches, vClass, vText);
-}
-
-function mkCheck(type, icon, text) {
-  return `<div class="check-row">
-    <span class="check-icon check-${type}">${icon}</span>
-    <span>${text}</span>
-  </div>`;
-}
-
-function showAssess(checks, ltMatches, vClass, vText) {
-  document.getElementById('checks-list').innerHTML = checks.join('');
-
-  const ltSec  = document.getElementById('lt-section');
-  const ltHead = document.getElementById('lt-head');
-  const ltList = document.getElementById('lt-list');
-  const ltFix  = document.getElementById('lt-fixall');
-  const ta     = document.getElementById('satz');
-
-  if (Array.isArray(ltMatches) && ltMatches.length > 0) {
-    ltHead.textContent = sw_t('ltHead', ltMatches.length);
-    ltList.innerHTML = ltMatches.map((m, i) => {
-      const wrong = ta.value.substring(m.offset, m.offset + m.length);
-      const sugs  = m.replacements.slice(0, 3).map(r => r.value);
-      const btns  = sugs.map(s =>
-        `<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`
-      ).join('');
-      return `<div class="lt-row">
-        <span class="lt-wrong">${escHtml(wrong)}</span>
-        <span class="lt-arrow">→</span>
-        <span class="lt-sugs">${btns}</span>
-      </div>`;
-    }).join('');
-    ltFix.style.display = ltMatches.length > 1 ? 'inline-block' : 'none';
-    ltSec.style.display = 'flex';
-  } else {
-    ltSec.style.display = 'none';
+  let html = `<div class="cp-head">✏️ ${matches.length} Verbesserungsvorschlag${matches.length > 1 ? 'e' : ''}:</div><div class="cp-list">`;
+  matches.forEach((m, i) => {
+    const wrong = ta.value.substring(m.offset, m.offset + m.length);
+    const sugs = m.replacements.slice(0, 3).map(r => r.value);
+    html += `<div class="cp-row">
+      <span class="cp-wrong">${escHtml(wrong)}</span>
+      <span class="cp-arrow">→</span>
+      <span class="cp-sugs">`;
+    sugs.forEach(s => {
+      html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`;
+    });
+    html += `</span></div>`;
+  });
+  html += `</div>`;
+  if (matches.length > 1) {
+    html += `<button class="cp-fixall" onclick="applyAll('${part}')">✨ Alle auf einmal korrigieren</button>`;
   }
-
-  const v = document.getElementById('verdict');
-  v.className = `verdict ${vClass}`;
-  v.textContent = vText;
-
-  document.getElementById('assess').style.display = 'block';
-  document.getElementById('assess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  showCP(cp, html);
+  cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-/* ── Apply single LT suggestion ── */
-function applyOneLT(idx, replacement) {
-  const ta = document.getElementById('satz');
-  const m  = _ltMatches[idx];
+function applySingle(part, idx, replacement) {
+  const ta = document.getElementById(`ta-${part}`);
+  const m = (_corrections[part] || [])[idx];
   if (!m) return;
   ta.value = ta.value.substring(0, m.offset) + replacement + ta.value.substring(m.offset + m.length);
-  checkSentence(); // re-run full check
+  onType(part);
+  checkSpelling(part);
 }
 
-/* ── Apply all LT suggestions (end→start) ── */
-function applyAllLT() {
-  const ta = document.getElementById('satz');
-  const sorted = [..._ltMatches].sort((a, b) => b.offset - a.offset);
+function applyAll(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  const matches = (_corrections[part] || [])
+    .filter(m => m.replacements.length > 0)
+    .sort((a, b) => b.offset - a.offset);
+
   let text = ta.value;
-  sorted.forEach(m => {
-    if (m.replacements.length > 0) {
-      text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
-    }
+  matches.forEach(m => {
+    text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
   });
   ta.value = text;
-  checkSentence();
+  onType(part);
+  const cp = document.getElementById(`cp-${part}`);
+  showCP(cp, '<div class="cp-ok">🌟 Alle Vorschläge wurden übernommen!</div>');
+  setTimeout(() => checkSpelling(part), 600);
 }
 
-function speakSentence() {
-  const text = document.getElementById('satz').value.trim();
-  if (!text || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'de-DE'; u.rate = 0.9;
-  speechSynthesis.speak(u);
+function showCP(cp, html) {
+  cp.innerHTML = html;
+  cp.style.display = 'block';
 }
 
 function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+
 function escAttr(s) {
-  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 }
 
-/* ════════════════════════════════════════
-   DRAG & DROP BLOCKS
-════════════════════════════════════════ */
-const pool = document.getElementById('wordPool');
-const area = document.getElementById('sentenceArea');
-let dragged     = null;
-let blockQueue  = [];   // shuffled index order
-let blockPos    = 0;    // current position in queue
-let blockBusy   = false; // prevents double-advance while animating
-
-/* Shuffle the sentence order so every round is different */
-function initQueue() {
-  blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
-  blockPos   = 0;
-}
-
-function currentEntry() {
-  return BLOCK_SENTENCES[blockQueue[blockPos]];
-}
-
-function buildBlocks() {
-  const { w } = currentEntry();
-  const color  = BLOCK_COLORS[blockPos % BLOCK_COLORS.length];
-  pool.innerHTML = '';
-  area.innerHTML = '';
-  area.classList.remove('success');
-  document.getElementById('blockFeedback').textContent = '';
-  blockBusy = false;
-  // Shuffle word order for the puzzle
-  [...w].sort(() => Math.random() - .5).forEach(word => pool.appendChild(makeBlock(word, color)));
-  updateCounter();
-}
-
-function makeBlock(text, color) {
-  const d = document.createElement('div');
-  d.className   = 'word-block';
-  d.draggable   = true;
-  d.textContent = text;
-  if (color) d.style.background = color;
-  return d;
-}
-
-function updateCounter() {
-  const el = document.getElementById('blockCounter');
-  if (el) el.textContent = typeof sw_t === 'function'
-    ? sw_t('counterText', blockPos + 1, BLOCK_SENTENCES.length)
-    : `Satz ${blockPos + 1} von ${BLOCK_SENTENCES.length}`; // fallback before i18n loads
-}
-
-/* Reset = reshuffle current sentence (same puzzle, new block order) */
-function resetBlocks() {
-  buildBlocks();
-}
-
-/* Skip = advance to next sentence immediately */
-function skipBlock() {
-  advanceBlock();
-}
-
-function advanceBlock() {
-  blockPos = (blockPos + 1) % BLOCK_SENTENCES.length;
-  // When we've cycled through all sentences, re-shuffle for next round
-  if (blockPos === 0) {
-    blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
-  }
-  buildBlocks();
-}
-
-// Drag events
-document.addEventListener('dragstart', e => {
-  if (e.target.classList.contains('word-block')) {
-    dragged = e.target;
-    dragged.classList.add('dragging');
-  }
-});
-document.addEventListener('dragend', e => {
-  if (dragged) { dragged.classList.remove('dragging'); dragged = null; }
-});
-
-[pool, area].forEach(el => {
-  el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('over'); });
-  el.addEventListener('dragleave', () => el.classList.remove('over'));
-  el.addEventListener('drop', e => {
-    e.preventDefault();
-    el.classList.remove('over');
-    if (dragged) el.appendChild(dragged);
-  });
-});
-
-function checkBlockSentence() {
-  if (blockBusy) return;
-  const blocks = area.querySelectorAll('.word-block');
-  const fb     = document.getElementById('blockFeedback');
-  if (!blocks.length) {
-    fb.style.color = 'var(--amber)';
-    fb.textContent = sw_t('fbEmpty');
-    return;
-  }
-  const { s } = currentEntry();
-  const built  = Array.from(blocks).map(b => b.textContent).join(' ') + '.';
-  if (built.trim() === s.trim()) {
-    blockBusy = true;
-    area.classList.add('success');
-    fb.style.color = 'var(--green)';
-    fb.textContent = sw_t('fbRight');
-    setTimeout(advanceBlock, 1800);
-  } else {
-    fb.style.color = 'var(--amber)';
-    fb.textContent = sw_t('fbWrong');
+function confetti() {
+  const colors = ['#22c55e','#d97706','#7c3aed','#4f6ef7','#f87171','#06b6d4','#f59e0b'];
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 7 + Math.random() * 9;
+    el.style.cssText = `
+      left:${Math.random()*100}vw; top:-12px;
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      animation-duration:${2.5+Math.random()*2.5}s;
+      animation-delay:${Math.random()*1.2}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
   }
 }
 
-/* ════════════════════════════════════════
-   LANGUAGE / i18n
-════════════════════════════════════════ */
-const _lang = (localStorage.getItem('sw_lang') || 'de');
-const _l    = _lang === 'both' ? 'de' : _lang; // 'both' → treat as 'de' on this page
-
-const SW_STRINGS = {
-  de: {
-    pageTitle:         'Satzwerkstatt ✏️',
-    topbarTitle:       '✏️ Satzwerkstatt',
-    navBlockwelt:      '📖 Blockwelt',
-    navSchreib:        '📝 Schreibwerkstatt',
-    navBaukasten:      '🧱 Baukasten',
-    card1Title:        'Dein Satz',
-    card1Sub:          'Schreibe irgendeinen Satz – ich prüfe ihn für dich!',
-    sentencePlaceholder:'Schreibe hier deinen Satz …',
-    checkSentenceBtn:  '🔍 Satz prüfen',
-    speakBtn:          '🔊 Vorlesen',
-    assessHead:        '📋 Meine Prüfung',
-    fixallBtn:         '✨ Alle auf einmal korrigieren',
-    card2Title:        'Satzbau mit Blöcken',
-    card2Sub:          'Ziehe die Wörter in die richtige Reihenfolge',
-    poolLabel:         'Wörter',
-    areaLabel:         'Dein Satz',
-    checkBlockBtn:     '🔍 Prüfen',
-    reshuffleBtn:      '🔀 Neu mischen',
-    skipBtn:           '⏭ Überspringen',
-    counterText:       (pos, total) => `Satz ${pos} von ${total}`,
-    fbRight:           "🌟 Richtig! Super gemacht! Weiter geht's …",
-    fbWrong:           '🔄 Noch nicht ganz richtig – versuche es nochmal!',
-    fbEmpty:           '⚠ Ziehe zuerst Wörter in die Satzfläche!',
-    writeSentenceFirst:'Schreibe zuerst einen Satz.',
-    noErrors:          'Keine Rechtschreib- oder Grammatikfehler',
-    capitalOk:         'Satzanfang ist großgeschrieben',
-    capitalWarn:       'Beginne deinen Satz mit einem Großbuchstaben',
-    punctOk:           (ch) => `Satzzeichen am Ende (${ch})`,
-    punctWarn:         'Dein Satz braucht ein Satzzeichen am Ende (. ! ?)',
-    wordsOk:           (n) => `Gute Satzlänge – ${n} Wörter`,
-    wordsWarn:         (n) => `Dein Satz hat ${n} Wörter – versuche 5 oder mehr`,
-    ltUnavailable:     'Grammatikprüfung nicht verfügbar (offline?)',
-    ltFound:           (n) => `${n} Rechtschreib- oder Grammatikvorschlag${n>1?'e':''} gefunden`,
-    ltHead:            (n) => `✏️ ${n} Verbesserungsvorschlag${n>1?'e':''}:`,
-    verdictPerfect:    '🌟 Perfekt! Dein Satz ist super!',
-    verdictGood:       '👍 Fast perfekt! Schau dir die Vorschläge an.',
-    verdictKeep:       '💪 Guter Anfang! Verbessere die markierten Punkte.',
-  },
-  en: {
-    pageTitle:         'Sentence Workshop ✏️',
-    topbarTitle:       '✏️ Sentence Workshop',
-    navBlockwelt:      '📖 Story World',
-    navSchreib:        '📝 Writing Workshop',
-    navBaukasten:      '🧱 Story Builder',
-    card1Title:        'Your Sentence',
-    card1Sub:          'Write any sentence – I\'ll check it for you!',
-    sentencePlaceholder:'Write your sentence here …',
-    checkSentenceBtn:  '🔍 Check Sentence',
-    speakBtn:          '🔊 Read Aloud',
-    assessHead:        '📋 My Check',
-    fixallBtn:         '✨ Fix all at once',
-    card2Title:        'Sentence Building with Blocks',
-    card2Sub:          'Drag the words into the correct order',
-    poolLabel:         'Words',
-    areaLabel:         'Your Sentence',
-    checkBlockBtn:     '🔍 Check',
-    reshuffleBtn:      '🔀 Shuffle',
-    skipBtn:           '⏭ Skip',
-    counterText:       (pos, total) => `Sentence ${pos} of ${total}`,
-    fbRight:           '🌟 Correct! Great job! Moving on …',
-    fbWrong:           '🔄 Not quite right – try again!',
-    fbEmpty:           '⚠ Drag words into the sentence area first!',
-    writeSentenceFirst:'Please write a sentence first.',
-    noErrors:          'No spelling or grammar errors',
-    capitalOk:         'Sentence starts with a capital letter',
-    capitalWarn:       'Start your sentence with a capital letter',
-    punctOk:           (ch) => `Punctuation at the end (${ch})`,
-    punctWarn:         'Your sentence needs a punctuation mark at the end (. ! ?)',
-    wordsOk:           (n) => `Good length – ${n} words`,
-    wordsWarn:         (n) => `Your sentence has ${n} word${n!==1?'s':''} – aim for 5 or more`,
-    ltUnavailable:     'Grammar check unavailable (offline?)',
-    ltFound:           (n) => `${n} spelling or grammar suggestion${n>1?'s':''} found`,
-    ltHead:            (n) => `✏️ ${n} suggestion${n>1?'s':''}:`,
-    verdictPerfect:    '🌟 Perfect! Your sentence is great!',
-    verdictGood:       '👍 Almost perfect! Check the suggestions.',
-    verdictKeep:       '💪 Good start! Improve the highlighted points.',
-  }
-};
-
-function sw_t(key, ...args) {
-  const s = (SW_STRINGS[_l] || SW_STRINGS.de)[key];
-  return typeof s === 'function' ? s(...args) : (s || key);
-}
-
-// Apply static i18n strings
-document.title = sw_t('pageTitle');
-document.querySelectorAll('[data-i18n]').forEach(el => {
-  const v = sw_t(el.dataset.i18n);
-  if (v) el.textContent = v;
-});
-document.querySelectorAll('[data-i18n-ph]').forEach(el => {
-  const v = sw_t(el.dataset.i18nPh);
-  if (v) el.placeholder = v;
-});
-// Re-render counter now that sw_t is available
-updateCounter();
-// Init block puzzle AFTER i18n so sw_t/_l/SW_STRINGS are defined
-initQueue();
-buildBlocks();
-
-// Lang toggle button label
-(function(){
-  const btn = document.getElementById('sw-lang-toggle');
-  if (btn) btn.textContent = _l === 'en' ? '🌐 EN' : '🌐 DE';
-})();
-
-function swToggleLang() {
-  const next = _l === 'en' ? 'de' : 'en';
+function blToggleLang() {
+  const cur = localStorage.getItem('sw_lang') || 'de';
+  const next = cur === 'en' ? 'de' : 'en';
   localStorage.setItem('sw_lang', next);
   location.reload();
 }
 </script>
-
+<script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap';</script>
+<script src="gdpr.js"></script>
 </body>
 </html>
