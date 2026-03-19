@@ -231,9 +231,31 @@ function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,'\\\'').replace(
 /* ════════════════════════════════════════
    BLOCKWELT DRAG & DROP
 ════════════════════════════════════════ */
-let sentences=[
-['Ein','Mädchen','war','Sara','.'],
-['Paula','hat','eine','Freundin','getroffen','.']
+const BLOCK_SENTENCES = [
+  { s: "Die Sonne scheint hell am Himmel.",
+    w: ["Die Sonne","scheint","hell","am","Himmel"] },
+  { s: "Wir spielen heute im Garten.",
+    w: ["Wir","spielen","heute","im","Garten"] },
+  { s: "Die Katze schläft auf dem Sofa.",
+    w: ["Die Katze","schläft","auf","dem","Sofa"] },
+  { s: "Das Mädchen malt ein buntes Bild.",
+    w: ["Das Mädchen","malt","ein buntes","Bild"] },
+  { s: "Der Junge rennt schnell zur Gans im Park.",
+    w: ["Der Junge","rennt","schnell","zur","Gans","im","Park"] },
+  { s: "Meine Schwester liest gerne Bücher.",
+    w: ["Meine Schwester","liest","gerne","Bücher"] },
+  { s: "Im Sommer fahren wir ans Meer.",
+    w: ["Im Sommer","fahren","wir","ans","Meer"] },
+  { s: "Der Lehrer schreibt die Aufgabe an die Tafel.",
+    w: ["Der Lehrer","schreibt","die Aufgabe","an","die","Tafel"] },
+  { s: "Die Kinder bauen eine große Schneeburg.",
+    w: ["Die Kinder","bauen","eine große","Schneeburg"] },
+  { s: "Heute backen wir einen leckeren Kuchen.",
+    w: ["Heute","backen","wir","einen leckeren","Kuchen"] },
+  { s: "Der Hund bringt dem Mann den Ball.",
+    w: ["Der Hund","bringt","dem Mann","den","Ball"] },
+  { s: "Das kleine Häschen hüpft über die Wiese.",
+    w: ["Das kleine","Häschen","hüpft","über","die","Wiese"] },
 ];
 
 /* A colour per sentence so blocks look fresh each round */
