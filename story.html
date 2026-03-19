@@ -1954,6 +1954,9 @@ function renderWrite(){
   const text=answers[chId];
   const cnt=wc(text);
   const good=cnt>=ch.minWords;
+  const hasCap=(text.trimStart()[0]||'').match(/[A-ZÄÖÜ]/);
+  const hasPunct=['.','!','?','"'].includes(text.trimEnd().slice(-1));
+  const hasRede=/„/.test(text);
 
   return`
     <div class="card">
@@ -1975,7 +1978,14 @@ function renderWrite(){
         <textarea id="answer-box" rows="8" spellcheck="true" lang="de">${esc(text)}</textarea>
 
         <div class="wc-row">
-          <span id="wc-el" class="${good?'wc-good':''}">📝 ${cnt} Wörter</span>
+          <span id="wc-el" class="${good?'wc-good':''}">Wörter: ${cnt} / ${ch.minWords}</span>
+          <span id="wc-ok" style="${good?'':'display:none'};color:var(--green)">✓ Genug Wörter!</span>
+        </div>
+        <div class="qpills">
+          <span class="qpill qp-g ${hasCap?'on':''}">✓ Großbuchstabe</span>
+          <span class="qpill qp-g ${hasPunct?'on':''}">✓ Satzzeichen</span>
+          <span class="qpill qp-b ${good?'on':''}">✓ ${ch.minWords}+ Wörter</span>
+          <span class="qpill qp-a ${hasRede?'on':''}">✓ Wörtliche Rede</span>
         </div>
 
         <div class="btn-row">
