@@ -77,11 +77,12 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
 <body>
 
 <header class="topbar">
-  <div class="topbar-title">✏️ Satzwerkstatt</div>
-  <nav>
-    <a class="tlink" href="index.html">📖 Blockwelt</a>
-    <a class="tlink" href="story.html">📝 Schreibwerkstatt</a>
-    <a class="tlink" href="builder.html">🧱 Baukasten</a>
+  <div class="topbar-title" data-i18n="topbarTitle">✏️ Satzwerkstatt</div>
+  <nav class="topbar-links">
+    <a class="tlink" href="index.html" data-i18n="navBlockwelt">📖 Blockwelt</a>
+    <a class="tlink" href="story.html" data-i18n="navSchreib">📝 Schreibwerkstatt</a>
+    <a class="tlink" href="builder.html" data-i18n="navBaukasten">🧱 Baukasten</a>
+    <button id="sw-lang-toggle" onclick="swToggleLang()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
   </nav>
 </header>
 
@@ -234,20 +235,422 @@ let sentences=[
 ['Ein','Mädchen','war','Sara','.'],
 ['Paula','hat','eine','Freundin','getroffen','.']
 ];
-let currentIdx=0;
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
-function loadBlocks(){const pool=document.getElementById('wordPool');pool.innerHTML='';if(!sentences[currentIdx])return;let words=[...sentences[currentIdx]];shuffle(words);words.forEach(w=>{const b=document.createElement('div');b.className='word-block';b.draggable=true;b.textContent=w;b.addEventListener('dragstart',dragStart);b.addEventListener('dragend',dragEnd);pool.appendChild(b)});updateCounter();}
-function updateCounter(){const cnt=document.getElementById('blockCounter');cnt.textContent=`Satz ${currentIdx+1} von ${sentences.length}`}
-function dragStart(e){e.dataTransfer.setData('text',e.target.textContent);e.target.classList.add('dragging')}
-function dragEnd(e){e.target.classList.remove('dragging')}
-const sentenceArea=document.getElementById('sentenceArea');
-sentenceArea.addEventListener('dragover',e=>{e.preventDefault();sentenceArea.classList.add('over')});
-sentenceArea.addEventListener('dragleave',e=>{sentenceArea.classList.remove('over')});
-sentenceArea.addEventListener('drop',e=>{e.preventDefault();sentenceArea.classList.remove('over');const word=e.dataTransfer.getData('text');const b=document.createElement('div');b.className='word-block';b.textContent=word;b.draggable=true;b.addEventListener('dragstart',dragStart);b.addEventListener('dragend',dragEnd);sentenceArea.appendChild(b)})
-function resetBlocks(){sentenceArea.innerHTML='';loadBlocks();document.getElementById('blockFeedback').textContent=''}
-function skipBlock(){currentIdx=(currentIdx+1)%sentences.length;resetBlocks()}
-function checkBlockSentence(){const words=[...sentenceArea.children].map(c=>c.textContent);const correct=sentences[currentIdx];const fb=document.getElementById('blockFeedback');if(words.join(' ')===correct.join(' ')){fb.textContent='✅ Perfekt!';fb.style.color='#16a34a';sentenceArea.classList.add('success')}else{fb.textContent='⚠️ Überprüfe die Reihenfolge';fb.style.color='#d97706';sentenceArea.classList.remove('success')}}
-document.addEventListener('DOMContentLoaded',loadBlocks);
+
+/* A colour per sentence so blocks look fresh each round */
+const BLOCK_COLORS = [
+  "#4f6ef7","#16a34a","#7c3aed","#d97706",
+  "#0891b2","#be185d","#dc2626","#059669",
+  "#2563eb","#9333ea","#ca8a04","#0369a1"
+];
+
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let _ltMatches = []; // LanguageTool matches for current sentence
+
+/* ════════════════════════════════════════
+   SENTENCE CHECKER
+════════════════════════════════════════ */
+function clearAssess() {
+  document.getElementById('assess').style.display = 'none';
+  _ltMatches = [];
+}
+
+async function checkSentence() {
+  const ta  = document.getElementById('satz');
+  const btn = document.getElementById('checkBtn');
+  const text = ta.value.trim();
+
+  if (!text) {
+    showAssess([`<div class="check-row"><span class="check-icon check-warn">!</span>${sw_t('writeSentenceFirst')}</div>`], '', 'v-keep', '✏️ ' + sw_t('writeSentenceFirst'));
+    return;
+  }
+
+  // ── Local structural checks ──────────────────────
+  const checks = [];
+  let structureOk = true;
+
+  // Capital start
+  if (text[0] === text[0].toUpperCase() && text[0] !== text[0].toLowerCase()) {
+    checks.push(mkCheck('ok', '✓', sw_t('capitalOk')));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('capitalWarn')));
+    structureOk = false;
+  }
+
+  // Ends with period
+  if (/[.!?]$/.test(text)) {
+    checks.push(mkCheck('ok', '✓', sw_t('punctOk', text.slice(-1))));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('punctWarn')));
+    structureOk = false;
+  }
+
+  // Word count
+  const wc = text.split(/\s+/).filter(Boolean).length;
+  if (wc >= 5) {
+    checks.push(mkCheck('ok', '✓', sw_t('wordsOk', wc)));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('wordsWarn', wc)));
+    structureOk = false;
+  }
+
+  // ── LanguageTool API ─────────────────────────────
+  btn.innerHTML = '<span class="spinner">⏳</span> …';
+  btn.disabled = true;
+
+  let ltOk = true;
+  try {
+    const resp = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ text, language: 'de-DE' })
+    });
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
+
+    _ltMatches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+
+    if (_ltMatches.length === 0) {
+      checks.push(mkCheck('ok', '✓', sw_t('noErrors')));
+    } else {
+      ltOk = false;
+      checks.push(mkCheck('warn', '!', sw_t('ltFound', _ltMatches.length)));
+    }
+  } catch(e) {
+    checks.push(mkCheck('info', 'i', sw_t('ltUnavailable')));
+  } finally {
+    btn.innerHTML = sw_t('checkSentenceBtn');
+    btn.disabled = false;
+  }
+
+  // ── Verdict ──────────────────────────────────────
+  let vClass, vText;
+  if (structureOk && ltOk) {
+    vClass = 'v-great'; vText = sw_t('verdictPerfect');
+  } else if (structureOk && !ltOk) {
+    vClass = 'v-good';  vText = sw_t('verdictGood');
+  } else {
+    vClass = 'v-keep';  vText = sw_t('verdictKeep');
+  }
+
+  showAssess(checks, _ltMatches, vClass, vText);
+}
+
+function mkCheck(type, icon, text) {
+  return `<div class="check-row">
+    <span class="check-icon check-${type}">${icon}</span>
+    <span>${text}</span>
+  </div>`;
+}
+
+function showAssess(checks, ltMatches, vClass, vText) {
+  document.getElementById('checks-list').innerHTML = checks.join('');
+
+  const ltSec  = document.getElementById('lt-section');
+  const ltHead = document.getElementById('lt-head');
+  const ltList = document.getElementById('lt-list');
+  const ltFix  = document.getElementById('lt-fixall');
+  const ta     = document.getElementById('satz');
+
+  if (Array.isArray(ltMatches) && ltMatches.length > 0) {
+    ltHead.textContent = sw_t('ltHead', ltMatches.length);
+    ltList.innerHTML = ltMatches.map((m, i) => {
+      const wrong = ta.value.substring(m.offset, m.offset + m.length);
+      const sugs  = m.replacements.slice(0, 3).map(r => r.value);
+      const btns  = sugs.map(s =>
+        `<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`
+      ).join('');
+      return `<div class="lt-row">
+        <span class="lt-wrong">${escHtml(wrong)}</span>
+        <span class="lt-arrow">→</span>
+        <span class="lt-sugs">${btns}</span>
+      </div>`;
+    }).join('');
+    ltFix.style.display = ltMatches.length > 1 ? 'inline-block' : 'none';
+    ltSec.style.display = 'flex';
+  } else {
+    ltSec.style.display = 'none';
+  }
+
+  const v = document.getElementById('verdict');
+  v.className = `verdict ${vClass}`;
+  v.textContent = vText;
+
+  document.getElementById('assess').style.display = 'block';
+  document.getElementById('assess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── Apply single LT suggestion ── */
+function applyOneLT(idx, replacement) {
+  const ta = document.getElementById('satz');
+  const m  = _ltMatches[idx];
+  if (!m) return;
+  ta.value = ta.value.substring(0, m.offset) + replacement + ta.value.substring(m.offset + m.length);
+  checkSentence(); // re-run full check
+}
+
+/* ── Apply all LT suggestions (end→start) ── */
+function applyAllLT() {
+  const ta = document.getElementById('satz');
+  const sorted = [..._ltMatches].sort((a, b) => b.offset - a.offset);
+  let text = ta.value;
+  sorted.forEach(m => {
+    if (m.replacements.length > 0) {
+      text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
+    }
+  });
+  ta.value = text;
+  checkSentence();
+}
+
+function speakSentence() {
+  const text = document.getElementById('satz').value.trim();
+  if (!text || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE'; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+/* ════════════════════════════════════════
+   DRAG & DROP BLOCKS
+════════════════════════════════════════ */
+const pool = document.getElementById('wordPool');
+const area = document.getElementById('sentenceArea');
+let dragged     = null;
+let blockQueue  = [];   // shuffled index order
+let blockPos    = 0;    // current position in queue
+let blockBusy   = false; // prevents double-advance while animating
+
+/* Shuffle the sentence order so every round is different */
+function initQueue() {
+  blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  blockPos   = 0;
+}
+
+function currentEntry() {
+  return BLOCK_SENTENCES[blockQueue[blockPos]];
+}
+
+function buildBlocks() {
+  const { w } = currentEntry();
+  const color  = BLOCK_COLORS[blockPos % BLOCK_COLORS.length];
+  pool.innerHTML = '';
+  area.innerHTML = '';
+  area.classList.remove('success');
+  document.getElementById('blockFeedback').textContent = '';
+  blockBusy = false;
+  // Shuffle word order for the puzzle
+  [...w].sort(() => Math.random() - .5).forEach(word => pool.appendChild(makeBlock(word, color)));
+  updateCounter();
+}
+
+function makeBlock(text, color) {
+  const d = document.createElement('div');
+  d.className   = 'word-block';
+  d.draggable   = true;
+  d.textContent = text;
+  if (color) d.style.background = color;
+  return d;
+}
+
+function updateCounter() {
+  const el = document.getElementById('blockCounter');
+  if (el) el.textContent = typeof sw_t === 'function'
+    ? sw_t('counterText', blockPos + 1, BLOCK_SENTENCES.length)
+    : `Satz ${blockPos + 1} von ${BLOCK_SENTENCES.length}`; // fallback before i18n loads
+}
+
+/* Reset = reshuffle current sentence (same puzzle, new block order) */
+function resetBlocks() {
+  buildBlocks();
+}
+
+/* Skip = advance to next sentence immediately */
+function skipBlock() {
+  advanceBlock();
+}
+
+function advanceBlock() {
+  blockPos = (blockPos + 1) % BLOCK_SENTENCES.length;
+  // When we've cycled through all sentences, re-shuffle for next round
+  if (blockPos === 0) {
+    blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  }
+  buildBlocks();
+}
+
+// Drag events
+document.addEventListener('dragstart', e => {
+  if (e.target.classList.contains('word-block')) {
+    dragged = e.target;
+    dragged.classList.add('dragging');
+  }
+});
+document.addEventListener('dragend', e => {
+  if (dragged) { dragged.classList.remove('dragging'); dragged = null; }
+});
+
+[pool, area].forEach(el => {
+  el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault();
+    el.classList.remove('over');
+    if (dragged) el.appendChild(dragged);
+  });
+});
+
+function checkBlockSentence() {
+  if (blockBusy) return;
+  const blocks = area.querySelectorAll('.word-block');
+  const fb     = document.getElementById('blockFeedback');
+  if (!blocks.length) {
+    fb.style.color = 'var(--amber)';
+    fb.textContent = sw_t('fbEmpty');
+    return;
+  }
+  const { s } = currentEntry();
+  const built  = Array.from(blocks).map(b => b.textContent).join(' ') + '.';
+  if (built.trim() === s.trim()) {
+    blockBusy = true;
+    area.classList.add('success');
+    fb.style.color = 'var(--green)';
+    fb.textContent = sw_t('fbRight');
+    setTimeout(advanceBlock, 1800);
+  } else {
+    fb.style.color = 'var(--amber)';
+    fb.textContent = sw_t('fbWrong');
+  }
+}
+
+/* ════════════════════════════════════════
+   LANGUAGE / i18n
+════════════════════════════════════════ */
+const _lang = (localStorage.getItem('sw_lang') || 'de');
+const _l    = _lang === 'both' ? 'de' : _lang; // 'both' → treat as 'de' on this page
+
+const SW_STRINGS = {
+  de: {
+    pageTitle:         'Satzwerkstatt ✏️',
+    topbarTitle:       '✏️ Satzwerkstatt',
+    navBlockwelt:      '📖 Blockwelt',
+    navSchreib:        '📝 Schreibwerkstatt',
+    navBaukasten:      '🧱 Baukasten',
+    card1Title:        'Dein Satz',
+    card1Sub:          'Schreibe irgendeinen Satz – ich prüfe ihn für dich!',
+    sentencePlaceholder:'Schreibe hier deinen Satz …',
+    checkSentenceBtn:  '🔍 Satz prüfen',
+    speakBtn:          '🔊 Vorlesen',
+    assessHead:        '📋 Meine Prüfung',
+    fixallBtn:         '✨ Alle auf einmal korrigieren',
+    card2Title:        'Satzbau mit Blöcken',
+    card2Sub:          'Ziehe die Wörter in die richtige Reihenfolge',
+    poolLabel:         'Wörter',
+    areaLabel:         'Dein Satz',
+    checkBlockBtn:     '🔍 Prüfen',
+    reshuffleBtn:      '🔀 Neu mischen',
+    skipBtn:           '⏭ Überspringen',
+    counterText:       (pos, total) => `Satz ${pos} von ${total}`,
+    fbRight:           "🌟 Richtig! Super gemacht! Weiter geht's …",
+    fbWrong:           '🔄 Noch nicht ganz richtig – versuche es nochmal!',
+    fbEmpty:           '⚠ Ziehe zuerst Wörter in die Satzfläche!',
+    writeSentenceFirst:'Schreibe zuerst einen Satz.',
+    noErrors:          'Keine Rechtschreib- oder Grammatikfehler',
+    capitalOk:         'Satzanfang ist großgeschrieben',
+    capitalWarn:       'Beginne deinen Satz mit einem Großbuchstaben',
+    punctOk:           (ch) => `Satzzeichen am Ende (${ch})`,
+    punctWarn:         'Dein Satz braucht ein Satzzeichen am Ende (. ! ?)',
+    wordsOk:           (n) => `Gute Satzlänge – ${n} Wörter`,
+    wordsWarn:         (n) => `Dein Satz hat ${n} Wörter – versuche 5 oder mehr`,
+    ltUnavailable:     'Grammatikprüfung nicht verfügbar (offline?)',
+    ltFound:           (n) => `${n} Rechtschreib- oder Grammatikvorschlag${n>1?'e':''} gefunden`,
+    ltHead:            (n) => `✏️ ${n} Verbesserungsvorschlag${n>1?'e':''}:`,
+    verdictPerfect:    '🌟 Perfekt! Dein Satz ist super!',
+    verdictGood:       '👍 Fast perfekt! Schau dir die Vorschläge an.',
+    verdictKeep:       '💪 Guter Anfang! Verbessere die markierten Punkte.',
+  },
+  en: {
+    pageTitle:         'Sentence Workshop ✏️',
+    topbarTitle:       '✏️ Sentence Workshop',
+    navBlockwelt:      '📖 Story World',
+    navSchreib:        '📝 Writing Workshop',
+    navBaukasten:      '🧱 Story Builder',
+    card1Title:        'Your Sentence',
+    card1Sub:          'Write any sentence – I\'ll check it for you!',
+    sentencePlaceholder:'Write your sentence here …',
+    checkSentenceBtn:  '🔍 Check Sentence',
+    speakBtn:          '🔊 Read Aloud',
+    assessHead:        '📋 My Check',
+    fixallBtn:         '✨ Fix all at once',
+    card2Title:        'Sentence Building with Blocks',
+    card2Sub:          'Drag the words into the correct order',
+    poolLabel:         'Words',
+    areaLabel:         'Your Sentence',
+    checkBlockBtn:     '🔍 Check',
+    reshuffleBtn:      '🔀 Shuffle',
+    skipBtn:           '⏭ Skip',
+    counterText:       (pos, total) => `Sentence ${pos} of ${total}`,
+    fbRight:           '🌟 Correct! Great job! Moving on …',
+    fbWrong:           '🔄 Not quite right – try again!',
+    fbEmpty:           '⚠ Drag words into the sentence area first!',
+    writeSentenceFirst:'Please write a sentence first.',
+    noErrors:          'No spelling or grammar errors',
+    capitalOk:         'Sentence starts with a capital letter',
+    capitalWarn:       'Start your sentence with a capital letter',
+    punctOk:           (ch) => `Punctuation at the end (${ch})`,
+    punctWarn:         'Your sentence needs a punctuation mark at the end (. ! ?)',
+    wordsOk:           (n) => `Good length – ${n} words`,
+    wordsWarn:         (n) => `Your sentence has ${n} word${n!==1?'s':''} – aim for 5 or more`,
+    ltUnavailable:     'Grammar check unavailable (offline?)',
+    ltFound:           (n) => `${n} spelling or grammar suggestion${n>1?'s':''} found`,
+    ltHead:            (n) => `✏️ ${n} suggestion${n>1?'s':''}:`,
+    verdictPerfect:    '🌟 Perfect! Your sentence is great!',
+    verdictGood:       '👍 Almost perfect! Check the suggestions.',
+    verdictKeep:       '💪 Good start! Improve the highlighted points.',
+  }
+};
+
+function sw_t(key, ...args) {
+  const s = (SW_STRINGS[_l] || SW_STRINGS.de)[key];
+  return typeof s === 'function' ? s(...args) : (s || key);
+}
+
+// Apply static i18n strings
+document.title = sw_t('pageTitle');
+document.querySelectorAll('[data-i18n]').forEach(el => {
+  const v = sw_t(el.dataset.i18n);
+  if (v) el.textContent = v;
+});
+document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+  const v = sw_t(el.dataset.i18nPh);
+  if (v) el.placeholder = v;
+});
+// Re-render counter now that sw_t is available
+updateCounter();
+// Init block puzzle AFTER i18n so sw_t/_l/SW_STRINGS are defined
+initQueue();
+buildBlocks();
+
+// Lang toggle button label
+(function(){
+  const btn = document.getElementById('sw-lang-toggle');
+  if (btn) btn.textContent = _l === 'en' ? '🌐 EN' : '🌐 DE';
+})();
+
+function swToggleLang() {
+  const next = _l === 'en' ? 'de' : 'en';
+  localStorage.setItem('sw_lang', next);
+  location.reload();
+}
 </script>
 
 </body>
