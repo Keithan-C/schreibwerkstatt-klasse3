@@ -1771,6 +1771,394 @@ function confetti() {
     setTimeout(() => el.remove(), 6000);
   }
 }
+
+/* ════════════════════════════════════════
+   LANGUAGE / i18n
+════════════════════════════════════════ */
+(function applyBuilderLang() {
+  const _bLang = localStorage.getItem('sw_lang') || 'de';
+  const _bL    = _bLang === 'both' ? 'de' : _bLang;
+
+  const S = {
+    de: {
+      pageTitle:      'Geschichten-Baumeister 📖',
+      topbarLogo:     '📖 Geschichten-Baumeister',
+      backLink:       '← Zurück',
+      chooseChar:     'Wähle deine Hauptfigur',
+      chooseSet:      'Wähle deinen Ort',
+      chipCharEmpty:  'Figur wählen…',
+      chipSetEmpty:   'Ort wählen…',
+      beginTitle:     'Anfang',
+      beginSub:       'Stell die Figur und den Ort vor',
+      step1badge:     'Schritt 1',
+      middleTitle:    'Ereignis',
+      middleSub:      'Was passiert? Was ist das Problem?',
+      step2badge:     'Schritt 2',
+      endTitle:       'Ende',
+      endSub:         'Wie löst sich das Problem?',
+      step3badge:     'Schritt 3',
+      sceneHint:      'Wähle Figur & Ort oben',
+      taBeginPh:      'Schreibe hier den Anfang der Geschichte …',
+      taMiddlePh:     'Schreibe hier das Ereignis …',
+      taEndPh:        'Schreibe hier das Ende der Geschichte …',
+      checkBtn:       '🔍 Prüfen',
+      speakBtn:       '🔊 Vorlesen',
+      words:          n => `${n} ${n===1?'Wort':'Wörter'}`,
+      lockMiddle:     'Schreibe zuerst den Anfang fertig!',
+      lockEnd:        'Schreibe zuerst das Ereignis fertig!',
+      previewTitle:   '📖 Meine Geschichte',
+      pvBegin:        '🌅 Anfang',
+      pvMiddle:       '⚡ Ereignis',
+      pvEnd:          '⭐ Ende',
+      celTitle:       'Fantastisch! Deine Geschichte ist fertig!',
+      celSub:         'Du hast eine tolle Geschichte geschrieben. Weiter so!',
+      speakAll:       '🔊 Alles vorlesen',
+      toPaper:        '✏️ Auf Papier schreiben →',
+      paperCtaTitle:  'Jetzt auf Papier schreiben!',
+      paperCtaSub:    'Deine Geschichte ist fertig – schreibe sie schön auf Papier ab, mache ein Foto davon und lade es für deinen Lehrer / deine Eltern hoch.',
+      s1Title:        '✏️ Schreibe deine Geschichte auf Papier ab',
+      s1Sub:          'Nimm ein liniertes Blatt und schreibe die Geschichte sauber und leserlich ab',
+      s1Body:         '📌 Schreibe jeden Abschnitt (Anfang / Ereignis / Ende) in einen eigenen Absatz. Lass am Anfang jedes Absatzes eine kleine Einrückung.',
+      s2Title:        '✍️ Text verbessern – lies nach und überarbeite!',
+      s2Sub:          'Geh jeden Punkt durch → verbessere deinen Text → dann erst abhaken',
+      bannerTitle:    'So verbesserst du deinen Text:',
+      backToText:     '⬆ Zum Text zurück',
+      is1: '1️⃣ Lies den Punkt', is2: '2️⃣ Schau in deinen Text oben',
+      is3: '3️⃣ Verbessere ihn', is4: '4️⃣ Hake ab ☑',
+      clg1: '📖 Inhalt & Aufbau',
+      clg2: '✍️ Sprache & Ausdruck',
+      clg3: '📝 Rechtschreibung',
+      clg4: '🖊️ Handschrift & Gestaltung',
+      clBack1: '⬆ Text ansehen & verbessern',
+      clBack2: '⬆ Text prüfen & korrigieren',
+      s3Title:        '📸 Foto hochladen & Feedback erhalten',
+      s3Sub:          'Mach ein Foto deiner handgeschriebenen Geschichte – dann kann der Lehrer / die Eltern Feedback geben',
+      uploadLabel:    'Hier klicken oder Foto aufnehmen',
+      uploadSub:      'Auf dem Handy direkt mit der Kamera · JPG oder PNG',
+      fbHd:           '👨‍🏫 Feedback vom Lehrer / von den Eltern',
+      fbGoodLbl:      '✅ Das war besonders gut',
+      fbGoodPh:       'z. B. Tolle Adjektive, schöne Handschrift, spannende Geschichte …',
+      fbImpLbl:       '💡 Das kannst du noch verbessern',
+      fbImpPh:        'z. B. Achte noch auf die Großschreibung der Nomen …',
+      fbSave:         '💾 Feedback speichern',
+      fbPrint:        '🖨️ Alles drucken',
+      cpOk:           '🌟 Super! Keine Fehler gefunden!',
+      cpNoop:         '✏️ Schreibe zuerst etwas, dann kann ich helfen!',
+      cpErr:          '😕 Keine Verbindung – bitte versuche es nochmal!',
+      cpFixall:       '✨ Alle auf einmal korrigieren',
+      clProgress:     (d,t) => d===t ? `${d} / ${t} – Alles verbessert! 🌟` : `${d} / ${t} verbessert`,
+    },
+    en: {
+      pageTitle:      'Story Builder 📖',
+      topbarLogo:     '📖 Story Builder',
+      backLink:       '← Back',
+      chooseChar:     'Choose your main character',
+      chooseSet:      'Choose your setting',
+      chipCharEmpty:  'Choose character…',
+      chipSetEmpty:   'Choose setting…',
+      beginTitle:     'Beginning',
+      beginSub:       'Introduce the character and the setting',
+      step1badge:     'Step 1',
+      middleTitle:    'Event',
+      middleSub:      'What happens? What is the problem?',
+      step2badge:     'Step 2',
+      endTitle:       'Ending',
+      endSub:         'How is the problem solved?',
+      step3badge:     'Step 3',
+      sceneHint:      'Choose character & setting above',
+      taBeginPh:      'Write the beginning of your story here …',
+      taMiddlePh:     'Write the event here …',
+      taEndPh:        'Write the ending here …',
+      checkBtn:       '🔍 Check',
+      speakBtn:       '🔊 Read Aloud',
+      words:          n => `${n} ${n===1?'word':'words'}`,
+      lockMiddle:     'Finish the beginning first!',
+      lockEnd:        'Finish the event first!',
+      previewTitle:   '📖 My Story',
+      pvBegin:        '🌅 Beginning',
+      pvMiddle:       '⚡ Event',
+      pvEnd:          '⭐ Ending',
+      celTitle:       'Fantastic! Your story is complete!',
+      celSub:         'You wrote a great story. Keep it up!',
+      speakAll:       '🔊 Read aloud',
+      toPaper:        '✏️ Write on paper →',
+      paperCtaTitle:  'Now write it on paper!',
+      paperCtaSub:    'Your story is ready – copy it neatly onto paper, take a photo and upload it for your teacher / parents.',
+      s1Title:        '✏️ Copy your story onto paper',
+      s1Sub:          'Take a lined sheet and copy the story neatly and legibly',
+      s1Body:         '📌 Write each section (Beginning / Event / Ending) in its own paragraph. Leave a small indent at the start of each paragraph.',
+      s2Title:        '✍️ Improve your text – read and revise!',
+      s2Sub:          'Go through each point → improve your text → then tick',
+      bannerTitle:    'How to improve your text:',
+      backToText:     '⬆ Back to text',
+      is1: '1️⃣ Read the point', is2: '2️⃣ Look at your text above',
+      is3: '3️⃣ Improve it',     is4: '4️⃣ Tick ☑',
+      clg1: '📖 Content & Structure',
+      clg2: '✍️ Language & Expression',
+      clg3: '📝 Spelling',
+      clg4: '🖊️ Handwriting & Presentation',
+      clBack1: '⬆ View & improve text',
+      clBack2: '⬆ Check & correct text',
+      s3Title:        '📸 Upload photo & get feedback',
+      s3Sub:          'Take a photo of your handwritten story – then your teacher / parents can give feedback',
+      uploadLabel:    'Click here or take a photo',
+      uploadSub:      'On mobile directly with camera · JPG or PNG',
+      fbHd:           '👨‍🏫 Feedback from teacher / parents',
+      fbGoodLbl:      '✅ This was especially good',
+      fbGoodPh:       'e.g. Great adjectives, nice handwriting, exciting story …',
+      fbImpLbl:       '💡 You can still improve this',
+      fbImpPh:        'e.g. Watch out for capital letters on nouns …',
+      fbSave:         '💾 Save feedback',
+      fbPrint:        '🖨️ Print everything',
+      cpOk:           '🌟 Great! No errors found!',
+      cpNoop:         '✏️ Write something first, then I can help!',
+      cpErr:          '😕 No connection – please try again!',
+      cpFixall:       '✨ Fix all at once',
+      clProgress:     (d,t) => d===t ? `${d} / ${t} – All done! 🌟` : `${d} / ${t} improved`,
+    }
+  };
+
+  const t = k => (S[_bL] || S.de)[k] || (S.de[k] || k);
+  const tf = (k, ...a) => { const v = (S[_bL] || S.de)[k]; return typeof v === 'function' ? v(...a) : (v||k); };
+
+  if (_bL === 'de') return; // default – no changes needed
+
+  // ── page title ──
+  document.title = t('pageTitle');
+
+  // ── topbar ──
+  const logo = document.querySelector('.topbar-logo');
+  if (logo) logo.textContent = t('topbarLogo');
+  const backA = document.querySelector('.topbar a');
+  if (backA) backA.textContent = t('backLink');
+
+  // ── setup zone ──
+  const [hdrChar, hdrSet] = document.querySelectorAll('.setup-row-header');
+  if (hdrChar) { const n = hdrChar.querySelector('.setup-num'); hdrChar.textContent = ' ' + t('chooseChar'); if (n) hdrChar.prepend(n); }
+  if (hdrSet)  { const n = hdrSet.querySelector('.setup-num');  hdrSet.textContent  = ' ' + t('chooseSet');  if (n) hdrSet.prepend(n); }
+
+  // ── chips ──
+  const ccl = document.getElementById('chipCharLabel');
+  const csl = document.getElementById('chipSetLabel');
+  if (ccl && ccl.textContent.includes('wählen')) ccl.textContent = t('chipCharEmpty');
+  if (csl && csl.textContent.includes('wählen')) csl.textContent = t('chipSetEmpty');
+
+  // ── panel headers ──
+  const pmap = { begin: 'begin', middle: 'middle', end: 'end' };
+  Object.keys(pmap).forEach(p => {
+    const panel = document.getElementById('panel' + p.charAt(0).toUpperCase() + p.slice(1));
+    if (!panel) return;
+    const title = panel.querySelector('.ph-title');
+    const sub   = panel.querySelector('.ph-sub');
+    if (title) title.textContent = t(p + 'Title');
+    if (sub)   sub.textContent   = t(p + 'Sub');
+    const badge = document.getElementById('badge-' + p);
+    if (badge) badge.textContent = t('step' + ({begin:'1',middle:'2',end:'3'}[p]) + 'badge');
+  });
+
+  // ── scene hint labels ──
+  ['begin','middle','end'].forEach(p => {
+    const el = document.getElementById('scene-' + p + '-label');
+    if (el && el.textContent.includes('Wähle')) el.textContent = t('sceneHint');
+  });
+
+  // ── textarea placeholders ──
+  const taPh = { begin: t('taBeginPh'), middle: t('taMiddlePh'), end: t('taEndPh') };
+  Object.entries(taPh).forEach(([p, ph]) => {
+    const ta = document.getElementById('ta-' + p);
+    if (ta) ta.placeholder = ph;
+  });
+
+  // ── buttons (Prüfen / Vorlesen) ──
+  ['begin','middle','end'].forEach(p => {
+    const chk = document.getElementById('chk-' + p);
+    if (chk) chk.textContent = t('checkBtn');
+  });
+  document.querySelectorAll('.speak-btn').forEach(b => b.textContent = t('speakBtn'));
+
+  // ── lock messages ──
+  const [lm, le] = document.querySelectorAll('.lock-msg');
+  if (lm) lm.textContent = t('lockMiddle');
+  if (le) le.textContent = t('lockEnd');
+
+  // ── preview ──
+  const pvHdr = document.querySelector('.preview-header');
+  if (pvHdr) { pvHdr.childNodes[0].textContent = t('previewTitle') + ' '; }
+  const pvBeginLbl  = document.querySelector('.pv-begin .pv-part-label');
+  const pvMiddleLbl = document.querySelector('.pv-middle .pv-part-label');
+  const pvEndLbl    = document.querySelector('.pv-end .pv-part-label');
+  if (pvBeginLbl)  pvBeginLbl.textContent  = t('pvBegin');
+  if (pvMiddleLbl) pvMiddleLbl.textContent = t('pvMiddle');
+  if (pvEndLbl)    pvEndLbl.textContent    = t('pvEnd');
+
+  // ── celebrate bar ──
+  const celT = document.querySelector('.cel-title');
+  const celS = document.querySelector('.cel-sub');
+  if (celT) celT.textContent = t('celTitle');
+  if (celS) celS.textContent = t('celSub');
+  const speakAllBtn = document.querySelector('.btn-speak-all');
+  const paperBtn    = document.querySelector('.btn-paper');
+  if (speakAllBtn) speakAllBtn.textContent = t('speakAll');
+  if (paperBtn)    paperBtn.textContent    = t('toPaper');
+
+  // ── paper CTA ──
+  const pctaT = document.querySelector('.paper-cta-title');
+  const pctaS = document.querySelector('.paper-cta-sub');
+  if (pctaT) pctaT.textContent = t('paperCtaTitle');
+  if (pctaS) pctaS.textContent = t('paperCtaSub');
+
+  // ── step cards ──
+  const stepCards = document.querySelectorAll('.step-card');
+  if (stepCards[0]) {
+    const t1 = stepCards[0].querySelector('.step-title');
+    const s1 = stepCards[0].querySelector('.step-sub');
+    const b1 = stepCards[0].querySelector('.step-body');
+    if (t1) t1.textContent = t('s1Title');
+    if (s1) s1.textContent = t('s1Sub');
+    if (b1) b1.textContent = t('s1Body');
+  }
+  if (stepCards[1]) {
+    const t2 = stepCards[1].querySelector('.step-title');
+    const s2 = stepCards[1].querySelector('.step-sub');
+    if (t2) t2.textContent = t('s2Title');
+    if (s2) s2.textContent = t('s2Sub');
+    // improve banner
+    const bTitle = stepCards[1].querySelector('.improve-banner-title');
+    const bBack  = stepCards[1].querySelector('.improve-back-btn');
+    if (bTitle) bTitle.textContent = t('bannerTitle');
+    if (bBack)  bBack.textContent  = t('backToText');
+    const iSteps = stepCards[1].querySelectorAll('.improve-step');
+    const iKeys  = ['is1','is2','is3','is4'];
+    iSteps.forEach((el, i) => { if (iKeys[i]) el.textContent = t(iKeys[i]); });
+    // cl-group titles and back links
+    const clGroups = stepCards[1].querySelectorAll('.cl-group');
+    const clGKeys  = ['clg1','clg2','clg3','clg4'];
+    const clBKeys  = ['clBack1','clBack1','clBack2','clBack1'];
+    clGroups.forEach((g, i) => {
+      const titleEl = g.querySelector('.cl-group-title');
+      const backEl  = g.querySelector('.cl-back-link');
+      if (titleEl && clGKeys[i]) {
+        // preserve the back link element when resetting textContent
+        if (backEl) titleEl.removeChild(backEl);
+        titleEl.textContent = t(clGKeys[i]);
+        if (backEl) { backEl.textContent = t(clBKeys[i]); titleEl.appendChild(backEl); }
+      }
+    });
+    // cl-back buttons inside groups (back-to-text links)
+    stepCards[1].querySelectorAll('.cl-back-link').forEach((b, i) => {
+      b.textContent = t(clBKeys[i] || 'clBack1');
+    });
+  }
+  if (stepCards[2]) {
+    const t3 = stepCards[2].querySelector('.step-title');
+    const s3 = stepCards[2].querySelector('.step-sub');
+    if (t3) t3.textContent = t('s3Title');
+    if (s3) s3.textContent = t('s3Sub');
+    const ulbl = stepCards[2].querySelector('.upload-label');
+    const usub = stepCards[2].querySelector('.upload-sub');
+    if (ulbl) ulbl.textContent = t('uploadLabel');
+    if (usub) usub.textContent = t('uploadSub');
+    // feedback zone
+    const fbhd = stepCards[2].querySelector('.feedback-zone-hd');
+    if (fbhd) fbhd.firstChild.textContent = t('fbHd');
+    const fbLabels = stepCards[2].querySelectorAll('.fb-label');
+    if (fbLabels[0]) fbLabels[0].textContent = t('fbGoodLbl');
+    if (fbLabels[1]) fbLabels[1].textContent = t('fbImpLbl');
+    const fbTas = stepCards[2].querySelectorAll('.fb-ta');
+    if (fbTas[0]) fbTas[0].placeholder = t('fbGoodPh');
+    if (fbTas[1]) fbTas[1].placeholder = t('fbImpPh');
+    const fbSaveEl  = stepCards[2].querySelector('.fb-save');
+    const fbPrintEl = stepCards[2].querySelector('.fb-print');
+    if (fbSaveEl)  fbSaveEl.textContent  = t('fbSave');
+    if (fbPrintEl) fbPrintEl.textContent = t('fbPrint');
+  }
+
+  // ── translate CHARS descriptions & SETS names/descs, rebuild grids ──
+  const charDescsEN = ['Brave girl','Curious boy','Friendly dog','Smart cat','Clever fox','Friendly dragon'];
+  const setsEN = [
+    {name:'In the Forest',    desc:'Big trees'},
+    {name:'At School',        desc:'Classroom'},
+    {name:'At the Beach',     desc:'Sand and sea'},
+    {name:'In the City',      desc:'Streets and houses'},
+    {name:'On the Farm',      desc:'Animals and fields'},
+    {name:'In the Mountains', desc:'Snow and peaks'},
+  ];
+  CHARS.forEach((c, i) => { if (charDescsEN[i]) c.desc = charDescsEN[i]; });
+  SETS.forEach((s, i)  => { if (setsEN[i]) { s.name = setsEN[i].name; s.desc = setsEN[i].desc; } });
+  document.getElementById('charGrid').innerHTML    = '';
+  document.getElementById('settingGrid').innerHTML = '';
+  buildCharGrid();
+  buildSettingGrid();
+
+  // ── override dynamic strings used in JS functions ──
+  // Patch renderCorrections and related functions to use translated strings
+  const _origRenderCorrections = renderCorrections;
+  window.renderCorrections = function(part, matches) {
+    const ta = document.getElementById('ta-' + part);
+    const cp = document.getElementById('cp-' + part);
+    if (!matches.length) { showCP(cp, `<div class="cp-ok">${t('cpOk')}</div>`); return; }
+    let html = `<div class="cp-head">✏️ ${matches.length} suggestion${matches.length>1?'s':''}:</div><div class="cp-list">`;
+    matches.forEach((m, i) => {
+      const wrong = ta.value.substring(m.offset, m.offset + m.length);
+      const sugs  = m.replacements.slice(0, 3).map(r => r.value);
+      html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong)}</span><span class="cp-arrow">→</span><span class="cp-sugs">`;
+      sugs.forEach(s => { html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`; });
+      html += `</span></div>`;
+    });
+    html += `</div>`;
+    if (matches.length > 1) html += `<button class="cp-fixall" onclick="applyAll('${part}')">${t('cpFixall')}</button>`;
+    showCP(cp, html);
+    cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  const _origCheckSpelling = checkSpelling;
+  window.checkSpelling = async function(part) {
+    const ta  = document.getElementById('ta-' + part);
+    const cp  = document.getElementById('cp-' + part);
+    const btn = document.getElementById('chk-' + part);
+    if (!ta.value.trim()) { showCP(cp, `<div class="cp-noop">${t('cpNoop')}</div>`); return; }
+    btn.textContent = '⏳ …';
+    btn.disabled = true;
+    try {
+      const resp = await fetch('https://api.languagetool.org/v2/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ text: ta.value, language: 'de-DE' })
+      });
+      if (!resp.ok) throw new Error('api');
+      const data = await resp.json();
+      const matches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+      _corrections[part] = matches;
+      renderCorrections(part, matches);
+    } catch(e) {
+      showCP(cp, `<div class="cp-err">${t('cpErr')}</div>`);
+    } finally {
+      btn.textContent = t('checkBtn');
+      btn.disabled = false;
+    }
+  };
+
+  // Patch word count pill updates
+  const _origOnType = onType;
+  window.onType = function(part) {
+    _origOnType(part);
+    const ta    = document.getElementById('ta-' + part);
+    const words = ta ? ta.value.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+    const pill  = document.getElementById('wc-' + part);
+    if (pill) pill.textContent = tf('words', words);
+  };
+
+  // Patch updateCLProgress to use translated label
+  const _origUpdateCL = updateCLProgress;
+  window.updateCLProgress = function() {
+    _origUpdateCL();
+    const items = document.querySelectorAll('#paperZone .cl-item');
+    const total = items.length;
+    const done  = document.querySelectorAll('#paperZone .cl-item.checked').length;
+    const el = document.getElementById('clCount');
+    if (el) { el.textContent = tf('clProgress', done, total); el.className = done===total?'cl-count all-done':'cl-count'; }
+  };
+})();
 </script>
 <script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap';</script>
 <script src="gdpr.js"></script>

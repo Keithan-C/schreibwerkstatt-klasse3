@@ -2416,11 +2416,19 @@ const BOOK_SVGS={
 let bookPage=0;
 const BOOK_PAGES=['cover','begin','middle','end'];
 const BOOK_BG={cover:'#e8f5e9',begin:'#e3f2fd',middle:'#e8eaf6',end:'#fff8e1'};
+const _bookTitleDE={cover:'📖 Mein Blockwelt-Abenteuer',begin:'🌱 Erzählsituation',middle:'⚡ Ereignis',end:'🏆 Ausgang'};
+const _bookTitleEN={cover:'📖 My Blockworld Adventure',begin:'🌱 Story Setting',middle:'⚡ The Event',end:'🏆 The Ending'};
+const _storyLang=(localStorage.getItem('sw_lang')||'de');
+function _bt(k){
+  if(_storyLang==='en')return _bookTitleEN[k];
+  if(_storyLang==='both')return _bookTitleDE[k]+' / '+_bookTitleEN[k];
+  return _bookTitleDE[k];
+}
 const BOOK_TITLE={
-  cover:'📖 Mein Blockwelt-Abenteuer / My Blockworld Adventure',
-  begin:'🌱 Erzählsituation / Story Setting',
-  middle:'⚡ Ereignis / The Event',
-  end:'🏆 Ausgang / The Ending'
+  get cover(){return _bt('cover');},
+  get begin(){return _bt('begin');},
+  get middle(){return _bt('middle');},
+  get end(){return _bt('end');}
 };
 
 function showPictureBook(){bookPage=0;renderBookPage();}
@@ -2459,7 +2467,7 @@ function renderBookPage(){
         </button>
       </div>
     </div>
-    <button class="book-close-btn" onclick="closePictureBook()" title="Schließen / Close">✕</button>`;
+    <button class="book-close-btn" onclick="closePictureBook()" title="${_storyLang==='en'?'Close':_storyLang==='both'?'Schließen / Close':'Schließen'}">✕</button>`;
   document.body.appendChild(overlay);
 }
 function nextBookPage(){if(bookPage<BOOK_PAGES.length-1){bookPage++;renderBookPage();}}

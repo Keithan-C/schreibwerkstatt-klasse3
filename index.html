@@ -735,7 +735,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
     <span class="setup-label">Sprache / Language</span>
     <div class="lang-toggle">
-      <button class="lang-btn active" id="lang-de" onclick="setLang('de')">🇩🇪 Deutsch</button>
+      <button class="lang-btn" id="lang-de" onclick="setLang('de')">🇩🇪 Deutsch</button>
       <button class="lang-btn" id="lang-en" onclick="setLang('en')">🇬🇧 English</button>
       <button class="lang-btn" id="lang-both" onclick="setLang('both')">🌍 Beide / Both</button>
     </div>
@@ -905,7 +905,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 // ═══════════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════════
-let lang='de'; // 'de','en','both'
+let lang=localStorage.getItem('sw_lang')||'de'; // 'de','en','both'
 let role='teacher'; // 'teacher' or 'parent'
 let theme='';
 let className='';
@@ -1255,6 +1255,7 @@ function setRole(r){
 
 function setLang(l){
   lang=l;
+  localStorage.setItem('sw_lang',l);
   ['de','en','both'].forEach(x=>{
     document.getElementById('lang-'+x).classList.toggle('active',x===l);
   });
@@ -1973,6 +1974,13 @@ async function askAI(){
 
 // Enter key for AI input; pre-fill API key from storage
 document.addEventListener('DOMContentLoaded',()=>{
+  // Restore saved language selection
+  ['de','en','both'].forEach(x=>{
+    document.getElementById('lang-'+x).classList.toggle('active',x===lang);
+  });
+  const dp=document.getElementById('lang-display');
+  if(dp)dp.textContent=lang==='de'?'🇩🇪 DE':lang==='en'?'🇬🇧 EN':'🌍 DE/EN';
+
   document.getElementById('ai-input').addEventListener('keydown',e=>{
     if(e.key==='Enter')askAI();
   });
