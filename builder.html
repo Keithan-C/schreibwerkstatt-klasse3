@@ -351,6 +351,56 @@ body {
 }
 .speak-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
 
+/* ── SPELL / GRAMMAR CHECK ── */
+.check-btn {
+  background: none; border: 2px solid var(--end-mid);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .82rem; color: var(--end);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s; white-space: nowrap;
+}
+.check-btn:hover  { background: var(--end); color: #fff; border-color: var(--end); }
+.check-btn:disabled { opacity: .55; cursor: wait; }
+
+.cp {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: #fffbeb;
+  border: 2px solid #fcd34d;
+  animation: fadeUp .2s ease;
+}
+.cp-ok    { color: var(--begin); font-weight: 800; font-size: .92rem; }
+.cp-noop  { color: var(--muted); font-weight: 600; font-size: .88rem; }
+.cp-err   { color: #dc2626;      font-weight: 700; font-size: .88rem; }
+.cp-head  {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .9rem; font-weight: 800; color: var(--text);
+  margin-bottom: 8px;
+}
+.cp-list  { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.cp-row   {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  background: var(--surface); border-radius: 8px;
+  padding: 6px 10px; border: 1.5px solid var(--border);
+}
+.cp-wrong { color: #dc2626; font-weight: 700; font-size: .85rem; text-decoration: line-through; }
+.cp-arrow { color: var(--muted); }
+.cp-sugs  { display: flex; gap: 5px; flex-wrap: wrap; }
+.cp-sug {
+  background: var(--begin-bg); border: 2px solid var(--begin-mid);
+  color: var(--begin); border-radius: 20px; padding: 3px 11px;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: all .18s;
+}
+.cp-sug:hover { background: var(--begin); color: #fff; }
+.cp-fixall {
+  width: 100%; background: var(--begin); color: #fff;
+  border: none; border-radius: 20px; padding: 8px 16px;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: background .2s;
+}
+.cp-fixall:hover { background: #15803d; }
+
 /* lock overlay */
 .lock-overlay {
   position: absolute; inset: 0; z-index: 10;
@@ -614,11 +664,16 @@ body {
         <div class="starters-wrap" id="starters-begin"></div>
         <textarea class="s-textarea" id="ta-begin"
           placeholder="Schreibe hier den Anfang der Geschichte …"
+          spellcheck="true"
           oninput="onType('begin')"></textarea>
         <div class="write-footer">
           <span class="wc-pill" id="wc-begin">0 Wörter</span>
-          <button class="speak-btn" onclick="speak('begin')">🔊 Vorlesen</button>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-begin" onclick="checkSpelling('begin')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('begin')">🔊 Vorlesen</button>
+          </div>
         </div>
+        <div class="cp" id="cp-begin" style="display:none"></div>
       </div>
     </div>
 
@@ -652,11 +707,16 @@ body {
         <div class="starters-wrap" id="starters-middle"></div>
         <textarea class="s-textarea" id="ta-middle"
           placeholder="Schreibe hier das Ereignis …"
+          spellcheck="true"
           oninput="onType('middle')"></textarea>
         <div class="write-footer">
           <span class="wc-pill" id="wc-middle">0 Wörter</span>
-          <button class="speak-btn" onclick="speak('middle')">🔊 Vorlesen</button>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-middle" onclick="checkSpelling('middle')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('middle')">🔊 Vorlesen</button>
+          </div>
         </div>
+        <div class="cp" id="cp-middle" style="display:none"></div>
       </div>
       <div class="lock-overlay" id="lock-middle">
         <span class="lock-icon">🔒</span>
@@ -694,11 +754,16 @@ body {
         <div class="starters-wrap" id="starters-end"></div>
         <textarea class="s-textarea" id="ta-end"
           placeholder="Schreibe hier das Ende der Geschichte …"
+          spellcheck="true"
           oninput="onType('end')"></textarea>
         <div class="write-footer">
           <span class="wc-pill" id="wc-end">0 Wörter</span>
-          <button class="speak-btn" onclick="speak('end')">🔊 Vorlesen</button>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-end" onclick="checkSpelling('end')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('end')">🔊 Vorlesen</button>
+          </div>
         </div>
+        <div class="cp" id="cp-end" style="display:none"></div>
       </div>
       <div class="lock-overlay" id="lock-end">
         <span class="lock-icon">🔒</span>
@@ -1024,6 +1089,117 @@ function tts(text) {
   const u = new SpeechSynthesisUtterance(text);
   u.lang = 'de-DE'; u.rate = 0.9;
   window.speechSynthesis.speak(u);
+}
+
+/* ── SPELL / GRAMMAR CHECK ───────────────── */
+const _corrections = {};
+
+async function checkSpelling(part) {
+  const ta  = document.getElementById(`ta-${part}`);
+  const cp  = document.getElementById(`cp-${part}`);
+  const btn = document.getElementById(`chk-${part}`);
+
+  if (!ta.value.trim()) {
+    showCP(cp, '<div class="cp-noop">✏️ Schreibe zuerst etwas, dann kann ich helfen!</div>');
+    return;
+  }
+
+  btn.textContent = '⏳ …';
+  btn.disabled = true;
+
+  try {
+    const resp = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ text: ta.value, language: 'de-DE' })
+    });
+    if (!resp.ok) throw new Error('api');
+    const data = await resp.json();
+
+    // filter out matches with no replacement suggestions
+    const matches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+    _corrections[part] = matches;
+    renderCorrections(part, matches);
+  } catch(e) {
+    showCP(cp, '<div class="cp-err">😕 Keine Verbindung – bitte versuche es nochmal!</div>');
+  } finally {
+    btn.textContent = '🔍 Prüfen';
+    btn.disabled = false;
+  }
+}
+
+function renderCorrections(part, matches) {
+  const ta = document.getElementById(`ta-${part}`);
+  const cp = document.getElementById(`cp-${part}`);
+
+  if (!matches.length) {
+    showCP(cp, '<div class="cp-ok">🌟 Super! Keine Fehler gefunden!</div>');
+    return;
+  }
+
+  let html = `<div class="cp-head">✏️ ${matches.length} Verbesserungsvorschlag${matches.length > 1 ? 'e' : ''}:</div><div class="cp-list">`;
+
+  matches.forEach((m, i) => {
+    const wrong = ta.value.substring(m.offset, m.offset + m.length);
+    const sugs  = m.replacements.slice(0, 3).map(r => r.value);
+    html += `<div class="cp-row">
+      <span class="cp-wrong">${escHtml(wrong)}</span>
+      <span class="cp-arrow">→</span>
+      <span class="cp-sugs">`;
+    sugs.forEach(s => {
+      html += `<button class="cp-sug"
+        onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`;
+    });
+    html += `</span></div>`;
+  });
+
+  html += `</div>`;
+  if (matches.length > 1) {
+    html += `<button class="cp-fixall" onclick="applyAll('${part}')">✨ Alle auf einmal korrigieren</button>`;
+  }
+  showCP(cp, html);
+
+  // scroll corrections into view
+  cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function applySingle(part, idx, replacement) {
+  const ta = document.getElementById(`ta-${part}`);
+  const m  = (_corrections[part] || [])[idx];
+  if (!m) return;
+  ta.value = ta.value.substring(0, m.offset) + replacement + ta.value.substring(m.offset + m.length);
+  onType(part);
+  // Re-check to update remaining errors
+  checkSpelling(part);
+}
+
+function applyAll(part) {
+  const ta      = document.getElementById(`ta-${part}`);
+  const matches = (_corrections[part] || [])
+    .filter(m => m.replacements.length > 0)
+    .sort((a, b) => b.offset - a.offset); // end → start so offsets stay valid
+
+  let text = ta.value;
+  matches.forEach(m => {
+    text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
+  });
+  ta.value = text;
+  onType(part);
+  const cp = document.getElementById(`cp-${part}`);
+  showCP(cp, '<div class="cp-ok">🌟 Alle Vorschläge wurden übernommen!</div>');
+  setTimeout(() => checkSpelling(part), 600);
+}
+
+function showCP(cp, html) {
+  cp.innerHTML = html;
+  cp.style.display = 'block';
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 }
 
 /* ── CONFETTI ─────────────────────────────── */
