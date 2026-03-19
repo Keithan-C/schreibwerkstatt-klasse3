@@ -225,4 +225,30 @@ ta.value=text;checkSentence()
 
 function speakSentence(){const text=document.getElementById('satz').value.trim();if(!text||!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function escAttr(s){return s.replace(/\\/g,'\\\\
+function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,'\\\'').replace(/"/g,'&quot;')}
+
+/* ════════════════════════════════════════
+   BLOCKWELT DRAG & DROP
+════════════════════════════════════════ */
+let sentences=[
+['Ein','Mädchen','war','Sara','.'],
+['Paula','hat','eine','Freundin','getroffen','.']
+];
+let currentIdx=0;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+function loadBlocks(){const pool=document.getElementById('wordPool');pool.innerHTML='';if(!sentences[currentIdx])return;let words=[...sentences[currentIdx]];shuffle(words);words.forEach(w=>{const b=document.createElement('div');b.className='word-block';b.draggable=true;b.textContent=w;b.addEventListener('dragstart',dragStart);b.addEventListener('dragend',dragEnd);pool.appendChild(b)});updateCounter();}
+function updateCounter(){const cnt=document.getElementById('blockCounter');cnt.textContent=`Satz ${currentIdx+1} von ${sentences.length}`}
+function dragStart(e){e.dataTransfer.setData('text',e.target.textContent);e.target.classList.add('dragging')}
+function dragEnd(e){e.target.classList.remove('dragging')}
+const sentenceArea=document.getElementById('sentenceArea');
+sentenceArea.addEventListener('dragover',e=>{e.preventDefault();sentenceArea.classList.add('over')});
+sentenceArea.addEventListener('dragleave',e=>{sentenceArea.classList.remove('over')});
+sentenceArea.addEventListener('drop',e=>{e.preventDefault();sentenceArea.classList.remove('over');const word=e.dataTransfer.getData('text');const b=document.createElement('div');b.className='word-block';b.textContent=word;b.draggable=true;b.addEventListener('dragstart',dragStart);b.addEventListener('dragend',dragEnd);sentenceArea.appendChild(b)})
+function resetBlocks(){sentenceArea.innerHTML='';loadBlocks();document.getElementById('blockFeedback').textContent=''}
+function skipBlock(){currentIdx=(currentIdx+1)%sentences.length;resetBlocks()}
+function checkBlockSentence(){const words=[...sentenceArea.children].map(c=>c.textContent);const correct=sentences[currentIdx];const fb=document.getElementById('blockFeedback');if(words.join(' ')===correct.join(' ')){fb.textContent='✅ Perfekt!';fb.style.color='#16a34a';sentenceArea.classList.add('success')}else{fb.textContent='⚠️ Überprüfe die Reihenfolge';fb.style.color='#d97706';sentenceArea.classList.remove('success')}}
+document.addEventListener('DOMContentLoaded',loadBlocks);
+</script>
+
+</body>
+</html>
