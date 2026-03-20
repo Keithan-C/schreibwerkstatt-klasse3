@@ -2535,7 +2535,7 @@ async function checkGramAnswer(){
       localFeedback=hasPast
         ?(l==='de'?'✓ Gut! Du hast Vergangenheitsformen verwendet!':'✓ Good! You used past tense forms!')
         :(l==='de'?'⚠️ Tipp: Nutze Präteritum-Formen — z.B. ging, sah, war, hatte …':'⚠️ Tip: Use simple past forms — e.g. went, saw, was, had …');
-    }else if(topic.id==='bindew'){
+    }else if(topic.id==='binde'){
       const hasBind=/\b(weil|obwohl|because|although|though)\b/i.test(answer);
       localOk=hasBind;
       localFeedback=hasBind

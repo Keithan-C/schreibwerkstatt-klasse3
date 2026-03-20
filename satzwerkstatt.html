@@ -141,92 +141,6 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
 </div>
 
 <script>
-/* ════════════════════════════════════════
-   SENTENCE CHECKER WITH IMPROVED LOCAL LOGIC
-════════════════════════════════════════ */
-let _ltMatches = [];
-
-function clearAssess(){document.getElementById('assess').style.display='none';_ltMatches=[]}
-
-function checkSentence(){
-const ta=document.getElementById('satz');
-const btn=document.getElementById('checkBtn');
-const text=ta.value.trim();
-if(!text){
-showAssess([mkCheck('warn','!','Schreibe zuerst einen Satz.')],'','v-keep','✏️ Schreibe zuerst einen Satz.');
-return;
-}
-let checks=[],structureOk=true;
-
-// Capital
-if(text[0]===text[0].toUpperCase()){checks.push(mkCheck('ok','✓','Satzanfang ist großgeschrieben'))}else{checks.push(mkCheck('warn','!','Beginne deinen Satz mit einem Großbuchstaben'));structureOk=false}
-
-// Punctuation
-if(/[.!?]$/.test(text)){checks.push(mkCheck('ok','✓','Satzzeichen am Ende ('+text.slice(-1)+')'))}else{checks.push(mkCheck('warn','!','Dein Satz braucht ein Satzzeichen am Ende (. ! ?)'));structureOk=false}
-
-// Word count
-const wc=text.split(/\s+/).filter(Boolean).length;
-if(wc>=5){checks.push(mkCheck('ok','✓','Gute Satzlänge – '+wc+' Wörter'))}else{checks.push(mkCheck('warn','!','Dein Satz hat '+wc+' Wörter – versuche 5 oder mehr'));structureOk=false}
-
-// Simple repeated subject detection
-const lower=text.toLowerCase();
-if(/(ein|eine|der|die|das)\s+\w+\s+\1/.test(lower)){checks.push(mkCheck('warn','!','Achtung: Wiederholtes Subjekt erkannt'));structureOk=false}
-
-// LanguageTool
-btn.innerHTML='<span class="spinner">⏳</span> …';btn.disabled=true;
-fetch('https://api.languagetool.org/v2/check',{
-method:'POST',
-headers:{'Content-Type':'application/x-www-form-urlencoded'},
-body:new URLSearchParams({text,language:'de-DE'})
-})
-.then(resp=>resp.json())
-.then(data=>{
-_ltMatches=(data.matches||[]).filter(m=>m.replacements&&m.replacements.length>0);
-if(_ltMatches.length===0){checks.push(mkCheck('ok','✓','Keine Rechtschreib- oder Grammatikfehler'))}else{checks.push(mkCheck('warn','!',_ltMatches.length+' Vorschläge gefunden')}}
-showAssess(checks,_ltMatches,structureOk&&_ltMatches.length===0?'v-great':structureOk?'v-good':'v-keep',structureOk&&_ltMatches.length===0?'🌟 Perfekt! Dein Satz ist super!':'💪 Prüfe die markierten Punkte')}
-).catch(e=>{checks.push(mkCheck('info','i','Grammatikprüfung nicht verfügbar'));showAssess(checks,_ltMatches,'v-keep','💪 Prüfe die markierten Punkte')})
-.finally(()=>{btn.innerHTML='🔍 Satz prüfen';btn.disabled=false})
-}
-
-function mkCheck(type,icon,text){return `<div class="check-row"><span class="check-icon check-${type}">${icon}</span><span>${text}</span></div>`}
-
-function showAssess(checks,ltMatches,vClass,vText){
-document.getElementById('checks-list').innerHTML=checks.join('');
-const ltSec=document.getElementById('lt-section');
-const ltHead=document.getElementById('lt-head');
-const ltList=document.getElementById('lt-list');
-const ltFix=document.getElementById('lt-fixall');
-const ta=document.getElementById('satz');
-if(Array.isArray(ltMatches)&&ltMatches.length>0){
-ltHead.textContent=`✏️ ${ltMatches.length} Verbesserungsvorschlag${ltMatches.length>1?'e':''}:`;
-ltList.innerHTML=ltMatches.map((m,i)=>{
-const wrong=ta.value.substring(m.offset,m.offset+m.length);
-const sugs=m.replacements.slice(0,3).map(r=>r.value);
-const btns=sugs.map(s=>`<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`).join('');
-return `<div class="lt-row"><span class="lt-wrong">${escHtml(wrong)}</span><span class="lt-arrow">→</span><span class="lt-sugs">${btns}</span></div>`}).join('');
-ltFix.style.display=ltMatches.length>1?'inline-block':'none';
-ltSec.style.display='flex'}else{ltSec.style.display='none'}
-const v=document.getElementById('verdict');v.className=`verdict ${vClass}`;v.textContent=vText;
-document.getElementById('assess').style.display='block';
-document.getElementById('assess').scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function applyOneLT(idx,replacement){
-const ta=document.getElementById('satz');const m=_ltMatches[idx];if(!m)return;
-ta.value=ta.value.substring(0,m.offset)+replacement+ta.value.substring(m.offset+m.length);
-checkSentence()
-}
-
-function applyAllLT(){
-const ta=document.getElementById('satz');const sorted=[..._ltMatches].sort((a,b)=>b.offset-a.offset);
-let text=ta.value;
-sorted.forEach(m=>{if(m.replacements.length>0){text=text.substring(0,m.offset)+m.replacements[0].value+text.substring(m.offset+m.length)}});
-ta.value=text;checkSentence()
-}
-
-function speakSentence(){const text=document.getElementById('satz').value.trim();if(!text||!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(text);u.lang='de-DE';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function escAttr(s){return s.replace(/\\/g,'\\\\').replace(/'/g,'\\\'').replace(/"/g,'&quot;')}
 
 /* ════════════════════════════════════════
    BLOCKWELT DRAG & DROP
@@ -439,7 +353,7 @@ function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function escAttr(s) {
-  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
 }
 
 /* ════════════════════════════════════════
