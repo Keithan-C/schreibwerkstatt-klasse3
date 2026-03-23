@@ -185,6 +185,22 @@ body{font-family:var(--font-body);background:var(--offwhite);color:var(--ink);mi
 .stem-item:hover{background:var(--sun);}
 .stem-arrow{color:var(--sun3);font-size:11px;margin-top:2px;flex-shrink:0;}
 
+/* ── SENTENCE STARTERS PANEL ── */
+.starters-panel{background:var(--grass);border:2px solid var(--grass2);border-radius:var(--radius-sm);margin-bottom:.9rem;overflow:hidden;}
+.starters-summary{padding:9px 14px;cursor:pointer;font-family:var(--font-head);font-size:12px;font-weight:700;color:var(--grass3);list-style:none;display:flex;align-items:center;gap:7px;user-select:none;}
+.starters-summary::-webkit-details-marker{display:none;}
+.starters-note{font-size:11px;color:var(--grass3);padding:0 14px 6px;font-weight:600;}
+.starters-body{padding:0 14px 12px;}
+.sg{margin-bottom:8px;}
+.sg-label{font-size:10px;font-weight:700;color:var(--grass3);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px;display:block;}
+.sg-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.sc{padding:5px 11px;border-radius:16px;font-family:var(--font-head);font-size:12px;font-weight:700;cursor:pointer;border:2px solid transparent;transition:filter .15s;line-height:1.3;}
+.sc:hover{filter:brightness(.9);}
+.sc-wo  {background:#d4edda;color:var(--grass3);border-color:var(--grass2);}
+.sc-wann{background:var(--sky);color:#1a5a8a;border-color:var(--sky2);}
+.sc-wie {background:var(--lavender);color:var(--lavender3);border-color:#c5b8f0;}
+.sc-satz{background:var(--sun);color:#8a6000;border-color:var(--sun2);}
+
 /* ── WRITE AREA ── */
 .task-box{
   background:var(--sky);border-left:4px solid var(--sky2);
@@ -969,6 +985,23 @@ const T={
       middle:['Plötzlich …','Urplötzlich …','Auf einmal …','„…!", rief er/sie.','Er/Sie fasste sich ein Herz und …','Mit klopfendem Herzen …'],
       end:['Von da an …','Seitdem …','Niemals vergaß er/sie …','Und so endete …','Glücklich und erleichtert …','Ab diesem Tag wusste … dass …']
     },
+    sentenceStarters:{
+      begin:[
+        {label:'📍 Wo?', cls:'sc-wo',   items:['Im [Ort] …','Tief im Wald …','Am Rand des Dorfes …','Hinter dem alten Schloss …','Mitten in …']},
+        {label:'🕐 Wann?', cls:'sc-wann', items:['Eines Morgens …','Eines Tages …','Schon bevor die Sonne aufging …','Kaum war [Name] …','Lange bevor …']},
+        {label:'💫 Wie?', cls:'sc-wie',  items:['Neugierig …','Aufgeregt …','Mutig und entschlossen …','Mit einem Lächeln …','Ängstlich …']},
+      ],
+      middle:[
+        {label:'⚡ Spannung', cls:'sc-satz', items:['Plötzlich …','Urplötzlich …','Auf einmal …','In diesem Moment …','Da …']},
+        {label:'📍 Wo?',     cls:'sc-wo',   items:['Mitten im Wald …','Hinter dem Baum …','Tief in der Höhle …','Am Ufer des Flusses …']},
+        {label:'❤️ Gefühle', cls:'sc-wie',  items:['Mit klopfendem Herzen …','Erschrocken …','Zitternd vor Angst …','Vor Schreck …','Mutiger als zuvor …']},
+      ],
+      end:[
+        {label:'⏰ Danach',  cls:'sc-wann', items:['Von da an …','Seitdem …','Niemals wieder …','Ab diesem Tag …','Noch Jahre später …']},
+        {label:'😊 Gefühle', cls:'sc-wie',  items:['Erleichtert …','Glücklich und zufrieden …','Stolz und mutig …','Dankbar …']},
+        {label:'🌟 Abschluss', cls:'sc-satz', items:['Und so …','Am Ende wusste [Name] …','Das Abenteuer von [Name] …','Lange sprach man noch von …']},
+      ]
+    },
     wordHelpers:{
       begin:[
         {title:'Einleitungsformeln (LP+)',words:['Es war einmal …','Eines Tages …','An einem … Morgen …','Kaum war … als …'],t:'chip-p'},
@@ -1102,6 +1135,23 @@ const T={
       begin:['Once upon a time …','One … morning …','One day …','… lived a … called …','No sooner had … than …'],
       middle:['Suddenly …','All at once …','Out of nowhere …','"…!" they cried.','They took a deep breath and …','With a pounding heart …'],
       end:['From that day on …','Ever since …','They never forgot …','And so ended …','Happy and relieved …','From that moment on … knew that …']
+    },
+    sentenceStarters:{
+      begin:[
+        {label:'📍 Where?', cls:'sc-wo',   items:['In the [place] …','Deep in the forest …','At the edge of …','Near the old castle …','Far from home …']},
+        {label:'🕐 When?',  cls:'sc-wann', items:['One day …','One morning …','Long before …','Just as [Name] …','Before the sun rose …']},
+        {label:'💫 How?',   cls:'sc-wie',  items:['Curiously …','Excitedly …','Bravely …','With a smile …','Nervously …']},
+      ],
+      middle:[
+        {label:'⚡ Tension', cls:'sc-satz', items:['Suddenly …','All at once …','Out of nowhere …','Just then …','In that moment …']},
+        {label:'📍 Where?', cls:'sc-wo',   items:['Deep in the cave …','Behind the tree …','At the river bank …','In the shadows …']},
+        {label:'❤️ Feelings', cls:'sc-wie', items:['Heart pounding …','Terrified …','Trembling with fear …','Barely breathing …','Braver than before …']},
+      ],
+      end:[
+        {label:'⏰ After',   cls:'sc-wann', items:['From that day on …','From then on …','Never again …','Since that moment …','Years later …']},
+        {label:'😊 Feelings', cls:'sc-wie', items:['Relieved …','Happy and content …','Proud and brave …','Grateful …']},
+        {label:'🌟 Closing', cls:'sc-satz', items:['And so …','In the end …','[Name]\'s adventure …','For a long time after …']},
+      ]
     },
     wordHelpers:{
       begin:[
@@ -1493,6 +1543,24 @@ function renderWrite(){
       <span class="stem-arrow">➜</span><span>${s}</span>
     </div>`).join('');
 
+  const starterGroups=T[l].sentenceStarters[part].map(g=>`
+    <div class="sg">
+      <span class="sg-label">${g.label}</span>
+      <div class="sg-chips">${g.items.map(w=>`<button class="sc ${g.cls}" onclick="insertText(${JSON.stringify(w)})">${w}</button>`).join('')}</div>
+    </div>`).join('');
+  const starterNote=l==='de'
+    ?'Nicht immer mit „Ich" oder „Er/Sie" anfangen! Tippe auf einen Vorschlag.'
+    :'Don\'t always start with "I" or "He/She"! Tap a suggestion.';
+  const starterLabel=l==='de'?'🔤 Satzanfänge variieren':'🔤 Vary your sentence starters';
+
+  // Build previous-part text reference panel(s) — show ALL parts written so far
+  const partIdx=PARTS.indexOf(part);
+  const prevPartsHTML=PARTS.slice(0,partIdx).filter(p=>answers[p]&&answers[p].trim()).map(p=>`
+    <details class="plan-notes-panel" open>
+      <summary>📖 ${l==='de'?`Mein Text — ${T[l].partLabels[p]}`:`My text — ${T[l].partLabels[p]}`}</summary>
+      <div class="plan-notes-inner" style="white-space:pre-wrap;font-size:13px;line-height:1.6;color:var(--ink)">${esc(answers[p])}</div>
+    </details>`).join('');
+
   // Build Stichwortzettel reference from plan phase
   const filledFields=T[l].planFields[part].filter(f=>planData[part][f.key]&&planData[part][f.key].trim());
   const planNotesHTML=filledFields.length?`
@@ -1520,6 +1588,12 @@ function renderWrite(){
         <span class="stems-label">${T[l].stemsLabel}</span>
         ${stems}
       </div>
+      <details class="starters-panel">
+        <summary class="starters-summary">▸ ${starterLabel}</summary>
+        <p class="starters-note">${starterNote}</p>
+        <div class="starters-body">${starterGroups}</div>
+      </details>
+      ${prevPartsHTML}
       ${planNotesHTML}
       <div class="hint-box ${hints[part]?'on':''}" id="hint-box">${T[l].hints[part]}</div>
       <div class="write-toolbar">
@@ -1667,6 +1741,15 @@ function _liveUpdateBase(text){
   if(qp[1])qp[1].classList.toggle('on',hasPunct);
   if(qp[2])qp[2].classList.toggle('on',good);
   if(qp[3])qp[3].classList.toggle('on',hasRede);
+  // Grammar detection debounce (merged here to avoid duplicate declaration)
+  clearTimeout(_gramDetectTimer);
+  _gramDetectTimer=setTimeout(()=>{
+    const gmBg=document.getElementById('gram-modal-bg');
+    if(gmBg&&gmBg.classList.contains('open'))return;
+    if(text.length<40)return;
+    const topic=detectGrammarTopic(text);
+    if(topic)openGramModal(topic);
+  },1500);
 }
 
 function toggleCrit(i){
@@ -1691,6 +1774,16 @@ function insertStem(idx){
   if(!ta)return;
   const sep=ta.value&&!ta.value.endsWith('\n')?'\n':'';
   ta.value+=sep+stem+' ';
+  answers[part]=ta.value;
+  ta.focus();ta.selectionStart=ta.selectionEnd=ta.value.length;
+  liveUpdate(ta.value);
+}
+
+function insertText(text){
+  const ta=document.getElementById('answer-box');
+  if(!ta)return;
+  const sep=ta.value&&!ta.value.endsWith('\n')?'\n':'';
+  ta.value+=sep+text+' ';
   answers[part]=ta.value;
   ta.focus();ta.selectionStart=ta.selectionEnd=ta.value.length;
   liveUpdate(ta.value);
