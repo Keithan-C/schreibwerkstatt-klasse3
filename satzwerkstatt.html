@@ -75,6 +75,8 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
 .block-counter{font-family:'Baloo 2';font-size:.82rem;font-weight:800;color:var(--muted);text-align:right;margin-bottom:4px}
 .spinner{display:inline-block;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+.btn-lang{background:var(--blue);color:#fff;border:none;border-radius:20px;padding:5px 13px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn-lang:hover{background:#3a55e0}
 @media(max-width:600px){
   .topbar{padding:10px 14px}
   .topbar-title{font-size:1rem}
@@ -94,7 +96,7 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
     <a class="tlink" href="index.html" data-i18n="navBlockwelt">📖 Blockwelt</a>
     <a class="tlink" href="story.html" data-i18n="navSchreib">📝 Schreibwerkstatt</a>
     <a class="tlink" href="builder.html" data-i18n="navBaukasten">🧱 Baukasten</a>
-    <button id="sw-lang-toggle" onclick="swToggleLang()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
+    <button id="sw-lang-toggle" class="btn-lang" onclick="swToggleLang()">🌐 DE</button>
   </nav>
 </header>
 
@@ -327,8 +329,12 @@ function showAssess(checks, ltMatches, vClass, vText) {
   v.className = `verdict ${vClass}`;
   v.textContent = vText;
 
-  document.getElementById('assess').style.display = 'block';
-  document.getElementById('assess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  const assessEl = document.getElementById('assess');
+  assessEl.style.display = 'block';
+  assessEl.style.animation = 'none';
+  void assessEl.offsetWidth; // force reflow so fadeUp replays every time
+  assessEl.style.animation = '';
+  assessEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /* ── Apply single LT suggestion ── */
@@ -359,7 +365,7 @@ function speakSentence() {
   if (!text || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'de-DE'; u.rate = 0.9;
+  u.lang = _l === 'en' ? 'en-GB' : 'de-DE'; u.rate = 0.9;
   speechSynthesis.speak(u);
 }
 
