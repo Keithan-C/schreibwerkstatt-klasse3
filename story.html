@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>⛏ Blockwelt Schreibabenteuer – Klasse 3</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<!-- Google Fonts loaded after GDPR consent via gdpr.js -->
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -461,6 +460,17 @@ textarea:focus{border-color:var(--green2);box-shadow:0 0 0 3px var(--green4);}
 .full-check-header{padding:10px 14px;background:var(--surface);border-bottom:2px solid var(--border);font-family:var(--fp);font-size:6px;color:var(--ink);}
 .full-check-header .err-legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;font-family:var(--f);font-size:11px;font-weight:600;}
 
+/* ── EDIT SCREEN ── */
+.edit-screen{background:var(--surface);border:3px solid var(--green);border-radius:var(--r);padding:1.5rem;box-shadow:var(--sh);}
+.edit-screen h2{font-family:var(--fp);font-size:10px;color:var(--green);line-height:1.8;margin-bottom:.4rem;text-align:center;}
+.edit-screen-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:1.2rem;line-height:1.6;}
+.edit-ch{margin-bottom:1.2rem;}
+.edit-ch-label{font-family:var(--fp);font-size:6px;color:var(--green);display:block;margin-bottom:5px;}
+.edit-ta{width:100%;min-height:120px;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--fb);font-size:15px;line-height:1.8;resize:vertical;outline:none;background:var(--bg);color:var(--ink);}
+.edit-ta:focus{border-color:var(--green2);background:var(--green4);}
+.edit-wc{font-size:12px;color:var(--muted);margin-top:3px;text-align:right;}
+.edit-wc.good{color:var(--green);}
+
 /* ── PICTURE BOOK ── */
 .book-overlay{position:fixed;inset:0;background:rgba(10,10,30,.88);z-index:9999;display:flex;align-items:center;justify-content:center;padding:12px;}
 .book-page{background:#fffdf4;border-radius:14px;max-width:480px;width:100%;max-height:92vh;overflow-y:auto;box-shadow:0 12px 48px rgba(0,0,0,.6);display:flex;flex-direction:column;}
@@ -578,7 +588,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
 .focus-overlay{position:fixed;inset:0;background:#0a0a12;z-index:9000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;}
 .focus-overlay.open{display:flex;}
 .focus-eyebrow{color:rgba(200,240,160,.85);font-family:var(--fp);font-size:8px;text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem;max-width:640px;width:100%;}
-.focus-prompt{color:#d8f5b0;font-family:var(--fb);font-size:16px;max-width:640px;width:100%;text-align:center;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.1);border-radius:12px;padding:12px 20px;border:1px solid rgba(200,240,160,.25);}
+.focus-prompt{color:#d8f5b0;font-family:var(--fb);font-size:16px;max-width:640px;width:100%;line-height:1.75;margin-bottom:1.2rem;background:rgba(200,240,160,.1);border-radius:12px;padding:14px 22px;border:1px solid rgba(200,240,160,.25);}
 .focus-area{width:100%;max-width:640px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.2);border-radius:16px;padding:20px;color:#f5fff5;font-family:var(--fb);font-size:18px;line-height:1.85;resize:none;min-height:260px;outline:none;transition:border .2s;}
 .focus-area:focus{border-color:rgba(74,170,42,.6);}
 .focus-wc{color:rgba(255,255,255,.6);font-size:12px;margin-top:6px;text-align:right;max-width:640px;width:100%;}
@@ -1122,7 +1132,7 @@ const CHAPTERS=[
       {key:'ort',label:'Ort – wo war ich? (3 Stichwörter)'},
       {key:'ziel',label:'Ziel – was wollte ich in meinem Spiel erreichen?'}
     ],
-    taskText:'Schreib <strong>4–6 Sätze</strong>: Stelle deinen Helden vor und beschreibe den Ort aus deinem Spiel. Nutze eine <strong>Einleitungsformel</strong>.',
+    taskText:['Schreib 4–6 Sätze','Stelle deinen Helden vor (Aussehen & Wesen)','Beschreibe den Ort aus deinem Spiel','Nutze eine Einleitungsformel'],
     lpRef:'LP+ D3/4 LB 2.1 – Erzählsituation · Figur nach Äußerem und Wesen',
     minWords:30,
     goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine Einleitung klingt sehr lebendig.','Der Satz über … ist toll.'],
@@ -1140,7 +1150,7 @@ const CHAPTERS=[
       {key:'hindernis',label:'Was hat es schwierig gemacht?'},
       {key:'dialog',label:'Was hat der Held gesagt? (wörtliche Rede „…")'}
     ],
-    taskText:'Schreib <strong>5–7 Sätze</strong>: Beschreibe das spannendste Moment aus deinem Spiel. Nutze ein <strong>Spannungswort</strong> und <strong>wörtliche Rede</strong>.',
+    taskText:['Schreib 5–7 Sätze','Beschreibe das spannendste Moment aus deinem Spiel','Nutze ein Spannungswort (z.B. plötzlich …)','Nutze wörtliche Rede'],
     lpRef:'LP+ D3/4 LB 2.1 – Ereignis · LB 4.2 – Wörtliche Rede',
     minWords:40,
     goodStems:['Ich finde gut, dass du … beschrieben hast.','Deine wörtliche Rede klingt sehr echt.','Das Spannungswort … wirkt sehr gut.'],
@@ -1158,7 +1168,7 @@ const CHAPTERS=[
       {key:'schlussformel',label:'Schlussformel – z.B. „Von da an …", „Seitdem …"'},
       {key:'letzterSatz',label:'Mein letzter Satz – wirkungsvoll!'}
     ],
-    taskText:'Schreib <strong>4–6 Sätze</strong>: Beschreibe den Ausgang deines Abenteuers. Nutze eine <strong>Schlussformel</strong> und zeige, was dein Held gelernt hat.',
+    taskText:['Schreib 4–6 Sätze','Beschreibe den Ausgang deines Abenteuers','Nutze eine Schlussformel (z.B. Von da an …)','Zeige, was dein Held gelernt hat'],
     lpRef:'LP+ D3/4 LB 2.1 – Ausgang der Erzählung · Schlussformeln',
     minWords:30,
     goodStems:['Ich finde gut, dass du den Ausgang so … beschrieben hast.','Dein letzter Satz ist sehr wirkungsvoll.','Die Botschaft wird klar: …'],
@@ -1955,6 +1965,9 @@ function renderWrite(){
   const text=answers[chId];
   const cnt=wc(text);
   const good=cnt>=ch.minWords;
+  const hasCap=(text.trimStart()[0]||'').match(/[A-ZÄÖÜ]/);
+  const hasPunct=['.','!','?','"'].includes(text.trimEnd().slice(-1));
+  const hasRede=/„/.test(text);
 
   return`
     <div class="card">
@@ -1976,7 +1989,14 @@ function renderWrite(){
         <textarea id="answer-box" rows="8" spellcheck="true" lang="de">${esc(text)}</textarea>
 
         <div class="wc-row">
-          <span id="wc-el" class="${good?'wc-good':''}">📝 ${cnt} Wörter</span>
+          <span id="wc-el" class="${good?'wc-good':''}">Wörter: ${cnt} / ${ch.minWords}</span>
+          <span id="wc-ok" style="${good?'':'display:none'};color:var(--green)">✓ Genug Wörter!</span>
+        </div>
+        <div class="qpills">
+          <span class="qpill qp-g ${hasCap?'on':''}">✓ Großbuchstabe</span>
+          <span class="qpill qp-g ${hasPunct?'on':''}">✓ Satzzeichen</span>
+          <span class="qpill qp-b ${good?'on':''}">✓ ${ch.minWords}+ Wörter</span>
+          <span class="qpill qp-a ${hasRede?'on':''}">✓ Wörtliche Rede</span>
         </div>
 
         <div class="btn-row">
@@ -2223,7 +2243,7 @@ function showComplete(){
         ✓ Realweltbezug: Eigenes Spielerlebnis → narrative Geschichte
       </div>
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="showPictureBook()" style="font-size:15px;padding:.55rem 1.1rem;">📖 Mein Bilderbuch / My Picture Book</button>
+        <button class="btn btn-primary" onclick="showEditScreen()" style="font-size:15px;padding:.55rem 1.1rem;">✏️ Geschichte überarbeiten / Edit Story</button>
       </div>
       <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <button class="btn btn-secondary" onclick="restartAll()">🔄 Neues Abenteuer</button>
@@ -2407,12 +2427,62 @@ const BOOK_SVGS={
 let bookPage=0;
 const BOOK_PAGES=['cover','begin','middle','end'];
 const BOOK_BG={cover:'#e8f5e9',begin:'#e3f2fd',middle:'#e8eaf6',end:'#fff8e1'};
+const _bookTitleDE={cover:'📖 Mein Blockwelt-Abenteuer',begin:'🌱 Erzählsituation',middle:'⚡ Ereignis',end:'🏆 Ausgang'};
+const _bookTitleEN={cover:'📖 My Blockworld Adventure',begin:'🌱 Story Setting',middle:'⚡ The Event',end:'🏆 The Ending'};
+const _storyLang=(localStorage.getItem('sw_lang')||'de');
+function _bt(k){
+  if(_storyLang==='en')return _bookTitleEN[k];
+  if(_storyLang==='both')return _bookTitleDE[k]+' / '+_bookTitleEN[k];
+  return _bookTitleDE[k];
+}
 const BOOK_TITLE={
-  cover:'📖 Mein Blockwelt-Abenteuer / My Blockworld Adventure',
-  begin:'🌱 Erzählsituation / Story Setting',
-  middle:'⚡ Ereignis / The Event',
-  end:'🏆 Ausgang / The Ending'
+  get cover(){return _bt('cover');},
+  get begin(){return _bt('begin');},
+  get middle(){return _bt('middle');},
+  get end(){return _bt('end');}
 };
+
+// ═══════════════════════════════════════════════════════════
+// EDIT SCREEN
+// ═══════════════════════════════════════════════════════════
+function showEditScreen(){
+  const content=document.getElementById('write-content');
+  const fields=CHAPTERS.map(ch=>`
+    <div class="edit-ch">
+      <span class="edit-ch-label">${ch.icon} ${ch.label}</span>
+      <textarea class="edit-ta" id="edit-ta-${ch.id}" oninput="updateEditWc('${ch.id}',${ch.minWords})">${esc(answers[ch.id])}</textarea>
+      <div class="edit-wc" id="edit-wc-${ch.id}"></div>
+    </div>`).join('');
+  content.innerHTML=`
+    <div class="edit-screen">
+      <h2>✏️ Geschichte überarbeiten</h2>
+      <p class="edit-screen-sub">Lies deine Geschichte noch einmal durch und verbessere sie — dann geht es zum Bilderbuch! 📖</p>
+      ${fields}
+      <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:.5rem;">
+        <button class="btn btn-secondary" onclick="showComplete()">◀ Zurück</button>
+        <button class="btn btn-primary" onclick="saveEditsAndShowBook()" style="font-size:15px;padding:.55rem 1.4rem;">📖 Zum Bilderbuch ▶</button>
+      </div>
+    </div>`;
+  CHAPTERS.forEach(ch=>updateEditWc(ch.id,ch.minWords));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateEditWc(chId,minWords){
+  const ta=document.getElementById('edit-ta-'+chId);
+  const el=document.getElementById('edit-wc-'+chId);
+  if(!ta||!el)return;
+  const count=wc(ta.value);
+  el.textContent=count+' Wörter';
+  el.className='edit-wc'+(count>=minWords?' good':'');
+}
+
+function saveEditsAndShowBook(){
+  CHAPTERS.forEach(ch=>{
+    const ta=document.getElementById('edit-ta-'+ch.id);
+    if(ta)answers[ch.id]=ta.value;
+  });
+  showPictureBook();
+}
 
 function showPictureBook(){bookPage=0;renderBookPage();}
 
@@ -2450,7 +2520,7 @@ function renderBookPage(){
         </button>
       </div>
     </div>
-    <button class="book-close-btn" onclick="closePictureBook()" title="Schließen / Close">✕</button>`;
+    <button class="book-close-btn" onclick="closePictureBook()" title="${_storyLang==='en'?'Close':_storyLang==='both'?'Schließen / Close':'Schließen'}">✕</button>`;
   document.body.appendChild(overlay);
 }
 function nextBookPage(){if(bookPage<BOOK_PAGES.length-1){bookPage++;renderBookPage();}}
@@ -2751,7 +2821,8 @@ function openFocusMode(){
   const ch=CHAPTERS[currentChapter];
   const fa=document.getElementById('focus-area');
   const fp=document.getElementById('focus-prompt');
-  fp.textContent=ch.taskText;
+  const items=Array.isArray(ch.taskText)?ch.taskText:[ch.taskText];
+  fp.innerHTML='<ul style="list-style:none;padding:0;margin:0;text-align:left;">'+items.map((t,i)=>`<li style="display:flex;align-items:baseline;gap:8px;padding:3px 0;${i===0?'font-weight:800;font-size:18px;margin-bottom:2px;':''}">${i===0?'':'<span style="color:rgba(200,240,160,.6);font-size:14px;">✦</span>'}${i===0?t:`<span>${t}</span>`}</li>`).join('')+'</ul>';
   fa.lang='de';
   fa.value=answers[chId]||'';
   document.getElementById('focus-overlay').classList.add('open');
@@ -2948,5 +3019,7 @@ function appendSpeechText(text){
     </div>
   </div>
 </div>
+<script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;600;700;800;900&display=swap';</script>
+<script src="gdpr.js"></script>
 </body>
 </html>

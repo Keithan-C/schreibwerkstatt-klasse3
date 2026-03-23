@@ -3,1628 +3,2237 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Geschichte Baukasten – Klasse 3/4 Bayern</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>Geschichten-Baumeister 📖</title>
+<!-- Google Fonts loaded after GDPR consent via gdpr.js -->
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  /* Autism-friendly palette: calm, muted, no saturated brights */
-  --forest:#2a5c1a;  --forest2:#4a9c2a;  --forest3:#c8ecb0;  --forest4:#edf8e6;
-  --navy:#1c3f6e;    --navy2:#2e6ab8;    --navy3:#b8d8f0;    --navy4:#e4f0fb;
-  --amber:#6b4c1a;   --amber2:#b07828;   --amber3:#f0d080;   --amber4:#fdf5de;
-  --plum:#4a2d8a;    --plum2:#7a5adf;    --plum3:#d8ccf8;    --plum4:#f0ebff;
-  --clay:#8a3020;    --clay3:#f8ddd8;    --clay4:#fdf0ee;
-  --ink:#1c1a18;     --ink2:#3c3a36;     --muted:#6a6660;
-  --surface:#ffffff; --page:#f4f2ed;
-  --border:#ccc8be;  --border-lt:#e4e2d8;
-  --font:'Nunito',sans-serif;
-  --r:14px;--r2:8px;
-  --sh:0 2px 10px rgba(0,0,0,.07);
-  --sh2:0 4px 18px rgba(0,0,0,.11);
-}
-body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:100vh;}
-.wrap{max-width:680px;margin:0 auto;padding:0 clamp(.75rem,4vw,1.5rem) 6rem;}
+/* ══════════════════════════════════════════════
+   RESET & TOKENS
+══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── HEADER ── */
-.site-header{
-  background:var(--forest);padding:1.2rem 1.5rem 1.4rem;
-  margin-bottom:1.8rem;text-align:center;
-}
-.header-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:#fff;display:block;margin-bottom:.3rem;line-height:1.2;}
-.header-sub{font-size:14px;color:rgba(255,255,255,.78);display:block;margin-bottom:.7rem;}
-.header-badge{
-  display:inline-block;font-size:12px;font-weight:700;
-  background:rgba(255,255,255,.18);color:#fff;
-  border:1.5px solid rgba(255,255,255,.35);
-  border-radius:20px;padding:4px 14px;
-}
-.header-links{display:flex;gap:8px;justify-content:center;margin-top:.9rem;flex-wrap:wrap;}
-.hlink{
-  font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;
-  border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.9);
-  text-decoration:none;background:rgba(255,255,255,.12);
-}
-.hlink:hover{background:rgba(255,255,255,.22);}
+:root {
+  /* story colours – consistent throughout */
+  --begin:    #16a34a;  --begin-bg:  #f0fdf4;  --begin-mid: #86efac;
+  --middle:   #d97706;  --middle-bg: #fffbeb;  --middle-mid:#fcd34d;
+  --end:      #7c3aed;  --end-bg:    #faf5ff;   --end-mid:  #c4b5fd;
 
-/* ── STEP PROGRESS ── */
-.step-progress{
-  display:flex;align-items:stretch;justify-content:center;
-  margin-bottom:1.6rem;background:var(--surface);
-  border-radius:var(--r);border:2px solid var(--border);
-  overflow:hidden;box-shadow:var(--sh);
+  --blue:     #4f6ef7;  --blue-lt:   #eef0ff;
+  --surface:  #ffffff;
+  --bg:       #f2f5ff;
+  --text:     #1a1f36;
+  --muted:    #64748b;
+  --border:   #e0e7f0;
+  --radius-sm:10px;
+  --radius:   18px;
+  --radius-lg:26px;
+  --shadow:   0 2px 16px rgba(79,110,247,0.09);
+  --shadow-md:0 6px 28px rgba(79,110,247,0.13);
 }
-.sp-step{
-  flex:1;padding:10px 4px;text-align:center;
-  border-right:1px solid var(--border);position:relative;
-}
-.sp-step:last-child{border-right:none;}
-.sp-num{font-size:12px;font-weight:900;color:var(--muted);display:block;margin-bottom:2px;}
-.sp-icon{font-size:20px;display:block;margin-bottom:2px;}
-.sp-label{font-size:11px;font-weight:700;color:var(--muted);display:block;line-height:1.3;}
-.sp-step.active{background:var(--amber4);border-bottom:3px solid var(--amber2);}
-.sp-step.active .sp-num,.sp-step.active .sp-label{color:var(--amber);font-weight:900;}
-.sp-step.done{background:var(--forest4);}
-.sp-step.done .sp-num,.sp-step.done .sp-label{color:var(--forest);}
 
-/* ── CONFIDENCE TOGGLE ── */
-.confidence-bar{
-  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-  background:var(--navy4);border:1.5px solid var(--navy3);
-  border-radius:var(--r2);padding:10px 14px;margin-bottom:1.2rem;
-  font-size:13px;color:var(--navy);
-}
-.conf-label{flex:1;font-weight:700;}
-.conf-toggle{display:flex;gap:4px;flex-wrap:wrap;}
-.conf-btn{
-  padding:10px 16px;border-radius:20px;border:2px solid var(--navy3);
-  background:var(--surface);color:var(--muted);font-size:13px;font-weight:700;
-  cursor:pointer;font-family:var(--font);min-height:44px;
-}
-.conf-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+html { scroll-behavior: smooth; }
 
-/* ── GATE NOTICE ── */
-.gate-notice{
-  background:var(--amber4);border:2px solid var(--amber2);border-radius:var(--r2);
-  padding:10px 14px;font-size:13px;font-weight:700;color:var(--amber);
-  margin-bottom:.9rem;display:none;line-height:1.6;
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
 }
-.gate-notice.on{display:block;}
 
-/* ── STEP PANELS ── */
-.step-panel{display:none;}
-.step-panel.active{display:block;}
-@media(prefers-reduced-motion:no-preference){
-  .step-panel.active{animation:fadeIn .22s ease;}
+/* ══════════════════════════════════════════════
+   TOPBAR
+══════════════════════════════════════════════ */
+.topbar {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--blue);
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 20px;
+  box-shadow: 0 2px 12px rgba(39,60,200,0.18);
 }
-@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.topbar-logo {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-weight: 800;
+  color: #fff;
+  flex: 1;
+}
+.topbar a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .875rem;
+  white-space: nowrap;
+}
+.topbar a:hover { color: #fff; }
 
-/* ── STEP CARD ── */
-.step-card{
-  background:var(--surface);border:2px solid var(--border);
-  border-radius:var(--r);margin-bottom:1.2rem;
-  box-shadow:var(--sh);overflow:hidden;
+/* hero chips – show chosen char + setting */
+.hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.hero-chip {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 40px;
+  padding: 4px 12px;
+  font-size: .82rem; font-weight: 700; color: #fff;
+  backdrop-filter: blur(6px);
+  transition: background .2s;
 }
-.step-accent{height:5px;}
-.sa-forest{background:var(--forest);}
-.sa-navy{background:var(--navy);}
-.sa-amber{background:var(--amber);}
-.sa-plum{background:var(--plum);}
-.sa-clay{background:var(--clay);}
-.step-body{padding:1.1rem 1.3rem .9rem;}
-.step-eyebrow{font-size:11px;font-weight:800;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
-.step-title{font-size:clamp(17px,3.5vw,22px);font-weight:900;color:var(--ink);display:block;margin-bottom:.4rem;line-height:1.3;}
-.step-desc{font-size:clamp(14px,2.5vw,16px);color:var(--muted);line-height:1.65;}
+.hero-chip.empty { opacity: .55; }
+.hero-chip .chip-icon { font-size: 1.1rem; }
 
-/* ── SUBSECTIONS (Step 1) ── */
-.subsection{margin-bottom:1.3rem;}
-.subsec-header{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 13px;border-radius:var(--r2);
-  background:var(--page);border:2px solid var(--border);margin-bottom:8px;
+/* ══════════════════════════════════════════════
+   SETUP ZONE
+══════════════════════════════════════════════ */
+.setup-zone {
+  background: var(--surface);
+  border-bottom: 3px solid var(--border);
+  padding: 18px 20px 16px;
 }
-.subsec-icon{font-size:24px;}
-.subsec-title{font-size:16px;font-weight:800;color:var(--ink);}
-.subsec-check{font-size:16px;font-weight:700;color:var(--forest);margin-left:auto;}
+.setup-row-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 800;
+  color: var(--muted);
+  text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+.setup-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue);
+  font-size: .8rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.setup-num.done { background: var(--begin-bg); color: var(--begin); }
 
-/* ── ICON GRID ── */
-.icon-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:.3rem;}
-@media(min-width:400px){.icon-grid{grid-template-columns:repeat(4,1fr);}}
-@media(min-width:520px){.icon-grid{grid-template-columns:repeat(6,1fr);}}
-.icon-card{
-  background:var(--surface);border:2.5px solid var(--border);
-  border-radius:var(--r2);padding:12px 6px 10px;text-align:center;
-  cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
-  min-height:76px;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;position:relative;
-  transition:border-color .15s,background .15s,transform .1s;
+.mini-grid {
+  display: flex; gap: 8px; flex-wrap: wrap;
 }
-.icon-card:hover{border-color:var(--amber2);background:var(--amber4);}
-.icon-card.selected{border-color:var(--forest2);background:var(--forest4);}
-.icon-card.selected::after{
-  content:'✓';position:absolute;bottom:4px;right:6px;
-  font-size:14px;color:var(--forest);font-weight:900;
+.mini-card {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg);
+  border: 2.5px solid var(--border);
+  border-radius: 40px;
+  padding: 6px 14px 6px 8px;
+  cursor: pointer;
+  font-weight: 700; font-size: .88rem;
+  transition: all .2s;
+  user-select: none;
 }
-@media(prefers-reduced-motion:no-preference){
-  .icon-card.selected{animation:cardPop .2s ease;}
-  @keyframes cardPop{0%{transform:scale(.95)}60%{transform:scale(1.05)}100%{transform:scale(1)}}
+.mini-card .mc-emoji { font-size: 1.3rem; line-height: 1; }
+.mini-card:hover { border-color: var(--blue); background: var(--blue-lt); color: var(--blue); transform: translateY(-2px); }
+.mini-card.selected {
+  background: var(--blue-lt);
+  border-color: var(--blue);
+  color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(79,110,247,0.15);
 }
-.ic-emoji{font-size:clamp(26px,5vw,32px);display:block;margin-bottom:4px;line-height:1;}
-.ic-label{font-size:12px;font-weight:700;color:var(--ink2);line-height:1.3;display:block;}
+.mini-card.selected::after {
+  content: '✓';
+  font-size: .75rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 50%;
+  width: 16px; height: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
 
-/* ── NAV BUTTONS ── */
-.step-nav{display:flex;gap:10px;justify-content:space-between;margin-bottom:1.5rem;align-items:center;}
-.nav-btn{
-  padding:13px 24px;border-radius:var(--r2);border:2px solid;
-  font-family:var(--font);font-size:16px;font-weight:800;
-  cursor:pointer;min-height:52px;
-}
-.nav-back{background:var(--surface);color:var(--ink2);border-color:var(--border);}
-.nav-back:hover{background:var(--page);}
-.nav-next{background:var(--forest);color:#fff;border-color:var(--forest);}
-.nav-next:hover{background:var(--forest2);}
-.nav-next:disabled{background:#cccccc;color:#666666;border-color:#bbbbbb;cursor:not-allowed;}
+.setup-divider { border: none; border-top: 2px solid var(--border); margin: 14px 0; }
 
-/* ── STORY MOUNTAIN ── */
-.mountain-svg-wrap{display:block;width:100%;max-width:400px;margin:0 auto .9rem;}
-.mountain-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:.5rem;}
-.mf{background:var(--surface);border:2px solid var(--border);border-radius:var(--r2);overflow:hidden;}
-.mf-header{display:flex;align-items:center;gap:8px;padding:11px 12px;border-bottom:1px solid var(--border-lt);}
-.mf-num{
-  width:28px;height:28px;border-radius:50%;display:flex;
-  align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;
+/* ══════════════════════════════════════════════
+   STORY TRACK (visual thread connecting panels)
+══════════════════════════════════════════════ */
+.canvas-zone {
+  padding: 24px 16px 0;
+  max-width: 1100px;
+  margin: 0 auto;
 }
-.mf-label{font-size:15px;font-weight:800;color:var(--ink);}
-.mf-tips{padding:6px 12px 4px;background:var(--amber4);border-bottom:1px solid var(--border-lt);}
-.mf-tip-item{font-size:12px;color:var(--amber);display:block;line-height:1.6;}
-.mf textarea{
-  width:100%;min-height:100px;border:none;border-left:3px solid transparent;outline:none;
-  padding:10px 13px;font-family:var(--font);font-size:15px;
-  line-height:1.8;background:transparent;color:var(--ink);resize:vertical;transition:border-left-color .15s;
-}
-.mf textarea:focus{background:var(--amber4);border-left:3px solid var(--amber2);}
 
-/* ── SENTENCE STARTERS ── */
-.starters-group{margin-bottom:1.1rem;}
-.sg-title{font-size:15px;font-weight:800;color:var(--ink2);display:block;margin-bottom:7px;}
-.sg-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px;}
-.starter-chip{
-  padding:10px 16px;border-radius:20px;border:2px solid var(--border);
-  background:var(--surface);color:var(--ink2);font-size:14px;font-weight:600;
-  cursor:pointer;font-family:var(--font);min-height:44px;
-  display:inline-flex;align-items:center;line-height:1.4;text-align:left;
+.story-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -14px; /* overlap with panels */
+  position: relative;
+  z-index: 5;
+  padding: 0 60px;
 }
-.starter-chip:hover{border-color:var(--navy2);background:var(--navy4);}
-.starter-chip.selected{border-color:var(--navy2);background:var(--navy2);color:#fff;}
-.selected-starters-box{
-  background:var(--forest4);border:1.5px solid var(--forest3);
-  border-radius:var(--r2);padding:10px 12px;margin-top:.5rem;
-  font-size:14px;color:var(--forest);line-height:1.8;min-height:44px;
+.track-node {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  border: 3px solid;
+  flex-shrink: 0;
+  transition: all .4s;
+  background: var(--surface);
+  position: relative;
+  z-index: 2;
 }
-.sel-box-label{font-size:12px;font-weight:800;color:var(--forest);display:block;margin-bottom:4px;}
+.track-node.n-begin { border-color: var(--begin-mid); color: var(--begin); }
+.track-node.n-middle { border-color: var(--middle-mid); color: var(--middle); }
+.track-node.n-end   { border-color: var(--end-mid);   color: var(--end); }
+.track-node.lit { box-shadow: 0 0 0 5px; }
+.track-node.n-begin.lit { background: var(--begin-bg); box-shadow: 0 0 0 5px rgba(22,163,74,0.18); }
+.track-node.n-middle.lit{ background: var(--middle-bg); box-shadow: 0 0 0 5px rgba(217,119,6,0.18); }
+.track-node.n-end.lit   { background: var(--end-bg);   box-shadow: 0 0 0 5px rgba(124,58,237,0.18); }
 
-/* ── WORD BANK ── */
-.word-bank-group{margin-bottom:1.2rem;}
-.wb-title{font-size:15px;font-weight:800;color:var(--ink2);display:block;margin-bottom:7px;}
-.wb-chips{display:flex;flex-wrap:wrap;gap:6px;}
-.word-chip{
-  padding:9px 15px;border-radius:6px;border:1.5px solid;
-  font-size:14px;font-weight:700;cursor:pointer;
-  font-family:var(--font);min-height:44px;display:inline-flex;align-items:center;
+.track-line {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background .4s;
 }
-.wc-adj  {background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
-.wc-adj.selected,.wc-adj:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
-.wc-verb {background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
-.wc-verb.selected,.wc-verb:hover{background:var(--forest);color:#fff;border-color:var(--forest);}
-.wc-place{background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
-.wc-place.selected,.wc-place:hover{background:var(--amber);color:#fff;border-color:var(--amber);}
-.selected-words{display:flex;flex-wrap:wrap;gap:5px;margin-top:.6rem;}
+.track-line.active { background: linear-gradient(90deg, var(--begin-mid), var(--middle-mid)); }
+.track-line.done   { background: linear-gradient(90deg, var(--middle-mid), var(--end-mid)); }
+.track-line .line-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0%; border-radius: 4px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.track-line.tl-1 .line-fill { background: linear-gradient(90deg, var(--begin), var(--middle)); }
+.track-line.tl-2 .line-fill { background: linear-gradient(90deg, var(--middle), var(--end)); }
 
-/* ── RUBRIC ── */
-.rubric-score{
-  text-align:center;padding:14px;background:var(--surface);
-  border:2px solid var(--border);border-radius:var(--r2);margin-bottom:1rem;
+/* ══════════════════════════════════════════════
+   PANELS ROW
+══════════════════════════════════════════════ */
+.panels-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
 }
-.rs-num{font-size:36px;font-weight:900;color:var(--forest);}
-.rs-of{font-size:14px;color:var(--muted);}
-.rs-msg{font-size:14px;font-weight:700;margin-top:4px;color:var(--ink2);}
-.rubric-list{display:flex;flex-direction:column;gap:7px;margin-bottom:1rem;}
-.rubric-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:11px 12px;border:2px solid var(--border);
-  border-radius:var(--r2);background:var(--surface);
-  cursor:pointer;min-height:50px;
-}
-.rubric-item:hover{border-color:var(--forest3);background:var(--forest4);}
-.rubric-item.checked{background:var(--forest4);border-color:var(--forest);}
-.rub-box{
-  width:28px;height:28px;min-width:28px;border:2.5px solid var(--border);
-  border-radius:6px;background:var(--surface);display:flex;
-  align-items:center;justify-content:center;font-size:15px;color:var(--forest);margin-top:1px;
-}
-.rubric-item.checked .rub-box{background:var(--forest);border-color:var(--forest);color:#fff;}
-.rub-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
-.rub-text{font-size:14px;font-weight:600;color:var(--ink2);line-height:1.55;}
-.rubric-item.checked .rub-text{color:var(--ink);}
 
-/* ── RESULT PANEL ── */
-.result-panel{display:none;}
-.result-panel.active{display:block;}
-.result-hero{
-  background:var(--forest);border-radius:var(--r);
-  padding:1.5rem;text-align:center;margin-bottom:1.2rem;box-shadow:var(--sh);
+/* ── connector arrows ── */
+.panel-arrow {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0 4px;
+  margin-top: 72px; /* align with middle of panel header */
+  color: var(--border);
+  font-size: 1.4rem;
+  transition: color .4s;
+  flex-shrink: 0;
 }
-.rh-title{font-size:clamp(18px,4vw,24px);font-weight:900;color:#fff;display:block;margin-bottom:.5rem;}
-.rh-sub{font-size:14px;color:rgba(255,255,255,.8);display:block;margin-bottom:.7rem;}
-.rh-emojis{font-size:34px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.action-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.8rem;}
-.action-btn{
-  flex:1;min-width:200px;padding:14px 16px;border-radius:var(--r2);border:2px solid;
-  font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer;
-  text-align:center;text-decoration:none;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;min-height:54px;
-}
-.action-btn small{font-size:12px;font-weight:400;opacity:.8;}
-.ab-story    {background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
-.ab-story:hover{background:var(--navy);color:#fff;}
-.ab-blockwelt{background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
-.ab-blockwelt:hover{background:var(--forest);color:#fff;}
-.ab-reset    {background:var(--page);color:var(--muted);border-color:var(--border);width:100%;}
-.ab-reset:hover{background:var(--border-lt);}
-@media(max-width:440px){.action-row{flex-direction:column;}}
+.panel-arrow svg { width: 36px; height: 36px; }
+.panel-arrow.active { color: var(--begin); }
+.panel-arrow.active2 { color: var(--middle); }
 
-/* ── SATZ-CHECK ── */
-.satz-check-wrap{background:var(--surface);border:2.5px solid var(--plum2);border-radius:var(--r);margin-top:2rem;margin-bottom:1rem;box-shadow:0 4px 16px rgba(122,90,223,.15);overflow:hidden;}
-.satz-check-header{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--plum4);border-bottom:2px solid var(--plum3);}
-.satz-check-icon{font-size:28px;line-height:1;flex-shrink:0;}
-.satz-check-title{font-size:18px;font-weight:900;color:var(--plum);display:block;line-height:1.2;}
-.satz-check-sub{font-size:13px;color:var(--plum);opacity:.8;display:block;margin-top:2px;}
-.satz-check-body{padding:1rem 1.2rem 1.1rem;}
-.sc-desc{font-size:13px;color:var(--muted);display:block;margin-bottom:.8rem;line-height:1.65;}
-.sc-textarea{width:100%;min-height:100px;border:2px solid var(--border);border-radius:var(--r2);padding:12px 13px;font-family:var(--font);font-size:16px;line-height:1.8;resize:vertical;outline:none;background:var(--surface);}
-.sc-textarea:focus{border-color:var(--plum2);background:var(--plum4);}
-.sc-btn{display:block;width:100%;margin-top:.7rem;padding:14px;border:none;border-radius:var(--r2);background:var(--plum);color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;min-height:52px;}
-.sc-btn:hover{background:var(--plum2);}
-.sc-results{display:none;flex-direction:column;gap:.55rem;margin-top:.9rem;}
-.sc-results.on{display:flex;}
-.sc-card{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:600;line-height:1.7;border:2px solid;}
-.sc-ok  {background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
-.sc-warn{background:var(--clay4);color:var(--clay);border-color:var(--clay3);}
-.sc-info{background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
-.sc-tip {background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
-.sc-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;opacity:.7;display:block;margin-bottom:2px;}
-.sc-hl-adj{background:var(--plum3);color:var(--plum);border-radius:4px;padding:1px 4px;}
+/* ── story panel ── */
+.s-panel {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--border);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex; flex-direction: column;
+  transition: border-color .3s, box-shadow .3s;
+  position: relative;
+}
+.s-panel.p-begin  { border-color: var(--begin-mid); }
+.s-panel.p-middle { border-color: var(--middle-mid); }
+.s-panel.p-end    { border-color: var(--end-mid); }
+.s-panel.p-middle.locked, .s-panel.p-end.locked {
+  border-color: var(--border);
+  opacity: .7;
+}
+.s-panel.p-middle.locked .panel-body,
+.s-panel.p-end.locked   .panel-body { pointer-events: none; filter: blur(1.5px); }
 
-/* ── GLOBAL ACCESSIBILITY ── */
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;}
+/* panel header */
+.panel-hd {
+  padding: 16px 18px 12px;
+  display: flex; align-items: center; gap: 10px;
 }
-button:focus-visible,a:focus-visible,textarea:focus-visible{
-  outline:3px solid var(--navy2);outline-offset:2px;
+.panel-hd.hd-begin  { background: var(--begin-bg); }
+.panel-hd.hd-middle { background: var(--middle-bg); }
+.panel-hd.hd-end    { background: var(--end-bg); }
+.ph-icon { font-size: 1.6rem; }
+.ph-info { flex: 1; }
+.ph-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.1rem; font-weight: 800;
 }
-/* ── XP BAR ── */
-.xp-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:1.2rem;box-shadow:var(--sh);}
-.xp-icon{font-size:26px;flex-shrink:0;}
-.xp-info{flex:1;}
-.xp-level{font-size:15px;font-weight:900;color:var(--ink);display:block;}
-.xp-bar-wrap{background:var(--border-lt);border-radius:8px;height:12px;margin-top:5px;overflow:hidden;}
-.xp-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));width:0%;}
-@media(prefers-reduced-motion:no-preference){.xp-bar-fill{transition:width .5s ease;}}
-.xp-pts{font-size:11px;font-weight:700;color:var(--muted);flex-shrink:0;white-space:nowrap;}
-/* ── TOAST ── */
-.toast{
-  position:fixed;top:12px;left:50%;transform:translateX(-50%);
-  background:var(--forest);color:#fff;font-size:14px;font-weight:800;
-  padding:10px 22px;border-radius:40px;box-shadow:var(--sh2);z-index:9999;
-  pointer-events:none;opacity:0;white-space:nowrap;
+.p-begin  .ph-title { color: var(--begin); }
+.p-middle .ph-title { color: var(--middle); }
+.p-end    .ph-title { color: var(--end); }
+.ph-sub { font-size: .78rem; font-weight: 600; color: var(--muted); margin-top: 1px; }
+.ph-badge {
+  font-size: .7rem; font-weight: 800;
+  border-radius: 40px; padding: 3px 10px;
+  border: 2px solid;
 }
-@media(prefers-reduced-motion:no-preference){
-  .toast.show{animation:tIn .2s ease forwards;}
-  @keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(-8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-  .toast.hide{transition:opacity .3s;}
-}
-.toast.show{opacity:1;}
-.toast.hide{opacity:0;}
-/* ── INTEREST SELECTOR ── */
-.interest-section{margin-bottom:1.1rem;}
-.interest-label{font-size:12px;font-weight:800;color:var(--muted);display:block;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
-.interest-row{display:flex;gap:6px;flex-wrap:wrap;}
-.interest-btn{padding:10px 16px;border-radius:20px;border:2px solid var(--border);background:var(--surface);color:var(--ink2);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:44px;}
-.interest-btn:hover{border-color:var(--amber2);background:var(--amber4);}
-.interest-btn.active{background:var(--amber);color:#fff;border-color:var(--amber);}
-/* ── THEMED MINI IDEAS ── */
-.themed-ideas{background:var(--amber4);border:1.5px solid var(--amber3);border-radius:var(--r2);padding:8px 10px;margin-bottom:8px;}
-.themed-label{font-size:11px;font-weight:800;color:var(--amber);display:block;margin-bottom:6px;}
-.themed-chips{display:flex;flex-wrap:wrap;gap:6px;}
-.themed-chip{padding:7px 13px;border-radius:20px;border:2px solid var(--amber3);background:var(--surface);color:var(--amber);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);min-height:40px;display:inline-flex;align-items:center;gap:5px;}
-.themed-chip:hover{background:var(--amber3);}
-.themed-chip.selected{background:var(--amber);color:#fff;border-color:var(--amber);}
-/* ── ACHIEVEMENT CARD ── */
-.ach-card{background:linear-gradient(135deg,var(--amber4),var(--forest4));border:2px solid var(--amber3);border-radius:var(--r);padding:1.2rem;text-align:center;margin-bottom:1rem;box-shadow:var(--sh);}
-.ach-icon{font-size:52px;display:block;margin-bottom:.3rem;}
-.ach-title{font-size:clamp(16px,3.5vw,20px);font-weight:900;color:var(--ink);display:block;}
-.ach-sub{font-size:13px;color:var(--muted);display:block;margin-top:.2rem;}
-.ach-xp{font-size:18px;font-weight:800;color:var(--forest);display:block;margin-top:.4rem;}
-.ach-bar-wrap{background:var(--border-lt);border-radius:6px;height:10px;margin:.6rem auto 0;max-width:200px;overflow:hidden;}
-.ach-bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--forest2),var(--forest));}
+.p-begin  .ph-badge { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .ph-badge { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .ph-badge { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
 
-/* ── PLAN SUMMARY (Step 5) ── */
-.plan-summary{display:flex;flex-direction:column;gap:7px;}
-.ps-row{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--surface);border:1.5px solid var(--border-lt);border-radius:var(--r2);}
-.ps-icon{font-size:20px;flex-shrink:0;line-height:1.35;}
-.ps-label{font-size:11px;font-weight:800;color:var(--muted);display:block;margin-bottom:2px;text-transform:uppercase;letter-spacing:.3px;}
-.ps-value{font-size:14px;font-weight:600;color:var(--ink);line-height:1.5;white-space:pre-wrap;}
-.ps-section-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin:.8rem 0 .35rem;padding:0 2px;}
+/* panel body */
+.panel-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
 
-/* ── PHOTO UPLOAD (Step 5) ── */
-.photo-upload-box{
-  border:2.5px dashed var(--border);border-radius:var(--r);
-  padding:1.6rem 1rem;text-align:center;background:var(--surface);
-  cursor:pointer;transition:border-color .2s,background .2s;
+/* scene preview */
+.scene-prev {
+  background: linear-gradient(135deg, var(--bg), #e8eeff);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  min-height: 70px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
 }
-.photo-upload-box:hover,.photo-upload-box.drag{border-color:var(--forest2);background:var(--forest4);}
-.pu-icon{font-size:40px;display:block;margin-bottom:.5rem;}
-.pu-title{font-size:15px;font-weight:800;color:var(--ink);display:block;margin-bottom:.3rem;}
-.pu-sub{font-size:13px;color:var(--muted);line-height:1.5;}
-.photo-preview-wrap{text-align:center;}
-.photo-preview{width:100%;max-height:380px;object-fit:contain;border-radius:var(--r2);border:2px solid var(--forest3);display:block;margin:0 auto;}
-.photo-remove-btn{
-  display:block;width:100%;text-align:center;margin-top:.6rem;
-  padding:8px;border-radius:var(--r2);border:2px solid var(--border);
-  background:var(--surface);color:var(--muted);font-size:13px;font-weight:700;
-  cursor:pointer;font-family:var(--font);
+.scene-emojis { font-size: 2.2rem; display: flex; gap: 6px; justify-content: center; }
+.scene-emojis .se { animation: bob 2.8s ease-in-out infinite; }
+.scene-emojis .se:nth-child(2) { animation-delay: .7s; }
+.scene-emojis .se:nth-child(3) { animation-delay: 1.4s; }
+@keyframes bob {
+  0%,100%{ transform: translateY(0); }
+  50%    { transform: translateY(-6px); }
 }
-.photo-remove-btn:hover{background:var(--clay4);color:var(--clay);border-color:var(--clay3);}
-.photo-saved-preview{width:100%;max-height:300px;object-fit:contain;border-radius:var(--r2);border:2px solid var(--forest3);display:block;margin:.7rem auto 0;}
+.scene-label { font-size: .72rem; font-weight: 700; color: var(--muted); }
+
+/* starters */
+.starters-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.starter {
+  font-size: .78rem; font-weight: 700;
+  border-radius: 40px; padding: 5px 12px;
+  cursor: pointer; border: 2px solid; font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.p-begin  .starter { color: var(--begin);  border-color: var(--begin-mid);  background: var(--begin-bg); }
+.p-middle .starter { color: var(--middle); border-color: var(--middle-mid); background: var(--middle-bg); }
+.p-end    .starter { color: var(--end);    border-color: var(--end-mid);   background: var(--end-bg); }
+.p-begin  .starter:hover { background: var(--begin);  color: #fff; }
+.p-middle .starter:hover { background: var(--middle); color: #fff; }
+.p-end    .starter:hover { background: var(--end);    color: #fff; }
+
+/* textarea */
+.s-textarea {
+  width: 100%;
+  min-height: 120px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-family: 'Nunito', sans-serif;
+  font-size: .95rem; font-weight: 600;
+  color: var(--text);
+  line-height: 1.7;
+  resize: none;
+  transition: border-color .2s;
+  background: #fafcff;
+}
+.s-textarea:focus { outline: none; border-color: var(--blue); background: #fff; }
+.s-textarea::placeholder { color: #b0bcda; font-weight: 500; }
+
+/* write footer */
+.write-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px;
+}
+.wc-pill {
+  font-size: .75rem; font-weight: 800;
+  border-radius: 40px; padding: 4px 12px;
+  background: var(--bg); color: var(--muted);
+  border: 2px solid var(--border);
+  transition: all .3s;
+  white-space: nowrap;
+}
+.wc-pill.ok {
+  color: var(--begin); border-color: var(--begin-mid); background: var(--begin-bg);
+}
+.speak-btn {
+  background: none; border: 2px solid var(--border);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .85rem; color: var(--muted);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s;
+}
+.speak-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+
+/* ── SPELL / GRAMMAR CHECK ── */
+.check-btn {
+  background: none; border: 2px solid var(--end-mid);
+  border-radius: 40px; padding: 4px 10px;
+  cursor: pointer; font-size: .82rem; color: var(--end);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  transition: all .2s; white-space: nowrap;
+}
+.check-btn:hover  { background: var(--end); color: #fff; border-color: var(--end); }
+.check-btn:disabled { opacity: .55; cursor: wait; }
+
+.cp {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: #fffbeb;
+  border: 2px solid #fcd34d;
+  animation: fadeUp .2s ease;
+}
+.cp-ok    { color: var(--begin); font-weight: 800; font-size: .92rem; }
+.cp-noop  { color: var(--muted); font-weight: 600; font-size: .88rem; }
+.cp-err   { color: #dc2626;      font-weight: 700; font-size: .88rem; }
+.cp-head  {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .9rem; font-weight: 800; color: var(--text);
+  margin-bottom: 8px;
+}
+.cp-list  { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.cp-row   {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  background: var(--surface); border-radius: 8px;
+  padding: 6px 10px; border: 1.5px solid var(--border);
+}
+.cp-wrong { color: #dc2626; font-weight: 700; font-size: .85rem; text-decoration: line-through; }
+.cp-arrow { color: var(--muted); }
+.cp-sugs  { display: flex; gap: 5px; flex-wrap: wrap; }
+.cp-sug {
+  background: var(--begin-bg); border: 2px solid var(--begin-mid);
+  color: var(--begin); border-radius: 20px; padding: 3px 11px;
+  font-size: .82rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: all .18s;
+}
+.cp-sug:hover { background: var(--begin); color: #fff; }
+.cp-fixall {
+  width: 100%; background: var(--begin); color: #fff;
+  border: none; border-radius: 20px; padding: 8px 16px;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; transition: background .2s;
+}
+.cp-fixall:hover { background: #15803d; }
+.cp-reason {
+  display: block; width: 100%; margin-top: 3px;
+  font-size: .78rem; color: var(--muted); font-style: italic;
+}
+.cp-local {
+  margin-bottom: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.cp-local-row {
+  background: #fff7ed; border: 1.5px solid #fed7aa;
+  border-radius: 8px; padding: 6px 10px;
+  font-size: .82rem; color: #c2410c; font-weight: 600;
+}
+
+/* lock overlay */
+.lock-overlay {
+  position: absolute; inset: 0; z-index: 10;
+  background: rgba(242,245,255,0.82);
+  backdrop-filter: blur(3px);
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+  transition: opacity .4s;
+}
+.lock-overlay.hidden { opacity: 0; pointer-events: none; }
+.lock-icon { font-size: 2.5rem; }
+.lock-msg {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .95rem; font-weight: 700;
+  color: var(--muted); text-align: center;
+  max-width: 180px; line-height: 1.4;
+}
+
+/* ══════════════════════════════════════════════
+   PREVIEW ZONE  (always visible below panels)
+══════════════════════════════════════════════ */
+.preview-zone {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px 40px;
+}
+.preview-header {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.preview-header .ph-live {
+  font-size: .7rem; font-weight: 800;
+  background: #ef4444; color: #fff;
+  border-radius: 40px; padding: 2px 8px;
+  letter-spacing: .05em;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{ opacity:1; } 50%{ opacity:.5; } }
+
+.preview-book {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 3px solid var(--blue-lt);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.pv-part {
+  padding: 20px;
+  min-height: 120px;
+  border-right: 2px solid var(--border);
+  position: relative;
+  transition: background .3s;
+}
+.pv-part:last-child { border-right: none; }
+.pv-part-label {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: .72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em;
+  display: flex; align-items: center; gap: 5px;
+  margin-bottom: 10px;
+}
+.pv-begin  .pv-part-label { color: var(--begin); }
+.pv-middle .pv-part-label { color: var(--middle); }
+.pv-end    .pv-part-label { color: var(--end); }
+
+.pv-begin  { border-top: 4px solid var(--begin); }
+.pv-middle { border-top: 4px solid var(--middle); }
+.pv-end    { border-top: 4px solid var(--end); }
+
+.pv-text {
+  font-size: .9rem; font-weight: 600; line-height: 1.7;
+  color: var(--text);
+  white-space: pre-wrap; word-break: break-word;
+}
+.pv-text.empty { color: #c8d3e8; font-style: italic; }
+
+/* dotted placeholder lines */
+.pv-lines {
+  display: flex; flex-direction: column; gap: 8px; margin-top: 4px;
+}
+.pv-line {
+  height: 10px; border-radius: 5px;
+  background: var(--border);
+  opacity: .5;
+}
+.pv-line:nth-child(1){ width:85%; }
+.pv-line:nth-child(2){ width:70%; }
+.pv-line:nth-child(3){ width:55%; }
+
+/* ── celebrate ── */
+.celebrate-bar {
+  background: linear-gradient(135deg, var(--begin-bg), var(--end-bg));
+  border-radius: var(--radius);
+  border: 3px solid var(--end-mid);
+  padding: 22px 28px;
+  display: flex; align-items: center; gap: 18px;
+  margin-top: 20px;
+  animation: fadeUp .4s ease;
+  display: none;
+}
+.celebrate-bar.show { display: flex; }
+.cel-emoji { font-size: 3rem; animation: pop .5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes pop { 0%{ transform:scale(0); } 70%{ transform:scale(1.2); } 100%{ transform:scale(1); } }
+.cel-text { flex: 1; }
+.cel-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--end);
+  margin-bottom: 3px;
+}
+.cel-sub { font-size: .88rem; font-weight: 600; color: var(--muted); }
+.cel-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-print {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 4px 14px rgba(79,110,247,0.25);
+  transition: all .2s;
+}
+.btn-print:hover { background: #3a55e0; transform: translateY(-2px); }
+.btn-speak-all {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--end-bg); color: var(--end);
+  border: 2px solid var(--end-mid); border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all .2s;
+}
+.btn-speak-all:hover { background: var(--end); color: #fff; }
+.btn-paper {
+  display: flex; align-items: center; gap: 7px;
+  background: linear-gradient(135deg,#1a1a2e,#2d2d5e); color: #fff;
+  border: none; border-radius: 40px; padding: 11px 22px;
+  font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 4px 14px rgba(26,26,46,0.3);
+  transition: all .2s;
+}
+.btn-paper:hover { opacity: .88; transform: translateY(-2px); }
+
+/* ══════════════════════════════════════════════
+   PAPER → UPLOAD → REVIEW ZONE
+══════════════════════════════════════════════ */
+.paper-zone {
+  max-width: 1100px; margin: 0 auto; padding: 0 16px 60px;
+  display: none;
+}
+.paper-zone.show { display: block; }
+
+.paper-cta {
+  background: linear-gradient(135deg,#1a1a2e 0%,#2d2d5e 60%,#1a3a5e 100%);
+  border-radius: var(--radius-lg); padding: 26px 30px;
+  display: flex; align-items: center; gap: 20px; margin-bottom: 20px;
+  color: #fff;
+}
+.paper-cta-icon { font-size: 3rem; flex-shrink: 0; }
+.paper-cta-text { flex: 1; }
+.paper-cta-title {
+  font-family: 'Baloo 2', sans-serif; font-size: 1.35rem; font-weight: 800;
+  margin-bottom: 4px;
+}
+.paper-cta-sub { font-size: .88rem; font-weight: 600; opacity: .82; line-height: 1.5; }
+
+.step-card {
+  background: var(--surface); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden; margin-bottom: 16px;
+  border: 2px solid var(--border);
+}
+.step-hd {
+  padding: 15px 20px; display: flex; align-items: center; gap: 14px;
+  border-bottom: 2px solid var(--border); background: var(--bg);
+}
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  font-family: 'Baloo 2', sans-serif; font-size: .95rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-title { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text); }
+.step-sub   { font-size: .78rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+.step-body  { padding: 18px 20px; }
+
+/* ── Checklist ── */
+.cl-group       { margin-bottom: 18px; }
+.cl-items { display: flex; flex-direction: column; gap: 3px; }
+.cl-item  {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background .15s; user-select: none;
+}
+.cl-item:hover   { background: var(--bg); }
+.cl-item.checked { background: var(--green-bg); }
+.cl-box {
+  width: 22px; height: 22px; min-width: 22px;
+  border: 2.5px solid var(--border); border-radius: 6px;
+  background: var(--surface); display: flex; align-items: center;
+  justify-content: center; font-size: .8rem; color: var(--green);
+  transition: all .2s; margin-top: 1px; font-weight: 900;
+}
+.cl-item.checked .cl-box  { background: var(--green); border-color: var(--green); color: #fff; }
+.cl-label                 { font-size: .9rem; font-weight: 600; line-height: 1.5; }
+.cl-item.checked .cl-label{ color: var(--green); }
+
+.cl-progress {
+  background: var(--bg); border-radius: var(--radius-sm);
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+  margin-top: 6px; border: 2px solid var(--border);
+}
+.cl-bar-wrap { flex: 1; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
+.cl-bar      { height: 100%; border-radius: 5px; width: 0%; transition: width .4s ease;
+               background: linear-gradient(90deg, var(--begin), #06b6d4); }
+.cl-count    { font-family: 'Baloo 2', sans-serif; font-size: .88rem; font-weight: 800;
+               color: var(--muted); white-space: nowrap; }
+.cl-count.all-done { color: var(--green); }
+
+/* ── Improve-before-tick banner ── */
+.improve-banner {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: linear-gradient(135deg, #fffbeb 0%, #faf5ff 100%);
+  border: 2.5px solid var(--middle-mid);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.improve-banner-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.improve-banner-body { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+.improve-banner-title {
+  font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800;
+  color: var(--text);
+}
+.improve-banner-steps {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+  font-size: .85rem; font-weight: 700; color: var(--muted);
+}
+.improve-step {
+  background: var(--surface); border: 2px solid var(--border);
+  border-radius: 40px; padding: 4px 12px;
+  color: var(--text); font-weight: 700; font-size: .82rem;
+}
+.improve-arrow { color: var(--middle); font-size: 1rem; }
+.improve-back-btn {
+  align-self: flex-start;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 40px; padding: 9px 18px;
+  font-size: .85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 3px 10px rgba(79,110,247,.22);
+  transition: all .2s; white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+}
+.improve-back-btn:hover { background: #3a55e0; transform: translateY(-1px); }
+
+/* per-group back link */
+.cl-group-title {
+  font-family: 'Baloo 2', sans-serif; font-size: .78rem; font-weight: 800;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+}
+.cl-back-link {
+  margin-left: auto;
+  background: none; border: 1.5px solid var(--border); border-radius: 40px;
+  padding: 2px 10px; font-size: .72rem; font-weight: 700; cursor: pointer;
+  color: var(--blue); font-family: 'Nunito', sans-serif;
+  transition: all .18s; white-space: nowrap; text-transform: none; letter-spacing: 0;
+}
+.cl-back-link:hover { background: var(--blue-lt); border-color: var(--blue); }
+
+/* all-done celebration inside checklist */
+.cl-alldone-msg {
+  display: none; align-items: center; gap: 10px;
+  background: var(--green-bg); border: 2px solid var(--green-mid);
+  border-radius: var(--radius-sm); padding: 12px 16px; margin-top: 10px;
+  animation: fadeUp .3s ease;
+}
+.cl-alldone-msg.show { display: flex; }
+.cl-alldone-msg-text {
+  font-family: 'Baloo 2', sans-serif; font-size: .92rem; font-weight: 800;
+  color: var(--green);
+}
+
+/* ── Photo upload ── */
+.upload-drop {
+  border: 3px dashed var(--border); border-radius: var(--radius);
+  padding: 32px 20px; text-align: center; cursor: pointer;
+  transition: all .2s; background: var(--bg);
+}
+.upload-drop:hover { border-color: var(--blue); background: var(--blue-lt); }
+.upload-drop input { display: none; }
+.upload-icon  { font-size: 2.4rem; margin-bottom: 8px; }
+.upload-label { font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.upload-sub   { font-size: .8rem; font-weight: 600; color: var(--muted); }
+
+.photo-preview     { margin-top: 16px; border-radius: var(--radius); overflow: hidden;
+                     box-shadow: var(--shadow-md); display: none; }
+.photo-preview img { width: 100%; display: block; }
+
+/* ── Feedback / review ── */
+.feedback-zone     { border-top: 3px solid var(--border); padding: 20px; display: none; }
+.feedback-zone.show{ display: block; }
+.feedback-zone-hd  {
+  font-family: 'Baloo 2', sans-serif; font-size: 1rem; font-weight: 800;
+  color: var(--text); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.star-row { display: flex; gap: 6px; margin-bottom: 16px; }
+.star     { font-size: 2rem; cursor: pointer; transition: transform .15s;
+            filter: grayscale(1) opacity(.35); }
+.star:hover, .star.on { filter: none; transform: scale(1.15); }
+.fb-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+.fb-label  { font-size: .76rem; font-weight: 800; color: var(--muted);
+             text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 5px; }
+.fb-ta {
+  width: 100%; min-height: 72px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 12px; resize: none;
+  font-family: 'Nunito', sans-serif; font-size: .92rem; font-weight: 600;
+  line-height: 1.6; outline: none; transition: border-color .2s; background: var(--surface);
+}
+.fb-ta:focus { border-color: var(--blue); }
+.fb-btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.fb-save {
+  background: var(--blue); color: #fff; border: none; border-radius: 40px;
+  padding: 10px 22px; font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; box-shadow: 0 3px 10px rgba(79,110,247,.25);
+  transition: all .2s;
+}
+.fb-save:hover { background: #3a55e0; transform: translateY(-1px); }
+.fb-print {
+  background: none; border: 2px solid var(--border); border-radius: 40px;
+  padding: 10px 22px; font-size: .9rem; font-weight: 700; cursor: pointer;
+  font-family: 'Nunito', sans-serif; color: var(--muted); transition: all .2s;
+}
+.fb-print:hover { border-color: var(--blue); color: var(--blue); }
+.saved-fb { background: var(--green-bg); border: 2px solid var(--green-mid);
+            border-radius: var(--radius-sm); padding: 14px 16px; margin-top: 14px; display: none; }
+.saved-fb.show  { display: block; }
+.saved-fb-title { font-family: 'Baloo 2', sans-serif; font-size: .88rem;
+                  font-weight: 800; color: var(--green); margin-bottom: 6px; }
+.saved-fb-body  { font-size: .88rem; font-weight: 600; color: var(--text); line-height: 1.7;
+                  white-space: pre-wrap; }
+
+/* ══════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════ */
+.confetti-piece {
+  position: fixed; pointer-events: none; z-index: 9999;
+  border-radius: 2px;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  from { opacity: 1; transform: translateY(-20px) rotate(0deg); }
+  to   { opacity: 0; transform: translateY(110vh) rotate(720deg); }
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media (max-width: 700px) {
+  .panels-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .panel-arrow {
+    margin-top: 0; padding: 6px 0;
+    transform: rotate(90deg);
+    justify-self: center;
+  }
+  .story-track { display: none; }
+  .preview-book { grid-template-columns: 1fr; }
+  .pv-part { border-right: none; border-bottom: 2px solid var(--border); }
+  .pv-part:last-child { border-bottom: none; }
+  .celebrate-bar { flex-direction: column; text-align: center; }
+  .cel-btns { justify-content: center; }
+}
+
+/* ══════════════════════════════════════════════
+   PRINT
+══════════════════════════════════════════════ */
+@media print {
+  .topbar, .setup-zone, .story-track, .panels-row,
+  .panel-arrow, .celebrate-bar, .preview-header { display: none !important; }
+  .preview-zone { padding: 0; max-width: 100%; }
+  .preview-book { box-shadow: none; border: 1px solid #ccc; }
+}
+
+/* fade-up util */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 </style>
 </head>
 <body>
 
-<div class="site-header">
-  <span class="header-title">📖 Geschichte Baukasten</span>
-  <span class="header-sub">Schritt für Schritt zur eigenen Geschichte</span>
-  <span class="header-badge">📚 LehrplanPLUS Bayern · Deutsch Klasse 3/4 · LB 2</span>
-  <div class="header-links">
-    <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
-    <a class="hlink" href="index.html">⛏ Blockwelt</a>
-    <a class="hlink" href="satzwerkstatt.html">✍️ Satzwerkstatt</a>
-    <a class="hlink" href="grammatik.html">🎨 Grammatik</a>
+<!-- ══════════════════════════════════════════
+     TOPBAR
+══════════════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-logo">📖 Geschichten-Baumeister</div>
+  <div class="hero-chips">
+    <div class="hero-chip empty" id="chipChar"><span class="chip-icon">🧒</span><span id="chipCharLabel">Figur wählen…</span></div>
+    <div class="hero-chip empty" id="chipSet"><span class="chip-icon">🗺️</span><span id="chipSetLabel">Ort wählen…</span></div>
   </div>
-</div>
+  <a href="index.html">← Zurück</a>
+  <button id="bl-lang-toggle" onclick="blToggleLang()" style="background:var(--blue,#4C8EF7);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
+</header>
 
-<div class="wrap">
-
-<div class="step-progress" id="step-progress"></div>
-
-<div class="xp-row" id="xp-bar">
-  <span class="xp-icon" id="xp-icon">📖</span>
-  <div class="xp-info">
-    <span class="xp-level" id="xp-level">Level: Anfänger</span>
-    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xp-bar-fill"></div></div>
+<!-- ══════════════════════════════════════════
+     SETUP ZONE
+══════════════════════════════════════════ -->
+<section class="setup-zone">
+  <!-- Step 1: Character -->
+  <div class="setup-row-header">
+    <span class="setup-num" id="numChar">1</span>
+    Wähle deine Hauptfigur
   </div>
-  <span class="xp-pts" id="xp-pts">0 / 500 XP</span>
-</div>
+  <div class="mini-grid" id="charGrid"></div>
 
-<div class="confidence-bar">
-  <span class="conf-label">💡 Wie viel Hilfe möchtest du?</span>
-  <div class="conf-toggle">
-    <button class="conf-btn" id="conf-0" onclick="setConfidence(0)">Viel Hilfe</button>
-    <button class="conf-btn" id="conf-1" onclick="setConfidence(1)">Etwas Hilfe</button>
-    <button class="conf-btn" id="conf-2" onclick="setConfidence(2)">Wenig Hilfe</button>
+  <hr class="setup-divider">
+
+  <!-- Step 2: Setting -->
+  <div class="setup-row-header">
+    <span class="setup-num" id="numSet">2</span>
+    Wähle deinen Ort
   </div>
-</div>
+  <div class="mini-grid" id="settingGrid"></div>
+</section>
 
-<div class="gate-notice" id="gate-notice"></div>
-<div id="step-panels"></div>
-
-<!-- RESULT PANEL -->
-<div class="result-panel" id="result-panel">
-  <div class="result-hero">
-    <span class="rh-title" id="rh-title">Dein Schreibplan ist fertig!</span>
-    <div class="rh-emojis" id="rh-emojis"></div>
-    <span class="rh-sub" style="margin-top:.6rem;">Wähle jetzt eine App zum Schreiben:</span>
+<!-- ══════════════════════════════════════════
+     STORY TRACK (visual connection line)
+══════════════════════════════════════════ -->
+<div class="canvas-zone">
+  <div class="story-track">
+    <div class="track-node n-begin" id="tn-begin">🌅</div>
+    <div class="track-line tl-1" id="tl1"><div class="line-fill" id="lf1"></div></div>
+    <div class="track-node n-middle" id="tn-middle">⚡</div>
+    <div class="track-line tl-2" id="tl2"><div class="line-fill" id="lf2"></div></div>
+    <div class="track-node n-end" id="tn-end">⭐</div>
   </div>
-  <div class="action-row">
-    <button class="action-btn ab-story" onclick="launchApp('story')">
-      📖 Schreibwerkstatt<small>Freies Schreiben · Klasse 3/4</small>
-    </button>
-    <button class="action-btn ab-blockwelt" onclick="launchApp('blockwelt')">
-      ⛏ Blockwelt Abenteuer<small>Spiel → Geschichte → Text</small>
-    </button>
-  </div>
-  <button class="action-btn ab-reset" onclick="resetBuilder()">↩ Neu anfangen</button>
-</div>
 
-<!-- ══ SATZ-CHECK ══ -->
-<div class="satz-check-wrap">
-  <div class="satz-check-header">
-    <span class="satz-check-icon">✍️</span>
-    <div>
-      <span class="satz-check-title">Satz prüfen</span>
-      <span class="satz-check-sub">Schreibe einen Satz — das Programm prüft ihn sofort!</span>
+  <!-- ══════════════════════════════════════════
+       PANELS ROW
+  ══════════════════════════════════════════ -->
+  <div class="panels-row">
+
+    <!-- ── PANEL: Anfang ── -->
+    <div class="s-panel p-begin" id="panelBegin">
+      <div class="panel-hd hd-begin">
+        <span class="ph-icon">🌅</span>
+        <div class="ph-info">
+          <div class="ph-title">Anfang</div>
+          <div class="ph-sub">Stell die Figur und den Ort vor</div>
+        </div>
+        <div class="ph-badge" id="badge-begin">Schritt 1</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-begin">
+          <div class="scene-emojis">
+            <span class="se" id="se-b-char">🧒</span>
+            <span class="se" id="se-b-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-begin-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-begin"></div>
+        <textarea class="s-textarea" id="ta-begin"
+          placeholder="Schreibe hier den Anfang der Geschichte …"
+          spellcheck="true"
+          oninput="onType('begin')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-begin">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-begin" onclick="checkSpelling('begin')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('begin')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-begin" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- connector arrow 1 -->
+    <div class="panel-arrow" id="arr1">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- ── PANEL: Ereignis ── -->
+    <div class="s-panel p-middle locked" id="panelMiddle">
+      <div class="panel-hd hd-middle">
+        <span class="ph-icon">⚡</span>
+        <div class="ph-info">
+          <div class="ph-title">Ereignis</div>
+          <div class="ph-sub">Was passiert? Was ist das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-middle">Schritt 2</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-middle">
+          <div class="scene-emojis">
+            <span class="se" id="se-m-char">🧒</span>
+            <span class="se">❗</span>
+            <span class="se" id="se-m-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-middle-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-middle"></div>
+        <textarea class="s-textarea" id="ta-middle"
+          placeholder="Schreibe hier das Ereignis …"
+          spellcheck="true"
+          oninput="onType('middle')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-middle">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-middle" onclick="checkSpelling('middle')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('middle')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-middle" style="display:none"></div>
+      </div>
+      <div class="lock-overlay" id="lock-middle">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst den Anfang fertig!</div>
+      </div>
+    </div>
+
+    <!-- connector arrow 2 -->
+    <div class="panel-arrow" id="arr2">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" stroke="currentColor" stroke-width="2.5" fill="none"/>
+        <path d="M13 18h10M19 13l5 5-5 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- ── PANEL: Ende ── -->
+    <div class="s-panel p-end locked" id="panelEnd">
+      <div class="panel-hd hd-end">
+        <span class="ph-icon">⭐</span>
+        <div class="ph-info">
+          <div class="ph-title">Ende</div>
+          <div class="ph-sub">Wie löst sich das Problem?</div>
+        </div>
+        <div class="ph-badge" id="badge-end">Schritt 3</div>
+      </div>
+      <div class="panel-body">
+        <div class="scene-prev" id="scene-end">
+          <div class="scene-emojis">
+            <span class="se" id="se-e-char">🧒</span>
+            <span class="se">✨</span>
+            <span class="se" id="se-e-set">🌲</span>
+          </div>
+          <div class="scene-label" id="scene-end-label">Wähle Figur &amp; Ort oben</div>
+        </div>
+        <div class="starters-wrap" id="starters-end"></div>
+        <textarea class="s-textarea" id="ta-end"
+          placeholder="Schreibe hier das Ende der Geschichte …"
+          spellcheck="true"
+          oninput="onType('end')"></textarea>
+        <div class="write-footer">
+          <span class="wc-pill" id="wc-end">0 Wörter</span>
+          <div style="display:flex;gap:6px">
+            <button class="check-btn" id="chk-end" onclick="checkSpelling('end')">🔍 Prüfen</button>
+            <button class="speak-btn" onclick="speak('end')">🔊 Vorlesen</button>
+          </div>
+        </div>
+        <div class="cp" id="cp-end" style="display:none"></div>
+      </div>
+      <div class="lock-overlay" id="lock-end">
+        <span class="lock-icon">🔒</span>
+        <div class="lock-msg">Schreibe zuerst das Ereignis fertig!</div>
+      </div>
+    </div>
+
+  </div><!-- /panels-row -->
+</div><!-- /canvas-zone -->
+
+<!-- ══════════════════════════════════════════
+     LIVE PREVIEW ZONE
+══════════════════════════════════════════ -->
+<div class="preview-zone">
+  <div class="preview-header">
+    📖 Meine Geschichte
+    <span class="ph-live">LIVE</span>
+  </div>
+
+  <div class="preview-book">
+    <!-- Anfang -->
+    <div class="pv-part pv-begin">
+      <div class="pv-part-label">🌅 Anfang</div>
+      <div class="pv-text empty" id="pv-begin">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Ereignis -->
+    <div class="pv-part pv-middle">
+      <div class="pv-part-label">⚡ Ereignis</div>
+      <div class="pv-text empty" id="pv-middle">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Ende -->
+    <div class="pv-part pv-end">
+      <div class="pv-part-label">⭐ Ende</div>
+      <div class="pv-text empty" id="pv-end">
+        <div class="pv-lines">
+          <div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="satz-check-body">
-    <textarea class="sc-textarea" id="sc-input" rows="3" spellcheck="true" lang="de"
-      placeholder="Schreibe hier einen Satz …&#10;Beispiel: Plötzlich sah der mutige Ritter einen riesigen Drachen."></textarea>
-    <button class="sc-btn" onclick="checkSentence()">🔎 Satz prüfen</button>
-    <div class="sc-results" id="sc-results"></div>
+
+  <!-- Celebrate bar (hidden until all done) -->
+  <div class="celebrate-bar" id="celebBar">
+    <span class="cel-emoji">🎉</span>
+    <div class="cel-text">
+      <div class="cel-title">Fantastisch! Deine Geschichte ist fertig!</div>
+      <div class="cel-sub">Du hast eine tolle Geschichte geschrieben. Weiter so!</div>
+    </div>
+    <div class="cel-btns">
+      <button class="btn-speak-all" onclick="speakAll()">🔊 Alles vorlesen</button>
+      <button class="btn-paper" onclick="scrollToPaper()">✏️ Auf Papier schreiben →</button>
+    </div>
   </div>
 </div>
 
-</div><!-- /wrap -->
+<!-- ══════════════════════════════════════════
+     PAPER → UPLOAD → REVIEW ZONE
+══════════════════════════════════════════ -->
+<div class="paper-zone" id="paperZone">
 
+  <!-- Banner -->
+  <div class="paper-cta">
+    <span class="paper-cta-icon">✏️</span>
+    <div class="paper-cta-text">
+      <div class="paper-cta-title">Jetzt auf Papier schreiben!</div>
+      <div class="paper-cta-sub">Deine Geschichte ist fertig – schreibe sie schön auf Papier ab, mache ein Foto davon und lade es für deinen Lehrer / deine Eltern hoch.</div>
+    </div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">1</span>
+      <div>
+        <div class="step-title">✏️ Schreibe deine Geschichte auf Papier ab</div>
+        <div class="step-sub">Nimm ein liniertes Blatt und schreibe die Geschichte sauber und leserlich ab</div>
+      </div>
+    </div>
+    <div class="step-body" style="font-size:.9rem;font-weight:600;color:var(--muted);line-height:1.7">
+      📌 Schreibe jeden Abschnitt (Anfang / Ereignis / Ende) in einen eigenen Absatz.
+      Lass am Anfang jedes Absatzes eine kleine Einrückung.
+    </div>
+  </div>
+
+  <!-- Step 2: Improve + Checklist -->
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">2</span>
+      <div>
+        <div class="step-title">✍️ Text verbessern – lies nach und überarbeite!</div>
+        <div class="step-sub">Geh jeden Punkt durch → verbessere deinen Text → dann erst abhaken</div>
+      </div>
+    </div>
+    <div class="step-body">
+
+      <!-- How-to banner -->
+      <div class="improve-banner">
+        <div class="improve-banner-icon">💡</div>
+        <div class="improve-banner-body">
+          <div class="improve-banner-title">So verbesserst du deinen Text:</div>
+          <div class="improve-banner-steps">
+            <span class="improve-step">1️⃣ Lies den Punkt</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">2️⃣ Schau in deinen Text oben</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">3️⃣ Verbessere ihn</span>
+            <span class="improve-arrow">→</span>
+            <span class="improve-step">4️⃣ Hake ab ☑</span>
+          </div>
+          <button class="improve-back-btn" onclick="scrollToStory()">⬆ Zum Text zurück</button>
+        </div>
+      </div>
+
+      <!-- Inhalt & Aufbau -->
+      <div class="cl-group">
+        <div class="cl-group-title">
+          📖 Inhalt &amp; Aufbau
+          <button class="cl-back-link" onclick="scrollToStory()">⬆ Text ansehen &amp; verbessern</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Geschichte hat einen Anfang, ein Ereignis und ein Ende</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Die Hauptfigur wird am Anfang vorgestellt</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Das Problem / Ereignis ist deutlich und spannend beschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Das Ende passt zur Geschichte und löst das Ereignis</span></div>
+        </div>
+      </div>
+
+      <!-- Sprache & Ausdruck -->
+      <div class="cl-group">
+        <div class="cl-group-title">
+          ✍️ Sprache &amp; Ausdruck
+          <button class="cl-back-link" onclick="scrollToStory()">⬆ Text ansehen &amp; verbessern</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe Verbindungswörter verwendet (und, aber, dann, deshalb, weil …)</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe Adjektive (Wiewörter) zur Beschreibung der Figuren und des Ortes verwendet</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Sätze sind abwechslungsreich – kurze und lange Sätze sind gemischt</span></div>
+        </div>
+      </div>
+
+      <!-- Rechtschreibung -->
+      <div class="cl-group">
+        <div class="cl-group-title">
+          📝 Rechtschreibung
+          <button class="cl-back-link" onclick="scrollToSpelling()">⬆ Text prüfen &amp; korrigieren</button>
+        </div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Jeder Satzanfang ist großgeschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Alle Nomen (Namenwörter) sind großgeschrieben</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Jeder Satz hat ein Satzzeichen am Ende (. ! ?)</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe auf die richtige Schreibung von s / ss / ß geachtet</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe auf Dehnung (aa, ee, oo, ie, h) und Schärfung (Doppelkonsonant) geachtet</span></div>
+        </div>
+      </div>
+
+      <!-- Handschrift & Gestaltung (paper only) -->
+      <div class="cl-group">
+        <div class="cl-group-title">🖊️ Handschrift &amp; Gestaltung <span style="font-size:.7rem;opacity:.65;text-transform:none;letter-spacing:0">(nach dem Abschreiben)</span></div>
+        <div class="cl-items">
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Meine Handschrift ist gut lesbar und gleichmäßig</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Ich habe gleichmäßige Abstände zwischen den Wörtern gelassen</span></div>
+          <div class="cl-item" onclick="toggleCL(this)"><span class="cl-box"></span><span class="cl-label">Die Geschichte ist in Absätze gegliedert (Anfang / Ereignis / Ende)</span></div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="cl-progress">
+        <div class="cl-bar-wrap"><div class="cl-bar" id="clBar"></div></div>
+        <span class="cl-count" id="clCount">0 / 15 verbessert</span>
+      </div>
+
+      <!-- All-done celebration -->
+      <div class="cl-alldone-msg" id="clAlldoneMsg">
+        <span style="font-size:1.6rem">🌟</span>
+        <div class="cl-alldone-msg-text">Super! Alle Punkte erledigt – dein Text ist jetzt richtig toll! Jetzt abschreiben!</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Step 3: Upload & Feedback -->
+  <div class="step-card">
+    <div class="step-hd">
+      <span class="step-num">3</span>
+      <div>
+        <div class="step-title">📸 Foto hochladen &amp; Feedback erhalten</div>
+        <div class="step-sub">Mach ein Foto deiner handgeschriebenen Geschichte – dann kann der Lehrer / die Eltern Feedback geben</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="upload-drop" onclick="document.getElementById('photoInput').click()">
+        <input type="file" id="photoInput" accept="image/*" capture="environment" onchange="handlePhoto(event)">
+        <div class="upload-icon">📷</div>
+        <div class="upload-label">Hier klicken oder Foto aufnehmen</div>
+        <div class="upload-sub">Auf dem Handy direkt mit der Kamera · JPG oder PNG</div>
+      </div>
+      <div class="photo-preview" id="photoPreview">
+        <img id="photoImg" src="" alt="Handgeschriebene Geschichte">
+      </div>
+    </div>
+
+    <!-- Feedback zone (shown after photo) -->
+    <div class="feedback-zone" id="feedbackZone">
+      <div class="feedback-zone-hd">👨‍🏫 Feedback vom Lehrer / von den Eltern</div>
+
+      <div class="star-row" id="starRow">
+        <span class="star" data-v="1" onclick="setStar(1)">⭐</span>
+        <span class="star" data-v="2" onclick="setStar(2)">⭐</span>
+        <span class="star" data-v="3" onclick="setStar(3)">⭐</span>
+        <span class="star" data-v="4" onclick="setStar(4)">⭐</span>
+        <span class="star" data-v="5" onclick="setStar(5)">⭐</span>
+      </div>
+
+      <div class="fb-fields">
+        <div>
+          <label class="fb-label">✅ Das war besonders gut</label>
+          <textarea class="fb-ta" id="fbGood" placeholder="z. B. Tolle Adjektive, schöne Handschrift, spannende Geschichte …"></textarea>
+        </div>
+        <div>
+          <label class="fb-label">💡 Das kannst du noch verbessern</label>
+          <textarea class="fb-ta" id="fbImprove" placeholder="z. B. Achte noch auf die Großschreibung der Nomen …"></textarea>
+        </div>
+      </div>
+
+      <div class="fb-btn-row">
+        <button class="fb-save"  onclick="saveFeedback()">💾 Feedback speichern</button>
+        <button class="fb-print" onclick="printReview()">🖨️ Alles drucken</button>
+      </div>
+
+      <div class="saved-fb" id="savedFb">
+        <div class="saved-fb-title">✅ Feedback gespeichert</div>
+        <div class="saved-fb-body" id="savedFbBody"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /paper-zone -->
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
 <script>
-// ══════════════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════════════
-
-const CATEGORIES = [
-  {
-    id:'character',label:'Figur',icon:'🧑',
-    question:'Wer ist dein Held?',
-    desc:'Wähle die Hauptfigur deiner Geschichte.',
-    choices:[
-      {e:'🧙',l:'Zauberer'},{e:'🦸',l:'Superheld'},{e:'👧',l:'Mädchen'},{e:'👦',l:'Junge'},
-      {e:'🐱',l:'Katze'},{e:'🐶',l:'Hund'},{e:'🤖',l:'Roboter'},{e:'🦊',l:'Fuchs'},
-      {e:'🐉',l:'Drachen'},{e:'🧜',l:'Nixe'},{e:'🦄',l:'Einhorn'},{e:'🧝',l:'Elfe'},
-    ]
-  },
-  {
-    id:'place',label:'Ort',icon:'🗺️',
-    question:'Wo spielt die Geschichte?',
-    desc:'Wähle den Ort, wo dein Held lebt und das Abenteuer beginnt.',
-    choices:[
-      {e:'🌲',l:'Wald'},{e:'🏰',l:'Burg'},{e:'🏖️',l:'Strand'},{e:'🏙️',l:'Stadt'},
-      {e:'🌋',l:'Vulkan'},{e:'🏔️',l:'Gebirge'},{e:'🌊',l:'Ozean'},{e:'🏠',l:'Zuhause'},
-      {e:'🌌',l:'Weltraum'},{e:'🧊',l:'Eisland'},{e:'🌿',l:'Dschungel'},{e:'🏕️',l:'Zeltlager'},
-    ]
-  },
-  {
-    id:'problem',label:'Problem',icon:'⚠️',
-    question:'Was ist das Problem?',
-    desc:'Wähle das Problem, das dein Held lösen muss.',
-    choices:[
-      {e:'🦹',l:'Bösewicht'},{e:'💎',l:'Gestohlener Schatz'},{e:'🌪️',l:'Sturm'},{e:'🗺️',l:'Verirrt'},
-      {e:'💤',l:'Zauberschlaf'},{e:'🌊',l:'Überschwemmung'},{e:'🕳️',l:'Falle'},{e:'🔒',l:'Eingesperrt'},
-      {e:'🐍',l:'Große Gefahr'},{e:'🌑',l:'Dunkelheit'},{e:'🧨',l:'Explosion'},{e:'🔮',l:'Zauberpech'},
-    ]
-  }
+/* ── DATA ─────────────────────────────────── */
+const CHARS = [
+  { emoji:'👧', name:'Emma',   desc:'Mutiges Mädchen',    pronoun:'Sie' },
+  { emoji:'👦', name:'Luca',   desc:'Neugieriger Junge',   pronoun:'Er' },
+  { emoji:'🐕', name:'Bello',  desc:'Freundlicher Hund',   pronoun:'Er' },
+  { emoji:'🐱', name:'Mia',    desc:'Schlaue Katze',       pronoun:'Sie' },
+  { emoji:'🦊', name:'Felix',  desc:'Schlauer Fuchs',      pronoun:'Er' },
+  { emoji:'🐉', name:'Drako',  desc:'Freundlicher Drache', pronoun:'Er' },
 ];
 
-const MOUNTAIN_FIELDS = [
-  {
-    id:'anfang',    label:'1. Anfang',    color:'#2a5c1a', icon:'🌅',
-    tips:['Stelle deine Figur vor.','Benutze eine Einleitungsformel: z.B. „Eines Tages…" oder „Es war einmal…"','Beschreibe den Ort mit Adjektiven.'],
-    ph:['Schreibe 2–3 Sätze:\n  Eines Tages war [Figur] in [Ort]. Alles war ruhig, bis…','Schreibe den Anfang deiner Geschichte.','Anfang…']
-  },
-  {
-    id:'aufbau',    label:'2. Aufbau',    color:'#4a9c2a', icon:'📈',
-    tips:['Das Problem beginnt hier.','Wie fühlt sich die Figur?','Was versucht sie zu tun?'],
-    ph:['Schreibe 2–3 Sätze:\n  [Figur] bemerkte, dass [Problem]. Sie/Er war sehr…','Das Problem beginnt hier.','Aufbau…']
-  },
-  {
-    id:'hoehepunkt',label:'3. Höhepunkt', color:'#b07828', icon:'⚡',
-    tips:['Das ist die spannendste Stelle!','Benutze: „Plötzlich…" oder „Urplötzlich…"','Schreibe wörtliche Rede: „[Figur] rief: \'Hilfe!\'"'],
-    ph:['Schreibe 2–4 Sätze:\n  Urplötzlich… „Hilfe!", rief [Figur].\n  Jetzt war die Lage besonders gefährlich…','Schreibe den spannendsten Moment.','Höhepunkt…']
-  },
-  {
-    id:'loesung',   label:'4. Lösung',   color:'#1c3f6e', icon:'💡',
-    tips:['Wie wird das Problem gelöst?','Was hilft der Figur?','Wie fühlt sie sich jetzt?'],
-    ph:['Schreibe 2–3 Sätze:\n  Zum Glück hatte [Figur] eine Idee. Sie/Er…','Wie wird das Problem gelöst?','Lösung…']
-  },
-  {
-    id:'schluss',   label:'5. Schluss',  color:'#4a2d8a', icon:'🏁',
-    tips:['Was hat die Figur gelernt?','Benutze eine Schlussformel: z.B. „Von da an…"','Wie fühlt sie sich am Ende?'],
-    ph:['Schreibe 1–3 Sätze:\n  Von da an war [Figur] viel mutiger.\n  Das Abenteuer hatte ihr/ihm gezeigt, dass…','Schreibe das Ende der Geschichte.','Schluss…']
-  },
+const SETS = [
+  { emoji:'🌲', name:'Im Wald',          desc:'Große Bäume' },
+  { emoji:'🏫', name:'In der Schule',    desc:'Klassenzimmer' },
+  { emoji:'🏖️', name:'Am Strand',        desc:'Sand und Meer' },
+  { emoji:'🏙️', name:'In der Stadt',     desc:'Straßen und Häuser' },
+  { emoji:'🏡', name:'Auf dem Bauernhof',desc:'Tiere und Felder' },
+  { emoji:'⛰️', name:'In den Bergen',    desc:'Schnee und Gipfel' },
 ];
 
-const SENTENCE_STARTERS = {
-  anfang:[
-    {id:'a1',text:'Es war einmal…'},
-    {id:'a2',text:'Eines Tages…'},
-    {id:'a3',text:'In einem weit entfernten Land lebte…'},
-    {id:'a4',text:'Es geschah an einem sonnigen Morgen, als…'},
-    {id:'a5',text:'Mitten in [Ort] wohnte…'},
+const STARTERS = {
+  begin: [
+    'Es war einmal …',
+    'An einem sonnigen Morgen …',
+    'Eines Tages …',
+    'In [ORT] lebte …',
+    '[FIGUR] wachte auf und …',
   ],
-  mitte:[
-    {id:'m1',text:'Plötzlich…'},
-    {id:'m2',text:'Urplötzlich…'},
-    {id:'m3',text:'Da bemerkte [Figur]…'},
-    {id:'m4',text:'Ohne Vorwarnung…'},
-    {id:'m5',text:'Gerade als [Figur] dachte, alles sei gut, …'},
+  middle: [
+    'Plötzlich …',
+    'Da sah [FIGUR] …',
+    'Auf einmal …',
+    'Oh nein! …',
+    'Dann passierte etwas …',
   ],
-  schluss:[
-    {id:'s1',text:'Von da an war alles anders…'},
-    {id:'s2',text:'Und so lebten sie glücklich bis ans Ende ihrer Tage.'},
-    {id:'s3',text:'Am Ende hatte [Figur] gelernt, dass…'},
-    {id:'s4',text:'Das war das größte Abenteuer in [Figur]s Leben.'},
-    {id:'s5',text:'Und wenn [Figur] nicht gestorben ist, dann lebt sie noch heute.'},
-  ]
+  end: [
+    'Zum Glück …',
+    'Am Ende …',
+    'Danach war alles …',
+    '[FIGUR] war sehr froh, weil …',
+    'Von nun an …',
+  ],
 };
 
-const WORD_BANK = [
-  {key:'figur',  label:'Adjektive für die Figur',  type:'adj',
-   words:['mutig','klug','stark','freundlich','neugierig','ängstlich','schnell','listig','tapfer','geheimnisvoll','fröhlich','traurig']},
-  {key:'ort',    label:'Adjektive für den Ort',    type:'place',
-   words:['dunkel','still','groß','gefährlich','wunderschön','geheimnisvoll','tief','hoch','kalt','warm','verlassen','belebt']},
-  {key:'verb',   label:'Verben für die Handlung',  type:'verb',
-   words:['laufen','rufen','entdecken','kämpfen','verstecken','flüstern','suchen','finden','retten','besiegen','fliehen','helfen']},
-];
+/* ── STATE ────────────────────────────────── */
+let st = { charIdx: null, setIdx: null };
+const MIN_WORDS = 5;
 
-const RUBRIC = [
-  {id:'r1',icon:'📖',text:'Meine Geschichte hat einen Anfang, eine Mitte und ein Ende.'},
-  {id:'r2',icon:'✍️',text:'Ich habe eine Einleitungsformel benutzt (z.B. „Eines Tages…").'},
-  {id:'r3',icon:'⚡',text:'Ich habe ein Spannungswort benutzt (z.B. „Plötzlich…" oder „Urplötzlich…").'},
-  {id:'r4',icon:'💬',text:'Ich habe wörtliche Rede mit Anführungszeichen benutzt.'},
-  {id:'r5',icon:'🎨',text:'Ich habe Adjektive benutzt, um meine Figur oder den Ort zu beschreiben.'},
-  {id:'r6',icon:'📝',text:'Mein Text hat mehr als 80 Wörter.'},
-  {id:'r7',icon:'🏁',text:'Ich habe eine Schlussformel benutzt.'},
-];
+/* ── BOOT ─────────────────────────────────── */
+buildCharGrid();
+buildSettingGrid();
+updateAll();
 
-const INTERESTS = {
-  minecraft:{label:'⛏️ Minecraft',ideas:{
-    character:[{e:'⛏️',l:'Bergmann'},{e:'🧱',l:'Baumeister'},{e:'👾',l:'Creeper'},{e:'🐺',l:'Wolf'}],
-    place:    [{e:'⛏️',l:'Mine'},{e:'🏚️',l:'Dorf'},{e:'🔮',l:'Portal'},{e:'🌋',l:'Nether'}],
-    problem:  [{e:'👾',l:'Monsterschwarm'},{e:'💫',l:'Verfluchtes Objekt'},{e:'🌑',l:'Dunkelheit'},{e:'💎',l:'Gestohlenes Erz'}]
-  }},
-  tiere:{label:'🦁 Tiere',ideas:{
-    character:[{e:'🦁',l:'Löwe'},{e:'🐯',l:'Tiger'},{e:'🦅',l:'Adler'},{e:'🐬',l:'Delfin'}],
-    place:    [{e:'🌾',l:'Savanne'},{e:'🌿',l:'Dschungel'},{e:'🌊',l:'Ozean'},{e:'❄️',l:'Polargebiet'}],
-    problem:  [{e:'🌪️',l:'Sturm'},{e:'🌊',l:'Überschwemmung'},{e:'🔥',l:'Waldbrand'},{e:'🕳️',l:'Falle'}]
-  }},
-  weltraum:{label:'🚀 Weltraum',ideas:{
-    character:[{e:'👨‍🚀',l:'Astronaut'},{e:'👽',l:'Alien'},{e:'🤖',l:'Roboter'},{e:'🌟',l:'Raumpilotin'}],
-    place:    [{e:'🪐',l:'Planet'},{e:'🌙',l:'Mondstation'},{e:'⭐',l:'Sternbasis'},{e:'🌌',l:'Nebel'}],
-    problem:  [{e:'💥',l:'Absturz'},{e:'🔒',l:'Eingesperrt'},{e:'🌑',l:'Dunkelheit'},{e:'🔮',l:'Rätsel'}]
-  }},
-  magie:{label:'🏰 Magie',ideas:{
-    character:[{e:'🧙',l:'Zauberer'},{e:'🧝',l:'Elfe'},{e:'🧜',l:'Nixe'},{e:'🦄',l:'Einhorn'}],
-    place:    [{e:'🏰',l:'Burg'},{e:'🌲',l:'Zauberwald'},{e:'🌊',l:'Zaubersee'},{e:'🗻',l:'Drachenberg'}],
-    problem:  [{e:'🔮',l:'Zauberpech'},{e:'💤',l:'Zauberschlaf'},{e:'🦹',l:'Bösewicht'},{e:'💎',l:'Verlorener Schatz'}]
-  }},
-};
-
-const LEVELS = [
-  {min:0,   max:99,  icon:'📖', name:'Anfänger'},
-  {min:100, max:199, icon:'✏️', name:'Schreiber'},
-  {min:200, max:299, icon:'🌟', name:'Held'},
-  {min:300, max:399, icon:'🏆', name:'Geschichtenmeister'},
-  {min:400, max:500, icon:'👑', name:'Meistererzähler'},
-];
-
-const XP_PER_STEP = {1:100, 2:150, 3:75, 4:75, 5:100};
-
-const STEPS_META = [
-  {n:1,icon:'🎭',label:'Figuren & Ort'},
-  {n:2,icon:'🏔️',label:'Schreibberg'},
-  {n:3,icon:'✍️',label:'Satzanfänge'},
-  {n:4,icon:'🎨',label:'Wörterschatz'},
-  {n:5,icon:'✅',label:'Selbstcheck'},
-];
-
-// ══════════════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════════════
-let currentStep = 1;
-let confidence  = parseInt(localStorage.getItem('sw-confidence') || '0');
-let choices     = {};       // { character, place, problem }
-let mountain    = {};       // { anfang, aufbau, hoehepunkt, loesung, schluss }
-let starters    = new Set();
-let wordPicks   = new Set();
-let rubric      = {};
-let interest    = null;   // 'minecraft' | 'tiere' | 'weltraum' | 'magie' | null
-let xp          = 0;
-let earnedSteps = new Set();
-let capturedPhoto = null; // data URL of the child's handwritten story photo
-
-// ══════════════════════════════════════════════════
-// CONFIDENCE
-// ══════════════════════════════════════════════════
-function setConfidence(n){
-  confidence = n;
-  localStorage.setItem('sw-confidence', String(n));
-  [0,1,2].forEach(i=>{
-    const el = document.getElementById('conf-'+i);
-    if(el) el.classList.toggle('active', i===n);
+/* ── GRIDS ────────────────────────────────── */
+function buildCharGrid() {
+  const g = document.getElementById('charGrid');
+  CHARS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `cc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${c.emoji}</span>${c.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${c.desc}</span>`;
+    el.onclick = () => { st.charIdx = i; selectMini('cc', i, CHARS.length); onCharSetChange(); };
+    g.appendChild(el);
   });
-  renderCurrentStep();
+}
+function buildSettingGrid() {
+  const g = document.getElementById('settingGrid');
+  SETS.forEach((s, i) => {
+    const el = document.createElement('div');
+    el.className = 'mini-card';
+    el.id = `sc-${i}`;
+    el.innerHTML = `<span class="mc-emoji">${s.emoji}</span>${s.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${s.desc}</span>`;
+    el.onclick = () => { st.setIdx = i; selectMini('sc', i, SETS.length); onCharSetChange(); };
+    g.appendChild(el);
+  });
+}
+function selectMini(prefix, idx, total) {
+  for (let i = 0; i < total; i++) {
+    const el = document.getElementById(`${prefix}-${i}`);
+    if (el) el.className = i === idx ? 'mini-card selected' : 'mini-card';
+  }
 }
 
-// ══════════════════════════════════════════════════
-// PROGRESS BAR
-// ══════════════════════════════════════════════════
-function renderProgress(){
-  document.getElementById('step-progress').innerHTML = STEPS_META.map(s=>{
-    const isDone   = s.n < currentStep || currentStep === 6;
-    const isActive = s.n === currentStep && currentStep < 6;
-    let cls = 'sp-step' + (isActive?' active':'') + (isDone?' done':'');
-    return `<div class="${cls}">
-      <span class="sp-num">${s.n}</span>
-      <span class="sp-icon">${isDone ? '✓' : s.icon}</span>
-      <span class="sp-label">${s.label}</span>
-    </div>`;
-  }).join('');
+/* ── CHARACTER / SETTING CHANGE ───────────── */
+function onCharSetChange() {
+  const char = st.charIdx !== null ? CHARS[st.charIdx] : null;
+  const set  = st.setIdx  !== null ? SETS[st.setIdx]   : null;
+
+  // topbar chips
+  const chipChar  = document.getElementById('chipChar');
+  const chipSet   = document.getElementById('chipSet');
+  const chipCLbl  = document.getElementById('chipCharLabel');
+  const chipSLbl  = document.getElementById('chipSetLabel');
+  if (char) { chipChar.classList.remove('empty'); chipCLbl.textContent = char.name; chipChar.querySelector('.chip-icon').textContent = char.emoji; }
+  else      { chipChar.classList.add('empty');    chipCLbl.textContent = 'Figur wählen…'; chipChar.querySelector('.chip-icon').textContent = '🧒'; }
+  if (set)  { chipSet.classList.remove('empty');  chipSLbl.textContent = set.name;  chipSet.querySelector('.chip-icon').textContent = set.emoji; }
+  else      { chipSet.classList.add('empty');     chipSLbl.textContent = 'Ort wählen…';  chipSet.querySelector('.chip-icon').textContent = '🗺️'; }
+
+  // setup step badges
+  document.getElementById('numChar').className = 'setup-num' + (char ? ' done' : '');
+  document.getElementById('numSet').className  = 'setup-num' + (set  ? ' done' : '');
+
+  // scene previews
+  ['b','m','e'].forEach(k => {
+    const ce = document.getElementById(`se-${k}-char`);
+    const se = document.getElementById(`se-${k}-set`);
+    if (ce) ce.textContent = char ? char.emoji : '🧒';
+    if (se) se.textContent = set  ? set.emoji  : '🌲';
+  });
+
+  const name = char ? char.name : 'die Figur';
+  const place = set ? set.name : 'dem Ort';
+
+  ['begin','middle','end'].forEach(part => {
+    const lbl = document.getElementById(`scene-${part}-label`);
+    if (lbl) lbl.textContent = `${name} ${part === 'begin' ? 'erkundet' : part === 'middle' ? 'erlebt etwas bei' : 'endet in'} ${place}`;
+  });
+
+  // rebuild starters with name injected
+  buildStarters('begin', name, place);
+  buildStarters('middle', name, place);
+  buildStarters('end', name, place);
+
+  updateAll();
 }
 
-// ══════════════════════════════════════════════════
-// STEP 1 — CHARACTER / PLACE / PROBLEM PICKERS
-// ══════════════════════════════════════════════════
-function renderStep1(){
-  // Interest selector buttons
-  const interestBtns = Object.entries(INTERESTS).map(([k,v])=>
-    `<button class="interest-btn${interest===k?' active':''}" onclick="setInterest('${k}')">${v.label}</button>`
-  ).join('');
-
-  // Build subsections — show all three at once, no gating
-  const subs = CATEGORIES.map((cat, i)=>{
-    const sel = choices[cat.id];
-
-    // Themed idea chips for chosen interest
-    let themedHTML = '';
-    if(interest && INTERESTS[interest]){
-      const tIdeas = INTERESTS[interest].ideas[cat.id] || [];
-      if(tIdeas.length){
-        const chips = tIdeas.map((c,j)=>{
-          const isSelected = sel && sel.e===c.e && sel.l===c.l;
-          return `<button class="themed-chip${isSelected?' selected':''}" onclick="pickThemed('${cat.id}','${c.e}','${c.l.replace(/'/g,"\\'")}')">
-            ${c.e} ${c.l}
-          </button>`;
-        }).join('');
-        themedHTML = `<div class="themed-ideas">
-          <span class="themed-label">✨ ${INTERESTS[interest].label} Ideen:</span>
-          <div class="themed-chips">${chips}</div>
-        </div>`;
-      }
-    }
-
-    const grid = cat.choices.map((c,j)=>`
-      <div class="icon-card${sel && sel.e===c.e && sel.l===c.l?' selected':''}" onclick="pick('${cat.id}',${j})" role="button" aria-label="${c.l}">
-        <span class="ic-emoji">${c.e}</span>
-        <span class="ic-label">${c.l}</span>
-      </div>`).join('');
-
-    const headerStyle = sel ? 'background:var(--forest4);border-color:var(--forest3);' : '';
-    return `
-      <div class="subsection">
-        <div class="subsec-header" style="${headerStyle}">
-          <span class="subsec-icon">${cat.icon}</span>
-          <span class="subsec-title">${cat.question}</span>
-          <span class="subsec-check">${sel ? '✅ '+sel.l : '← Tippe auf ein Bild'}</span>
-        </div>
-        ${themedHTML}
-        <div class="icon-grid">${grid}</div>
-      </div>`;
-  }).join('');
-
-  const allPicked = !!choices.character && !!choices.place && !!choices.problem;
-  const doneCount = [choices.character,choices.place,choices.problem].filter(Boolean).length;
-  return `
-    <div class="step-panel active" id="panel-1">
-      <div class="step-card">
-        <div class="step-accent sa-forest"></div>
-        <div class="step-body">
-          <span class="step-eyebrow">Schritt 1 von 5</span>
-          <span class="step-title">🎭 Figur, Ort und Problem wählen</span>
-          <span class="step-desc">Tippe bei jedem Abschnitt auf ein Bild. Wenn du alle drei gewählt hast, geht es weiter!</span>
-          ${doneCount>0&&doneCount<3?`<div style="margin-top:.5rem;font-size:14px;font-weight:700;color:var(--forest);">✓ ${doneCount} von 3 gewählt — gleich geschafft!</div>`:''}
-        </div>
-      </div>
-      <div class="interest-section">
-        <span class="interest-label">🌟 Passt das zu deinen Interessen?</span>
-        <div class="interest-row">
-          <button class="interest-btn${!interest?' active':''}" onclick="setInterest(null)">Standard</button>
-          ${interestBtns}
-        </div>
-      </div>
-      ${subs}
-      <div class="step-nav">
-        <span></span>
-        <button class="nav-btn nav-next" onclick="nextStep()" ${allPicked?'':'disabled'}>${allPicked?'Weiter →':'Wähle alle 3 aus …'}</button>
-      </div>
-    </div>`;
+function buildStarters(part, name, place) {
+  const wrap = document.getElementById(`starters-${part}`);
+  if (!wrap) return;
+  wrap.innerHTML = '';
+  (STARTERS[part] || []).forEach(s => {
+    const text = s.replace('[FIGUR]', name).replace('[ORT]', place);
+    const btn = document.createElement('button');
+    btn.className = 'starter';
+    btn.textContent = text;
+    btn.onclick = () => insertStarter(part, text);
+    wrap.appendChild(btn);
+  });
 }
 
-// ══════════════════════════════════════════════════
-// STEP 2 — STORY MOUNTAIN
-// ══════════════════════════════════════════════════
-function renderStep2(){
-  const charName  = choices.character ? choices.character.l : 'Figur';
-  const placeName = choices.place     ? choices.place.l     : 'Ort';
-
-  const fields = MOUNTAIN_FIELDS.map((f,idx)=>{
-    const phIdx = Math.min(confidence, f.ph.length - 1);
-    const ph = f.ph[phIdx]
-      .replace(/\[Figur\]/g, charName)
-      .replace(/\[Ort\]/g,   placeName);
-    const tips = (confidence < 2)
-      ? `<div class="mf-tips">${f.tips.map(t=>`<span class="mf-tip-item">• ${t}</span>`).join('')}</div>`
-      : '';
-    return `
-      <div class="mf">
-        <div class="mf-header">
-          <span class="mf-num" style="background:${f.color}">${idx+1}</span>
-          <span class="mf-label">${f.icon} ${f.label}</span>
-        </div>
-        ${tips}
-        <textarea id="mf-${f.id}" placeholder="${ph}" aria-label="${f.label}">${mountain[f.id]||''}</textarea>
-      </div>`;
-  }).join('');
-
-  return `
-    <div class="step-panel active" id="panel-2">
-      <div class="step-card">
-        <div class="step-accent sa-amber"></div>
-        <div class="step-body">
-          <span class="step-eyebrow">Schritt 2 von 5 · Erzählberg (Schreibplan)</span>
-          <span class="step-title">🏔️ Schreibberg planen</span>
-          <span class="step-desc">Fülle jeden Abschnitt mit 1–3 Sätzen aus. Hier planst du deine Geschichte. Du kannst kurze Stichworte oder ganze Sätze schreiben.</span>
-        </div>
-      </div>
-      <svg class="mountain-svg-wrap" viewBox="0 0 380 105" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <polyline points="10,95 90,28 190,6 290,28 370,95" stroke="#4a9c2a" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>
-        <circle cx="10"  cy="95" r="7" fill="#2a5c1a"/>
-        <circle cx="90"  cy="28" r="7" fill="#4a9c2a"/>
-        <circle cx="190" cy="6"  r="8" fill="#b07828"/>
-        <circle cx="290" cy="28" r="7" fill="#1c3f6e"/>
-        <circle cx="370" cy="95" r="7" fill="#4a2d8a"/>
-        <text x="0"   y="104" font-family="Nunito,sans-serif" font-size="10" fill="#2a5c1a" font-weight="800">Anfang</text>
-        <text x="65"  y="22"  font-family="Nunito,sans-serif" font-size="10" fill="#4a9c2a" font-weight="800">Aufbau</text>
-        <text x="152" y="4"   font-family="Nunito,sans-serif" font-size="10" fill="#b07828" font-weight="800">Höhepunkt</text>
-        <text x="265" y="22"  font-family="Nunito,sans-serif" font-size="10" fill="#1c3f6e" font-weight="800">Lösung</text>
-        <text x="344" y="104" font-family="Nunito,sans-serif" font-size="10" fill="#4a2d8a" font-weight="800">Schluss</text>
-      </svg>
-      <div class="mountain-fields">${fields}</div>
-      <div class="step-nav" style="margin-top:1rem;">
-        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
-        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
-      </div>
-    </div>`;
+function insertStarter(part, text) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const cur = ta.value.trim();
+  ta.value = cur ? cur + ' ' + text + ' ' : text + ' ';
+  ta.focus();
+  onType(part);
 }
 
-// ══════════════════════════════════════════════════
-// STEP 3 — SENTENCE STARTERS
-// ══════════════════════════════════════════════════
-function renderStep3(){
-  const charName  = choices.character ? choices.character.l : 'Figur';
-  const placeName = choices.place     ? choices.place.l     : 'Ort';
-  const showMax   = confidence === 0 ? 5 : confidence === 1 ? 3 : 2;
+/* ── TYPING ───────────────────────────────── */
+function onType(part) {
+  const ta  = document.getElementById(`ta-${part}`);
+  if (!ta) return;
+  const words = countWords(ta.value);
 
-  const groups = [
-    {key:'anfang', label:'Satzanfänge für den Anfang',  icon:'🌅'},
-    {key:'mitte',  label:'Satzanfänge für die Mitte',   icon:'⚡'},
-    {key:'schluss',label:'Satzanfänge für den Schluss', icon:'🏁'},
-  ].map(g=>{
-    const shown = SENTENCE_STARTERS[g.key].slice(0, showMax);
-    const chips = shown.map(s=>{
-      const txt = s.text
-        .replace(/\[Figur\]/g, charName)
-        .replace(/\[Ort\]/g,   placeName);
-      return `<button class="starter-chip${starters.has(s.id)?' selected':''}" onclick="toggleStarter('${s.id}')">${txt}</button>`;
-    }).join('');
-    return `
-      <div class="starters-group">
-        <span class="sg-title">${g.icon} ${g.label}</span>
-        <div class="sg-chips">${chips}</div>
-      </div>`;
-  }).join('');
+  // word count pill
+  const pill = document.getElementById(`wc-${part}`);
+  pill.textContent = `${words} ${words === 1 ? 'Wort' : 'Wörter'}`;
+  pill.className   = words >= MIN_WORDS ? 'wc-pill ok' : 'wc-pill';
 
-  // Show selected starters summary
-  const selTexts = [...starters].map(id=>{
-    for(const key of Object.keys(SENTENCE_STARTERS)){
-      const s = SENTENCE_STARTERS[key].find(x=>x.id===id);
-      if(s) return s.text.replace(/\[Figur\]/g, charName).replace(/\[Ort\]/g, placeName);
-    }
-    return '';
-  }).filter(Boolean);
-
-  return `
-    <div class="step-panel active" id="panel-3">
-      <div class="step-card">
-        <div class="step-accent sa-navy"></div>
-        <div class="step-body">
-          <span class="step-eyebrow">Schritt 3 von 5 · Schreibhilfen</span>
-          <span class="step-title">✍️ Satzanfänge wählen</span>
-          <span class="step-desc">Tippe auf einen Satzanfang, den du benutzen möchtest. Du kannst mehrere wählen. Diese Sätze helfen dir beim Schreiben.</span>
-        </div>
-      </div>
-      ${groups}
-      <div class="selected-starters-box">
-        <span class="sel-box-label">Deine gewählten Satzanfänge:</span>
-        ${selTexts.length ? selTexts.join(' · ') : '<em style="color:var(--muted)">Noch keine gewählt — du kannst Schritt 3 auch überspringen.</em>'}
-      </div>
-      <div class="step-nav" style="margin-top:1rem;">
-        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
-        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
-      </div>
-    </div>`;
+  // live preview
+  updatePreview(part, ta.value.trim());
+  updateAll();
 }
 
-// ══════════════════════════════════════════════════
-// STEP 4 — WORD BANK
-// ══════════════════════════════════════════════════
-function renderStep4(){
-  const banks = WORD_BANK.map(b=>{
-    const chips = b.words.map(w=>`
-      <button class="word-chip wc-${b.type}${wordPicks.has(w)?' selected':''}" onclick="toggleWord('${w}')">${w}</button>`).join('');
-    return `
-      <div class="word-bank-group">
-        <span class="wb-title">${b.label}</span>
-        <div class="wb-chips">${chips}</div>
-      </div>`;
-  }).join('');
-
-  const selChips = [...wordPicks].map(w=>{
-    // Determine type for colour
-    const b = WORD_BANK.find(x=>x.words.includes(w));
-    const t = b ? b.type : 'adj';
-    return `<span class="word-chip wc-${t} selected" style="font-size:12px;padding:5px 10px;min-height:30px;">${w}</span>`;
-  }).join('');
-
-  return `
-    <div class="step-panel active" id="panel-4">
-      <div class="step-card">
-        <div class="step-accent sa-clay"></div>
-        <div class="step-body">
-          <span class="step-eyebrow">Schritt 4 von 5 · Wörterschatz</span>
-          <span class="step-title">🎨 Details hinzufügen</span>
-          <span class="step-desc">Tippe auf Wörter, die du in deiner Geschichte benutzen möchtest. Blaue Wörter beschreiben Figuren. Grüne Wörter sind Tätigkeiten. Braune Wörter beschreiben Orte.</span>
-        </div>
-      </div>
-      ${banks}
-      ${selChips ? `
-        <div style="margin-bottom:1rem;padding:10px 12px;background:var(--forest4);border:1.5px solid var(--forest3);border-radius:var(--r2);">
-          <span style="font-size:12px;font-weight:800;color:var(--forest);display:block;margin-bottom:6px;">Deine gewählten Wörter:</span>
-          <div class="selected-words">${selChips}</div>
-        </div>` : ''}
-      <div class="step-nav">
-        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
-        <button class="nav-btn nav-next" onclick="nextStep()">Weiter →</button>
-      </div>
-    </div>`;
+function updatePreview(part, text) {
+  const pv = document.getElementById(`pv-${part}`);
+  if (!pv) return;
+  if (text) {
+    pv.className = 'pv-text';
+    pv.textContent = text;
+  } else {
+    pv.className = 'pv-text empty';
+    pv.innerHTML = '<div class="pv-lines"><div class="pv-line"></div><div class="pv-line"></div><div class="pv-line"></div></div>';
+  }
 }
 
-// ══════════════════════════════════════════════════
-// STEP 5 — WRITE ON PAPER + PHOTO UPLOAD
-// ══════════════════════════════════════════════════
-function renderStep5(){
-  const ch        = choices;
-  const charName  = ch.character ? ch.character.l : 'Figur';
-  const placeName = ch.place     ? ch.place.l     : 'Ort';
-
-  // ── Choice summary rows ──────────────────────────
-  const choiceRows = [
-    {icon:ch.character.e, label:'Figur',   value:ch.character.l},
-    {icon:ch.place.e,     label:'Ort',     value:ch.place.l},
-    {icon:ch.problem.e,   label:'Problem', value:ch.problem.l},
-  ].map(r=>`
-    <div class="ps-row">
-      <span class="ps-icon">${r.icon}</span>
-      <div><span class="ps-label">${r.label}</span><span class="ps-value">${r.value}</span></div>
-    </div>`).join('');
-
-  // ── Story mountain rows ──────────────────────────
-  const mountainRows = MOUNTAIN_FIELDS.map(f=>{
-    const v = (mountain[f.id]||'').trim();
-    if(!v) return '';
-    return `<div class="ps-row">
-      <span class="ps-icon">${f.icon}</span>
-      <div><span class="ps-label">${f.label}</span><span class="ps-value">${v}</span></div>
-    </div>`;
-  }).join('');
-
-  // ── Selected starters ────────────────────────────
-  const starterTexts = [...starters].map(id=>{
-    for(const key of Object.keys(SENTENCE_STARTERS)){
-      const s = SENTENCE_STARTERS[key].find(x=>x.id===id);
-      if(s) return s.text.replace(/\[Figur\]/g,charName).replace(/\[Ort\]/g,placeName);
-    }
-    return null;
-  }).filter(Boolean);
-
-  // ── Selected words ───────────────────────────────
-  const wordList = [...wordPicks];
-
-  // ── Rubric items ─────────────────────────────────
-  const rubricItems = RUBRIC.map(r=>`
-    <div class="rubric-item${rubric[r.id]?' checked':''}" onclick="toggleRubric('${r.id}')" role="checkbox" aria-checked="${!!rubric[r.id]}">
-      <span class="rub-icon">${r.icon}</span>
-      <div class="rub-box">${rubric[r.id]?'✓':''}</div>
-      <span class="rub-text">${r.text}</span>
-    </div>`).join('');
-
-  // ── Photo section ────────────────────────────────
-  const photoSection = capturedPhoto
-    ? `<div class="photo-preview-wrap">
-        <img class="photo-preview" src="${capturedPhoto}" alt="Deine Geschichte">
-        <button class="photo-remove-btn" onclick="removePhoto()">✕ Foto entfernen</button>
-       </div>`
-    : `<label for="photo-input" style="display:block;">
-        <div class="photo-upload-box" id="photo-drop-zone">
-          <span class="pu-icon">📷</span>
-          <span class="pu-title">Foto aufnehmen oder hochladen</span>
-          <span class="pu-sub">Tippe hier, um ein Foto zu machen oder aus deiner Bibliothek zu wählen.</span>
-        </div>
-       </label>
-       <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none;" onchange="handlePhotoUpload(this)">`;
-
-  return `
-    <div class="step-panel active" id="panel-5">
-
-      <!-- Header card -->
-      <div class="step-card">
-        <div class="step-accent sa-plum"></div>
-        <div class="step-body">
-          <span class="step-eyebrow">Schritt 5 von 5 · Schreiben &amp; Abgeben · LehrplanPLUS D3/4</span>
-          <span class="step-title">✍️ Jetzt auf Papier schreiben!</span>
-          <span class="step-desc">Hier ist dein vollständiger Schreibplan. Schreibe jetzt deine Geschichte auf ein Blatt Papier. Wenn du fertig bist, mache ein Foto und lade es hoch.</span>
-        </div>
-      </div>
-
-      <!-- Plan summary card -->
-      <div class="step-card" style="border-color:var(--forest3);">
-        <div class="step-accent" style="background:var(--forest);"></div>
-        <div class="step-body" style="padding-bottom:.3rem;">
-          <span class="step-title" style="font-size:17px;margin-bottom:0;">📋 Dein Schreibplan</span>
-        </div>
-        <div style="padding:0 1.1rem 1.1rem;">
-          <span class="ps-section-title">Figur · Ort · Problem</span>
-          <div class="plan-summary">${choiceRows}</div>
-
-          ${mountainRows ? `<span class="ps-section-title">Dein Erzählberg</span>
-          <div class="plan-summary">${mountainRows}</div>` : ''}
-
-          ${starterTexts.length ? `<span class="ps-section-title">Deine Satzanfänge</span>
-          <div style="background:var(--navy4);border:1.5px solid var(--navy3);border-radius:var(--r2);padding:10px 12px;font-size:14px;color:var(--navy);line-height:1.9;">
-            ${starterTexts.map(s=>`• ${s}`).join('<br>')}
-          </div>` : ''}
-
-          ${wordList.length ? `<span class="ps-section-title">Deine Wörter</span>
-          <div style="display:flex;flex-wrap:wrap;gap:5px;">
-            ${wordList.map(w=>{
-              const b = WORD_BANK.find(x=>x.words.includes(w));
-              const t = b ? b.type : 'adj';
-              return `<span class="word-chip wc-${t}" style="font-size:13px;padding:5px 11px;min-height:32px;cursor:default;">${w}</span>`;
-            }).join('')}
-          </div>` : ''}
-        </div>
-      </div>
-
-      <!-- Rubric self-check card -->
-      <div class="step-card">
-        <div class="step-accent sa-forest"></div>
-        <div class="step-body" style="padding-bottom:.3rem;">
-          <span class="step-title" style="font-size:17px;margin-bottom:0;">✅ Selbstcheck</span>
-          <span class="step-desc" style="font-size:13px;margin-top:.3rem;">Hake ab, was du in deiner Geschichte eingebaut hast oder einbauen möchtest.</span>
-        </div>
-        <div style="padding:0 1rem 1rem;">
-          <div class="rubric-list" style="gap:6px;">${rubricItems}</div>
-        </div>
-      </div>
-
-      <!-- Photo upload card -->
-      <div class="step-card">
-        <div class="step-accent sa-clay"></div>
-        <div class="step-body" style="padding-bottom:.3rem;">
-          <span class="step-title" style="font-size:17px;margin-bottom:0;">📷 Foto deiner Geschichte</span>
-          <span class="step-desc" style="font-size:13px;margin-top:.3rem;">Fertig geschrieben? Mache ein Foto von deiner Geschichte und lade es hoch. Das Foto wird gespeichert, damit deine Lehrkraft oder deine Eltern es später ansehen können.</span>
-        </div>
-        <div style="padding:0 1.1rem 1.1rem;">
-          ${photoSection}
-        </div>
-      </div>
-
-      <div class="step-nav">
-        <button class="nav-btn nav-back" onclick="prevStep()">← Zurück</button>
-        <button class="nav-btn nav-next" onclick="nextStep()">${capturedPhoto ? '✅ Fertig &amp; Speichern →' : 'Weiter →'}</button>
-      </div>
-    </div>`;
+function countWords(str) {
+  return str.trim().split(/\s+/).filter(w => w.length > 0).length;
 }
 
-function handlePhotoUpload(input){
-  const file = input.files[0];
-  if(!file) return;
+/* ── LOCK / UNLOCK LOGIC ─────────────────── */
+function updateAll() {
+  const beginWords  = countWords(document.getElementById('ta-begin').value);
+  const middleWords = countWords(document.getElementById('ta-middle').value);
+
+  const beginDone  = beginWords  >= MIN_WORDS;
+  const middleDone = middleWords >= MIN_WORDS;
+
+  // lock overlays
+  const lockM = document.getElementById('lock-middle');
+  const lockE = document.getElementById('lock-end');
+  const panelM = document.getElementById('panelMiddle');
+  const panelE = document.getElementById('panelEnd');
+
+  if (beginDone) {
+    lockM.classList.add('hidden');
+    panelM.classList.remove('locked');
+    document.getElementById('arr1').classList.add('active');
+    document.getElementById('tn-begin').classList.add('lit');
+    document.getElementById('lf1').style.width = '100%';
+  } else {
+    lockM.classList.remove('hidden');
+    panelM.classList.add('locked');
+    document.getElementById('arr1').classList.remove('active');
+    document.getElementById('tn-begin').classList.remove('lit');
+    document.getElementById('lf1').style.width = '0%';
+  }
+
+  if (beginDone && middleDone) {
+    lockE.classList.add('hidden');
+    panelE.classList.remove('locked');
+    document.getElementById('arr2').classList.add('active2');
+    document.getElementById('tn-middle').classList.add('lit');
+    document.getElementById('lf2').style.width = '100%';
+  } else {
+    lockE.classList.remove('hidden');
+    panelE.classList.add('locked');
+    document.getElementById('arr2').classList.remove('active2');
+    document.getElementById('tn-middle').classList.remove('lit');
+    document.getElementById('lf2').style.width = '0%';
+  }
+
+  // track node end
+  const endWords = countWords(document.getElementById('ta-end').value);
+  const endDone  = endWords >= MIN_WORDS;
+  if (endDone) document.getElementById('tn-end').classList.add('lit');
+  else         document.getElementById('tn-end').classList.remove('lit');
+
+  // celebrate + unlock paper section
+  const allDone = beginDone && middleDone && endDone;
+  const bar = document.getElementById('celebBar');
+  if (allDone && !bar.classList.contains('show')) {
+    bar.classList.add('show');
+    confetti();
+    // Reveal the paper-writing zone after a short delay
+    setTimeout(() => document.getElementById('paperZone').classList.add('show'), 1200);
+  }
+}
+
+/* ── SPEECH ───────────────────────────────── */
+function speak(part) {
+  const ta = document.getElementById(`ta-${part}`);
+  if (!ta || !ta.value.trim()) return;
+  tts(ta.value.trim());
+}
+
+function speakAll() {
+  const parts = ['begin','middle','end'].map(p => {
+    const ta = document.getElementById(`ta-${p}`);
+    return ta ? ta.value.trim() : '';
+  }).filter(Boolean).join(' … ');
+  if (parts) tts(parts);
+}
+
+function tts(text) {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE'; u.rate = 0.9;
+  window.speechSynthesis.speak(u);
+}
+
+/* ── PAPER / UPLOAD / FEEDBACK ───────────── */
+let _starRating = 0;
+
+function scrollToPaper() {
+  const z = document.getElementById('paperZone');
+  z.classList.add('show');
+  z.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Scroll back up to the story writing panels */
+function scrollToStory() {
+  document.querySelector('.canvas-zone').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* Scroll to the first panel's spell-check button and highlight it briefly */
+function scrollToSpelling() {
+  const btn = document.getElementById('chk-begin');
+  if (btn) {
+    btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    btn.style.outline = '3px solid var(--blue)';
+    setTimeout(() => btn.style.outline = '', 1800);
+  }
+}
+
+function toggleCL(item) {
+  item.classList.toggle('checked');
+  item.querySelector('.cl-box').textContent = item.classList.contains('checked') ? '✓' : '';
+  updateCLProgress();
+}
+
+function updateCLProgress() {
+  const items = document.querySelectorAll('#paperZone .cl-item');
+  const total = items.length;
+  const done  = document.querySelectorAll('#paperZone .cl-item.checked').length;
+  document.getElementById('clBar').style.width  = total ? (done / total * 100) + '%' : '0%';
+  const el = document.getElementById('clCount');
+  el.textContent = done === total
+    ? `${done} / ${total} – Alles verbessert! 🌟`
+    : `${done} / ${total} verbessert`;
+  el.className = done === total ? 'cl-count all-done' : 'cl-count';
+  const msg = document.getElementById('clAlldoneMsg');
+  if (msg) msg.classList.toggle('show', done === total);
+}
+
+function handlePhoto(event) {
+  const file = event.target.files[0];
+  if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(ev){
-    const img = new Image();
-    img.onload = function(){
-      // Resize to max 900px to keep localStorage usage reasonable
-      const MAX = 900;
-      let w = img.width, h = img.height;
-      if(w > MAX || h > MAX){
-        if(w > h){ h = Math.round(h * MAX / w); w = MAX; }
-        else { w = Math.round(w * MAX / h); h = MAX; }
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      capturedPhoto = canvas.toDataURL('image/jpeg', 0.78);
-      renderCurrentStep();
-    };
-    img.src = ev.target.result;
+  reader.onload = e => {
+    document.getElementById('photoImg').src = e.target.result;
+    document.getElementById('photoPreview').style.display = 'block';
+    const fz = document.getElementById('feedbackZone');
+    fz.classList.add('show');
+    setTimeout(() => fz.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   };
   reader.readAsDataURL(file);
 }
 
-function removePhoto(){
-  capturedPhoto = null;
-  renderCurrentStep();
+function setStar(n) {
+  _starRating = n;
+  document.querySelectorAll('.star').forEach(s =>
+    s.classList.toggle('on', parseInt(s.dataset.v) <= n)
+  );
 }
 
-function savePhoto(){
-  if(!capturedPhoto) return;
-  try{
-    const saved = JSON.parse(localStorage.getItem('builder-photos') || '[]');
-    const entry = {
-      date:  new Date().toISOString(),
-      theme: choices.character && choices.place
-        ? `${choices.character.e} ${choices.character.l} in ${choices.place.e} ${choices.place.l}`
-        : 'Geschichte',
-      photo: capturedPhoto,
-    };
-    saved.push(entry);
-    // Keep the last 8 entries
-    if(saved.length > 8) saved.splice(0, saved.length - 8);
-    localStorage.setItem('builder-photos', JSON.stringify(saved));
-  }catch(e){
-    // localStorage may be full (large photos); silently skip
-    console.warn('builder-photos save failed:', e.message);
-  }
+function saveFeedback() {
+  const good    = document.getElementById('fbGood').value.trim();
+  const improve = document.getElementById('fbImprove').value.trim();
+  if (!_starRating && !good && !improve) return;
+
+  const parts = [];
+  if (_starRating) parts.push('Bewertung: ' + '⭐'.repeat(_starRating));
+  if (good)        parts.push('✅ Besonders gut:\n' + good);
+  if (improve)     parts.push('💡 Noch verbessern:\n' + improve);
+
+  const body = parts.join('\n\n');
+  document.getElementById('savedFbBody').textContent = body;
+  document.getElementById('savedFb').classList.add('show');
+  try { localStorage.setItem('sw_fb', JSON.stringify({ rating: _starRating, good, improve, ts: Date.now() })); }
+  catch(e) {}
 }
 
-// ══════════════════════════════════════════════════
-// INTERACTIONS
-// ══════════════════════════════════════════════════
-function pick(catId, idx){
-  choices[catId] = CATEGORIES.find(c=>c.id===catId).choices[idx];
-  renderCurrentStep();
-}
+function printReview() {
+  saveFeedback();
 
-function pickThemed(catId, e, l){
-  choices[catId] = {e, l};
-  renderCurrentStep();
-}
+  const char  = st.charIdx !== null ? CHARS[st.charIdx] : null;
+  const set   = st.setIdx  !== null ? SETS[st.setIdx]   : null;
+  const title = char ? char.emoji + ' ' + char.name : 'Meine Geschichte';
+  const place = set  ? set.name : '';
+  const begin  = document.getElementById('ta-begin').value.trim();
+  const middle = document.getElementById('ta-middle').value.trim();
+  const end    = document.getElementById('ta-end').value.trim();
+  const photoSrc = document.getElementById('photoImg').src;
+  const hasPhoto = photoSrc && !photoSrc.endsWith(window.location.href);
+  const clItems  = [...document.querySelectorAll('#paperZone .cl-item')].map(el => ({
+    done:  el.classList.contains('checked'),
+    label: el.querySelector('.cl-label').textContent.trim()
+  }));
+  const good    = document.getElementById('fbGood').value.trim();
+  const improve = document.getElementById('fbImprove').value.trim();
+  const stars   = '⭐'.repeat(_starRating);
 
-function toggleStarter(id){
-  starters.has(id) ? starters.delete(id) : starters.add(id);
-  renderCurrentStep();
-}
-
-function toggleWord(w){
-  wordPicks.has(w) ? wordPicks.delete(w) : wordPicks.add(w);
-  renderCurrentStep();
-}
-
-function toggleRubric(id){
-  rubric[id] = !rubric[id];
-  renderCurrentStep();
-}
-
-// ══════════════════════════════════════════════════
-// NAVIGATION
-// ══════════════════════════════════════════════════
-function nextStep(){
-  if(currentStep === 1){
-    if(!choices.character || !choices.place || !choices.problem){
-      const g = document.getElementById('gate-notice');
-      g.textContent = 'Bitte wähle zuerst Figur, Ort und Problem. Alle drei müssen ausgewählt sein.';
-      g.classList.add('on');
-      return;
-    }
-    document.getElementById('gate-notice').classList.remove('on');
-  }
-  awardXp(currentStep);
-  if(currentStep < 5){
-    currentStep++;
-    render();
-    window.scrollTo({top:0,behavior:'smooth'});
-  } else {
-    // Save mountain textarea values then save photo + show result
-    saveMountainValues();
-    savePhoto();
-    currentStep = 6;
-    render();
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-}
-
-function prevStep(){
-  if(currentStep === 2) saveMountainValues();
-  if(currentStep > 1){
-    currentStep--;
-    render();
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-}
-
-function saveMountainValues(){
-  MOUNTAIN_FIELDS.forEach(f=>{
-    const el = document.getElementById('mf-'+f.id);
-    if(el) mountain[f.id] = el.value;
-  });
-}
-
-// ══════════════════════════════════════════════════
-// RENDER
-// ══════════════════════════════════════════════════
-function renderCurrentStep(){
-  const fns = [null, renderStep1, renderStep2, renderStep3, renderStep4, renderStep5];
-  const panels = document.getElementById('step-panels');
-  panels.innerHTML = fns[currentStep]();
-  // Re-attach mountain oninput listeners
-  if(currentStep === 2){
-    MOUNTAIN_FIELDS.forEach(f=>{
-      const el = document.getElementById('mf-'+f.id);
-      if(el) el.addEventListener('input', e=>{ mountain[f.id] = e.target.value; });
-    });
-  }
-  // Apply confidence button active state
-  [0,1,2].forEach(i=>{
-    const el = document.getElementById('conf-'+i);
-    if(el) el.classList.toggle('active', i===confidence);
-  });
-}
-
-function render(){
-  renderProgress();
-  updateXpBar();
-  const resultEl = document.getElementById('result-panel');
-  const panelsEl = document.getElementById('step-panels');
-  if(currentStep === 6){
-    panelsEl.innerHTML = '';
-    resultEl.classList.add('active');
-    renderResult();
-  } else {
-    resultEl.classList.remove('active');
-    renderCurrentStep();
-  }
-}
-
-// ══════════════════════════════════════════════════
-// RESULT + LAUNCH
-// ══════════════════════════════════════════════════
-function renderResult(){
-  renderProgress();
-  updateXpBar();
-  const ch = choices;
-  document.getElementById('rh-title').textContent =
-    `${ch.character.e} ${ch.character.l} · ${ch.place.e} ${ch.place.l} · ${ch.problem.e} ${ch.problem.l}`;
-  document.getElementById('rh-emojis').innerHTML =
-    `<span>${ch.character.e}</span><span>${ch.place.e}</span><span>${ch.problem.e}</span>`;
-
-  // Show achievement card before action buttons
-  const lvl  = getLevel(xp);
-  const pct  = Math.min(100, Math.round(xp / 500 * 100));
-  const achEl = document.createElement('div');
-  achEl.className = 'ach-card';
-  achEl.innerHTML = `
-    <span class="ach-icon">${lvl.icon}</span>
-    <span class="ach-title">Du bist jetzt: ${lvl.name}!</span>
-    <span class="ach-sub">Du hast deinen Schreibplan fertig gestellt. Gut gemacht!</span>
-    <span class="ach-xp">⭐ ${xp} / 500 XP</span>
-    <div class="ach-bar-wrap"><div class="ach-bar-fill" style="width:${pct}%"></div></div>`;
-
-  const resultPanel = document.getElementById('result-panel');
-  // Insert after result-hero if not already there
-  const existing = resultPanel.querySelector('.ach-card');
-  if(existing) existing.remove();
-  const hero = resultPanel.querySelector('.result-hero');
-  if(hero) hero.insertAdjacentElement('afterend', achEl);
-
-  // Show saved photo if one was uploaded
-  const existingPhotoCard = resultPanel.querySelector('.saved-photo-card');
-  if(existingPhotoCard) existingPhotoCard.remove();
-  if(capturedPhoto){
-    const photoCard = document.createElement('div');
-    photoCard.className = 'step-card saved-photo-card';
-    photoCard.style.marginBottom = '1rem';
-    const dateStr = new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'});
-    photoCard.innerHTML = `
-      <div class="step-accent" style="background:var(--forest);"></div>
-      <div class="step-body" style="padding-bottom:.3rem;">
-        <span class="step-title" style="font-size:16px;margin-bottom:0;">📷 Deine handgeschriebene Geschichte</span>
-        <span class="step-desc" style="font-size:12px;margin-top:.3rem;">Gespeichert am ${dateStr} · Für Lehrkraft / Eltern zur Bewertung</span>
-      </div>
-      <div style="padding:0 1rem 1rem;">
-        <img class="photo-saved-preview" src="${capturedPhoto}" alt="Handgeschriebene Geschichte">
-        <a href="${capturedPhoto}" download="meine-geschichte-${Date.now()}.jpg"
-           style="display:block;text-align:center;margin-top:.6rem;padding:9px 16px;border-radius:var(--r2);border:2px solid var(--forest3);background:var(--forest4);color:var(--forest);font-size:13px;font-weight:800;text-decoration:none;">
-          ⬇️ Foto herunterladen
-        </a>
-      </div>`;
-    achEl.insertAdjacentElement('afterend', photoCard);
-  }
-}
-
-function launchApp(target){
-  const ch = choices;
-  const theme = `${ch.character.e} ${ch.character.l} in ${ch.place.e} ${ch.place.l}`;
-
-  // Build writing prompts from mountain notes (with fallback)
-  const mBegin  = mountain.anfang       || `${ch.character.l} lebt in ${ch.place.l}. Stelle die Figur vor. Benutze eine Einleitungsformel!`;
-  const mMiddle = mountain.hoehepunkt   || `Problem: ${ch.problem.l}. Benutze „Plötzlich" oder „Urplötzlich". Schreibe wörtliche Rede!`;
-  const mEnd    = mountain.schluss      || `${ch.character.l} löst das Problem. Benutze eine Schlussformel!`;
-
-  // Build a stichworte summary shown in writing apps
-  const stichworteLines = [
-    `Figur: ${ch.character.e} ${ch.character.l}`,
-    `Ort: ${ch.place.e} ${ch.place.l}`,
-    `Problem: ${ch.problem.e} ${ch.problem.l}`,
-  ];
-  if(mountain.anfang)       stichworteLines.push(`Anfang: ${mountain.anfang.slice(0,80)}…`);
-  if(mountain.hoehepunkt)   stichworteLines.push(`Höhepunkt: ${mountain.hoehepunkt.slice(0,80)}…`);
-  if(mountain.schluss)      stichworteLines.push(`Schluss: ${mountain.schluss.slice(0,80)}…`);
-  if(wordPicks.size)        stichworteLines.push(`Wörter: ${[...wordPicks].join(', ')}`);
-
-  localStorage.setItem('builder-theme', theme);
-  localStorage.setItem('builder-data', JSON.stringify({
-    theme,
-    choices: {
-      ...ch,
-      // Keep backward-compatible event/ending fields
-      event:  {e:'💡',l:'Wendepunkt'},
-      ending: {e:'🏆',l:'Schluss'},
-    },
-    prompts: { begin: mBegin, middle: mMiddle, end: mEnd },
-    storyMountain:    {...mountain},
-    selectedStarters: [...starters],
-    selectedWords:    [...wordPicks],
-    stichhilfe:       stichworteLines,
+  // Group checklist items by their group
+  const groups  = [...document.querySelectorAll('#paperZone .cl-group')].map(g => ({
+    title: g.querySelector('.cl-group-title').textContent.trim(),
+    items: [...g.querySelectorAll('.cl-item')].map(el => ({
+      done:  el.classList.contains('checked'),
+      label: el.querySelector('.cl-label').textContent.trim()
+    }))
   }));
 
-  window.location.href = target === 'story' ? 'index.html' : 'story.html';
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8">
+<title>${escHtml(title)} – Meine Geschichte</title>
+<style>
+  body { font-family: Georgia, serif; max-width: 720px; margin: 36px auto; padding: 0 20px; color: #1a1f36; }
+  h1  { font-size: 1.6rem; color: #4f6ef7; margin-bottom: 2px; }
+  .meta { font-size: .82rem; color: #64748b; margin-bottom: 22px; }
+  h2  { font-size: .95rem; font-weight: bold; margin: 20px 0 6px; color: #1a1f36;
+        border-bottom: 2px solid #e0e7f0; padding-bottom: 3px; }
+  p   { line-height: 1.85; font-size: .97rem; white-space: pre-wrap; margin-bottom: 8px; }
+  img { max-width: 100%; border-radius: 8px; margin: 12px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,.12); }
+  .cl-group-hd { font-size: .76rem; font-weight: bold; text-transform: uppercase;
+                 letter-spacing: .06em; color: #64748b; margin: 14px 0 6px; }
+  .cl-row  { display: flex; gap: 8px; align-items: flex-start; font-size: .87rem;
+             padding: 3px 0; }
+  .ok  { color: #16a34a; font-weight: 900; }
+  .no  { color: #dc2626; font-weight: 900; }
+  .fb-box { border-radius: 4px; padding: 10px 14px; margin: 6px 0; }
+  .fb-good    { background: #f0fdf4; border-left: 4px solid #22c55e; }
+  .fb-improve { background: #fffbeb; border-left: 4px solid #d97706; }
+  .fb-lbl  { font-size: .73rem; text-transform: uppercase; letter-spacing: .06em;
+             color: #64748b; font-weight: bold; margin-bottom: 4px; }
+  .fb-body { font-size: .93rem; line-height: 1.6; }
+  @media print { body { margin: 16px; } }
+</style></head><body>
+<h1>📖 ${escHtml(title)}</h1>
+<div class="meta">${place ? escHtml(place) + ' · ' : ''}${new Date().toLocaleDateString('de-DE')}</div>
+${begin  ? `<h2 style="color:#16a34a">🌅 Anfang</h2><p>${escHtml(begin)}</p>` : ''}
+${middle ? `<h2 style="color:#d97706">⚡ Ereignis</h2><p>${escHtml(middle)}</p>` : ''}
+${end    ? `<h2 style="color:#7c3aed">⭐ Ende</h2><p>${escHtml(end)}</p>` : ''}
+${hasPhoto ? `<h2>Handgeschriebene Geschichte</h2><img src="${photoSrc}" alt="Foto">` : ''}
+<h2>Selbst-Check (Bayern Klasse 3 / 4)</h2>
+${groups.map(g => `<div class="cl-group-hd">${escHtml(g.title)}</div>` +
+  g.items.map(it => `<div class="cl-row"><span class="${it.done ? 'ok' : 'no'}">${it.done ? '✓' : '✗'}</span><span>${escHtml(it.label)}</span></div>`).join('')
+).join('')}
+${(good || improve || _starRating) ? `<h2>Feedback</h2>
+${stars ? `<p style="font-size:1.3rem;margin-bottom:4px">${stars}</p>` : ''}
+${good    ? `<div class="fb-box fb-good"><div class="fb-lbl">Besonders gut</div><div class="fb-body">${escHtml(good)}</div></div>` : ''}
+${improve ? `<div class="fb-box fb-improve"><div class="fb-lbl">Noch verbessern</div><div class="fb-body">${escHtml(improve)}</div></div>` : ''}` : ''}
+</body></html>`);
+  w.document.close();
+  setTimeout(() => w.print(), 500);
 }
 
-function resetBuilder(){
-  choices = {}; mountain = {}; starters = new Set(); wordPicks = new Set(); rubric = {};
-  interest = null; xp = 0; earnedSteps = new Set(); capturedPhoto = null;
-  currentStep = 1;
-  render();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
+/* ── SPELL / GRAMMAR CHECK ───────────────── */
+const _corrections = {};
 
-// ── GAMIFICATION ───────────────────────────────────
-function getLevel(pts){
-  return LEVELS.find(l=>pts>=l.min&&pts<=l.max) || LEVELS[LEVELS.length-1];
-}
+async function checkSpelling(part) {
+  const ta  = document.getElementById(`ta-${part}`);
+  const cp  = document.getElementById(`cp-${part}`);
+  const btn = document.getElementById(`chk-${part}`);
 
-function updateXpBar(){
-  const lvl  = getLevel(xp);
-  const pct  = Math.min(100, Math.round(xp / 500 * 100));
-  const icon = document.getElementById('xp-icon');
-  const lbl  = document.getElementById('xp-level');
-  const fill = document.getElementById('xp-bar-fill');
-  const pts  = document.getElementById('xp-pts');
-  if(icon) icon.textContent = lvl.icon;
-  if(lbl)  lbl.textContent  = `Level: ${lvl.name}`;
-  if(fill) fill.style.width = pct + '%';
-  if(pts)  pts.textContent  = `${xp} / 500 XP`;
-}
-
-function showToast(msg, dur=2500){
-  let t = document.getElementById('_toast');
-  if(!t){
-    t = document.createElement('div');
-    t.id = '_toast'; t.className = 'toast';
-    document.body.appendChild(t);
+  if (!ta.value.trim()) {
+    showCP(cp, '<div class="cp-noop">✏️ Schreibe zuerst etwas, dann kann ich helfen!</div>');
+    return;
   }
-  t.textContent = msg;
-  t.classList.remove('hide');
-  t.classList.add('show');
-  clearTimeout(t._tmr);
-  t._tmr = setTimeout(()=>{ t.classList.remove('show'); t.classList.add('hide'); }, dur);
+
+  btn.textContent = '⏳ …';
+  btn.disabled = true;
+
+  try {
+    const ltLang = localStorage.getItem('sw_lang') === 'en' ? 'en-GB' : 'de-DE';
+    const resp = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ text: ta.value, language: ltLang })
+    });
+    if (!resp.ok) throw new Error('api');
+    const data = await resp.json();
+
+    const matches = data.matches || [];
+    _corrections[part] = matches;
+    renderCorrections(part, matches);
+  } catch(e) {
+    showCP(cp, '<div class="cp-err">😕 Keine Verbindung – bitte versuche es nochmal!</div>');
+  } finally {
+    btn.textContent = '🔍 Prüfen';
+    btn.disabled = false;
+  }
 }
 
-function awardXp(step){
-  if(earnedSteps.has(step)) return;
-  earnedSteps.add(step);
-  const pts = XP_PER_STEP[step] || 0;
-  xp += pts;
-  updateXpBar();
-  const lvl = getLevel(xp);
-  const messages = {
-    1:`🎭 Figuren gewählt! +${pts} XP`,
-    2:`🏔️ Schreibberg fertig! +${pts} XP`,
-    3:`✍️ Satzanfänge gesammelt! +${pts} XP`,
-    4:`🎨 Wörterschatz gepackt! +${pts} XP`,
-    5:`✅ Selbstcheck erledigt! +${pts} XP · ${lvl.icon} ${lvl.name}`,
+function renderCorrections(part, matches) {
+  const ta   = document.getElementById(`ta-${part}`);
+  const cp   = document.getElementById(`cp-${part}`);
+  const text = ta.value;
+
+  // Local structural checks
+  const localWarns = [];
+  if (text.trim() && !/^[A-ZÄÖÜ„"']/.test(text.trim()))
+    localWarns.push('Beginne mit einem Großbuchstaben.');
+  if (text.trim() && !/[.!?]$/.test(text.trim()))
+    localWarns.push('Am Ende fehlt ein Satzzeichen (. ! ?)');
+  if (/  /.test(text))
+    localWarns.push('Doppeltes Leerzeichen gefunden – bitte prüfen.');
+
+  if (!matches.length && !localWarns.length) {
+    showCP(cp, '<div class="cp-ok">🌟 Super! Keine Fehler gefunden!</div>');
+    return;
+  }
+
+  const withSugs = matches.filter(m => m.replacements && m.replacements.length > 0);
+  let html = '';
+
+  if (localWarns.length) {
+    html += `<div class="cp-local">${localWarns.map(w =>
+      `<div class="cp-local-row">⚠️ ${escHtml(w)}</div>`).join('')}</div>`;
+  }
+
+  if (matches.length) {
+    html += `<div class="cp-head">✏️ ${matches.length} Verbesserungsvorschlag${matches.length > 1 ? 'e' : ''}:</div><div class="cp-list">`;
+    matches.forEach((m, i) => {
+      const wrong = text.substring(m.offset, m.offset + m.length);
+      const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+      const msg   = m.shortMessage || m.message || '';
+      html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong || '?')}</span>`;
+      if (sugs.length) {
+        html += `<span class="cp-arrow">→</span><span class="cp-sugs">`;
+        sugs.forEach(s => {
+          html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`;
+        });
+        html += `</span>`;
+      }
+      if (msg) html += `<span class="cp-reason">${escHtml(msg)}</span>`;
+      html += `</div>`;
+    });
+    html += `</div>`;
+    if (withSugs.length > 1) {
+      html += `<button class="cp-fixall" onclick="applyAll('${part}')">✨ Alle auf einmal korrigieren</button>`;
+    }
+  }
+
+  showCP(cp, html);
+  cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function applySingle(part, idx, replacement) {
+  const ta = document.getElementById(`ta-${part}`);
+  const m  = (_corrections[part] || [])[idx];
+  if (!m) return;
+  ta.value = ta.value.substring(0, m.offset) + replacement + ta.value.substring(m.offset + m.length);
+  onType(part);
+  // Re-check to update remaining errors
+  checkSpelling(part);
+}
+
+function applyAll(part) {
+  const ta      = document.getElementById(`ta-${part}`);
+  const matches = (_corrections[part] || [])
+    .filter(m => m.replacements.length > 0)
+    .sort((a, b) => b.offset - a.offset); // end → start so offsets stay valid
+
+  let text = ta.value;
+  matches.forEach(m => {
+    text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
+  });
+  ta.value = text;
+  onType(part);
+  const cp = document.getElementById(`cp-${part}`);
+  showCP(cp, '<div class="cp-ok">🌟 Alle Vorschläge wurden übernommen!</div>');
+  setTimeout(() => checkSpelling(part), 600);
+}
+
+function showCP(cp, html) {
+  cp.innerHTML = html;
+  cp.style.display = 'block';
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
+/* ── CONFETTI ─────────────────────────────── */
+function confetti() {
+  const colors = ['#22c55e','#d97706','#7c3aed','#4f6ef7','#f87171','#06b6d4','#f59e0b'];
+  for (let i = 0; i < 70; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    const size = 7 + Math.random() * 9;
+    el.style.cssText = `
+      left:${Math.random()*100}vw; top:-12px;
+      width:${size}px; height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      animation-duration:${2.5+Math.random()*2.5}s;
+      animation-delay:${Math.random()*1.2}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }
+}
+
+/* ════════════════════════════════════════
+   LANGUAGE / i18n
+════════════════════════════════════════ */
+(function applyBuilderLang() {
+  const _bLang = localStorage.getItem('sw_lang') || 'de';
+  const _bL    = _bLang === 'both' ? 'de' : _bLang;
+
+  const S = {
+    de: {
+      pageTitle:      'Geschichten-Baumeister 📖',
+      topbarLogo:     '📖 Geschichten-Baumeister',
+      backLink:       '← Zurück',
+      chooseChar:     'Wähle deine Hauptfigur',
+      chooseSet:      'Wähle deinen Ort',
+      chipCharEmpty:  'Figur wählen…',
+      chipSetEmpty:   'Ort wählen…',
+      beginTitle:     'Anfang',
+      beginSub:       'Stell die Figur und den Ort vor',
+      step1badge:     'Schritt 1',
+      middleTitle:    'Ereignis',
+      middleSub:      'Was passiert? Was ist das Problem?',
+      step2badge:     'Schritt 2',
+      endTitle:       'Ende',
+      endSub:         'Wie löst sich das Problem?',
+      step3badge:     'Schritt 3',
+      sceneHint:      'Wähle Figur & Ort oben',
+      taBeginPh:      'Schreibe hier den Anfang der Geschichte …',
+      taMiddlePh:     'Schreibe hier das Ereignis …',
+      taEndPh:        'Schreibe hier das Ende der Geschichte …',
+      checkBtn:       '🔍 Prüfen',
+      speakBtn:       '🔊 Vorlesen',
+      words:          n => `${n} ${n===1?'Wort':'Wörter'}`,
+      lockMiddle:     'Schreibe zuerst den Anfang fertig!',
+      lockEnd:        'Schreibe zuerst das Ereignis fertig!',
+      previewTitle:   '📖 Meine Geschichte',
+      pvBegin:        '🌅 Anfang',
+      pvMiddle:       '⚡ Ereignis',
+      pvEnd:          '⭐ Ende',
+      celTitle:       'Fantastisch! Deine Geschichte ist fertig!',
+      celSub:         'Du hast eine tolle Geschichte geschrieben. Weiter so!',
+      speakAll:       '🔊 Alles vorlesen',
+      toPaper:        '✏️ Auf Papier schreiben →',
+      paperCtaTitle:  'Jetzt auf Papier schreiben!',
+      paperCtaSub:    'Deine Geschichte ist fertig – schreibe sie schön auf Papier ab, mache ein Foto davon und lade es für deinen Lehrer / deine Eltern hoch.',
+      s1Title:        '✏️ Schreibe deine Geschichte auf Papier ab',
+      s1Sub:          'Nimm ein liniertes Blatt und schreibe die Geschichte sauber und leserlich ab',
+      s1Body:         '📌 Schreibe jeden Abschnitt (Anfang / Ereignis / Ende) in einen eigenen Absatz. Lass am Anfang jedes Absatzes eine kleine Einrückung.',
+      s2Title:        '✍️ Text verbessern – lies nach und überarbeite!',
+      s2Sub:          'Geh jeden Punkt durch → verbessere deinen Text → dann erst abhaken',
+      bannerTitle:    'So verbesserst du deinen Text:',
+      backToText:     '⬆ Zum Text zurück',
+      is1: '1️⃣ Lies den Punkt', is2: '2️⃣ Schau in deinen Text oben',
+      is3: '3️⃣ Verbessere ihn', is4: '4️⃣ Hake ab ☑',
+      clg1: '📖 Inhalt & Aufbau',
+      clg2: '✍️ Sprache & Ausdruck',
+      clg3: '📝 Rechtschreibung',
+      clg4: '🖊️ Handschrift & Gestaltung',
+      clBack1: '⬆ Text ansehen & verbessern',
+      clBack2: '⬆ Text prüfen & korrigieren',
+      s3Title:        '📸 Foto hochladen & Feedback erhalten',
+      s3Sub:          'Mach ein Foto deiner handgeschriebenen Geschichte – dann kann der Lehrer / die Eltern Feedback geben',
+      uploadLabel:    'Hier klicken oder Foto aufnehmen',
+      uploadSub:      'Auf dem Handy direkt mit der Kamera · JPG oder PNG',
+      fbHd:           '👨‍🏫 Feedback vom Lehrer / von den Eltern',
+      fbGoodLbl:      '✅ Das war besonders gut',
+      fbGoodPh:       'z. B. Tolle Adjektive, schöne Handschrift, spannende Geschichte …',
+      fbImpLbl:       '💡 Das kannst du noch verbessern',
+      fbImpPh:        'z. B. Achte noch auf die Großschreibung der Nomen …',
+      fbSave:         '💾 Feedback speichern',
+      fbPrint:        '🖨️ Alles drucken',
+      cpOk:           '🌟 Super! Keine Fehler gefunden!',
+      cpNoop:         '✏️ Schreibe zuerst etwas, dann kann ich helfen!',
+      cpErr:          '😕 Keine Verbindung – bitte versuche es nochmal!',
+      cpFixall:       '✨ Alle auf einmal korrigieren',
+      clProgress:     (d,t) => d===t ? `${d} / ${t} – Alles verbessert! 🌟` : `${d} / ${t} verbessert`,
+    },
+    en: {
+      pageTitle:      'Story Builder 📖',
+      topbarLogo:     '📖 Story Builder',
+      backLink:       '← Back',
+      chooseChar:     'Choose your main character',
+      chooseSet:      'Choose your setting',
+      chipCharEmpty:  'Choose character…',
+      chipSetEmpty:   'Choose setting…',
+      beginTitle:     'Beginning',
+      beginSub:       'Introduce the character and the setting',
+      step1badge:     'Step 1',
+      middleTitle:    'Event',
+      middleSub:      'What happens? What is the problem?',
+      step2badge:     'Step 2',
+      endTitle:       'Ending',
+      endSub:         'How is the problem solved?',
+      step3badge:     'Step 3',
+      sceneHint:      'Choose character & setting above',
+      taBeginPh:      'Write the beginning of your story here …',
+      taMiddlePh:     'Write the event here …',
+      taEndPh:        'Write the ending here …',
+      checkBtn:       '🔍 Check',
+      speakBtn:       '🔊 Read Aloud',
+      words:          n => `${n} ${n===1?'word':'words'}`,
+      lockMiddle:     'Finish the beginning first!',
+      lockEnd:        'Finish the event first!',
+      previewTitle:   '📖 My Story',
+      pvBegin:        '🌅 Beginning',
+      pvMiddle:       '⚡ Event',
+      pvEnd:          '⭐ Ending',
+      celTitle:       'Fantastic! Your story is complete!',
+      celSub:         'You wrote a great story. Keep it up!',
+      speakAll:       '🔊 Read aloud',
+      toPaper:        '✏️ Write on paper →',
+      paperCtaTitle:  'Now write it on paper!',
+      paperCtaSub:    'Your story is ready – copy it neatly onto paper, take a photo and upload it for your teacher / parents.',
+      s1Title:        '✏️ Copy your story onto paper',
+      s1Sub:          'Take a lined sheet and copy the story neatly and legibly',
+      s1Body:         '📌 Write each section (Beginning / Event / Ending) in its own paragraph. Leave a small indent at the start of each paragraph.',
+      s2Title:        '✍️ Improve your text – read and revise!',
+      s2Sub:          'Go through each point → improve your text → then tick',
+      bannerTitle:    'How to improve your text:',
+      backToText:     '⬆ Back to text',
+      is1: '1️⃣ Read the point', is2: '2️⃣ Look at your text above',
+      is3: '3️⃣ Improve it',     is4: '4️⃣ Tick ☑',
+      clg1: '📖 Content & Structure',
+      clg2: '✍️ Language & Expression',
+      clg3: '📝 Spelling',
+      clg4: '🖊️ Handwriting & Presentation',
+      clBack1: '⬆ View & improve text',
+      clBack2: '⬆ Check & correct text',
+      s3Title:        '📸 Upload photo & get feedback',
+      s3Sub:          'Take a photo of your handwritten story – then your teacher / parents can give feedback',
+      uploadLabel:    'Click here or take a photo',
+      uploadSub:      'On mobile directly with camera · JPG or PNG',
+      fbHd:           '👨‍🏫 Feedback from teacher / parents',
+      fbGoodLbl:      '✅ This was especially good',
+      fbGoodPh:       'e.g. Great adjectives, nice handwriting, exciting story …',
+      fbImpLbl:       '💡 You can still improve this',
+      fbImpPh:        'e.g. Watch out for capital letters on nouns …',
+      fbSave:         '💾 Save feedback',
+      fbPrint:        '🖨️ Print everything',
+      cpOk:           '🌟 Great! No errors found!',
+      cpNoop:         '✏️ Write something first, then I can help!',
+      cpErr:          '😕 No connection – please try again!',
+      cpFixall:       '✨ Fix all at once',
+      clProgress:     (d,t) => d===t ? `${d} / ${t} – All done! 🌟` : `${d} / ${t} improved`,
+    }
   };
-  showToast(messages[step] || `+${pts} XP`);
-}
 
-function setInterest(key){
-  // key is null for "Standard" button, or a theme string
-  interest = (key !== null && interest === key) ? null : key;
-  renderCurrentStep();
-}
+  const t = k => (S[_bL] || S.de)[k] || (S.de[k] || k);
+  const tf = (k, ...a) => { const v = (S[_bL] || S.de)[k]; return typeof v === 'function' ? v(...a) : (v||k); };
 
-// ══════════════════════════════════════════════════
-// SATZ-CHECK
-// ══════════════════════════════════════════════════
-const SC_ADJ = new Set([
-  'mutig','mutige','mutigen','mutigem','mutiger','mutiges',
-  'klug','kluge','klugen','kluger','kluges',
-  'stark','starke','starken','starker','starkes',
-  'freundlich','freundliche','freundlichen','freundlicher',
-  'neugierig','neugierige','neugierigen','neugieriger',
-  'ängstlich','ängstliche','ängstlichen',
-  'listig','listige','listigen','listiger',
-  'tapfer','tapfere','tapferen','tapferer',
-  'fröhlich','fröhliche','fröhlichen','fröhlicher',
-  'traurig','traurige','traurigen','trauriger',
-  'wütend','wütende','wütenden','wütender',
-  'stolz','stolze','stolzen','stolzer',
-  'glücklich','glückliche','glücklichen','glücklicher',
-  'böse','bösen','böser','nett','nette','netten','netter',
-  'groß','große','großen','großem','großer','großes',
-  'klein','kleine','kleinen','kleiner','kleines',
-  'lang','lange','langen','langer','langes',
-  'kurz','kurze','kurzen','kurzer','kurzes',
-  'hoch','hohe','hohen','hoher','hohes',
-  'tief','tiefe','tiefen','tiefer','tiefes',
-  'alt','alte','alten','alter','altes',
-  'jung','junge','jungen','junger','junges',
-  'neu','neue','neuen','neuer','neues',
-  'gut','gute','guten','guter','gutes',
-  'schlecht','schlechte','schlechten','schlechter',
-  'schön','schöne','schönen','schöner','schönes',
-  'dunkel','dunkle','dunklen','dunkler','dunkles','dunklem',
-  'hell','helle','hellen','heller','helles',
-  'warm','warme','warmen','warmer','warmes',
-  'kalt','kalte','kalten','kalter','kaltes',
-  'laut','laute','lauten','lauter','lautes',
-  'leise','leisen','leiser',
-  'schnell','schnelle','schnellen','schneller',
-  'langsam','langsame','langsamen','langsamer',
-  'riesig','riesige','riesigen','riesiger','riesiges',
-  'winzig','winzige','winzigen','winziger',
-  'wild','wilde','wilden','wilder','wildes',
-  'geheimnisvoll','geheimnisvolle','geheimnisvollen','geheimnisvoller',
-  'gefährlich','gefährliche','gefährlichen','gefährlicher',
-  'schrecklich','schreckliche','schrecklichen',
-  'wunderbar','wunderbare','wunderbaren','wunderbarer',
-  'einsam','einsame','einsamen','einsamer',
-  'ruhig','ruhige','ruhigen','ruhiger',
-  'mächtig','mächtige','mächtigen','mächtiger',
-  'erschöpft','erschöpfte','erschöpften',
-  'golden','goldene','goldenen','goldener',
-  'bunt','bunte','bunten','bunter',
-  'rot','rote','roten','roter','rotes',
-  'blau','blaue','blauen','blauer','blaues',
-  'grün','grüne','grünen','grüner',
-  'schwarz','schwarze','schwarzen','schwarzer',
-  'weiß','weiße','weißen','weißer',
-  'seltsam','seltsame','seltsamen','seltsamer',
-  'verlassen','verlassene','verlassenen','verlassener',
-  'stürmisch','stürmische','stürmischen',
-  'eisig','eisige','eisigen','eisiger',
-  'hungrig','hungrige','hungrigen','hungriger',
-  'flink','flinke','flinken','flinker',
-  'sanft','sanfte','sanften','sanfter',
-  'golden','silbern','silberne','silbernen',
-  'brodelnde','brodelnden','dampfende','dampfenden',
-  'glühende','glühenden','feuerspeiende','feuerspeienden',
-]);
+  if (_bL === 'de') return; // default – no changes needed
 
-const SC_PRÄT = new Set([
-  'war','waren','warst','wart',
-  'hatte','hatten','hattest','hattet',
-  'wurde','wurden','wurdest','wurdet',
-  'ging','gingen','gingst','gingt',
-  'sah','sahen','sahst','saht',
-  'kam','kamen','kamst','kamt',
-  'stand','standen','standest','standet',
-  'lief','liefen','liefst','lieft',
-  'rannte','rannten','ranntest','ranntet',
-  'rief','riefen','riefst','rieft',
-  'fand','fanden','fandest','fandet',
-  'gab','gaben','gabst','gabt',
-  'nahm','nahmen','nahmst','nahmt',
-  'blieb','blieben','bliebst','bliebt',
-  'wollte','wollten','wolltest','wolltet',
-  'konnte','konnten','konntest','konntet',
-  'musste','mussten','musstest','musstet',
-  'durfte','durften','durftest','durftet',
-  'sollte','sollten','solltest','solltet',
-  'dachte','dachten','dachtest','dachtet',
-  'wusste','wussten','wusstest','wusstet',
-  'sagte','sagten','sagtest','sagtet',
-  'fragte','fragten','fragtest','fragtet',
-  'spielte','spielten','spieltest','spieltet',
-  'lachte','lachten','lachtest','lachtet',
-  'weinte','weinten','weintest','weintet',
-  'schrie','schrien','schriest','schriet',
-  'fiel','fielen','fielst','fielt',
-  'brachte','brachten','brachtest','brachtet',
-  'zog','zogen','zogst','zogt',
-  'griff','griffen','griffst','grifft',
-  'ließ','ließen','ließt',
-  'schrieb','schrieben','schriebst','schriebt',
-  'flog','flogen','flogst','flogt',
-  'sprang','sprangen','sprangst','sprangt',
-  'schwamm','schwammen','schwammst','schwammt',
-  'hörte','hörten','hörtest','hörtet',
-  'suchte','suchten','suchtest','suchtet',
-  'kämpfte','kämpften','rettete','retteten',
-  'kletterte','kletterten','öffnete','öffneten',
-  'begann','begannen','wartete','warteten',
-  'half','halfen','schaute','schauten',
-  'bemerkte','bemerkten','entdeckte','entdeckten',
-  'holte','holten','stellte','stellten',
-  'legte','legten','zitterte','zitterten',
-  'versuchte','versuchten','erkannte','erkannten',
-  'stolperte','stolperten','seufzte','seufzten',
-  'strahlte','strahlten','schlief','schliefen',
-  'flüsterte','flüsterten','schlich','schlichen',
-  'warf','warfen','bat','baten','las','lasen',
-  'baute','bauten','trat','traten',
-  'träumte','träumten','wünschte','wünschten',
-  'berührte','berührten','landete','landeten',
-  'zeigte','zeigten','roch','rochen',
-]);
+  // ── page title ──
+  document.title = t('pageTitle');
 
-const SC_PRÄS = new Set([
-  'bin','ist','sind','bist','seid',
-  'habe','hat','haben','hast','habt',
-  'werde','wird','werden','wirst','werdet',
-  'gehe','geht','gehen','gehst',
-  'sehe','sieht','sehen','siehst',
-  'komme','kommt','kommen','kommst',
-  'stehe','steht','stehen','stehst',
-  'laufe','läuft','laufen','läufst',
-  'renne','rennt','rennen','rennst',
-  'rufe','ruft','rufen','rufst',
-  'finde','findet','finden','findest',
-  'gebe','gibt','geben','gibst',
-  'nehme','nimmt','nehmen','nimmst',
-  'bleibe','bleibt','bleiben','bleibst',
-  'will','wollen','willst','wollt',
-  'kann','können','kannst','könnt',
-  'muss','müssen','musst','müsst',
-  'darf','dürfen','darfst','dürft',
-  'soll','sollen','sollst','sollt',
-  'mag','mögen','magst','mögt',
-  'denke','denkt','denken','denkst',
-  'weiß','wissen','weißt','wisst',
-  'sage','sagt','sagen','sagst',
-  'frage','fragt','fragen','fragst',
-  'spiele','spielt','spielen','spielst',
-  'lache','lacht','lachen','lachst',
-  'weine','weint','weinen','weinst',
-  'schreie','schreit','schreien','schreist',
-  'falle','fällt','fallen','fällst',
-  'bringe','bringt','bringen','bringst',
-  'ziehe','zieht','ziehen','ziehst',
-  'höre','hört','hören','hörst',
-  'suche','sucht','suchen','suchst',
-  'kämpfe','kämpft','kämpfen','kämpfst',
-  'rette','rettet','retten','rettest',
-  'klettere','klettert','klettern','kletterst',
-  'öffne','öffnet','öffnen','öffnest',
-  'beginne','beginnt','beginnen','beginnst',
-  'warte','wartet','warten','wartest',
-  'helfe','hilft','helfen','hilfst',
-  'schaue','schaut','schauen','schaust',
-  'bemerke','bemerkt','bemerken','bemerkst',
-  'entdecke','entdeckt','entdecken','entdeckst',
-  'hole','holt','holen','holst',
-  'stelle','stellt','stellen','stellst',
-  'lege','legt','legen','legst',
-  'zittere','zittert','zittern','zitterst',
-  'versuche','versucht','versuchen','versuchst',
-  'träume','träumt','träumen','träumst',
-  'erkenne','erkennt','erkennen','erkennst',
-  'stolpere','stolpert','stolpern','stolperst',
-  'springt','springe','springen','springst',
-  'fliegt','fliege','fliegen','fliegst',
-  'schwimmt','schwimme','schwimmen','schwimmst',
-  'riecht','rieche','riechen','riechst',
-  'zeigt','zeige','zeigen','zeigst',
-  'landet','lande','landen','landest',
-  'strahle','strahlt','strahlen','strahlst',
-]);
+  // ── topbar ──
+  const logo = document.querySelector('.topbar-logo');
+  if (logo) logo.textContent = t('topbarLogo');
+  const backA = document.querySelector('.topbar a');
+  if (backA) backA.textContent = t('backLink');
 
-function scEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // ── setup zone ──
+  const [hdrChar, hdrSet] = document.querySelectorAll('.setup-row-header');
+  if (hdrChar) { const n = hdrChar.querySelector('.setup-num'); hdrChar.textContent = ' ' + t('chooseChar'); if (n) hdrChar.prepend(n); }
+  if (hdrSet)  { const n = hdrSet.querySelector('.setup-num');  hdrSet.textContent  = ' ' + t('chooseSet');  if (n) hdrSet.prepend(n); }
 
-function checkSentence(){
-  const raw = (document.getElementById('sc-input').value||'').trim();
-  if(!raw){ showToast('Schreibe erst einen Satz!'); return; }
+  // ── chips ──
+  const ccl = document.getElementById('chipCharLabel');
+  const csl = document.getElementById('chipSetLabel');
+  if (ccl && ccl.textContent.includes('wählen')) ccl.textContent = t('chipCharEmpty');
+  if (csl && csl.textContent.includes('wählen')) csl.textContent = t('chipSetEmpty');
 
-  const words = raw.split(/\s+/).filter(Boolean);
-  const lower = words.map(w=>w.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase());
-  const results = [];
-
-  // 1. Capital letter
-  if(/^[A-ZÄÖÜ„"]/.test(raw)){
-    results.push({cls:'sc-ok',  label:'✓ Großbuchstabe', text:'Dein Satz beginnt mit einem Großbuchstaben. ✓'});
-  } else {
-    results.push({cls:'sc-warn', label:'✗ Großbuchstabe', text:'Dein Satz muss mit einem Großbuchstaben beginnen!'});
-  }
-
-  // 2. End punctuation
-  const lc = raw.trimEnd().slice(-1);
-  if(['.','!','?','"'].includes(lc)){
-    results.push({cls:'sc-ok',  label:'✓ Satzzeichen', text:'Das Satzzeichen am Ende ist richtig. ✓'});
-  } else {
-    results.push({cls:'sc-warn', label:'✗ Satzzeichen', text:'Vergiss das Satzzeichen am Ende nicht! Benutze  .  !  oder  ?'});
-  }
-
-  // 3. Word count
-  const count = words.length;
-  if(count < 4){
-    results.push({cls:'sc-warn', label:'📏 Satzlänge', text:`Dein Satz hat nur ${count} Wörter — das ist sehr kurz. Versuche 5–12 Wörter.`});
-  } else if(count <= 14){
-    results.push({cls:'sc-ok',  label:'📏 Satzlänge', text:`Dein Satz hat ${count} Wörter — das ist eine gute Länge! ✓`});
-  } else {
-    results.push({cls:'sc-info', label:'📏 Satzlänge', text:`Dein Satz hat ${count} Wörter — das ist sehr lang. Kurze Sätze erzeugen mehr Spannung!`});
-  }
-
-  // 4. Sentence starter — warn if starts with "Ich"
-  const first = lower[0]||'';
-  if(first==='ich'){
-    results.push({cls:'sc-tip', label:'🔤 Satzanfang', text:'Dein Satz beginnt mit „Ich". Versuche einen anderen Anfang: z.B. „Plötzlich …", „Langsam …", „Im Wald …".'});
-  } else if(first){
-    results.push({cls:'sc-ok',  label:'🔤 Satzanfang', text:`Guter Satzanfang: „${words[0]}" ✓`});
-  }
-
-  // 5. Adjectives
-  const foundAdj = lower.filter(w=>SC_ADJ.has(w));
-  const uniqueAdj = [...new Set(foundAdj)];
-  if(uniqueAdj.length===0){
-    results.push({cls:'sc-tip', label:'🎨 Adjektive', text:'Keine Adjektive (Eigenschaftswörter) gefunden. Adjektive machen Sätze lebendiger — z.B. „der mutige Ritter", „der dunkle Wald".'});
-  } else {
-    const hl = raw.replace(/([a-zA-ZäöüÄÖÜß]+)/g, m =>
-      SC_ADJ.has(m.toLowerCase()) ? `<span class="sc-hl-adj">${scEsc(m)}</span>` : scEsc(m));
-    results.push({cls:'sc-ok', label:'🎨 Adjektive',
-      html:`${uniqueAdj.length} Adjektiv${uniqueAdj.length===1?'':'e'} gefunden ✓: ${hl}`});
-  }
-
-  // 6. Tense
-  const hasPrät = lower.some(w=>SC_PRÄT.has(w));
-  const hasPräs = lower.some(w=>SC_PRÄS.has(w));
-  if(hasPrät && !hasPräs){
-    results.push({cls:'sc-ok',  label:'⏰ Zeitform', text:'Vergangenheit (Präteritum) ✓ — richtig für Geschichten!'});
-  } else if(hasPräs && !hasPrät){
-    const pv = [...new Set(lower.filter(w=>SC_PRÄS.has(w)))];
-    results.push({cls:'sc-tip', label:'⏰ Zeitform',
-      text:`Gegenwart erkannt: „${pv.join('", „')}". Für Geschichten benutze die Vergangenheit — z.B. „ging" statt „geht", „war" statt „ist".`});
-  } else if(hasPrät && hasPräs){
-    results.push({cls:'sc-warn', label:'⏰ Zeitform', text:'Zwei verschiedene Zeitformen! Für Geschichten immer die Vergangenheit (Präteritum) benutzen.'});
-  } else {
-    results.push({cls:'sc-info', label:'⏰ Zeitform', text:'Kein Tuwort (Verb) erkannt. Schreibe einen Satz mit einem Verb — z.B. „lief", „sah", „hatte", „rief".'});
-  }
-
-  // 7. Wörtliche Rede (bonus)
-  if(/„|"/.test(raw)){
-    results.push({cls:'sc-ok', label:'💬 Wörtliche Rede', text:'Wörtliche Rede mit Anführungszeichen gefunden ✓ — sehr gut!'});
-  }
-
-  const out = document.getElementById('sc-results');
-  out.className = 'sc-results on';
-  out.innerHTML = results.map(r=>`
-    <div class="sc-card ${r.cls}">
-      <span class="sc-label">${r.label}</span>
-      ${r.html||scEsc(r.text||'')}
-    </div>`).join('');
-}
-
-// ══════════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════════
-document.addEventListener('DOMContentLoaded', ()=>{
-  // Apply saved confidence
-  [0,1,2].forEach(i=>{
-    const el = document.getElementById('conf-'+i);
-    if(el) el.classList.toggle('active', i===confidence);
+  // ── panel headers ──
+  const pmap = { begin: 'begin', middle: 'middle', end: 'end' };
+  Object.keys(pmap).forEach(p => {
+    const panel = document.getElementById('panel' + p.charAt(0).toUpperCase() + p.slice(1));
+    if (!panel) return;
+    const title = panel.querySelector('.ph-title');
+    const sub   = panel.querySelector('.ph-sub');
+    if (title) title.textContent = t(p + 'Title');
+    if (sub)   sub.textContent   = t(p + 'Sub');
+    const badge = document.getElementById('badge-' + p);
+    if (badge) badge.textContent = t('step' + ({begin:'1',middle:'2',end:'3'}[p]) + 'badge');
   });
-  render();
-  // Sentence checker: Shift+Enter = new line, Enter alone = check
-  const sci = document.getElementById('sc-input');
-  if(sci) sci.addEventListener('keydown', e=>{
-    if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); checkSentence(); }
+
+  // ── scene hint labels ──
+  ['begin','middle','end'].forEach(p => {
+    const el = document.getElementById('scene-' + p + '-label');
+    if (el && el.textContent.includes('Wähle')) el.textContent = t('sceneHint');
   });
-});
+
+  // ── textarea placeholders ──
+  const taPh = { begin: t('taBeginPh'), middle: t('taMiddlePh'), end: t('taEndPh') };
+  Object.entries(taPh).forEach(([p, ph]) => {
+    const ta = document.getElementById('ta-' + p);
+    if (ta) ta.placeholder = ph;
+  });
+
+  // ── buttons (Prüfen / Vorlesen) ──
+  ['begin','middle','end'].forEach(p => {
+    const chk = document.getElementById('chk-' + p);
+    if (chk) chk.textContent = t('checkBtn');
+  });
+  document.querySelectorAll('.speak-btn').forEach(b => b.textContent = t('speakBtn'));
+
+  // ── lock messages ──
+  const [lm, le] = document.querySelectorAll('.lock-msg');
+  if (lm) lm.textContent = t('lockMiddle');
+  if (le) le.textContent = t('lockEnd');
+
+  // ── preview ──
+  const pvHdr = document.querySelector('.preview-header');
+  if (pvHdr) { pvHdr.childNodes[0].textContent = t('previewTitle') + ' '; }
+  const pvBeginLbl  = document.querySelector('.pv-begin .pv-part-label');
+  const pvMiddleLbl = document.querySelector('.pv-middle .pv-part-label');
+  const pvEndLbl    = document.querySelector('.pv-end .pv-part-label');
+  if (pvBeginLbl)  pvBeginLbl.textContent  = t('pvBegin');
+  if (pvMiddleLbl) pvMiddleLbl.textContent = t('pvMiddle');
+  if (pvEndLbl)    pvEndLbl.textContent    = t('pvEnd');
+
+  // ── celebrate bar ──
+  const celT = document.querySelector('.cel-title');
+  const celS = document.querySelector('.cel-sub');
+  if (celT) celT.textContent = t('celTitle');
+  if (celS) celS.textContent = t('celSub');
+  const speakAllBtn = document.querySelector('.btn-speak-all');
+  const paperBtn    = document.querySelector('.btn-paper');
+  if (speakAllBtn) speakAllBtn.textContent = t('speakAll');
+  if (paperBtn)    paperBtn.textContent    = t('toPaper');
+
+  // ── paper CTA ──
+  const pctaT = document.querySelector('.paper-cta-title');
+  const pctaS = document.querySelector('.paper-cta-sub');
+  if (pctaT) pctaT.textContent = t('paperCtaTitle');
+  if (pctaS) pctaS.textContent = t('paperCtaSub');
+
+  // ── step cards ──
+  const stepCards = document.querySelectorAll('.step-card');
+  if (stepCards[0]) {
+    const t1 = stepCards[0].querySelector('.step-title');
+    const s1 = stepCards[0].querySelector('.step-sub');
+    const b1 = stepCards[0].querySelector('.step-body');
+    if (t1) t1.textContent = t('s1Title');
+    if (s1) s1.textContent = t('s1Sub');
+    if (b1) b1.textContent = t('s1Body');
+  }
+  if (stepCards[1]) {
+    const t2 = stepCards[1].querySelector('.step-title');
+    const s2 = stepCards[1].querySelector('.step-sub');
+    if (t2) t2.textContent = t('s2Title');
+    if (s2) s2.textContent = t('s2Sub');
+    // improve banner
+    const bTitle = stepCards[1].querySelector('.improve-banner-title');
+    const bBack  = stepCards[1].querySelector('.improve-back-btn');
+    if (bTitle) bTitle.textContent = t('bannerTitle');
+    if (bBack)  bBack.textContent  = t('backToText');
+    const iSteps = stepCards[1].querySelectorAll('.improve-step');
+    const iKeys  = ['is1','is2','is3','is4'];
+    iSteps.forEach((el, i) => { if (iKeys[i]) el.textContent = t(iKeys[i]); });
+    // cl-group titles and back links
+    const clGroups = stepCards[1].querySelectorAll('.cl-group');
+    const clGKeys  = ['clg1','clg2','clg3','clg4'];
+    const clBKeys  = ['clBack1','clBack1','clBack2','clBack1'];
+    clGroups.forEach((g, i) => {
+      const titleEl = g.querySelector('.cl-group-title');
+      const backEl  = g.querySelector('.cl-back-link');
+      if (titleEl && clGKeys[i]) {
+        // preserve the back link element when resetting textContent
+        if (backEl) titleEl.removeChild(backEl);
+        titleEl.textContent = t(clGKeys[i]);
+        if (backEl) { backEl.textContent = t(clBKeys[i]); titleEl.appendChild(backEl); }
+      }
+    });
+    // cl-back buttons inside groups (back-to-text links)
+    stepCards[1].querySelectorAll('.cl-back-link').forEach((b, i) => {
+      b.textContent = t(clBKeys[i] || 'clBack1');
+    });
+  }
+  if (stepCards[2]) {
+    const t3 = stepCards[2].querySelector('.step-title');
+    const s3 = stepCards[2].querySelector('.step-sub');
+    if (t3) t3.textContent = t('s3Title');
+    if (s3) s3.textContent = t('s3Sub');
+    const ulbl = stepCards[2].querySelector('.upload-label');
+    const usub = stepCards[2].querySelector('.upload-sub');
+    if (ulbl) ulbl.textContent = t('uploadLabel');
+    if (usub) usub.textContent = t('uploadSub');
+    // feedback zone
+    const fbhd = stepCards[2].querySelector('.feedback-zone-hd');
+    if (fbhd) fbhd.firstChild.textContent = t('fbHd');
+    const fbLabels = stepCards[2].querySelectorAll('.fb-label');
+    if (fbLabels[0]) fbLabels[0].textContent = t('fbGoodLbl');
+    if (fbLabels[1]) fbLabels[1].textContent = t('fbImpLbl');
+    const fbTas = stepCards[2].querySelectorAll('.fb-ta');
+    if (fbTas[0]) fbTas[0].placeholder = t('fbGoodPh');
+    if (fbTas[1]) fbTas[1].placeholder = t('fbImpPh');
+    const fbSaveEl  = stepCards[2].querySelector('.fb-save');
+    const fbPrintEl = stepCards[2].querySelector('.fb-print');
+    if (fbSaveEl)  fbSaveEl.textContent  = t('fbSave');
+    if (fbPrintEl) fbPrintEl.textContent = t('fbPrint');
+  }
+
+  // ── translate CHARS descriptions & SETS names/descs, rebuild grids ──
+  const charDescsEN = ['Brave girl','Curious boy','Friendly dog','Smart cat','Clever fox','Friendly dragon'];
+  const setsEN = [
+    {name:'In the Forest',    desc:'Big trees'},
+    {name:'At School',        desc:'Classroom'},
+    {name:'At the Beach',     desc:'Sand and sea'},
+    {name:'In the City',      desc:'Streets and houses'},
+    {name:'On the Farm',      desc:'Animals and fields'},
+    {name:'In the Mountains', desc:'Snow and peaks'},
+  ];
+  CHARS.forEach((c, i) => { if (charDescsEN[i]) c.desc = charDescsEN[i]; });
+  SETS.forEach((s, i)  => { if (setsEN[i]) { s.name = setsEN[i].name; s.desc = setsEN[i].desc; } });
+  document.getElementById('charGrid').innerHTML    = '';
+  document.getElementById('settingGrid').innerHTML = '';
+  buildCharGrid();
+  buildSettingGrid();
+
+  // ── override dynamic strings used in JS functions ──
+  // Patch renderCorrections and related functions to use translated strings
+  const _origRenderCorrections = renderCorrections;
+  window.renderCorrections = function(part, matches) {
+    const ta   = document.getElementById('ta-' + part);
+    const cp   = document.getElementById('cp-' + part);
+    const text = ta.value;
+
+    const localWarns = [];
+    if (text.trim() && !/^[A-ZÄÖÜ„"']/.test(text.trim()))
+      localWarns.push('Start with a capital letter.');
+    if (text.trim() && !/[.!?]$/.test(text.trim()))
+      localWarns.push('Missing end punctuation (. ! ?)');
+    if (/  /.test(text))
+      localWarns.push('Double space found – please check.');
+
+    if (!matches.length && !localWarns.length) { showCP(cp, `<div class="cp-ok">${t('cpOk')}</div>`); return; }
+
+    const withSugs = matches.filter(m => m.replacements && m.replacements.length > 0);
+    let html = '';
+
+    if (localWarns.length) {
+      html += `<div class="cp-local">${localWarns.map(w =>
+        `<div class="cp-local-row">⚠️ ${escHtml(w)}</div>`).join('')}</div>`;
+    }
+
+    if (matches.length) {
+      html += `<div class="cp-head">✏️ ${matches.length} suggestion${matches.length>1?'s':''}:</div><div class="cp-list">`;
+      matches.forEach((m, i) => {
+        const wrong = text.substring(m.offset, m.offset + m.length);
+        const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+        const msg   = m.shortMessage || m.message || '';
+        html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong || '?')}</span>`;
+        if (sugs.length) {
+          html += `<span class="cp-arrow">→</span><span class="cp-sugs">`;
+          sugs.forEach(s => { html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`; });
+          html += `</span>`;
+        }
+        if (msg) html += `<span class="cp-reason">${escHtml(msg)}</span>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+      if (withSugs.length > 1) html += `<button class="cp-fixall" onclick="applyAll('${part}')">${t('cpFixall')}</button>`;
+    }
+
+    showCP(cp, html);
+    cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+
+  const _origCheckSpelling = checkSpelling;
+  window.checkSpelling = async function(part) {
+    const ta  = document.getElementById('ta-' + part);
+    const cp  = document.getElementById('cp-' + part);
+    const btn = document.getElementById('chk-' + part);
+    if (!ta.value.trim()) { showCP(cp, `<div class="cp-noop">${t('cpNoop')}</div>`); return; }
+    btn.textContent = '⏳ …';
+    btn.disabled = true;
+    try {
+      const resp = await fetch('https://api.languagetool.org/v2/check', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ text: ta.value, language: _bL === 'en' ? 'en-GB' : 'de-DE' })
+      });
+      if (!resp.ok) throw new Error('api');
+      const data = await resp.json();
+      const matches = data.matches || [];
+      _corrections[part] = matches;
+      renderCorrections(part, matches);
+    } catch(e) {
+      showCP(cp, `<div class="cp-err">${t('cpErr')}</div>`);
+    } finally {
+      btn.textContent = t('checkBtn');
+      btn.disabled = false;
+    }
+  };
+
+  // Patch word count pill updates
+  const _origOnType = onType;
+  window.onType = function(part) {
+    _origOnType(part);
+    const ta    = document.getElementById('ta-' + part);
+    const words = ta ? ta.value.trim().split(/\s+/).filter(w => w.length > 0).length : 0;
+    const pill  = document.getElementById('wc-' + part);
+    if (pill) pill.textContent = tf('words', words);
+  };
+
+  // Patch updateCLProgress to use translated label
+  const _origUpdateCL = updateCLProgress;
+  window.updateCLProgress = function() {
+    _origUpdateCL();
+    const items = document.querySelectorAll('#paperZone .cl-item');
+    const total = items.length;
+    const done  = document.querySelectorAll('#paperZone .cl-item.checked').length;
+    const el = document.getElementById('clCount');
+    if (el) { el.textContent = tf('clProgress', done, total); el.className = done===total?'cl-count all-done':'cl-count'; }
+  };
+  // Lang toggle button label
+  (function(){
+    const btn = document.getElementById('bl-lang-toggle');
+    if (btn) btn.textContent = _bL === 'en' ? '🌐 EN' : '🌐 DE';
+  })();
+})();
+
+function blToggleLang() {
+  const cur = localStorage.getItem('sw_lang') || 'de';
+  const next = cur === 'en' ? 'de' : 'en';
+  localStorage.setItem('sw_lang', next);
+  location.reload();
+}
 </script>
+<script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap';</script>
+<script src="gdpr.js"></script>
 </body>
 </html>

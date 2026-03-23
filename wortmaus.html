@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐭 Wortmaus – Schreibwerkstatt Klasse 3</title>
+  <meta name="description" content="Wortmaus hilft Kindern der Klasse 3 beim Schreiben – Schritt für Schritt, mit Tipps, Satzanfängen und Spracheingabe. LehrplanPLUS Bayern.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:       #1a1a2e;
+      --ink2:      #2d2d44;
+      --bg:        #faf9f6;
+      --white:     #ffffff;
+      --muted:     #5e5e78;
+      --border:    #ddd8f0;
+      --shadow:    0 4px 22px rgba(26,26,46,.11);
+      --shadow-lg: 0 10px 40px rgba(26,26,46,.16);
+      --r:         20px;
+      --r-sm:      12px;
+
+      --lavender:  #ede7f6;
+      --lavender2: #7c4dff;
+      --lavender3: #4527a0;
+      --grass:     #d4edda;
+      --grass2:    #43a047;
+      --grass3:    #1b5e20;
+      --sun:       #fff3cd;
+      --sun2:      #f59f00;
+      --sun3:      #7a4400;
+      --sky:       #e3f2fd;
+      --sky2:      #1565c0;
+      --sky3:      #0d2e6e;
+
+      --font-h: 'Baloo 2', 'Comic Sans MS', cursive;
+      --font-b: 'Quicksand', 'Arial Rounded MT Bold', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.75;
+    }
+
+    /* ── Skip link ─────────────────────────────── */
+    .skip {
+      position: absolute; top: -120px; left: 20px; z-index: 9999;
+      padding: 12px 22px; background: var(--lavender2); color: #fff;
+      font-family: var(--font-h); font-weight: 700; border-radius: 8px;
+      text-decoration: none; transition: top .2s;
+    }
+    .skip:focus { top: 18px; }
+
+    /* ── HERO ───────────────────────────────────── */
+    .hero {
+      background: linear-gradient(145deg, #12122a 0%, #252560 55%, #1a3d70 100%);
+      padding: 4rem 1.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Twinkling stars */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1.5px 1.5px at  8% 12%, rgba(255,255,255,.55) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 22% 55%, rgba(255,255,255,.40) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 38% 22%, rgba(255,255,255,.45) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 52%  8%, rgba(255,255,255,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 68% 38%, rgba(255,255,255,.50) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 78% 70%, rgba(255,255,255,.40) 0%, transparent 100%),
+        radial-gradient(2px   2px   at 88% 18%, rgba(255,255,255,.45) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 93% 60%, rgba(255,255,255,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 15% 82%, rgba(255,255,255,.40) 0%, transparent 100%),
+        radial-gradient(1px   1px   at 46% 78%, rgba(255,255,255,.30) 0%, transparent 100%);
+    }
+    .hero-inner {
+      max-width: 680px; margin: 0 auto;
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; align-items: center; gap: 1.4rem;
+    }
+    .mascot-wrap {
+      animation: bob 2.8s ease-in-out infinite;
+      filter: drop-shadow(0 10px 28px rgba(0,0,0,.40));
+    }
+    h1.hero-title {
+      font-family: var(--font-h);
+      font-size: clamp(3rem, 9vw, 5rem);
+      font-weight: 800;
+      color: #ffd060;
+      line-height: 1.05;
+      letter-spacing: -.5px;
+      text-shadow: 3px 4px 0 rgba(0,0,0,.30);
+    }
+    .hero-tagline {
+      font-family: var(--font-h);
+      font-size: clamp(1.1rem, 3.5vw, 1.55rem);
+      font-weight: 600;
+      color: rgba(255,255,255,.92);
+    }
+    .hero-desc {
+      font-size: clamp(.95rem, 2.4vw, 1.1rem);
+      color: rgba(255,255,255,.72);
+      max-width: 480px;
+      line-height: 1.85;
+    }
+
+    /* ── WAVE divider ───────────────────────────── */
+    .wave {
+      display: block; width: 100%;
+      background: var(--bg);
+      margin-top: -2px;
+    }
+
+    /* ── MAIN ───────────────────────────────────── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4.5rem;
+    }
+
+    .section-title {
+      font-family: var(--font-h);
+      font-size: clamp(1.5rem, 4.5vw, 2.1rem);
+      font-weight: 800;
+      color: var(--ink);
+      text-align: center;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ── TOOL CARDS ─────────────────────────────── */
+    .tools-section { margin-bottom: 3.5rem; }
+
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .tool-card {
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      border: 2.5px solid transparent;
+      padding: 1.8rem 1.6rem 1.5rem;
+      display: flex; flex-direction: column; gap: .75rem;
+      text-decoration: none; color: inherit;
+      position: relative; overflow: hidden;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
+    }
+    /* Coloured top accent bar */
+    .tool-card::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 7px;
+      border-radius: var(--r) var(--r) 0 0;
+    }
+    .tool-card:hover  { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .tool-card:focus-visible {
+      outline: 3px solid var(--lavender2); outline-offset: 3px;
+    }
+    .tc-lavender::before { background: var(--lavender2); }
+    .tc-lavender:hover   { border-color: var(--lavender2); }
+    .tc-grass::before    { background: var(--grass2); }
+    .tc-grass:hover      { border-color: var(--grass2); }
+    .tc-sun::before      { background: var(--sun2); }
+    .tc-sun:hover        { border-color: var(--sun2); }
+    .tc-sky::before      { background: var(--sky2); }
+    .tc-sky:hover        { border-color: var(--sky2); }
+
+    .tool-icon { font-size: 3.2rem; line-height: 1; margin-top: .3rem; }
+
+    .tool-name {
+      font-family: var(--font-h);
+      font-size: 1.35rem; font-weight: 800;
+      color: var(--ink);
+    }
+    .tool-desc {
+      font-size: .97rem; color: var(--muted);
+      line-height: 1.75; flex: 1;
+    }
+    .tool-badge {
+      display: inline-block;
+      font-size: .75rem; font-weight: 700;
+      padding: 3px 11px; border-radius: 20px;
+      width: fit-content;
+    }
+    .badge-v { background: var(--lavender); color: var(--lavender3); }
+    .badge-g { background: var(--grass);    color: var(--grass3); }
+    .badge-s { background: var(--sun);      color: var(--sun3); }
+    .badge-k { background: var(--sky);      color: var(--sky3); }
+
+    .tool-cta {
+      display: flex; align-items: center; justify-content: center; gap: .35rem;
+      padding: .8rem 1.5rem;
+      border-radius: 50px;
+      font-family: var(--font-h); font-size: 1rem; font-weight: 700;
+      color: #fff;
+      margin-top: .3rem;
+      transition: filter .15s, transform .1s;
+    }
+    .tool-card:hover .tool-cta { filter: brightness(1.1); }
+    .tool-card:active .tool-cta { transform: scale(.97); }
+    .cta-v { background: var(--lavender2); }
+    .cta-g { background: var(--grass2); }
+    .cta-s { background: var(--sun2); }
+    .cta-k { background: var(--sky2); }
+
+    /* ── FEATURES ───────────────────────────────── */
+    .features-section {
+      background: var(--white);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 2.5rem 2.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.8rem 2rem;
+      margin-top: .75rem;
+    }
+    .feat {
+      display: flex; flex-direction: column; gap: .4rem;
+    }
+    .feat-icon { font-size: 2.2rem; line-height: 1; }
+    .feat-title {
+      font-family: var(--font-h);
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--ink);
+    }
+    .feat-text {
+      font-size: .9rem; color: var(--muted); line-height: 1.7;
+    }
+
+    /* ── CALLOUT ────────────────────────────────── */
+    .callout {
+      border-radius: var(--r);
+      border: 2.5px solid #c5a6f5;
+      background: linear-gradient(135deg, #ede7f6 0%, #f9ecff 100%);
+      padding: 1.9rem 2rem;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+    .callout-title {
+      font-family: var(--font-h);
+      font-size: 1.3rem; font-weight: 800;
+      color: var(--lavender3);
+      margin-bottom: .5rem;
+    }
+    .callout-text {
+      font-size: .98rem; color: var(--ink2); line-height: 1.8;
+    }
+    .callout-text strong { color: var(--lavender3); }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,.65);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: .85rem;
+      line-height: 1.9;
+    }
+    footer a { color: rgba(255,255,255,.8); text-underline-offset: 3px; }
+
+    /* ── ANIMATIONS ─────────────────────────────── */
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-12px); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fu   { animation: fadeUp .45s ease both; }
+    .fu-1 { animation-delay: .06s; }
+    .fu-2 { animation-delay: .13s; }
+    .fu-3 { animation-delay: .20s; }
+    .fu-4 { animation-delay: .27s; }
+
+    /* ── REDUCED MOTION ─────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .mascot-wrap { animation: none; }
+      .fu, .fu-1, .fu-2, .fu-3, .fu-4 { animation: none; }
+      .tool-card { transition: none; }
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 520px) {
+      .hero { padding: 2.75rem 1rem 3.5rem; }
+      main  { padding: 2rem 1rem 3.5rem; }
+      .features-section { padding: 1.75rem 1.25rem; }
+      .callout { padding: 1.5rem 1.25rem; }
+      .tools-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+
+  <!-- ══ HERO ══════════════════════════════════════ -->
+  <header class="hero" role="banner">
+    <div class="hero-inner">
+
+      <!-- Wortmaus SVG mascot -->
+      <div class="mascot-wrap" aria-hidden="true">
+        <svg viewBox="0 0 200 240" width="168" height="202"
+             xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="ms" x="-25%" y="-25%" width="150%" height="150%">
+              <feDropShadow dx="0" dy="4" stdDeviation="7"
+                            flood-color="rgba(0,0,0,.22)"/>
+            </filter>
+          </defs>
+
+          <!-- Tail -->
+          <path d="M 148 202 C 182 218 204 186 198 158 C 194 136 174 138 180 118"
+                fill="none" stroke="#b89872" stroke-width="7.5"
+                stroke-linecap="round"/>
+
+          <!-- Body -->
+          <ellipse cx="100" cy="186" rx="57" ry="46"
+                   fill="#d6bc9f" filter="url(#ms)"/>
+
+          <!-- Belly -->
+          <ellipse cx="100" cy="192" rx="37" ry="29" fill="#ede2d0"/>
+
+          <!-- Head -->
+          <circle cx="100" cy="116" r="54" fill="#d6bc9f"/>
+
+          <!-- Left ear outer -->
+          <circle cx="63"  cy="70"  r="27" fill="#d6bc9f"/>
+          <!-- Left ear inner -->
+          <circle cx="63"  cy="70"  r="17" fill="#f4a8c2"/>
+
+          <!-- Right ear outer -->
+          <circle cx="137" cy="70"  r="27" fill="#d6bc9f"/>
+          <!-- Right ear inner -->
+          <circle cx="137" cy="70"  r="17" fill="#f4a8c2"/>
+
+          <!-- Eyes (large, friendly) -->
+          <circle cx="82"  cy="112" r="13" fill="#1a1a2e"/>
+          <circle cx="118" cy="112" r="13" fill="#1a1a2e"/>
+          <!-- Eye shine -->
+          <circle cx="77"  cy="107" r="5"  fill="#ffffff"/>
+          <circle cx="113" cy="107" r="5"  fill="#ffffff"/>
+          <!-- Second small shine -->
+          <circle cx="90"  cy="120" r="2"  fill="rgba(255,255,255,.4)"/>
+          <circle cx="126" cy="120" r="2"  fill="rgba(255,255,255,.4)"/>
+
+          <!-- Nose -->
+          <ellipse cx="100" cy="131" rx="7.5" ry="6.5" fill="#e8709a"/>
+
+          <!-- Happy smile -->
+          <path d="M 86 141 Q 100 155 114 141"
+                fill="none" stroke="#9a7060" stroke-width="3"
+                stroke-linecap="round"/>
+
+          <!-- Whiskers left -->
+          <line x1="58"  y1="126" x2="91"  y2="131"
+                stroke="#a08060" stroke-width="1.6" stroke-linecap="round"/>
+          <line x1="56"  y1="136" x2="90"  y2="135"
+                stroke="#a08060" stroke-width="1.6" stroke-linecap="round"/>
+
+          <!-- Whiskers right -->
+          <line x1="142" y1="126" x2="109" y2="131"
+                stroke="#a08060" stroke-width="1.6" stroke-linecap="round"/>
+          <line x1="144" y1="136" x2="110" y2="135"
+                stroke="#a08060" stroke-width="1.6" stroke-linecap="round"/>
+
+          <!-- Right arm -->
+          <ellipse cx="151" cy="174" rx="16" ry="11"
+                   fill="#d6bc9f" transform="rotate(-30 151 174)"/>
+
+          <!-- Pencil (tilted ~22°, held by right paw) -->
+          <g transform="translate(158,136) rotate(22)">
+            <!-- Eraser -->
+            <rect x="-5.5" y="0"  width="11" height="9"  rx="3"   fill="#ff9898"/>
+            <!-- Metal band -->
+            <rect x="-5.5" y="9"  width="11" height="5"  rx="1.5" fill="#b0b4ba"/>
+            <!-- Body yellow -->
+            <rect x="-5.5" y="14" width="11" height="54" rx="1.5" fill="#ffd060"/>
+            <!-- Wood reveal -->
+            <polygon points="-5.5,68  5.5,68  0,82"   fill="#e2c280"/>
+            <!-- Lead tip -->
+            <polygon points="-3.5,82  3.5,82  0,90"   fill="#3a3a4a"/>
+          </g>
+
+          <!-- Small W badge on belly (brand mark) -->
+          <circle cx="100" cy="192" r="14" fill="#ffd060" opacity=".9"/>
+          <text x="100" y="197" text-anchor="middle"
+                font-family="'Baloo 2', cursive" font-weight="800"
+                font-size="14" fill="#1a1a2e">W</text>
+        </svg>
+      </div>
+
+      <h1 class="hero-title">🐭 Wortmaus</h1>
+      <p class="hero-tagline">Deine Schreibwerkstatt für Klasse&nbsp;3</p>
+      <p class="hero-desc">
+        Hier lernst du, Geschichten und Sätze zu schreiben —
+        mit kleinen Schritten, hilfreichen Tipps und ganz viel Spaß!
+      </p>
+    </div>
+  </header>
+
+  <!-- Wave divider -->
+  <svg class="wave" viewBox="0 0 1440 54" preserveAspectRatio="none"
+       height="42" aria-hidden="true">
+    <path d="M0,32 C360,54 1080,0 1440,32 L1440,54 L0,54 Z"
+          fill="#faf9f6"/>
+  </svg>
+
+  <!-- ══ MAIN ══════════════════════════════════════ -->
+  <main id="main">
+
+    <!-- ── Tool cards ── -->
+    <section class="tools-section" aria-labelledby="tools-h">
+      <h2 class="section-title" id="tools-h">🎯 Wähle dein Schreibabenteuer</h2>
+      <div class="tools-grid">
+
+        <a class="tool-card tc-lavender fu fu-1" href="index.html">
+          <div class="tool-icon" aria-hidden="true">📖</div>
+          <div class="tool-name">Meine Geschichte</div>
+          <p class="tool-desc">
+            Schreib eine ganze Geschichte mit Anfang, Mitte und Ende —
+            Schritt für Schritt, mit Tipps, Checkliste und KI-Check.
+          </p>
+          <span class="tool-badge badge-v">✏️ Freies Schreiben</span>
+          <span class="tool-cta cta-v" aria-hidden="true">Los geht's! →</span>
+        </a>
+
+        <a class="tool-card tc-grass fu fu-2" href="story.html">
+          <div class="tool-icon" aria-hidden="true">⛏️</div>
+          <div class="tool-name">Blockwelt Abenteuer</div>
+          <p class="tool-desc">
+            Erzähle dein Roblox- oder Minecraft-Abenteuer in drei Kapiteln —
+            mit Wortbank, Spannungswörtern und Pixel-Flair!
+          </p>
+          <span class="tool-badge badge-g">🎮 Spielend schreiben</span>
+          <span class="tool-cta cta-g" aria-hidden="true">Los geht's! →</span>
+        </a>
+
+        <a class="tool-card tc-sun fu fu-3" href="builder.html">
+          <div class="tool-icon" aria-hidden="true">🏗️</div>
+          <div class="tool-name">Geschichten-Baumeister</div>
+          <p class="tool-desc">
+            Baue deinen eigenen Schreibauftrag: wähle ein Thema, eine Figur
+            und einen Ort — du bestimmst, worüber du schreibst!
+          </p>
+          <span class="tool-badge badge-s">⚙️ Selbst gestalten</span>
+          <span class="tool-cta cta-s" aria-hidden="true">Los geht's! →</span>
+        </a>
+
+        <a class="tool-card tc-sky fu fu-4" href="satzwerkstatt.html">
+          <div class="tool-icon" aria-hidden="true">🔤</div>
+          <div class="tool-name">Satzwerkstatt</div>
+          <p class="tool-desc">
+            Übe einzelne Sätze zu schreiben: Groß­schreibung, Satzzeichen,
+            wörtliche Rede — ein Satz nach dem anderen.
+          </p>
+          <span class="tool-badge badge-k">🔍 Gezielt üben</span>
+          <span class="tool-cta cta-k" aria-hidden="true">Los geht's! →</span>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- ── Features / why Wortmaus ── -->
+    <section class="features-section" aria-labelledby="feat-h">
+      <h2 class="section-title" id="feat-h" style="text-align:left;margin-bottom:1rem;">
+        ✨ Wortmaus hilft dir beim Schreiben
+      </h2>
+      <div class="features-grid">
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">🪜</div>
+          <div class="feat-title">Klare Schritte</div>
+          <p class="feat-text">
+            Erst planen, dann schreiben, dann überarbeiten.
+            Du weißt immer, was als Nächstes kommt.
+          </p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">💡</div>
+          <div class="feat-title">Satzanfänge helfen</div>
+          <p class="feat-text">
+            Wenn dir kein Wort einfällt, zeigt Wortmaus dir fertige
+            Satzanfänge — damit der Start leichter wird.
+          </p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">📊</div>
+          <div class="feat-title">Du siehst deinen Fortschritt</div>
+          <p class="feat-text">
+            Wörter werden gezählt, Häkchen zeigen dir,
+            was du schon geschafft hast.
+          </p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">🧘</div>
+          <div class="feat-title">Fokus-Modus</div>
+          <p class="feat-text">
+            Im Fokus-Modus verschwindet alles außer deinem Text.
+            Ruhiger Bildschirm, klarer Kopf.
+          </p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">🎤</div>
+          <div class="feat-title">Sprechen statt tippen</div>
+          <p class="feat-text">
+            Du kannst deine Wörter auch einfach sprechen —
+            Wortmaus schreibt sie für dich auf.
+          </p>
+        </div>
+
+        <div class="feat">
+          <div class="feat-icon" aria-hidden="true">🔍</div>
+          <div class="feat-title">Schreib-Check</div>
+          <p class="feat-text">
+            Die KI schaut über die Schulter und hilft dir,
+            Fehler zu finden und zu verbessern.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Callout for grown-ups ── -->
+    <div class="callout" role="note" aria-label="Hinweis für Erwachsene">
+      <div class="callout-title">👩‍🏫 Für Eltern und Lehrkräfte</div>
+      <p class="callout-text">
+        Wortmaus ist <strong>kostenlos</strong> und braucht <strong>keine Anmeldung</strong>.
+        Alle Aufgaben orientieren sich am
+        <strong>LehrplanPLUS Bayern Klasse&nbsp;3</strong>.
+        Die App funktioniert am Tablet oder Computer — am besten mit einer Tastatur.
+        Es werden keine Daten gespeichert oder weitergegeben.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- ══ FOOTER ════════════════════════════════════ -->
+  <footer>
+    <p>🐭 Wortmaus · Schreibwerkstatt Klasse 3 · LehrplanPLUS Bayern</p>
+    <p style="font-size:.8rem;opacity:.7;margin-top:.3rem;">
+      Kostenlos &amp; ohne Anmeldung · Keine Daten werden gespeichert
+    </p>
+  </footer>
+
+</body>
+</html>
