@@ -400,6 +400,19 @@ body {
   font-family: 'Nunito', sans-serif; transition: background .2s;
 }
 .cp-fixall:hover { background: #15803d; }
+.cp-reason {
+  display: block; width: 100%; margin-top: 3px;
+  font-size: .78rem; color: var(--muted); font-style: italic;
+}
+.cp-local {
+  margin-bottom: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.cp-local-row {
+  background: #fff7ed; border: 1.5px solid #fed7aa;
+  border-radius: 8px; padding: 6px 10px;
+  font-size: .82rem; color: #c2410c; font-weight: 600;
+}
 
 /* lock overlay */
 .lock-overlay {
@@ -1659,16 +1672,16 @@ async function checkSpelling(part) {
   btn.disabled = true;
 
   try {
+    const ltLang = localStorage.getItem('sw_lang') === 'en' ? 'en-GB' : 'de-DE';
     const resp = await fetch('https://api.languagetool.org/v2/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ text: ta.value, language: 'de-DE' })
+      body: new URLSearchParams({ text: ta.value, language: ltLang })
     });
     if (!resp.ok) throw new Error('api');
     const data = await resp.json();
 
-    // filter out matches with no replacement suggestions
-    const matches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+    const matches = data.matches || [];
     _corrections[part] = matches;
     renderCorrections(part, matches);
   } catch(e) {
@@ -1680,37 +1693,56 @@ async function checkSpelling(part) {
 }
 
 function renderCorrections(part, matches) {
-  const ta = document.getElementById(`ta-${part}`);
-  const cp = document.getElementById(`cp-${part}`);
+  const ta   = document.getElementById(`ta-${part}`);
+  const cp   = document.getElementById(`cp-${part}`);
+  const text = ta.value;
 
-  if (!matches.length) {
+  // Local structural checks
+  const localWarns = [];
+  if (text.trim() && !/^[A-ZÄÖÜ„"']/.test(text.trim()))
+    localWarns.push('Beginne mit einem Großbuchstaben.');
+  if (text.trim() && !/[.!?]$/.test(text.trim()))
+    localWarns.push('Am Ende fehlt ein Satzzeichen (. ! ?)');
+  if (/  /.test(text))
+    localWarns.push('Doppeltes Leerzeichen gefunden – bitte prüfen.');
+
+  if (!matches.length && !localWarns.length) {
     showCP(cp, '<div class="cp-ok">🌟 Super! Keine Fehler gefunden!</div>');
     return;
   }
 
-  let html = `<div class="cp-head">✏️ ${matches.length} Verbesserungsvorschlag${matches.length > 1 ? 'e' : ''}:</div><div class="cp-list">`;
+  const withSugs = matches.filter(m => m.replacements && m.replacements.length > 0);
+  let html = '';
 
-  matches.forEach((m, i) => {
-    const wrong = ta.value.substring(m.offset, m.offset + m.length);
-    const sugs  = m.replacements.slice(0, 3).map(r => r.value);
-    html += `<div class="cp-row">
-      <span class="cp-wrong">${escHtml(wrong)}</span>
-      <span class="cp-arrow">→</span>
-      <span class="cp-sugs">`;
-    sugs.forEach(s => {
-      html += `<button class="cp-sug"
-        onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`;
-    });
-    html += `</span></div>`;
-  });
-
-  html += `</div>`;
-  if (matches.length > 1) {
-    html += `<button class="cp-fixall" onclick="applyAll('${part}')">✨ Alle auf einmal korrigieren</button>`;
+  if (localWarns.length) {
+    html += `<div class="cp-local">${localWarns.map(w =>
+      `<div class="cp-local-row">⚠️ ${escHtml(w)}</div>`).join('')}</div>`;
   }
-  showCP(cp, html);
 
-  // scroll corrections into view
+  if (matches.length) {
+    html += `<div class="cp-head">✏️ ${matches.length} Verbesserungsvorschlag${matches.length > 1 ? 'e' : ''}:</div><div class="cp-list">`;
+    matches.forEach((m, i) => {
+      const wrong = text.substring(m.offset, m.offset + m.length);
+      const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+      const msg   = m.shortMessage || m.message || '';
+      html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong || '?')}</span>`;
+      if (sugs.length) {
+        html += `<span class="cp-arrow">→</span><span class="cp-sugs">`;
+        sugs.forEach(s => {
+          html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`;
+        });
+        html += `</span>`;
+      }
+      if (msg) html += `<span class="cp-reason">${escHtml(msg)}</span>`;
+      html += `</div>`;
+    });
+    html += `</div>`;
+    if (withSugs.length > 1) {
+      html += `<button class="cp-fixall" onclick="applyAll('${part}')">✨ Alle auf einmal korrigieren</button>`;
+    }
+  }
+
+  showCP(cp, html);
   cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
@@ -1750,7 +1782,7 @@ function escHtml(s) {
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function escAttr(s) {
-  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
 }
 
 /* ── CONFETTI ─────────────────────────────── */
@@ -2095,19 +2127,47 @@ function confetti() {
   // Patch renderCorrections and related functions to use translated strings
   const _origRenderCorrections = renderCorrections;
   window.renderCorrections = function(part, matches) {
-    const ta = document.getElementById('ta-' + part);
-    const cp = document.getElementById('cp-' + part);
-    if (!matches.length) { showCP(cp, `<div class="cp-ok">${t('cpOk')}</div>`); return; }
-    let html = `<div class="cp-head">✏️ ${matches.length} suggestion${matches.length>1?'s':''}:</div><div class="cp-list">`;
-    matches.forEach((m, i) => {
-      const wrong = ta.value.substring(m.offset, m.offset + m.length);
-      const sugs  = m.replacements.slice(0, 3).map(r => r.value);
-      html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong)}</span><span class="cp-arrow">→</span><span class="cp-sugs">`;
-      sugs.forEach(s => { html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`; });
-      html += `</span></div>`;
-    });
-    html += `</div>`;
-    if (matches.length > 1) html += `<button class="cp-fixall" onclick="applyAll('${part}')">${t('cpFixall')}</button>`;
+    const ta   = document.getElementById('ta-' + part);
+    const cp   = document.getElementById('cp-' + part);
+    const text = ta.value;
+
+    const localWarns = [];
+    if (text.trim() && !/^[A-ZÄÖÜ„"']/.test(text.trim()))
+      localWarns.push('Start with a capital letter.');
+    if (text.trim() && !/[.!?]$/.test(text.trim()))
+      localWarns.push('Missing end punctuation (. ! ?)');
+    if (/  /.test(text))
+      localWarns.push('Double space found – please check.');
+
+    if (!matches.length && !localWarns.length) { showCP(cp, `<div class="cp-ok">${t('cpOk')}</div>`); return; }
+
+    const withSugs = matches.filter(m => m.replacements && m.replacements.length > 0);
+    let html = '';
+
+    if (localWarns.length) {
+      html += `<div class="cp-local">${localWarns.map(w =>
+        `<div class="cp-local-row">⚠️ ${escHtml(w)}</div>`).join('')}</div>`;
+    }
+
+    if (matches.length) {
+      html += `<div class="cp-head">✏️ ${matches.length} suggestion${matches.length>1?'s':''}:</div><div class="cp-list">`;
+      matches.forEach((m, i) => {
+        const wrong = text.substring(m.offset, m.offset + m.length);
+        const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+        const msg   = m.shortMessage || m.message || '';
+        html += `<div class="cp-row"><span class="cp-wrong">${escHtml(wrong || '?')}</span>`;
+        if (sugs.length) {
+          html += `<span class="cp-arrow">→</span><span class="cp-sugs">`;
+          sugs.forEach(s => { html += `<button class="cp-sug" onclick="applySingle('${part}',${i},'${escAttr(s)}')">${escHtml(s)}</button>`; });
+          html += `</span>`;
+        }
+        if (msg) html += `<span class="cp-reason">${escHtml(msg)}</span>`;
+        html += `</div>`;
+      });
+      html += `</div>`;
+      if (withSugs.length > 1) html += `<button class="cp-fixall" onclick="applyAll('${part}')">${t('cpFixall')}</button>`;
+    }
+
     showCP(cp, html);
     cp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
@@ -2124,11 +2184,11 @@ function confetti() {
       const resp = await fetch('https://api.languagetool.org/v2/check', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ text: ta.value, language: 'de-DE' })
+        body: new URLSearchParams({ text: ta.value, language: _bL === 'en' ? 'en-GB' : 'de-DE' })
       });
       if (!resp.ok) throw new Error('api');
       const data = await resp.json();
-      const matches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+      const matches = data.matches || [];
       _corrections[part] = matches;
       renderCorrections(part, matches);
     } catch(e) {
