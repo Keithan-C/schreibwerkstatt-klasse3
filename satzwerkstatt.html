@@ -3,750 +3,594 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satzwerkstatt – Bayern Klasse 3/4</title>
-<!-- Google Fonts loaded after GDPR consent via gdpr.js -->
+<title>Satzwerkstatt ✏️</title>
 <style>
+/* ── RESET & TOKENS ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f4f2ed;
-  --paper:#fffdf8;
-  --ink:#1f1c18;
-  --ink2:#3f3a34;
-  --muted:#6f6a63;
-
-  --forest:#2f6b3c;
-  --forestBg:#edf7ef;
-  --forestBd:#b8d9bf;
-
-  --blue:#2f5f96;
-  --blueBg:#ebf3fc;
-  --blueBd:#bfd5ef;
-
-  --amber:#9a6a1f;
-  --amberBg:#fff7e7;
-  --amberBd:#efd49a;
-
-  --rose:#9a4e45;
-  --roseBg:#fdf1ef;
-  --roseBd:#ebc0b8;
-
-  --purple:#6d52b5;
-  --purpleBg:#f3efff;
-  --purpleBd:#d2c5f4;
-
-  --border:#d9d3ca;
-  --shadow:0 6px 20px rgba(0,0,0,.08);
-
-  --radius:18px;
-  --radiusSm:12px;
-
-  --fontHead:'Baloo 2',cursive;
-  --fontBody:'Quicksand',sans-serif;
+--blue:#4f6ef7;--blue-lt:#eef0ff;
+--green:#16a34a;--green-bg:#f0fdf4;--green-mid:#86efac;
+--amber:#d97706;--amber-bg:#fffbeb;--amber-mid:#fcd34d;
+--red:#dc2626;--red-bg:#fef2f2;
+--surface:#ffffff;--bg:#f2f5ff;--text:#1a1f36;--muted:#64748b;--border:#e0e7f0;
+--radius:18px;--radius-sm:10px;--shadow:0 2px 16px rgba(79,110,247,.09)
 }
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--fontBody);
-  background:
-    radial-gradient(circle at top left,#fff8eb 0,transparent 30%),
-    radial-gradient(circle at top right,#eef6ff 0,transparent 26%),
-    var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  line-height:1.65;
-  -webkit-text-size-adjust:100%;
-}
-@media (prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-}
-button:focus-visible,a:focus-visible,textarea:focus-visible{
-  outline:3px solid var(--blue);
-  outline-offset:2px;
-}
-.topbar{
-  background:linear-gradient(135deg,#264560,#365f85);
-  padding:14px 18px;
-  position:sticky;
-  top:0;
-  z-index:100;
-  box-shadow:0 4px 16px rgba(0,0,0,.14);
-}
-.topbar-inner{
-  max-width:860px;
-  margin:0 auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.topbar-title{
-  font-family:var(--fontHead);
-  font-size:clamp(1.05rem,2.6vw,1.35rem);
-  color:#fff;
-  line-height:1.1;
-}
-.topbar-sub{
-  font-size:11px;
-  color:rgba(255,255,255,.75);
-  margin-top:2px;
-}
-.topbar-right{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.top-link{
-  font-family:var(--fontHead);
-  font-size:11px;
-  font-weight:700;
-  padding:9px 12px;
-  min-height:40px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border-radius:999px;
-  text-decoration:none;
-  background:rgba(255,255,255,.14);
-  color:#fff;
-}
-.top-link:hover{background:rgba(255,255,255,.24)}
-.wrap{
-  max-width:860px;
-  margin:0 auto;
-  padding:22px 14px 56px;
-}
-.hero{
-  background:linear-gradient(135deg,#fffdf8,#f6f8ff);
-  border:2px solid var(--border);
-  border-radius:26px;
-  box-shadow:var(--shadow);
-  padding:22px 18px;
-  margin-bottom:14px;
-}
-.hero-icon{
-  font-size:42px;
-  text-align:center;
-  display:block;
-  margin-bottom:6px;
-}
-.hero-title{
-  font-family:var(--fontHead);
-  font-size:clamp(1.7rem,4vw,2.2rem);
-  text-align:center;
-  line-height:1.15;
-  margin-bottom:8px;
-  color:var(--ink);
-}
-.hero-sub{
-  max-width:58ch;
-  margin:0 auto;
-  text-align:center;
-  font-size:14px;
-  color:var(--muted);
-}
-.calm-note{
-  margin-top:12px;
-  background:var(--blueBg);
-  border:2px solid var(--blueBd);
-  border-radius:var(--radiusSm);
-  padding:10px 12px;
-  font-size:13px;
-  color:var(--blue);
-}
-.grid{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:14px;
-}
-.card{
-  background:var(--paper);
-  border:2px solid var(--border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:16px;
-  margin-bottom:14px;
-}
-.card-header{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  margin-bottom:12px;
-}
-.card-icon{
-  font-size:22px;
-  line-height:1;
-  margin-top:2px;
-}
-.card-title{
-  font-family:var(--fontHead);
-  font-size:15px;
-  font-weight:800;
-  color:var(--ink);
-}
-.card-sub{
-  font-size:12px;
-  color:var(--muted);
-  margin-top:2px;
-}
-.goal-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-.goal{
-  background:#faf8f3;
-  border:1.5px solid var(--border);
-  border-radius:var(--radiusSm);
-  padding:10px 11px;
-}
-.goal strong{
-  display:block;
-  font-family:var(--fontHead);
-  font-size:11px;
-  margin-bottom:4px;
-}
-.goal span{
-  display:block;
-  font-size:13px;
-  color:var(--muted);
-}
-.step-strip{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:12px;
-}
-.step-pill{
-  background:var(--forestBg);
-  color:var(--forest);
-  border:2px solid var(--forestBd);
-  border-radius:999px;
-  padding:7px 12px;
-  font-family:var(--fontHead);
-  font-size:11px;
-}
-.starters{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:12px;
-}
-.starter-btn{
-  padding:10px 14px;
-  border:2px solid var(--purpleBd);
-  border-radius:999px;
-  background:var(--purpleBg);
-  color:var(--purple);
-  font-family:var(--fontHead);
-  font-size:11px;
-  font-weight:700;
-  cursor:pointer;
-  min-height:44px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-.starter-btn:hover{background:#e9e1ff}
-textarea{
-  width:100%;
-  min-height:150px;
-  border:2px solid var(--border);
-  border-radius:14px;
-  padding:13px 14px;
-  font-family:var(--fontBody);
-  font-size:16px;
-  line-height:1.85;
-  resize:vertical;
-  background:#fffefb;
-  color:var(--ink);
-  outline:none;
-}
-textarea:focus{
-  border-color:var(--blue);
-  box-shadow:0 0 0 4px rgba(47,95,150,.12);
-}
-.tool-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:10px 0 12px;
-}
-.meta-row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.meta-pill{
-  font-family:var(--fontHead);
-  font-size:10px;
-  color:var(--muted);
-  background:#f7f4ef;
-  border:1.5px solid var(--border);
-  border-radius:999px;
-  padding:7px 11px;
-}
-.meta-pill.good{
-  background:var(--forestBg);
-  border-color:var(--forestBd);
-  color:var(--forest);
-}
-.btn-row{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-}
-.btn{
-  font-family:var(--fontHead);
-  font-size:12px;
-  font-weight:700;
-  padding:12px 16px;
-  border-radius:12px;
-  border:2px solid;
-  cursor:pointer;
-  min-height:46px;
-  min-width:120px;
-}
-.btn:active{transform:scale(.98)}
-.btn-primary{
-  background:linear-gradient(135deg,var(--blue),#4577b0);
-  color:#fff;
-  border-color:var(--blue);
-}
-.btn-secondary{
-  background:#f8f5ef;
-  color:var(--ink2);
-  border-color:var(--border);
-}
-.btn-secondary:hover{background:#f1ede5}
-.results{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.result{
-  border-radius:14px;
-  padding:11px 13px;
-  border:2px solid;
-  font-size:13.5px;
-  line-height:1.7;
-}
-.result-label{
-  font-family:var(--fontHead);
-  font-size:10px;
-  display:block;
-  margin-bottom:3px;
-}
-.result.ok{background:var(--forestBg);color:var(--forest);border-color:var(--forestBd)}
-.result.warn{background:var(--amberBg);color:var(--amber);border-color:var(--amberBd)}
-.result.info{background:var(--blueBg);color:var(--blue);border-color:var(--blueBd)}
-.result.bad{background:var(--roseBg);color:var(--rose);border-color:var(--roseBd)}
-.result.tip{background:var(--purpleBg);color:var(--purple);border-color:var(--purpleBd)}
-.helper-list{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-}
-.helper{
-  background:#faf8f3;
-  border:1.5px solid var(--border);
-  border-radius:12px;
-  padding:10px 11px;
-}
-.helper strong{
-  display:block;
-  font-family:var(--fontHead);
-  font-size:11px;
-  margin-bottom:4px;
-}
-.helper span{
-  display:block;
-  font-size:13px;
-  color:var(--muted);
-}
-.hl{
-  background:var(--amberBg);
-  border:1px solid var(--amberBd);
-  border-radius:4px;
-  padding:1px 5px;
-  color:var(--amber);
-  font-weight:700;
-}
-.success-box{
-  margin-top:12px;
-  display:none;
-  background:linear-gradient(135deg,var(--forestBg),#f6fbf6);
-  border:2px solid var(--forestBd);
-  border-radius:14px;
-  padding:12px 13px;
-  color:var(--forest);
-}
-.success-box.show{display:block}
-.success-title{
-  font-family:var(--fontHead);
-  font-size:12px;
-  margin-bottom:4px;
-}
-.footer-note{
-  margin-top:10px;
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-@media(max-width:760px){
-  .grid{grid-template-columns:1fr}
-}
-
-@media(max-width:640px){
-  .wrap{padding:16px 12px 44px}
-  .hero{padding:18px 14px}
-  .card{padding:14px}
-  .goal-list{grid-template-columns:1fr}
-  .tool-row{align-items:stretch}
-  .meta-row,.btn-row{width:100%}
-  .btn-row .btn{flex:1}
-}
-
-@media(max-width:480px){
-  .topbar{padding:12px 12px}
-  .topbar-inner{align-items:stretch}
-  .topbar-right{width:100%}
-  .top-link{flex:1}
-  .hero-title{font-size:1.55rem}
-  .hero-sub,.calm-note,.goal span,.helper span,.footer-note,.result{font-size:13px}
-  .starter-btn{width:100%}
-  textarea{
-    min-height:170px;
-    font-size:16px;
-    line-height:1.75;
-  }
-  .btn{
-    width:100%;
-    min-width:0;
-  }
-  .btn-row{
-    flex-direction:column;
-  }
-}
+body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:linear-gradient(135deg,#1a1a2e,#2d2d5e);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.topbar-title{font-family:"Baloo 2";font-weight:800;color:#fff;font-size:1.2rem}
+.tlink{font-size:.8rem;padding:6px 14px;border-radius:40px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;transition:all .2s}
+.tlink:hover{background:rgba(255,255,255,.2);color:#fff}
+.page{max-width:860px;margin:32px auto 60px;padding:0 16px;display:flex;flex-direction:column;gap:24px}
+.card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.card-hd{padding:18px 22px 14px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:10px}
+.card-icon{font-size:1.6rem}
+.card-title{font-family:'Baloo 2';font-size:1.2rem;font-weight:800;color:var(--text)}
+.card-sub{font-size:.82rem;font-weight:600;color:var(--muted);margin-top:1px}
+.card-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+.s-ta{width:100%;min-height:110px;border:2.5px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;font-family:'Nunito';font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.7;background:#fafcff;outline:none;transition:border-color .2s;spellcheck:true}
+.s-ta:focus{border-color:var(--blue);background:#fff}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:flex;align-items:center;gap:6px;border:none;border-radius:40px;padding:10px 20px;font-size:.92rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .2s}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 3px 10px rgba(79,110,247,.25)}
+.btn-primary:hover{background:#3a55e0;transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.55;cursor:wait;transform:none}
+.btn-outline{background:none;border:2px solid var(--border);color:var(--muted)}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-lt)}
+.assess{border-radius:var(--radius-sm);overflow:hidden;animation:fadeUp .25s ease;border:2px solid var(--border);display:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.assess-head{padding:12px 16px;font-family:'Baloo 2';font-size:.92rem;font-weight:800;background:var(--bg);border-bottom:2px solid var(--border)}
+.checks-list{display:flex;flex-direction:column}
+.check-row{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.9rem;font-weight:600}
+.check-row:last-child{border-bottom:none}
+.check-icon{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;flex-shrink:0;margin-top:1px}
+.check-ok{background:var(--green-bg);color:var(--green);border:2px solid var(--green-mid)}
+.check-warn{background:var(--amber-bg);color:var(--amber);border:2px solid var(--amber-mid)}
+.check-info{background:var(--blue-lt);color:var(--blue);border:2px solid #a5b4fc}
+.lt-section{background:#fffbeb;border-top:2px solid var(--amber-mid);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.lt-head{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--text)}
+.lt-list{display:flex;flex-direction:column;gap:6px}
+.lt-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--surface);border-radius:8px;padding:6px 10px;border:1.5px solid var(--border)}
+.lt-wrong{color:var(--red);font-weight:700;font-size:.88rem;text-decoration:line-through}
+.lt-arrow{color:var(--muted);font-size:.85rem}
+.lt-sugs{display:flex;gap:5px;flex-wrap:wrap}
+.lt-sug{background:var(--green-bg);border:2px solid var(--green-mid);color:var(--green);border-radius:20px;padding:3px 11px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .18s}
+.lt-sug:hover{background:var(--green);color:#fff}
+.lt-reason{display:block;width:100%;margin-top:3px;font-size:.77rem;color:var(--muted);font-style:italic}
+.lt-fixall{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 18px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:background .2s;align-self:flex-start}
+.lt-fixall:hover{background:#15803d}
+.verdict{padding:14px 16px;border-top:2px solid var(--border);font-family:'Baloo 2';font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px}
+.verdict.v-great{background:var(--green-bg);color:var(--green)}
+.verdict.v-good{background:var(--amber-bg);color:var(--amber)}
+.verdict.v-keep{background:var(--red-bg);color:var(--red)}
+.dnd-label{font-family:'Baloo 2';font-size:.88rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.word-pool,.sentence-area{display:flex;flex-wrap:wrap;gap:8px;padding:12px;border:2.5px dashed var(--border);min-height:56px;border-radius:var(--radius-sm);transition:border-color .25s,background .25s}
+.word-pool.over,.sentence-area.over{border-color:var(--blue);background:var(--blue-lt)}
+.sentence-area.success{border-color:var(--green);background:var(--green-bg)}
+.word-block{color:#fff;padding:7px 14px;border-radius:40px;cursor:grab;user-select:none;font-size:.9rem;font-weight:700;font-family:'Nunito';transition:opacity .15s,transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.word-block:hover{transform:translateY(-2px)}
+.word-block.dragging{opacity:.45}
+.block-feedback{font-size:.95rem;font-weight:700;padding:10px 0;min-height:2rem}
+.block-counter{font-family:'Baloo 2';font-size:.82rem;font-weight:800;color:var(--muted);text-align:right;margin-bottom:4px}
+.spinner{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div>
-        <div class="topbar-title">✍️ Satzwerkstatt</div>
-        <div class="topbar-sub">Bayern · Deutsch · Klasse 3/4</div>
-      </div>
-      <div class="topbar-right">
-        <a class="top-link" href="index.html">🏠 Start</a>
-        <a class="top-link" href="story.html">📖 Geschichten</a>
-        <a class="top-link" href="satzwerkstatt.html">✍️ Satzwerkstatt</a>
-      </div>
+
+<header class="topbar">
+  <div class="topbar-title" data-i18n="topbarTitle">✏️ Satzwerkstatt</div>
+  <nav class="topbar-links">
+    <a class="tlink" href="index.html" data-i18n="navBlockwelt">📖 Blockwelt</a>
+    <a class="tlink" href="story.html" data-i18n="navSchreib">📝 Schreibwerkstatt</a>
+    <a class="tlink" href="builder.html" data-i18n="navBaukasten">🧱 Baukasten</a>
+    <button id="sw-lang-toggle" onclick="swToggleLang()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
+  </nav>
+</header>
+
+<div class="page">
+
+<!-- Schreibwerkstatt -->
+<div class="card">
+  <div class="card-hd"><span class="card-icon">🖊️</span>
+    <div><div class="card-title">Dein Satz</div>
+         <div class="card-sub">Schreibe irgendeinen Satz – ich prüfe ihn für dich!</div></div>
+  </div>
+  <div class="card-body">
+    <textarea class="s-ta" id="satz" placeholder="Schreibe hier deinen Satz …" oninput="clearAssess()"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="checkBtn" onclick="checkSentence()">🔍 Satz prüfen</button>
+      <button class="btn btn-outline" onclick="speakSentence()">🔊 Vorlesen</button>
     </div>
-  </header>
-
-  <main class="wrap">
-    <section class="hero">
-      <span class="hero-icon">✍️</span>
-      <h1 class="hero-title">Ein Satz nach dem anderen</h1>
-      <p class="hero-sub">Hier übst du nur Sätze. Du kannst in Ruhe schreiben, prüfen und verbessern. Es gibt keine Zeitvorgabe und keine Überraschungen.</p>
-      <div class="calm-note">So funktioniert es: 1. Satz schreiben · 2. Satz prüfen · 3. In Ruhe verbessern</div>
-    </section>
-
-    <section class="grid">
-      <div>
-        <section class="card">
-          <div class="card-header">
-            <span class="card-icon">🎯</span>
-            <div>
-              <div class="card-title">Das üben wir</div>
-              <div class="card-sub">Nur Satztraining, keine ganze Geschichte.</div>
-            </div>
-          </div>
-
-          <div class="goal-list">
-            <div class="goal">
-              <strong>1. Satzanfang</strong>
-              <span>Ein Satz beginnt mit einem <span class="hl">Großbuchstaben</span>.</span>
-            </div>
-            <div class="goal">
-              <strong>2. Satzschluss</strong>
-              <span>Am Ende steht <span class="hl">.</span>, <span class="hl">!</span> oder <span class="hl">?</span>.</span>
-            </div>
-            <div class="goal">
-              <strong>3. Adjektive</strong>
-              <span>Adjektive machen einen Satz genauer, zum Beispiel <span class="hl">mutig</span> oder <span class="hl">dunkel</span>.</span>
-            </div>
-            <div class="goal">
-              <strong>4. Erzählzeit</strong>
-              <span>Bei Erzählsätzen passt oft die Vergangenheit: <span class="hl">ging</span>, <span class="hl">sah</span>, <span class="hl">war</span>.</span>
-            </div>
-          </div>
-        </section>
-
-        <section class="card">
-          <div class="card-header">
-            <span class="card-icon">🪄</span>
-            <div>
-              <div class="card-title">Mein Satz</div>
-              <div class="card-sub">Wähle einen Satzstarter oder schreibe frei.</div>
-            </div>
-          </div>
-
-          <div class="step-strip">
-            <span class="step-pill">1. Schreiben</span>
-            <span class="step-pill">2. Prüfen</span>
-            <span class="step-pill">3. Verbessern</span>
-          </div>
-
-          <div class="starters">
-            <button class="starter-btn" type="button" onclick="insertStarter('Plötzlich ')">Plötzlich …</button>
-            <button class="starter-btn" type="button" onclick="insertStarter('Auf einmal ')">Auf einmal …</button>
-            <button class="starter-btn" type="button" onclick="insertStarter('Langsam ')">Langsam …</button>
-            <button class="starter-btn" type="button" onclick="insertStarter('Im dunklen Wald ')">Im dunklen Wald …</button>
-            <button class="starter-btn" type="button" onclick="insertStarter('Der mutige Ritter ')">Der mutige Ritter …</button>
-            <button class="starter-btn" type="button" onclick="insertStarter('Eines Tages ')">Eines Tages …</button>
-          </div>
-
-          <textarea id="sentenceInput" spellcheck="true" lang="de" placeholder="Beispiel: Plötzlich sah der mutige Ritter einen riesigen Drachen."></textarea>
-
-          <div class="tool-row">
-            <div class="meta-row">
-              <span class="meta-pill" id="wordCount">0 Wörter</span>
-              <span class="meta-pill" id="lengthLabel">Noch kein Satz</span>
-            </div>
-
-            <div class="btn-row">
-              <button class="btn btn-secondary" id="readBtn" type="button">🔊 Vorlesen</button>
-              <button class="btn btn-primary" id="checkBtn" type="button">🔎 Satz prüfen</button>
-            </div>
-          </div>
-
-          <div class="results" id="results"></div>
-
-          <div class="success-box" id="successBox">
-            <div class="success-title">Gut gemacht</div>
-            <div>Dein Satz hat die wichtigsten Merkmale. Wenn du möchtest, kannst du ihn noch schöner machen.</div>
-          </div>
-
-          <div class="footer-note">Tipp: Drücke <strong>Enter</strong>, um deinen Satz zu prüfen. Mit <strong>Shift + Enter</strong> kannst du trotzdem eine neue Zeile machen.</div>
-        </section>
+    <div id="assess" class="assess">
+      <div class="assess-head">📋 Meine Prüfung</div>
+      <div class="checks-list" id="checks-list"></div>
+      <div id="lt-section" class="lt-section" style="display:none">
+        <div class="lt-head" id="lt-head"></div>
+        <div class="lt-list" id="lt-list"></div>
+        <button class="lt-fixall" id="lt-fixall" onclick="applyAllLT()" style="display:none">✨ Alle auf einmal korrigieren</button>
       </div>
+      <div class="verdict" id="verdict"></div>
+    </div>
+  </div>
+</div>
 
-      <aside>
-        <section class="card">
-          <div class="card-header">
-            <span class="card-icon">💡</span>
-            <div>
-              <div class="card-title">Hilfen</div>
-              <div class="card-sub">Kurz, klar und gut lesbar.</div>
-            </div>
-          </div>
+<!-- Blockwelt -->
+<div class="card">
+  <div class="card-hd"><span class="card-icon">🧩</span>
+    <div><div class="card-title">Satzbau mit Blöcken</div>
+         <div class="card-sub">Ziehe die Wörter in die richtige Reihenfolge</div></div>
+  </div>
+  <div class="card-body">
+    <div class="block-counter" id="blockCounter"></div>
+    <div>
+      <div class="dnd-label">Wörter</div>
+      <div class="word-pool" id="wordPool"></div>
+    </div>
+    <div>
+      <div class="dnd-label">Dein Satz</div>
+      <div class="sentence-area" id="sentenceArea"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="checkBlockSentence()">🔍 Prüfen</button>
+      <button class="btn btn-outline" onclick="resetBlocks()">🔀 Neu mischen</button>
+      <button class="btn btn-outline" onclick="skipBlock()">⏭ Überspringen</button>
+    </div>
+    <div class="block-feedback" id="blockFeedback"></div>
+  </div>
+</div>
 
-          <div class="helper-list">
-            <div class="helper">
-              <strong>Groß anfangen</strong>
-              <span>Jeder Satz beginnt mit einem Großbuchstaben.</span>
-            </div>
-            <div class="helper">
-              <strong>Satzzeichen setzen</strong>
-              <span>Am Ende steht ein Punkt, ein Ausrufezeichen oder ein Fragezeichen.</span>
-            </div>
-            <div class="helper">
-              <strong>Adjektive nutzen</strong>
-              <span>Adjektive beschreiben genauer, zum Beispiel mutig, riesig oder dunkel.</span>
-            </div>
-            <div class="helper">
-              <strong>Vergangenheit bei Erzählsätzen</strong>
-              <span>Erzählsätze klingen oft gut mit war, ging oder sah.</span>
-            </div>
-          </div>
-        </section>
-      </aside>
-    </section>
-  </main>
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('sentenceInput');
-  const results = document.getElementById('results');
-  const wordCountEl = document.getElementById('wordCount');
-  const lengthLabelEl = document.getElementById('lengthLabel');
-  const checkBtn = document.getElementById('checkBtn');
-  const readBtn = document.getElementById('readBtn');
-  const successBox = document.getElementById('successBox');
 
-  const ADJECTIVES = new Set([
-    'mutig','mutige','mutigen','mutiger','mutiges',
-    'riesig','riesige','riesigen','riesiger','riesiges',
-    'dunkel','dunkle','dunklen','dunkler','dunkles',
-    'groß','große','großen','großer','großes',
-    'klein','kleine','kleinen','kleiner','kleines',
-    'fröhlich','fröhliche','fröhlichen','fröhlicher',
-    'traurig','traurige','traurigen','trauriger',
-    'tapfer','tapfere','tapferen','tapferer',
-    'schlau','schlaue','schlauen','schlauer',
-    'freundlich','freundliche','freundlichen','freundlicher',
-    'laut','laute','lauten','lauter',
-    'leise','leisen','leiser',
-    'alt','alte','alten','alter','altes',
-    'jung','junge','jungen','junger','junges'
-  ]);
+/* ════════════════════════════════════════
+   BLOCKWELT DRAG & DROP
+════════════════════════════════════════ */
+const BLOCK_SENTENCES = [
+  { s: "Die Sonne scheint hell am Himmel.",
+    w: ["Die Sonne","scheint","hell","am","Himmel"] },
+  { s: "Wir spielen heute im Garten.",
+    w: ["Wir","spielen","heute","im","Garten"] },
+  { s: "Die Katze schläft auf dem Sofa.",
+    w: ["Die Katze","schläft","auf","dem","Sofa"] },
+  { s: "Das Mädchen malt ein buntes Bild.",
+    w: ["Das Mädchen","malt","ein buntes","Bild"] },
+  { s: "Der Junge rennt schnell zur Gans im Park.",
+    w: ["Der Junge","rennt","schnell","zur","Gans","im","Park"] },
+  { s: "Meine Schwester liest gerne Bücher.",
+    w: ["Meine Schwester","liest","gerne","Bücher"] },
+  { s: "Im Sommer fahren wir ans Meer.",
+    w: ["Im Sommer","fahren","wir","ans","Meer"] },
+  { s: "Der Lehrer schreibt die Aufgabe an die Tafel.",
+    w: ["Der Lehrer","schreibt","die Aufgabe","an","die","Tafel"] },
+  { s: "Die Kinder bauen eine große Schneeburg.",
+    w: ["Die Kinder","bauen","eine große","Schneeburg"] },
+  { s: "Heute backen wir einen leckeren Kuchen.",
+    w: ["Heute","backen","wir","einen leckeren","Kuchen"] },
+  { s: "Der Hund bringt dem Mann den Ball.",
+    w: ["Der Hund","bringt","dem Mann","den","Ball"] },
+  { s: "Das kleine Häschen hüpft über die Wiese.",
+    w: ["Das kleine","Häschen","hüpft","über","die","Wiese"] },
+];
 
-  const PAST_VERBS = new Set([
-    'war','waren','hatte','hatten','ging','gingen','sah','sahen','kam','kamen',
-    'lief','liefen','rief','riefen','fand','fanden','blieb','blieben','wurde','wurden',
-    'stand','standen','hörte','hörten','fragte','fragten','sagte','sagten'
-  ]);
+/* A colour per sentence so blocks look fresh each round */
+const BLOCK_COLORS = [
+  "#4f6ef7","#16a34a","#7c3aed","#d97706",
+  "#0891b2","#be185d","#dc2626","#059669",
+  "#2563eb","#9333ea","#ca8a04","#0369a1"
+];
 
-  const PRESENT_VERBS = new Set([
-    'ist','sind','hat','haben','geht','gehen','sieht','sehen','kommt','kommen',
-    'läuft','laufen','ruft','rufen','findet','finden','bleibt','bleiben','steht','stehen'
-  ]);
+/* ════════════════════════════════════════
+   STATE
+════════════════════════════════════════ */
+let _ltMatches = []; // LanguageTool matches for current sentence
 
-  function countWords(text){
-    return text.trim().split(/\s+/).filter(Boolean).length;
+/* ════════════════════════════════════════
+   SENTENCE CHECKER
+════════════════════════════════════════ */
+function clearAssess() {
+  document.getElementById('assess').style.display = 'none';
+  _ltMatches = [];
+}
+
+async function checkSentence() {
+  const ta  = document.getElementById('satz');
+  const btn = document.getElementById('checkBtn');
+  const text = ta.value.trim();
+
+  if (!text) {
+    showAssess([`<div class="check-row"><span class="check-icon check-warn">!</span>${sw_t('writeSentenceFirst')}</div>`], '', 'v-keep', '✏️ ' + sw_t('writeSentenceFirst'));
+    return;
   }
 
-  function escapeHtml(text){
-    return String(text)
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
+  // ── Local structural checks ──────────────────────
+  const checks = [];
+  let structureOk = true;
+
+  // Capital start
+  if (text[0] === text[0].toUpperCase() && text[0] !== text[0].toLowerCase()) {
+    checks.push(mkCheck('ok', '✓', sw_t('capitalOk')));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('capitalWarn')));
+    structureOk = false;
   }
 
-  function renderResult(type, label, text){
-    return '<div class="result ' + type + '"><span class="result-label">' + label + '</span>' + text + '</div>';
+  // Ends with period
+  if (/[.!?]$/.test(text)) {
+    checks.push(mkCheck('ok', '✓', sw_t('punctOk', text.slice(-1))));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('punctWarn')));
+    structureOk = false;
   }
 
-  function updateMeta(){
-    const text = input.value.trim();
-    const words = countWords(text);
-
-    wordCountEl.textContent = words + ' ' + (words === 1 ? 'Wort' : 'Wörter');
-    wordCountEl.className = 'meta-pill' + (words >= 5 ? ' good' : '');
-
-    if(!text){
-      lengthLabelEl.textContent = 'Noch kein Satz';
-      lengthLabelEl.className = 'meta-pill';
-    } else if(words < 4){
-      lengthLabelEl.textContent = 'Sehr kurz';
-      lengthLabelEl.className = 'meta-pill';
-    } else if(words <= 12){
-      lengthLabelEl.textContent = 'Gute Länge';
-      lengthLabelEl.className = 'meta-pill good';
-    } else {
-      lengthLabelEl.textContent = 'Eher lang';
-      lengthLabelEl.className = 'meta-pill';
-    }
+  // Word count
+  const wc = text.split(/\s+/).filter(Boolean).length;
+  if (wc >= 5) {
+    checks.push(mkCheck('ok', '✓', sw_t('wordsOk', wc)));
+  } else {
+    checks.push(mkCheck('warn', '!', sw_t('wordsWarn', wc)));
+    structureOk = false;
   }
 
-  function checkSentence(){
-    const raw = input.value.trim();
-    successBox.classList.remove('show');
+  // ── LanguageTool API ─────────────────────────────
+  btn.innerHTML = '<span class="spinner">⏳</span> …';
+  btn.disabled = true;
 
-    if(!raw){
-      results.innerHTML = renderResult('bad','Bitte zuerst schreiben','Schreibe zuerst einen Satz.');
-      return;
-    }
+  let ltOk = true;
+  try {
+    const resp = await fetch('https://api.languagetool.org/v2/check', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ text, language: _l === 'en' ? 'en-GB' : 'de-DE' })
+    });
+    if (!resp.ok) throw new Error();
+    const data = await resp.json();
 
-    const words = raw.split(/\s+/).filter(Boolean);
-    const cleaned = words.map(w => w.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase());
-    const foundAdjectives = Array.from(new Set(cleaned.filter(w => ADJECTIVES.has(w))));
-    const hasPast = cleaned.some(w => PAST_VERBS.has(w));
-    const hasPresent = cleaned.some(w => PRESENT_VERBS.has(w));
+    _ltMatches = data.matches || [];
 
-    const out = [];
-    let goodCount = 0;
-
-    if(/^[A-ZÄÖÜ„"]/.test(raw)){
-      out.push(renderResult('ok','Satzanfang','Dein Satz beginnt mit einem Großbuchstaben. Super.'));
-      goodCount++;
+    if (_ltMatches.length === 0) {
+      checks.push(mkCheck('ok', '✓', sw_t('noErrors')));
     } else {
-      out.push(renderResult('bad','Satzanfang','Achte darauf: Dein Satz sollte mit einem Großbuchstaben beginnen.'));
+      ltOk = false;
+      checks.push(mkCheck('warn', '!', sw_t('ltFound', _ltMatches.length)));
     }
-
-    if(/[.!?]$/.test(raw)){
-      out.push(renderResult('ok','Satzschlusszeichen','Am Ende steht ein passendes Satzzeichen.'));
-      goodCount++;
-    } else {
-      out.push(renderResult('bad','Satzschlusszeichen','Am Ende fehlt ein Punkt, Ausrufezeichen oder Fragezeichen.'));
-    }
-
-    if(words.length < 4){
-      out.push(renderResult('warn','Satzlänge','Dein Satz ist noch sehr kurz. Versuche 5 bis 12 Wörter.'));
-    } else if(words.length <= 12){
-      out.push(renderResult('ok','Satzlänge','Dein Satz hat ' + words.length + ' Wörter. Das ist eine gute Länge.'));
-      goodCount++;
-    } else {
-      out.push(renderResult('info','Satzlänge','Dein Satz hat ' + words.length + ' Wörter. Das ist schon ziemlich lang.'));
-    }
-
-    if(foundAdjectives.length){
-      out.push(renderResult(
-        'ok',
-        'Adjektive',
-        'Gefunden: ' + foundAdjectives.map(w => '<span class="hl">' + escapeHtml(w) + '</span>').join(', ')
-      ));
-      goodCount++;
-    } else {
-      out.push(renderResult('tip','Adjektive','Wenn du möchtest, kannst du ein Eigenschaftswort einbauen, zum Beispiel mutig, dunkel oder riesig.'));
-    }
-
-    if(hasPast && !hasPresent){
-      out.push(renderResult('ok','Zeitform','Gut: Dein Satz klingt nach Vergangenheit.'));
-      goodCount++;
-    } else if(hasPresent && !hasPast){
-      out.push(renderResult('tip','Zeitform','Für Erzählsätze passt oft die Vergangenheit besser, zum Beispiel ging, sah oder war.'));
-    } else if(hasPast && hasPresent){
-      out.push(renderResult('warn','Zeitform','In deinem Satz mischen sich Zeitformen. Bleibe möglichst bei einer Zeit.'));
-    } else {
-      out.push(renderResult('info','Zeitform','Prüfe dein Verb noch einmal. Ich erkenne die Zeitform nicht sicher.'));
-    }
-
-    results.innerHTML = out.join('');
-
-    if(goodCount >= 4){
-      successBox.classList.add('show');
-    }
+  } catch(e) {
+    checks.push(mkCheck('info', 'i', sw_t('ltUnavailable')));
+  } finally {
+    btn.innerHTML = sw_t('checkSentenceBtn');
+    btn.disabled = false;
   }
 
-  function readSentence(){
-    const text = input.value.trim();
-    if(!text || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'de-DE';
-    utterance.rate = 0.9;
-    window.speechSynthesis.speak(utterance);
+  // ── Verdict ──────────────────────────────────────
+  let vClass, vText;
+  if (structureOk && ltOk) {
+    vClass = 'v-great'; vText = sw_t('verdictPerfect');
+  } else if (structureOk && !ltOk) {
+    vClass = 'v-good';  vText = sw_t('verdictGood');
+  } else {
+    vClass = 'v-keep';  vText = sw_t('verdictKeep');
   }
 
-  window.insertStarter = function(text){
-    input.value = input.value ? input.value + ' ' + text : text;
-    input.focus();
-    updateMeta();
-  };
+  showAssess(checks, _ltMatches, vClass, vText);
+}
 
-  input.addEventListener('input', updateMeta);
+function mkCheck(type, icon, text) {
+  return `<div class="check-row">
+    <span class="check-icon check-${type}">${icon}</span>
+    <span>${text}</span>
+  </div>`;
+}
 
-  input.addEventListener('keydown', e => {
-    if(e.key === 'Enter' && !e.shiftKey){
-      e.preventDefault();
-      checkSentence();
+function showAssess(checks, ltMatches, vClass, vText) {
+  document.getElementById('checks-list').innerHTML = checks.join('');
+
+  const ltSec  = document.getElementById('lt-section');
+  const ltHead = document.getElementById('lt-head');
+  const ltList = document.getElementById('lt-list');
+  const ltFix  = document.getElementById('lt-fixall');
+  const ta     = document.getElementById('satz');
+
+  if (Array.isArray(ltMatches) && ltMatches.length > 0) {
+    ltHead.textContent = sw_t('ltHead', ltMatches.length);
+    const withSugs = ltMatches.filter(m => m.replacements && m.replacements.length > 0);
+    ltList.innerHTML = ltMatches.map((m, i) => {
+      const wrong = ta.value.substring(m.offset, m.offset + m.length);
+      const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+      const msg   = m.shortMessage || m.message || '';
+      const btns  = sugs.map(s =>
+        `<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`
+      ).join('');
+      return `<div class="lt-row">
+        <span class="lt-wrong">${escHtml(wrong || '?')}</span>
+        ${sugs.length ? `<span class="lt-arrow">→</span><span class="lt-sugs">${btns}</span>` : ''}
+        ${msg ? `<span class="lt-reason">${escHtml(msg)}</span>` : ''}
+      </div>`;
+    }).join('');
+    ltFix.style.display = withSugs.length > 1 ? 'inline-block' : 'none';
+    ltSec.style.display = 'flex';
+  } else {
+    ltSec.style.display = 'none';
+  }
+
+  const v = document.getElementById('verdict');
+  v.className = `verdict ${vClass}`;
+  v.textContent = vText;
+
+  document.getElementById('assess').style.display = 'block';
+  document.getElementById('assess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── Apply single LT suggestion ── */
+function applyOneLT(idx, replacement) {
+  const ta = document.getElementById('satz');
+  const m  = _ltMatches[idx];
+  if (!m) return;
+  ta.value = ta.value.substring(0, m.offset) + replacement + ta.value.substring(m.offset + m.length);
+  checkSentence(); // re-run full check
+}
+
+/* ── Apply all LT suggestions (end→start) ── */
+function applyAllLT() {
+  const ta = document.getElementById('satz');
+  const sorted = [..._ltMatches].sort((a, b) => b.offset - a.offset);
+  let text = ta.value;
+  sorted.forEach(m => {
+    if (m.replacements.length > 0) {
+      text = text.substring(0, m.offset) + m.replacements[0].value + text.substring(m.offset + m.length);
     }
   });
+  ta.value = text;
+  checkSentence();
+}
 
-  checkBtn.addEventListener('click', checkSentence);
-  readBtn.addEventListener('click', readSentence);
+function speakSentence() {
+  const text = document.getElementById('satz').value.trim();
+  if (!text || !('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE'; u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
 
-  updateMeta();
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escAttr(s) {
+  return s.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+}
+
+/* ════════════════════════════════════════
+   DRAG & DROP BLOCKS
+════════════════════════════════════════ */
+const pool = document.getElementById('wordPool');
+const area = document.getElementById('sentenceArea');
+let dragged     = null;
+let blockQueue  = [];   // shuffled index order
+let blockPos    = 0;    // current position in queue
+let blockBusy   = false; // prevents double-advance while animating
+
+/* Shuffle the sentence order so every round is different */
+function initQueue() {
+  blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  blockPos   = 0;
+}
+
+function currentEntry() {
+  return BLOCK_SENTENCES[blockQueue[blockPos]];
+}
+
+function buildBlocks() {
+  const { w } = currentEntry();
+  const color  = BLOCK_COLORS[blockPos % BLOCK_COLORS.length];
+  pool.innerHTML = '';
+  area.innerHTML = '';
+  area.classList.remove('success');
+  document.getElementById('blockFeedback').textContent = '';
+  blockBusy = false;
+  // Shuffle word order for the puzzle
+  [...w].sort(() => Math.random() - .5).forEach(word => pool.appendChild(makeBlock(word, color)));
+  updateCounter();
+}
+
+function makeBlock(text, color) {
+  const d = document.createElement('div');
+  d.className   = 'word-block';
+  d.draggable   = true;
+  d.textContent = text;
+  if (color) d.style.background = color;
+  return d;
+}
+
+function updateCounter() {
+  const el = document.getElementById('blockCounter');
+  if (el) el.textContent = typeof sw_t === 'function'
+    ? sw_t('counterText', blockPos + 1, BLOCK_SENTENCES.length)
+    : `Satz ${blockPos + 1} von ${BLOCK_SENTENCES.length}`; // fallback before i18n loads
+}
+
+/* Reset = reshuffle current sentence (same puzzle, new block order) */
+function resetBlocks() {
+  buildBlocks();
+}
+
+/* Skip = advance to next sentence immediately */
+function skipBlock() {
+  advanceBlock();
+}
+
+function advanceBlock() {
+  blockPos = (blockPos + 1) % BLOCK_SENTENCES.length;
+  // When we've cycled through all sentences, re-shuffle for next round
+  if (blockPos === 0) {
+    blockQueue = BLOCK_SENTENCES.map((_,i) => i).sort(() => Math.random() - .5);
+  }
+  buildBlocks();
+}
+
+// Drag events
+document.addEventListener('dragstart', e => {
+  if (e.target.classList.contains('word-block')) {
+    dragged = e.target;
+    dragged.classList.add('dragging');
+  }
 });
+document.addEventListener('dragend', e => {
+  if (dragged) { dragged.classList.remove('dragging'); dragged = null; }
+});
+
+[pool, area].forEach(el => {
+  el.addEventListener('dragover',  e => { e.preventDefault(); el.classList.add('over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault();
+    el.classList.remove('over');
+    if (dragged) el.appendChild(dragged);
+  });
+});
+
+function checkBlockSentence() {
+  if (blockBusy) return;
+  const blocks = area.querySelectorAll('.word-block');
+  const fb     = document.getElementById('blockFeedback');
+  if (!blocks.length) {
+    fb.style.color = 'var(--amber)';
+    fb.textContent = sw_t('fbEmpty');
+    return;
+  }
+  const { s } = currentEntry();
+  const built  = Array.from(blocks).map(b => b.textContent).join(' ') + '.';
+  if (built.trim() === s.trim()) {
+    blockBusy = true;
+    area.classList.add('success');
+    fb.style.color = 'var(--green)';
+    fb.textContent = sw_t('fbRight');
+    setTimeout(advanceBlock, 1800);
+  } else {
+    fb.style.color = 'var(--amber)';
+    fb.textContent = sw_t('fbWrong');
+  }
+}
+
+/* ════════════════════════════════════════
+   LANGUAGE / i18n
+════════════════════════════════════════ */
+const _lang = (localStorage.getItem('sw_lang') || 'de');
+const _l    = _lang === 'both' ? 'de' : _lang; // 'both' → treat as 'de' on this page
+
+const SW_STRINGS = {
+  de: {
+    pageTitle:         'Satzwerkstatt ✏️',
+    topbarTitle:       '✏️ Satzwerkstatt',
+    navBlockwelt:      '📖 Blockwelt',
+    navSchreib:        '📝 Schreibwerkstatt',
+    navBaukasten:      '🧱 Baukasten',
+    card1Title:        'Dein Satz',
+    card1Sub:          'Schreibe irgendeinen Satz – ich prüfe ihn für dich!',
+    sentencePlaceholder:'Schreibe hier deinen Satz …',
+    checkSentenceBtn:  '🔍 Satz prüfen',
+    speakBtn:          '🔊 Vorlesen',
+    assessHead:        '📋 Meine Prüfung',
+    fixallBtn:         '✨ Alle auf einmal korrigieren',
+    card2Title:        'Satzbau mit Blöcken',
+    card2Sub:          'Ziehe die Wörter in die richtige Reihenfolge',
+    poolLabel:         'Wörter',
+    areaLabel:         'Dein Satz',
+    checkBlockBtn:     '🔍 Prüfen',
+    reshuffleBtn:      '🔀 Neu mischen',
+    skipBtn:           '⏭ Überspringen',
+    counterText:       (pos, total) => `Satz ${pos} von ${total}`,
+    fbRight:           "🌟 Richtig! Super gemacht! Weiter geht's …",
+    fbWrong:           '🔄 Noch nicht ganz richtig – versuche es nochmal!',
+    fbEmpty:           '⚠ Ziehe zuerst Wörter in die Satzfläche!',
+    writeSentenceFirst:'Schreibe zuerst einen Satz.',
+    noErrors:          'Keine Rechtschreib- oder Grammatikfehler',
+    capitalOk:         'Satzanfang ist großgeschrieben',
+    capitalWarn:       'Beginne deinen Satz mit einem Großbuchstaben',
+    punctOk:           (ch) => `Satzzeichen am Ende (${ch})`,
+    punctWarn:         'Dein Satz braucht ein Satzzeichen am Ende (. ! ?)',
+    wordsOk:           (n) => `Gute Satzlänge – ${n} Wörter`,
+    wordsWarn:         (n) => `Dein Satz hat ${n} Wörter – versuche 5 oder mehr`,
+    ltUnavailable:     'Grammatikprüfung nicht verfügbar (offline?)',
+    ltFound:           (n) => `${n} Rechtschreib- oder Grammatikvorschlag${n>1?'e':''} gefunden`,
+    ltHead:            (n) => `✏️ ${n} Verbesserungsvorschlag${n>1?'e':''}:`,
+    verdictPerfect:    '🌟 Perfekt! Dein Satz ist super!',
+    verdictGood:       '👍 Fast perfekt! Schau dir die Vorschläge an.',
+    verdictKeep:       '💪 Guter Anfang! Verbessere die markierten Punkte.',
+  },
+  en: {
+    pageTitle:         'Sentence Workshop ✏️',
+    topbarTitle:       '✏️ Sentence Workshop',
+    navBlockwelt:      '📖 Story World',
+    navSchreib:        '📝 Writing Workshop',
+    navBaukasten:      '🧱 Story Builder',
+    card1Title:        'Your Sentence',
+    card1Sub:          'Write any sentence – I\'ll check it for you!',
+    sentencePlaceholder:'Write your sentence here …',
+    checkSentenceBtn:  '🔍 Check Sentence',
+    speakBtn:          '🔊 Read Aloud',
+    assessHead:        '📋 My Check',
+    fixallBtn:         '✨ Fix all at once',
+    card2Title:        'Sentence Building with Blocks',
+    card2Sub:          'Drag the words into the correct order',
+    poolLabel:         'Words',
+    areaLabel:         'Your Sentence',
+    checkBlockBtn:     '🔍 Check',
+    reshuffleBtn:      '🔀 Shuffle',
+    skipBtn:           '⏭ Skip',
+    counterText:       (pos, total) => `Sentence ${pos} of ${total}`,
+    fbRight:           '🌟 Correct! Great job! Moving on …',
+    fbWrong:           '🔄 Not quite right – try again!',
+    fbEmpty:           '⚠ Drag words into the sentence area first!',
+    writeSentenceFirst:'Please write a sentence first.',
+    noErrors:          'No spelling or grammar errors',
+    capitalOk:         'Sentence starts with a capital letter',
+    capitalWarn:       'Start your sentence with a capital letter',
+    punctOk:           (ch) => `Punctuation at the end (${ch})`,
+    punctWarn:         'Your sentence needs a punctuation mark at the end (. ! ?)',
+    wordsOk:           (n) => `Good length – ${n} words`,
+    wordsWarn:         (n) => `Your sentence has ${n} word${n!==1?'s':''} – aim for 5 or more`,
+    ltUnavailable:     'Grammar check unavailable (offline?)',
+    ltFound:           (n) => `${n} spelling or grammar suggestion${n>1?'s':''} found`,
+    ltHead:            (n) => `✏️ ${n} suggestion${n>1?'s':''}:`,
+    verdictPerfect:    '🌟 Perfect! Your sentence is great!',
+    verdictGood:       '👍 Almost perfect! Check the suggestions.',
+    verdictKeep:       '💪 Good start! Improve the highlighted points.',
+  }
+};
+
+function sw_t(key, ...args) {
+  const s = (SW_STRINGS[_l] || SW_STRINGS.de)[key];
+  return typeof s === 'function' ? s(...args) : (s || key);
+}
+
+// Apply static i18n strings
+document.title = sw_t('pageTitle');
+document.querySelectorAll('[data-i18n]').forEach(el => {
+  const v = sw_t(el.dataset.i18n);
+  if (v) el.textContent = v;
+});
+document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+  const v = sw_t(el.dataset.i18nPh);
+  if (v) el.placeholder = v;
+});
+// Re-render counter now that sw_t is available
+updateCounter();
+// Init block puzzle AFTER i18n so sw_t/_l/SW_STRINGS are defined
+initQueue();
+buildBlocks();
+
+// Lang toggle button label
+(function(){
+  const btn = document.getElementById('sw-lang-toggle');
+  if (btn) btn.textContent = _l === 'en' ? '🌐 EN' : '🌐 DE';
+})();
+
+function swToggleLang() {
+  const next = _l === 'en' ? 'de' : 'en';
+  localStorage.setItem('sw_lang', next);
+  location.reload();
+}
 </script>
-<script>window._SW_FONTS_URL='https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap';</script>
-<script src="gdpr.js"></script>
+
 </body>
 </html>

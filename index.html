@@ -1650,7 +1650,7 @@ function bindEvents(){
   if(ri)ri.addEventListener('input',saveRev);
 }
 
-function liveUpdate(text){
+function _liveUpdateBase(text){
   const l=lang==='both'?'de':lang;
   const count=wc(text);
   const min=T[l].minWords[part];
@@ -2332,9 +2332,8 @@ function detectGrammarTopic(text){
 
 // Hook into liveUpdate — debounced detection
 let gramDetectTimer=null;
-const _origLiveUpdate=liveUpdate;
 function liveUpdate(text){
-  _origLiveUpdate(text);
+  _liveUpdateBase(text);
   // Debounce detection — wait 1.5s after typing stops
   clearTimeout(gramDetectTimer);
   gramDetectTimer=setTimeout(()=>{
@@ -2536,7 +2535,7 @@ async function checkGramAnswer(){
       localFeedback=hasPast
         ?(l==='de'?'✓ Gut! Du hast Vergangenheitsformen verwendet!':'✓ Good! You used past tense forms!')
         :(l==='de'?'⚠️ Tipp: Nutze Präteritum-Formen — z.B. ging, sah, war, hatte …':'⚠️ Tip: Use simple past forms — e.g. went, saw, was, had …');
-    }else if(topic.id==='bindew'){
+    }else if(topic.id==='binde'){
       const hasBind=/\b(weil|obwohl|because|although|though)\b/i.test(answer);
       localOk=hasBind;
       localFeedback=hasBind
