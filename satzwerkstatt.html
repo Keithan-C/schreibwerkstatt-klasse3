@@ -55,6 +55,7 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
 .lt-sugs{display:flex;gap:5px;flex-wrap:wrap}
 .lt-sug{background:var(--green-bg);border:2px solid var(--green-mid);color:var(--green);border-radius:20px;padding:3px 11px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:all .18s}
 .lt-sug:hover{background:var(--green);color:#fff}
+.lt-reason{display:block;width:100%;margin-top:3px;font-size:.77rem;color:var(--muted);font-style:italic}
 .lt-fixall{background:var(--green);color:#fff;border:none;border-radius:20px;padding:8px 18px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Nunito';transition:background .2s;align-self:flex-start}
 .lt-fixall:hover{background:#15803d}
 .verdict{padding:14px 16px;border-top:2px solid var(--border);font-family:'Baloo 2';font-size:1rem;font-weight:800;display:flex;align-items:center;gap:8px}
@@ -240,12 +241,12 @@ async function checkSentence() {
     const resp = await fetch('https://api.languagetool.org/v2/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ text, language: 'de-DE' })
+      body: new URLSearchParams({ text, language: _l === 'en' ? 'en-GB' : 'de-DE' })
     });
     if (!resp.ok) throw new Error();
     const data = await resp.json();
 
-    _ltMatches = (data.matches || []).filter(m => m.replacements && m.replacements.length > 0);
+    _ltMatches = data.matches || [];
 
     if (_ltMatches.length === 0) {
       checks.push(mkCheck('ok', '✓', sw_t('noErrors')));
@@ -291,19 +292,21 @@ function showAssess(checks, ltMatches, vClass, vText) {
 
   if (Array.isArray(ltMatches) && ltMatches.length > 0) {
     ltHead.textContent = sw_t('ltHead', ltMatches.length);
+    const withSugs = ltMatches.filter(m => m.replacements && m.replacements.length > 0);
     ltList.innerHTML = ltMatches.map((m, i) => {
       const wrong = ta.value.substring(m.offset, m.offset + m.length);
-      const sugs  = m.replacements.slice(0, 3).map(r => r.value);
+      const sugs  = (m.replacements || []).slice(0, 3).map(r => r.value);
+      const msg   = m.shortMessage || m.message || '';
       const btns  = sugs.map(s =>
         `<button class="lt-sug" onclick="applyOneLT(${i},'${escAttr(s)}')">${escHtml(s)}</button>`
       ).join('');
       return `<div class="lt-row">
-        <span class="lt-wrong">${escHtml(wrong)}</span>
-        <span class="lt-arrow">→</span>
-        <span class="lt-sugs">${btns}</span>
+        <span class="lt-wrong">${escHtml(wrong || '?')}</span>
+        ${sugs.length ? `<span class="lt-arrow">→</span><span class="lt-sugs">${btns}</span>` : ''}
+        ${msg ? `<span class="lt-reason">${escHtml(msg)}</span>` : ''}
       </div>`;
     }).join('');
-    ltFix.style.display = ltMatches.length > 1 ? 'inline-block' : 'none';
+    ltFix.style.display = withSugs.length > 1 ? 'inline-block' : 'none';
     ltSec.style.display = 'flex';
   } else {
     ltSec.style.display = 'none';
