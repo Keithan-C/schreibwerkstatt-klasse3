@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -162,11 +163,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="app-title">Diktat Übung <small>Klasse 3 · Bayern</small></div>
 </div>
 
-<!-- ══════════════ THEME SCREEN ══════════════ -->
 <div class="screen active" id="screenTheme">
   <div class="theme-intro">
     <h2>📚 Wähle dein Thema</h2>
-    <p>Wähle einen oder mehrere Schwerpunkte aus, dann starten wir!</p>
+    <p>Wähle einen oder mehrere Schwerpunkte aus, zum Beispiel Rechtschreibung, Wortarten oder Vergangenheit.</p>
   </div>
 
   <div class="theme-grid" id="themeGrid">
@@ -206,6 +206,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="tc-title">Verben &amp; Adjektive</div>
       <div class="tc-desc">Tätigkeiten &amp; Eigenschaften</div>
     </div>
+    <div class="theme-card" data-theme="praeteritum" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">⏳</div>
+      <div class="tc-title">Vergangenheit</div>
+      <div class="tc-desc">Präteritum üben</div>
+    </div>
   </div>
 
   <div class="theme-actions">
@@ -214,7 +220,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<!-- ══════════════ QUIZ SCREEN ══════════════ -->
 <div class="screen" id="screenQuiz">
   <div class="tracker">
     <div class="tracker-info">
@@ -253,8 +258,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
     <div class="input-block">
       <div class="input-label">✍️ Schreibe das Wort:</div>
-      <input class="field-word" type="text" id="wordInput" placeholder="Hier tippen…"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input class="field-word" type="text" id="wordInput" placeholder="Hier tippen…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <div id="wordFeedback"></div>
     </div>
 
@@ -288,7 +292,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
 </div>
 
-<!-- ══════════════ RESULTS SCREEN ══════════════ -->
 <div class="screen" id="screenResults">
   <div class="result-hero">
     <div class="result-emoji" id="resEmoji"></div>
@@ -312,87 +315,86 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════
-// WORD BANK
-// theme: nomen | ie | sch | dehnungs | doppel | verb
-// wortart: Nomen | Verb | Adjektiv
-// phonetic: optional TTS override (spoken differently than written)
-// ══════════════════════════════════════════════════════
 const BANK = [
-  // ── Nomen (Großschreibung) ──
-  {theme:"nomen", word:"Schmetterling", wortart:"Nomen",    sentence:"Der bunte Schmetterling sitzt auf der Blume.",     tip:"Nomen schreibt man groß. 'der Schmetterling' – du kannst 'der' davor setzen!"},
-  {theme:"nomen", word:"Frühstück",     wortart:"Nomen",    sentence:"Jeden Morgen essen wir zusammen Frühstück.",        tip:"'das Frühstück' – Nomen schreibt man groß."},
-  {theme:"nomen", word:"Freundschaft",  wortart:"Nomen",    sentence:"Freundschaft ist sehr wichtig im Leben.",           tip:"'die Freundschaft' – ein Nomen. Nomen schreibt man groß."},
-  {theme:"nomen", word:"Bahnhof",       wortart:"Nomen",    sentence:"Wir warten am Bahnhof auf den Zug.",               tip:"'der Bahnhof' – ein Ort. Orte sind Nomen und werden großgeschrieben."},
-  {theme:"nomen", word:"Geburtstag",    wortart:"Nomen",    sentence:"An meinem Geburtstag bekomme ich Geschenke.",       tip:"'der Geburtstag' – Nomen schreibt man groß."},
-  {theme:"nomen", word:"Zeichnung",     wortart:"Nomen",    sentence:"Die Zeichnung hängt jetzt an der Wand.",           tip:"'die Zeichnung' – du kannst 'die' davor setzen."},
-  {theme:"nomen", word:"Fahrrad",       wortart:"Nomen",    sentence:"Mein Fahrrad hat eine rote Klingel.",              tip:"'das Fahrrad' – ein Ding. Dinge sind Nomen, großgeschrieben."},
-  {theme:"nomen", word:"Hausaufgabe",   wortart:"Nomen",    sentence:"Ich mache heute meine Hausaufgabe schnell.",        tip:"'die Hausaufgabe' – Nomen schreibt man groß."},
+  {theme:"nomen", word:"Schmetterling", wortart:"Nomen", sentence:"Der bunte Schmetterling sitzt auf der Blume.", tip:"Nomen schreibt man groß. 'der Schmetterling' – du kannst 'der' davor setzen!"},
+  {theme:"nomen", word:"Frühstück", wortart:"Nomen", sentence:"Jeden Morgen essen wir zusammen Frühstück.", tip:"'das Frühstück' – Nomen schreibt man groß."},
+  {theme:"nomen", word:"Freundschaft", wortart:"Nomen", sentence:"Freundschaft ist sehr wichtig im Leben.", tip:"'die Freundschaft' – ein Nomen. Nomen schreibt man groß."},
+  {theme:"nomen", word:"Bahnhof", wortart:"Nomen", sentence:"Wir warten am Bahnhof auf den Zug.", tip:"'der Bahnhof' – ein Ort. Orte sind Nomen und werden großgeschrieben."},
+  {theme:"nomen", word:"Geburtstag", wortart:"Nomen", sentence:"An meinem Geburtstag bekomme ich Geschenke.", tip:"'der Geburtstag' – Nomen schreibt man groß."},
+  {theme:"nomen", word:"Zeichnung", wortart:"Nomen", sentence:"Die Zeichnung hängt jetzt an der Wand.", tip:"'die Zeichnung' – du kannst 'die' davor setzen."},
+  {theme:"nomen", word:"Fahrrad", wortart:"Nomen", sentence:"Mein Fahrrad hat eine rote Klingel.", tip:"'das Fahrrad' – ein Ding. Dinge sind Nomen, großgeschrieben."},
+  {theme:"nomen", word:"Hausaufgabe", wortart:"Nomen", sentence:"Ich mache heute meine Hausaufgabe schnell.", tip:"'die Hausaufgabe' – Nomen schreibt man groß."},
 
-  // ── ie / ei / eu ──
-  {theme:"ie", word:"spielen",   wortart:"Verb",     sentence:"Die Kinder spielen nach der Schule im Garten.",   tip:"'spielen' ist ein Verb – eine Tätigkeit. Was machen die Kinder? Sie spielen!"},
-  {theme:"ie", word:"schreiben", wortart:"Verb",     sentence:"Ich schreibe einen Brief an meine Oma.",          tip:"'schreiben' ist ein Verb – eine Handlung."},
-  {theme:"ie", word:"fliegen",   wortart:"Verb",     sentence:"Die Vögel fliegen im Herbst in den Süden.",       tip:"'fliegen' ist ein Verb – eine Tätigkeit."},
-  {theme:"ie", word:"reisen",    wortart:"Verb",     sentence:"Im Sommer reisen wir ans Meer.",                  tip:"'reisen' ist ein Verb – eine Tätigkeit."},
-  {theme:"ie", word:"Freude",    wortart:"Nomen",    sentence:"Die Freude war groß, als die Sonne schien.",      tip:"'die Freude' – ein Gefühl als Nomen. Nomen schreibt man groß."},
-  {theme:"ie", word:"lieben",    wortart:"Verb",     sentence:"Kinder lieben das Spielen im Freien.",            tip:"'lieben' ist ein Verb – eine Tätigkeit/Gefühl."},
-  {theme:"ie", word:"Biene",     wortart:"Nomen",    sentence:"Die Biene sammelt Nektar von den Blumen.",        tip:"'die Biene' – Nomen schreibt man groß."},
-  {theme:"ie", word:"leise",     wortart:"Adjektiv", sentence:"Das Kätzchen schläft leise in seinem Körbchen.",  tip:"'leise' ist ein Adjektiv – es beschreibt, wie das Kätzchen schläft."},
+  {theme:"ie", word:"spielen", wortart:"Verb", sentence:"Die Kinder spielen nach der Schule im Garten.", tip:"'spielen' ist ein Verb – eine Tätigkeit. Was machen die Kinder? Sie spielen!"},
+  {theme:"ie", word:"schreiben", wortart:"Verb", sentence:"Ich schreibe einen Brief an meine Oma.", tip:"'schreiben' ist ein Verb – eine Handlung."},
+  {theme:"ie", word:"fliegen", wortart:"Verb", sentence:"Die Vögel fliegen im Herbst in den Süden.", tip:"'fliegen' ist ein Verb – eine Tätigkeit."},
+  {theme:"ie", word:"reisen", wortart:"Verb", sentence:"Im Sommer reisen wir ans Meer.", tip:"'reisen' ist ein Verb – eine Tätigkeit."},
+  {theme:"ie", word:"Freude", wortart:"Nomen", sentence:"Die Freude war groß, als die Sonne schien.", tip:"'die Freude' – ein Gefühl als Nomen. Nomen schreibt man groß."},
+  {theme:"ie", word:"lieben", wortart:"Verb", sentence:"Kinder lieben das Spielen im Freien.", tip:"'lieben' ist ein Verb – eine Tätigkeit/Gefühl."},
+  {theme:"ie", word:"Biene", wortart:"Nomen", sentence:"Die Biene sammelt Nektar von den Blumen.", tip:"'die Biene' – Nomen schreibt man groß."},
+  {theme:"ie", word:"leise", wortart:"Adjektiv", sentence:"Das Kätzchen schläft leise in seinem Körbchen.", tip:"'leise' ist ein Adjektiv – es beschreibt, wie das Kätzchen schläft."},
 
-  // ── sch / sp / st ──
-  {theme:"sch", word:"Schule",   wortart:"Nomen",    sentence:"In der Schule lernen wir Lesen und Rechnen.",     tip:"'die Schule' – ein Ort. Orte sind Nomen, großgeschrieben."},
-  {theme:"sch", word:"sprechen", wortart:"Verb",     sentence:"Bitte sprich laut und deutlich.",                 tip:"'sprechen' ist ein Verb – eine Tätigkeit des Redens."},
-  {theme:"sch", word:"stellen",  wortart:"Verb",     sentence:"Stell das Glas vorsichtig auf den Tisch.",        tip:"'stellen' ist ein Verb – eine Handlung."},
-  {theme:"sch", word:"Straße",   wortart:"Nomen",    sentence:"Wir überqueren die Straße an der Ampel.",         tip:"'die Straße' – ein Ort. Nomen schreibt man groß."},
-  {theme:"sch", word:"Schrank",  wortart:"Nomen",    sentence:"Ich lege meine Kleider in den Schrank.",          tip:"'der Schrank' – ein Ding. Nomen schreibt man groß."},
-  {theme:"sch", word:"schwimmen",wortart:"Verb",     sentence:"Wir schwimmen jeden Dienstag im Hallenbad.",      tip:"'schwimmen' ist ein Verb – eine Tätigkeit."},
-  {theme:"sch", word:"springen", wortart:"Verb",     sentence:"Die Kinder springen über die Pfützen.",           tip:"'springen' ist ein Verb – eine Bewegung."},
+  {theme:"sch", word:"Schule", wortart:"Nomen", sentence:"In der Schule lernen wir Lesen und Rechnen.", tip:"'die Schule' – ein Ort. Orte sind Nomen, großgeschrieben."},
+  {theme:"sch", word:"sprechen", wortart:"Verb", sentence:"Bitte sprich laut und deutlich.", tip:"'sprechen' ist ein Verb – eine Tätigkeit des Redens."},
+  {theme:"sch", word:"stellen", wortart:"Verb", sentence:"Stell das Glas vorsichtig auf den Tisch.", tip:"'stellen' ist ein Verb – eine Handlung."},
+  {theme:"sch", word:"Straße", wortart:"Nomen", sentence:"Wir überqueren die Straße an der Ampel.", tip:"'die Straße' – ein Ort. Nomen schreibt man groß."},
+  {theme:"sch", word:"Schrank", wortart:"Nomen", sentence:"Ich lege meine Kleider in den Schrank.", tip:"'der Schrank' – ein Ding. Nomen schreibt man groß."},
+  {theme:"sch", word:"schwimmen", wortart:"Verb", sentence:"Wir schwimmen jeden Dienstag im Hallenbad.", tip:"'schwimmen' ist ein Verb – eine Tätigkeit."},
+  {theme:"sch", word:"springen", wortart:"Verb", sentence:"Die Kinder springen über die Pfützen.", tip:"'springen' ist ein Verb – eine Bewegung."},
 
-  // ── Dehnungs-h ──
-  {theme:"dehnungs", word:"fahren", wortart:"Verb",  sentence:"Wir fahren am Wochenende zu Oma.",               tip:"'fahren' ist ein Verb. Was machen wir? Wir fahren!"},
-  {theme:"dehnungs", word:"Stuhl",  wortart:"Nomen", sentence:"Der Stuhl steht neben dem Tisch.",               tip:"'der Stuhl' – ein Möbelstück. Nomen schreibt man groß."},
-  {theme:"dehnungs", word:"Zahl",   wortart:"Nomen", sentence:"Welche Zahl kommt nach der Sieben?",             tip:"'die Zahl' – Nomen schreibt man groß."},
-  {theme:"dehnungs", word:"Wahl",   wortart:"Nomen", sentence:"Er hatte die Wahl zwischen Apfel und Birne.",    tip:"'die Wahl' – ein Nomen."},
-  {theme:"dehnungs", word:"führen", wortart:"Verb",  sentence:"Der Lehrer führt die Klasse in die Bibliothek.", tip:"'führen' ist ein Verb – eine Tätigkeit.", phonetic:"füren"},
-  {theme:"dehnungs", word:"Bahn",   wortart:"Nomen", sentence:"Wir fahren mit der Bahn in die Stadt.",          tip:"'die Bahn' – Nomen schreibt man groß."},
-  {theme:"dehnungs", word:"wohnen", wortart:"Verb",  sentence:"Wir wohnen in einem großen Haus.",               tip:"'wohnen' ist ein Verb – eine Tätigkeit.", phonetic:"woonen"},
+  {theme:"dehnungs", word:"fahren", wortart:"Verb", sentence:"Wir fahren am Wochenende zu Oma.", tip:"'fahren' ist ein Verb. Was machen wir? Wir fahren!"},
+  {theme:"dehnungs", word:"Stuhl", wortart:"Nomen", sentence:"Der Stuhl steht neben dem Tisch.", tip:"'der Stuhl' – ein Möbelstück. Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"Zahl", wortart:"Nomen", sentence:"Welche Zahl kommt nach der Sieben?", tip:"'die Zahl' – Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"Wahl", wortart:"Nomen", sentence:"Er hatte die Wahl zwischen Apfel und Birne.", tip:"'die Wahl' – ein Nomen."},
+  {theme:"dehnungs", word:"führen", wortart:"Verb", sentence:"Der Lehrer führt die Klasse in die Bibliothek.", tip:"'führen' ist ein Verb – eine Tätigkeit.", phonetic:"füren"},
+  {theme:"dehnungs", word:"Bahn", wortart:"Nomen", sentence:"Wir fahren mit der Bahn in die Stadt.", tip:"'die Bahn' – Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"wohnen", wortart:"Verb", sentence:"Wir wohnen in einem großen Haus.", tip:"'wohnen' ist ein Verb – eine Tätigkeit.", phonetic:"woonen"},
 
-  // ── Doppelkonsonanten ──
-  {theme:"doppel", word:"Wasser",  wortart:"Nomen",    sentence:"Das Wasser im See ist heute sehr kalt.",        tip:"'das Wasser' – Nomen schreibt man groß. Achte auf das Doppel-s!"},
-  {theme:"doppel", word:"Teller",  wortart:"Nomen",    sentence:"Stell den Teller bitte auf den Tisch.",         tip:"'der Teller' – Nomen schreibt man groß. Doppel-l!"},
-  {theme:"doppel", word:"rennen",  wortart:"Verb",     sentence:"Die Kinder rennen auf dem Sportplatz.",         tip:"'rennen' ist ein Verb. Achte auf das Doppel-n!"},
-  {theme:"doppel", word:"Kette",   wortart:"Nomen",    sentence:"Die goldene Kette gehört meiner Oma.",          tip:"'die Kette' – Nomen schreibt man groß. Doppel-t!"},
-  {theme:"doppel", word:"fallen",  wortart:"Verb",     sentence:"Im Herbst fallen die bunten Blätter.",          tip:"'fallen' ist ein Verb. Doppel-l!"},
-  {theme:"doppel", word:"Sommer",  wortart:"Nomen",    sentence:"Im Sommer fahren wir ans Meer.",                tip:"'der Sommer' – Nomen schreibt man groß. Doppel-m!"},
-  {theme:"doppel", word:"Mitte",   wortart:"Nomen",    sentence:"Das Buch liegt in der Mitte des Tisches.",      tip:"'die Mitte' – Nomen schreibt man groß. Doppel-t!"},
-  {theme:"doppel", word:"nass",    wortart:"Adjektiv", sentence:"Nach dem Regen ist der Boden ganz nass.",       tip:"'nass' ist ein Adjektiv – eine Eigenschaft. Doppel-s!"},
-  {theme:"doppel", word:"Kissen",  wortart:"Nomen",    sentence:"Das weiche Kissen liegt auf dem Sofa.",         tip:"'das Kissen' – Nomen schreibt man groß. Doppel-s!"},
-  {theme:"doppel", word:"witzig",  wortart:"Adjektiv", sentence:"Der Clown ist sehr witzig und bunt.",           tip:"'witzig' ist ein Adjektiv – eine Eigenschaft."},
+  {theme:"doppel", word:"Wasser", wortart:"Nomen", sentence:"Das Wasser im See ist heute sehr kalt.", tip:"'das Wasser' – Nomen schreibt man groß. Achte auf das Doppel-s!"},
+  {theme:"doppel", word:"Teller", wortart:"Nomen", sentence:"Stell den Teller bitte auf den Tisch.", tip:"'der Teller' – Nomen schreibt man groß. Doppel-l!"},
+  {theme:"doppel", word:"rennen", wortart:"Verb", sentence:"Die Kinder rennen auf dem Sportplatz.", tip:"'rennen' ist ein Verb. Achte auf das Doppel-n!"},
+  {theme:"doppel", word:"Kette", wortart:"Nomen", sentence:"Die goldene Kette gehört meiner Oma.", tip:"'die Kette' – Nomen schreibt man groß. Doppel-t!"},
+  {theme:"doppel", word:"fallen", wortart:"Verb", sentence:"Im Herbst fallen die bunten Blätter.", tip:"'fallen' ist ein Verb. Doppel-l!"},
+  {theme:"doppel", word:"Sommer", wortart:"Nomen", sentence:"Im Sommer fahren wir ans Meer.", tip:"'der Sommer' – Nomen schreibt man groß. Doppel-m!"},
+  {theme:"doppel", word:"Mitte", wortart:"Nomen", sentence:"Das Buch liegt in der Mitte des Tisches.", tip:"'die Mitte' – Nomen schreibt man groß. Doppel-t!"},
+  {theme:"doppel", word:"nass", wortart:"Adjektiv", sentence:"Nach dem Regen ist der Boden ganz nass.", tip:"'nass' ist ein Adjektiv – eine Eigenschaft. Doppel-s!"},
+  {theme:"doppel", word:"Kissen", wortart:"Nomen", sentence:"Das weiche Kissen liegt auf dem Sofa.", tip:"'das Kissen' – Nomen schreibt man groß. Doppel-s!"},
+  {theme:"doppel", word:"witzig", wortart:"Adjektiv", sentence:"Der Clown ist sehr witzig und bunt.", tip:"'witzig' ist ein Adjektiv – eine Eigenschaft."},
 
-  // ── Verben & Adjektive ──
-  {theme:"verb", word:"arbeiten",  wortart:"Verb",     sentence:"Mein Vater muss heute lange arbeiten.",         tip:"'arbeiten' ist ein Verb – eine Tätigkeit."},
-  {theme:"verb", word:"wünschen",  wortart:"Verb",     sentence:"Ich wünsche mir ein neues Buch.",               tip:"'wünschen' ist ein Verb – eine Handlung.", phonetic:"wünschen"},
-  {theme:"verb", word:"ruhig",     wortart:"Adjektiv", sentence:"Es ist sehr ruhig im Wald.",                    tip:"'ruhig' ist ein Adjektiv – es beschreibt, wie etwas ist."},
-  {theme:"verb", word:"wichtig",   wortart:"Adjektiv", sentence:"Schlafen ist sehr wichtig für das Gehirn.",     tip:"'wichtig' ist ein Adjektiv – eine Eigenschaft."},
-  {theme:"verb", word:"lustig",    wortart:"Adjektiv", sentence:"Das Buch ist sehr lustig und spannend.",        tip:"'lustig' ist ein Adjektiv – es sagt uns, wie das Buch ist."},
-  {theme:"verb", word:"fleißig",   wortart:"Adjektiv", sentence:"Der fleißige Schüler macht seine Hausaufgaben.",tip:"'fleißig' ist ein Adjektiv – eine Eigenschaft einer Person."},
-  {theme:"verb", word:"lachen",    wortart:"Verb",     sentence:"Die Kinder lachen über den lustigen Witz.",     tip:"'lachen' ist ein Verb – eine Tätigkeit."},
-  {theme:"verb", word:"freundlich",wortart:"Adjektiv", sentence:"Die Lehrerin ist sehr freundlich und nett.",    tip:"'freundlich' ist ein Adjektiv – eine Eigenschaft."},
+  {theme:"verb", word:"arbeiten", wortart:"Verb", sentence:"Mein Vater muss heute lange arbeiten.", tip:"'arbeiten' ist ein Verb – eine Tätigkeit."},
+  {theme:"verb", word:"wünschen", wortart:"Verb", sentence:"Ich wünsche mir ein neues Buch.", tip:"'wünschen' ist ein Verb – eine Handlung.", phonetic:"wünschen"},
+  {theme:"verb", word:"ruhig", wortart:"Adjektiv", sentence:"Es ist sehr ruhig im Wald.", tip:"'ruhig' ist ein Adjektiv – es beschreibt, wie etwas ist."},
+  {theme:"verb", word:"wichtig", wortart:"Adjektiv", sentence:"Schlafen ist sehr wichtig für das Gehirn.", tip:"'wichtig' ist ein Adjektiv – eine Eigenschaft."},
+  {theme:"verb", word:"lustig", wortart:"Adjektiv", sentence:"Das Buch ist sehr lustig und spannend.", tip:"'lustig' ist ein Adjektiv – es sagt uns, wie das Buch ist."},
+  {theme:"verb", word:"fleißig", wortart:"Adjektiv", sentence:"Der fleißige Schüler macht seine Hausaufgaben.", tip:"'fleißig' ist ein Adjektiv – eine Eigenschaft einer Person."},
+  {theme:"verb", word:"lachen", wortart:"Verb", sentence:"Die Kinder lachen über den lustigen Witz.", tip:"'lachen' ist ein Verb – eine Tätigkeit."},
+  {theme:"verb", word:"freundlich", wortart:"Adjektiv", sentence:"Die Lehrerin ist sehr freundlich und nett.", tip:"'freundlich' ist ein Adjektiv – eine Eigenschaft."},
+
+  {theme:"praeteritum", word:"ging", wortart:"Verb", sentence:"Gestern ging Mia allein zur Schule.", tip:"'ging' ist die Vergangenheitsform von 'gehen'. Es ist ein Verb – eine Tätigkeit."},
+  {theme:"praeteritum", word:"war", wortart:"Verb", sentence:"Der Hund war sehr müde nach dem Spaziergang.", tip:"'war' ist die Vergangenheitsform von 'sein'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"hatte", wortart:"Verb", sentence:"Luca hatte heute seine Brotdose vergessen.", tip:"'hatte' ist die Vergangenheitsform von 'haben'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"sah", wortart:"Verb", sentence:"Emma sah einen Regenbogen am Himmel.", tip:"'sah' ist die Vergangenheitsform von 'sehen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"kam", wortart:"Verb", sentence:"Der Bus kam pünktlich an die Haltestelle.", tip:"'kam' ist die Vergangenheitsform von 'kommen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"lief", wortart:"Verb", sentence:"Der Junge lief schnell über den Schulhof.", tip:"'lief' ist die Vergangenheitsform von 'laufen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"fand", wortart:"Verb", sentence:"Mila fand eine Muschel am Strand.", tip:"'fand' ist die Vergangenheitsform von 'finden'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"stand", wortart:"Verb", sentence:"Die Flasche stand auf dem Tisch.", tip:"'stand' ist die Vergangenheitsform von 'stehen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"schrieb", wortart:"Verb", sentence:"Tom schrieb einen Brief an seinen Opa.", tip:"'schrieb' ist die Vergangenheitsform von 'schreiben'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"rief", wortart:"Verb", sentence:"Die Lehrerin rief die Kinder in die Klasse.", tip:"'rief' ist die Vergangenheitsform von 'rufen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"half", wortart:"Verb", sentence:"Der große Bruder half beim Aufräumen.", tip:"'half' ist die Vergangenheitsform von 'helfen'. Es ist ein Verb."},
+  {theme:"praeteritum", word:"brachte", wortart:"Verb", sentence:"Papa brachte frische Brötchen vom Bäcker mit.", tip:"'brachte' ist die Vergangenheitsform von 'bringen'. Es ist ein Verb."}
 ];
 
-const THEME_ICONS = {nomen:"🔠",ie:"🔤",sch:"💬",dehnungs:"📏",doppel:"✌️",verb:"🌿"};
-const THEME_LABELS = {nomen:"Nomen",ie:"ie/ei/eu",sch:"sch/sp/st",dehnungs:"Dehnungs-h",doppel:"Doppelkonsonanten",verb:"Verben & Adjektive"};
+const THEME_ICONS = {nomen:"🔠",ie:"🔤",sch:"💬",dehnungs:"📏",doppel:"✌️",verb:"🌿",praeteritum:"⏳"};
+const THEME_LABELS = {nomen:"Nomen",ie:"ie/ei/eu",sch:"sch/sp/st",dehnungs:"Dehnungs-h",doppel:"Doppelkonsonanten",verb:"Verben & Adjektive",praeteritum:"Vergangenheit"};
 const TOTAL = 12;
 
 let selectedThemes = [];
-let questions=[], current=0, results=[], checked=false, waDone=false;
+let questions = [], current = 0, results = [], checked = false, waDone = false;
 let deVoice = null;
 
-// ── Voice init ──────────────────────────────────────────────────────────────
 function initVoice(){
   const load = () => {
     const voices = window.speechSynthesis.getVoices();
-    // Priority: de-DE voices – prefer names with 'Anna', 'Petra', 'Markus', 'Hans', 'Hedda', 'Katja'
     const preferred = ['anna','katja','petra','hedda','hans','markus','helena','yannick'];
     let best = null;
     for(const p of preferred){
@@ -407,7 +409,7 @@ function initVoice(){
   window.speechSynthesis.onvoiceschanged = load;
 }
 
-function speak(text, rate=0.78, onEnd=null){
+function speak(text, rate = 0.78, onEnd = null){
   if(!window.speechSynthesis){ alert('Sprachausgabe nicht verfügbar.'); return; }
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
@@ -421,7 +423,6 @@ function speak(text, rate=0.78, onEnd=null){
 
 function speakWord(){
   const q = questions[current];
-  // Use phonetic override if present, else speak the word slowly
   const text = q.phonetic || q.word;
   document.getElementById('btnWord').classList.add('speaking');
   speak(text, 0.65, () => document.getElementById('btnWord').classList.remove('speaking'));
@@ -439,7 +440,6 @@ function speakSentence(){
   document.getElementById('wordInput').focus();
 }
 
-// ── Theme selection ─────────────────────────────────────────────────────────
 function toggleTheme(card){
   card.classList.toggle('selected');
   selectedThemes = Array.from(document.querySelectorAll('.theme-card.selected')).map(c => c.dataset.theme);
@@ -450,16 +450,17 @@ function startMix(){ buildQuestions(Object.keys(THEME_LABELS)); showQuiz(); }
 
 function buildQuestions(themes){
   const pool = BANK.filter(w => themes.includes(w.theme));
-  // Shuffle and pick TOTAL, but ensure variety if pool big enough
   const shuffled = [...pool].sort(() => Math.random() - 0.5);
   questions = shuffled.slice(0, TOTAL);
-  // If pool smaller than TOTAL, repeat
   if(questions.length < TOTAL){
     while(questions.length < TOTAL){
       questions.push(...shuffled.slice(0, TOTAL - questions.length));
     }
   }
-  current = 0; results = []; checked = false; waDone = false;
+  current = 0;
+  results = [];
+  checked = false;
+  waDone = false;
 }
 
 function showQuiz(){
@@ -472,8 +473,6 @@ function showScreen(id){
   document.getElementById(id).classList.add('active');
 }
 
-// ── Quiz logic ───────────────────────────────────────────────────────────────
-function shuffle(a){ return [...a].sort(() => Math.random() - 0.5); }
 function norm(s){ return s.trim().replace(/\s+/g,' ').replace(/[.!?,;]+$/,'').toLowerCase(); }
 
 function renderTrack(){
@@ -481,76 +480,87 @@ function renderTrack(){
   row.innerHTML = '';
   for(let i=0;i<TOTAL;i++){
     const d = document.createElement('div');
-    d.className = 'track-dot' + (i<current?' done':i===current?' active':'');
+    d.className = 'track-dot' + (i < current ? ' done' : i === current ? ' active' : '');
     row.appendChild(d);
   }
-  document.getElementById('trackerLabel').textContent = `Wort ${current+1} von ${TOTAL}`;
+  document.getElementById('trackerLabel').textContent = `Wort ${current + 1} von ${TOTAL}`;
   document.getElementById('trackerCount').textContent = `${current} von ${TOTAL} fertig`;
 }
 
 function setPhase(n){
   ['ph1','ph2','ph3','ph4'].forEach((id,i)=>{
-    document.getElementById(id).className = 'phase-step' + (i+1<n?' done':i+1===n?' active':'');
+    document.getElementById(id).className = 'phase-step' + (i + 1 < n ? ' done' : i + 1 === n ? ' active' : '');
   });
 }
 
 function loadQuestion(){
-  checked = false; waDone = false;
+  checked = false;
+  waDone = false;
   const q = questions[current];
   const icon = THEME_ICONS[q.theme] || '📌';
   const label = THEME_LABELS[q.theme] || q.theme;
+
   document.getElementById('typeBadge').textContent = `${icon} ${label}`;
   document.getElementById('instructionText').innerHTML = 'Klicke zuerst auf <strong>„Wort hören"</strong>, dann auf <strong>„Satz hören"</strong>. Danach schreibe beides unten.';
   document.getElementById('sentenceDisplay').innerHTML = '<span class="sentence-placeholder">Der Satz erscheint hier nach „Satz hören".</span>';
 
   ['wordInput','sentenceInput'].forEach(id => {
     const el = document.getElementById(id);
-    el.value = ''; el.className = el.tagName==='INPUT' ? 'field-word' : 'field-sentence'; el.disabled = false;
+    el.value = '';
+    el.className = el.tagName === 'INPUT' ? 'field-word' : 'field-sentence';
+    el.disabled = false;
   });
+
   document.getElementById('wordFeedback').innerHTML = '';
   document.getElementById('sentenceFeedback').innerHTML = '';
 
-  // Reset wortart
   document.getElementById('wortartSection').classList.remove('visible');
   document.getElementById('waFeedback').innerHTML = '';
   document.getElementById('waTip').classList.remove('visible');
+
   ['wa-Nomen','wa-Verb','wa-Adjektiv'].forEach(id => {
     const b = document.getElementById(id);
-    b.className = 'btn-wa'; b.disabled = false;
+    b.className = 'btn-wa';
+    b.disabled = false;
   });
 
   document.getElementById('btnCheck').disabled = false;
   const bn = document.getElementById('btnNext');
   bn.classList.remove('visible');
-  bn.textContent = current+1<TOTAL ? 'Weiter zum nächsten Wort →' : 'Ergebnis ansehen 🎉';
+  bn.textContent = current + 1 < TOTAL ? 'Weiter zum nächsten Wort →' : 'Ergebnis ansehen 🎉';
 
-  setPhase(1); renderTrack();
+  setPhase(1);
+  renderTrack();
   document.getElementById('wordInput').focus();
 }
 
-function chip(cls,txt){ return `<div class="chip ${cls}">${txt}</div>`; }
+function chip(cls, txt){ return `<div class="chip ${cls}">${txt}</div>`; }
 
 function checkAnswer(){
   if(checked) return;
-  checked = true; setPhase(3);
+  checked = true;
+  setPhase(3);
+
   const q = questions[current];
   const wv = document.getElementById('wordInput').value;
   const sv = document.getElementById('sentenceInput').value;
 
   const wOk = wv.trim() === q.word;
   const wi = document.getElementById('wordInput');
-  wi.disabled = true; wi.classList.add(wOk?'correct':'incorrect');
+  wi.disabled = true;
+  wi.classList.add(wOk ? 'correct' : 'incorrect');
   document.getElementById('wordFeedback').innerHTML = wOk
     ? chip('ok','✅ Richtig geschrieben!')
-    : chip('bad',`❌ Richtig: „${q.word}"`);
+    : chip('bad',`❌ Richtig: „${q.word}”`);
 
   const sEmpty = sv.trim().length === 0;
   const sOk = !sEmpty && norm(sv) === norm(q.sentence);
   const si = document.getElementById('sentenceInput');
-  si.disabled = true; si.classList.add(sOk?'correct':'incorrect');
+  si.disabled = true;
+  si.classList.add(sOk ? 'correct' : 'incorrect');
   document.getElementById('sentenceFeedback').innerHTML = sEmpty
     ? chip('warn','⚠️ Kein Satz eingegeben.')
-    : sOk ? chip('ok','✅ Satz korrekt!') : chip('bad',`❌ Richtig: „${q.sentence}"`);
+    : sOk ? chip('ok','✅ Satz korrekt!') : chip('bad',`❌ Richtig: „${q.sentence}”`);
 
   results.push({q, wOk, sOk, waOk:null});
   document.getElementById('wortartSection').classList.add('visible');
@@ -565,51 +575,61 @@ function selectWA(chosen){
   const q = questions[current];
   const correct = q.wortart;
   const isOk = chosen === correct;
+
   ['Nomen','Verb','Adjektiv'].forEach(w => {
-    const b = document.getElementById('wa-'+w);
+    const b = document.getElementById('wa-' + w);
     b.disabled = true;
-    if(w===chosen && isOk) b.classList.add('ok');
-    else if(w===chosen && !isOk) b.classList.add('wrong');
-    else if(w===correct) b.classList.add('reveal');
+    if(w === chosen && isOk) b.classList.add('ok');
+    else if(w === chosen && !isOk) b.classList.add('wrong');
+    else if(w === correct) b.classList.add('reveal');
   });
+
   document.getElementById('waFeedback').innerHTML = isOk
-    ? chip('ok',`✅ Richtig! „${q.word}" ist ein ${correct}.`)
-    : chip('bad',`❌ „${q.word}" ist ein ${correct}.`);
+    ? chip('ok',`✅ Richtig! „${q.word}” ist ein ${correct}.`)
+    : chip('bad',`❌ „${q.word}” ist ein ${correct}.`);
+
   const tipEl = document.getElementById('waTip');
-  tipEl.textContent = q.tip; tipEl.classList.add('visible');
-  results[results.length-1].waOk = isOk;
+  tipEl.textContent = q.tip;
+  tipEl.classList.add('visible');
+
+  results[results.length - 1].waOk = isOk;
   document.getElementById('btnNext').classList.add('visible');
   document.getElementById('instructionText').innerHTML = isOk
-    ? '🌟 Sehr gut! Klicke auf „Weiter".'
-    : '👀 Schau dir die Erklärung an. Dann klicke auf „Weiter".';
+    ? '🌟 Sehr gut! Klicke auf „Weiter”.'
+    : '👀 Schau dir die Erklärung an. Dann klicke auf „Weiter”.';
 }
 
 function nextQuestion(){
-  if(!waDone && results.length>0 && results[results.length-1].waOk===null)
-    results[results.length-1].waOk = false;
+  if(!waDone && results.length > 0 && results[results.length - 1].waOk === null){
+    results[results.length - 1].waOk = false;
+  }
   current++;
-  if(current < TOTAL) loadQuestion(); else showResults();
+  if(current < TOTAL) loadQuestion();
+  else showResults();
 }
 
 function showResults(){
   showScreen('screenResults');
   const n = results.length;
-  const wOk = results.filter(r=>r.wOk).length;
-  const sOk = results.filter(r=>r.sOk).length;
-  const waOk = results.filter(r=>r.waOk).length;
-  const pct = Math.round((wOk+sOk+waOk)/(n*3)*100);
-  let emoji,title,sub;
-  if(pct>=90){emoji='🌟';title='Fantastisch!';sub='Du hast das sehr gut gemacht!';}
-  else if(pct>=70){emoji='😊';title='Gut gemacht!';sub='Du machst große Fortschritte!';}
-  else if(pct>=50){emoji='💪';title='Weiter üben!';sub='Jedes Üben macht dich besser.';}
-  else{emoji='📚';title='Noch üben!';sub='Keine Sorge – beim nächsten Mal klappt es besser!';}
+  const wOk = results.filter(r => r.wOk).length;
+  const sOk = results.filter(r => r.sOk).length;
+  const waOk = results.filter(r => r.waOk).length;
+  const pct = Math.round((wOk + sOk + waOk) / (n * 3) * 100);
+
+  let emoji, title, sub;
+  if(pct >= 90){ emoji = '🌟'; title = 'Fantastisch!'; sub = 'Du hast das sehr gut gemacht!'; }
+  else if(pct >= 70){ emoji = '😊'; title = 'Gut gemacht!'; sub = 'Du machst große Fortschritte!'; }
+  else if(pct >= 50){ emoji = '💪'; title = 'Weiter üben!'; sub = 'Jedes Üben macht dich besser.'; }
+  else { emoji = '📚'; title = 'Noch üben!'; sub = 'Keine Sorge – beim nächsten Mal klappt es besser!'; }
+
   document.getElementById('resEmoji').textContent = emoji;
   document.getElementById('resTitle').textContent = title;
   document.getElementById('resSub').textContent = sub;
   document.getElementById('spW').textContent = `${wOk}/${n}`;
   document.getElementById('spS').textContent = `${sOk}/${n}`;
   document.getElementById('spWA').textContent = `${waOk}/${n}`;
-  document.getElementById('spPct').textContent = pct+'%';
+  document.getElementById('spPct').textContent = pct + '%';
+
   const list = document.getElementById('reviewList');
   list.innerHTML = '';
   results.forEach(r => {
@@ -617,13 +637,13 @@ function showResults(){
     const div = document.createElement('div');
     div.className = 'review-item';
     div.innerHTML = `
-      <div class="ri-icon">${allOk?'✅':r.wOk&&r.sOk?'🟡':'❌'}</div>
+      <div class="ri-icon">${allOk ? '✅' : r.wOk && r.sOk ? '🟡' : '❌'}</div>
       <div>
         <div class="ri-word">${r.q.word}</div>
         <div class="ri-detail">
-          <span class="${r.wOk?'ri-ok':'ri-no'}">${r.wOk?'✓ Wort':'✗ Wort'}</span>
-          <span class="${r.sOk?'ri-ok':'ri-no'}">${r.sOk?'✓ Satz':'✗ Satz'}</span>
-          <span class="${r.waOk?'ri-ok':'ri-no'}">${r.waOk?`✓ ${r.q.wortart}`:`✗ ${r.q.wortart}`}</span>
+          <span class="${r.wOk ? 'ri-ok' : 'ri-no'}">${r.wOk ? '✓ Wort' : '✗ Wort'}</span>
+          <span class="${r.sOk ? 'ri-ok' : 'ri-no'}">${r.sOk ? '✓ Satz' : '✗ Satz'}</span>
+          <span class="${r.waOk ? 'ri-ok' : 'ri-no'}">${r.waOk ? '✓ ' + r.q.wortart : '✗ ' + r.q.wortart}</span>
         </div>
       </div>`;
     list.appendChild(div);
@@ -635,8 +655,8 @@ function restartSame(){
   showQuiz();
 }
 
-// ── Boot ─────────────────────────────────────────────────────────────────────
 initVoice();
 </script>
 </body>
 </html>
+```
