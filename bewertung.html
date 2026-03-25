@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📝 Geschichtenbewertung – Klasse 3/4 Bayern</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:       #1a1f2e;
+  --paper:     #fdfaf4;
+  --cream:     #f5f0e8;
+  --rule:      #e8e0d0;
+  --blue:      #2c5f9e;
+  --blue-lt:   #ddeaf8;
+  --green:     #2d7a4f;
+  --green-lt:  #ddf2e8;
+  --red:       #c0392b;
+  --red-lt:    #fdecea;
+  --amber:     #b8620a;
+  --amber-lt:  #fef3e2;
+  --purple:    #6b3fa0;
+  --purple-lt: #f0e8fa;
+  --gold:      #c8991a;
+  --gold-lt:   #fef8e1;
+  --shadow:    0 2px 16px rgba(26,31,46,0.10);
+  --shadow-lg: 0 8px 32px rgba(26,31,46,0.14);
+  --r:         14px;
+  --r-lg:      22px;
+  --font-body: 'Nunito', sans-serif;
+  --font-story:'Merriweather', Georgia, serif;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  background-image:
+    repeating-linear-gradient(
+      transparent,
+      transparent 31px,
+      #e8dfc8 31px,
+      #e8dfc8 32px
+    );
+  background-attachment: fixed;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--ink);
+  color: #fff;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,.25);
+}
+.header-logo { font-size: 1.5rem; }
+.header-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.1;
+}
+.header-title small {
+  display: block;
+  font-size: .7rem;
+  font-weight: 600;
+  opacity: .6;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.header-back {
+  margin-left: auto;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: .82rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s;
+}
+.header-back:hover { background: rgba(255,255,255,.22); }
+
+/* ── Layout ── */
+.page { max-width: 900px; margin: 0 auto; padding: 32px 20px 60px; }
+
+/* ── Step tabs ── */
+.tabs {
+  display: flex;
+  gap: 0;
+  background: var(--rule);
+  border-radius: var(--r);
+  padding: 4px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+.tab {
+  flex: 1;
+  padding: 11px 10px;
+  border-radius: calc(var(--r) - 4px);
+  text-align: center;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #888;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.tab.active {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 6px rgba(0,0,0,.1);
+}
+
+/* ── Cards ── */
+.card {
+  background: #fff;
+  border-radius: var(--r-lg);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--rule);
+  margin-bottom: 20px;
+}
+.card-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title .ct-icon { font-size: 1.2rem; }
+
+/* ── Input panel ── */
+#panelInput { }
+.class-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.select-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 140px;
+}
+.select-group label {
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #888;
+}
+.select-group select,
+.select-group input {
+  font-family: var(--font-body);
+  font-size: .92rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  border: 2px solid var(--rule);
+  border-radius: var(--r);
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+  transition: border-color .15s;
+}
+.select-group select:focus,
+.select-group input:focus { border-color: var(--blue); }
+
+.story-textarea {
+  width: 100%;
+  font-family: var(--font-story);
+  font-size: 1rem;
+  line-height: 2;
+  padding: 20px;
+  border: 2px solid var(--rule);
+  border-radius: var(--r);
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 280px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+  background-image: repeating-linear-gradient(
+    transparent, transparent 31px, #e8dfc8 31px, #e8dfc8 32px
+  );
+}
+.story-textarea:focus { border-color: var(--blue); }
+
+.word-counter {
+  font-size: .75rem;
+  font-weight: 700;
+  color: #aaa;
+  text-align: right;
+  margin-top: 6px;
+}
+.word-counter span { color: var(--blue); }
+
+.btn-analyze {
+  width: 100%;
+  margin-top: 20px;
+  padding: 17px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 800;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity .15s, transform .1s;
+  letter-spacing: -.01em;
+}
+.btn-analyze:hover { opacity: .88; }
+.btn-analyze:active { transform: scale(.99); }
+.btn-analyze:disabled { opacity: .45; cursor: not-allowed; }
+
+/* ── Loading ── */
+.loading {
+  text-align: center;
+  padding: 48px 24px;
+  display: none;
+}
+.loading.active { display: block; }
+.loading-spinner {
+  width: 48px; height: 48px;
+  border: 4px solid var(--rule);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading p { font-size: .95rem; font-weight: 700; color: #888; }
+
+/* ── Results panels ── */
+#panelResult, #panelGrade { display: none; }
+#panelResult.active, #panelGrade.active { display: block; }
+
+/* ── Annotated story ── */
+.story-rendered {
+  font-family: var(--font-story);
+  font-size: 1rem;
+  line-height: 2.2;
+  color: var(--ink);
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: 24px;
+  border: 1px solid var(--rule);
+  background-image: repeating-linear-gradient(
+    transparent, transparent 35px, #e8dfc8 35px, #e8dfc8 36px
+  );
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Error highlight types */
+.err {
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  transition: filter .1s;
+  padding: 0 2px;
+}
+.err:hover { filter: brightness(.92); }
+.err-spell   { background: #ffd6d6; border-bottom: 2.5px solid var(--red);   color: var(--red); }
+.err-grammar { background: #fff3cd; border-bottom: 2.5px solid var(--amber); color: var(--amber); }
+.err-capital { background: #e8d5f8; border-bottom: 2.5px solid var(--purple);color: var(--purple); }
+.err-punct   { background: #d5eaf8; border-bottom: 2.5px solid var(--blue);  color: var(--blue); }
+.err-style   { background: #d8f5e8; border-bottom: 2.5px dashed var(--green);color: var(--green); }
+
+/* Tooltip */
+.tooltip {
+  display: none;
+  position: fixed;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: .8rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  max-width: 260px;
+  line-height: 1.4;
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+}
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 16px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+}
+.tooltip.visible { display: block; }
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .75rem;
+  font-weight: 700;
+}
+.legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* Error summary list */
+.error-list {
+  margin-top: 20px;
+}
+.error-group-title {
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.error-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--r);
+  margin-bottom: 6px;
+  font-size: .87rem;
+}
+.error-row.spell   { background: #ffd6d6; }
+.error-row.grammar { background: #fff3cd; }
+.error-row.capital { background: #e8d5f8; }
+.error-row.punct   { background: #d5eaf8; }
+.error-row.style   { background: #d8f5e8; }
+.er-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.er-body { flex: 1; }
+.er-wrong { font-weight: 800; text-decoration: line-through; color: var(--red); }
+.er-right { font-weight: 800; color: var(--green); }
+.er-explain { color: #555; font-size: .8rem; margin-top: 2px; }
+
+/* ── Grade panel ── */
+.grade-hero {
+  text-align: center;
+  padding: 32px 20px 24px;
+  background: var(--ink);
+  border-radius: var(--r-lg);
+  color: #fff;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.grade-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 0%, rgba(100,160,255,.18), transparent 60%),
+              radial-gradient(ellipse at 80% 100%, rgba(255,200,80,.12), transparent 60%);
+}
+.grade-big {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1;
+  position: relative;
+  letter-spacing: -.04em;
+}
+.grade-label {
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  opacity: .6;
+  margin-bottom: 8px;
+  position: relative;
+}
+.grade-desc {
+  font-size: .92rem;
+  opacity: .8;
+  margin-top: 10px;
+  font-weight: 600;
+  position: relative;
+}
+.grade-class {
+  font-size: .72rem;
+  opacity: .5;
+  margin-top: 6px;
+  position: relative;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+/* Criteria breakdown */
+.criteria-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.crit-card {
+  background: var(--paper);
+  border-radius: var(--r);
+  padding: 16px;
+  border: 1.5px solid var(--rule);
+}
+.crit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.crit-name {
+  font-size: .8rem;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.3;
+}
+.crit-badge {
+  font-size: .75rem;
+  font-weight: 900;
+  padding: 3px 10px;
+  border-radius: 99px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.crit-badge.g1 { background: #c8f0d8; color: #1a6635; }
+.crit-badge.g2 { background: #d8eeff; color: #1a4d7a; }
+.crit-badge.g3 { background: #fff3cd; color: #7a5500; }
+.crit-badge.g4 { background: #ffe5cc; color: #7a3300; }
+.crit-badge.g5 { background: #ffd6d6; color: #8b0000; }
+.crit-badge.g6 { background: #e8e8e8; color: #444; }
+.crit-bar-bg {
+  height: 6px;
+  background: var(--rule);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.crit-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width .6s ease;
+}
+.crit-comment {
+  font-size: .75rem;
+  color: #666;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Feedback box */
+.feedback-box {
+  background: var(--gold-lt);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--r);
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.fb-title {
+  font-size: .8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fb-text {
+  font-size: .9rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.next-steps {
+  background: var(--green-lt);
+  border: 1.5px solid #9ddbb8;
+  border-radius: var(--r);
+  padding: 18px;
+}
+.ns-title {
+  font-size: .8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--green);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ns-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: .87rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+}
+.ns-item:last-child { margin-bottom: 0; }
+.ns-num {
+  background: var(--green);
+  color: #fff;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  font-size: .7rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* action buttons */
+.action-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.btn-sec {
+  flex: 1;
+  padding: 13px;
+  font-family: var(--font-body);
+  font-size: .9rem;
+  font-weight: 700;
+  border: 2px solid var(--rule);
+  border-radius: var(--r);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  transition: border-color .15s;
+  min-width: 140px;
+}
+.btn-sec:hover { border-color: var(--blue); color: var(--blue); }
+.btn-print {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.btn-print:hover { opacity: .88; color: #fff; }
+
+/* print */
+@media print {
+  .header, .tabs, .btn-analyze, .action-row { display: none !important; }
+  body { background: #fff; background-image: none; }
+  .card { box-shadow: none; border: 1px solid #ccc; }
+  .story-rendered { background-image: none; }
+}
+
+@media(max-width:560px) {
+  .criteria-grid { grid-template-columns: 1fr; }
+  .class-row { flex-direction: column; }
+  .page { padding: 20px 14px 48px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">📝</div>
+  <div class="header-title">
+    Geschichten-Bewertung
+    <small>Bayern LehrplanPLUS · Klasse 3 &amp; 4 · Deutsch</small>
+  </div>
+  <a class="header-back" href="https://keithan-c.github.io/schreibwerkstatt-klasse3/">← Schreibwerkstatt</a>
+</div>
+
+<div class="page">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" id="tab1" onclick="showTab(1)">✍️ Geschichte eingeben</div>
+    <div class="tab" id="tab2" onclick="showTab(2)">🔍 Fehleranalyse</div>
+    <div class="tab" id="tab3" onclick="showTab(3)">🏆 Benotung</div>
+  </div>
+
+  <!-- ══ TAB 1: INPUT ══ -->
+  <div id="panelInput">
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">⚙️</span> Einstellungen</div>
+      <div class="class-row">
+        <div class="select-group">
+          <label>Klasse</label>
+          <select id="selKlasse">
+            <option value="3">Klasse 3</option>
+            <option value="4">Klasse 4</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label>Aufgabentyp</label>
+          <select id="selType">
+            <option value="erlebniserzählung">Erlebniserzählung</option>
+            <option value="fantasiegeschichte">Fantasiegeschichte</option>
+            <option value="bildergeschichte">Bildergeschichte</option>
+            <option value="nacherzählung">Nacherzählung</option>
+            <option value="freiesschreiben">Freies Schreiben</option>
+          </select>
+        </div>
+        <div class="select-group">
+          <label>Schüler-ID (anonym)</label>
+          <input type="text" id="inpSchueler" placeholder="z.B. S-07" maxlength="20"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">📖</span> Geschichte des Kindes einfügen</div>
+      <textarea class="story-textarea" id="storyInput"
+        placeholder="Schreibe oder kopiere die Geschichte des Kindes hier rein…
+
+Achte darauf, den Text so zu übertragen wie das Kind ihn geschrieben hat – mit allen Fehlern."></textarea>
+      <div class="word-counter">Wörter: <span id="wordCount">0</span></div>
+
+      <button class="btn-analyze" id="btnAnalyze" onclick="runAnalysis()">
+        🔍 Analyse starten
+      </button>
+    </div>
+
+    <div class="loading" id="loadingBox">
+      <div class="loading-spinner"></div>
+      <p id="loadingMsg">KI analysiert die Geschichte…</p>
+    </div>
+  </div>
+
+  <!-- ══ TAB 2: ERRORS ══ -->
+  <div id="panelResult">
+    <div class="card">
+      <div class="card-title"><span class="ct-icon">📖</span> Geschichte mit Fehlermarkierungen</div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#ffd6d6;border:2px solid #c0392b"></div> Rechtschreibung</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#fff3cd;border:2px solid #b8620a"></div> Grammatik</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#e8d5f8;border:2px solid #6b3fa0"></div> Großschreibung</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d5eaf8;border:2px solid #2c5f9e"></div> Zeichensetzung</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d8f5e8;border:2px dashed #2d7a4f"></div> Stil-Hinweis</div>
+      </div>
+
+      <div class="story-rendered" id="storyRendered"></div>
+    </div>
+
+    <div class="card" id="errorListCard">
+      <div class="card-title"><span class="ct-icon">🗒️</span> Fehlerübersicht</div>
+      <div class="error-list" id="errorList"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-sec" onclick="showTab(1)">← Zurück</button>
+      <button class="btn-sec" onclick="showTab(3)">Zur Benotung →</button>
+      <button class="btn-sec btn-print" onclick="window.print()">🖨️ Drucken</button>
+    </div>
+  </div>
+
+  <!-- ══ TAB 3: GRADE ══ -->
+  <div id="panelGrade">
+    <div class="grade-hero" id="gradeHero">
+      <div class="grade-label">Gesamtnote · Bayern LP+ Klasse <span id="gradeKlasseLabel">3</span></div>
+      <div class="grade-big" id="gradeBig">—</div>
+      <div class="grade-desc" id="gradeDesc"></div>
+      <div class="grade-class" id="gradeSubLabel"></div>
+    </div>
+
+    <div class="criteria-grid" id="criteriaGrid"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <div class="fb-title">⭐ Stärken dieser Geschichte</div>
+      <div class="fb-text" id="feedbackStrengths"></div>
+    </div>
+
+    <div class="next-steps" id="nextStepsBox">
+      <div class="ns-title">📈 Nächste Lernschritte</div>
+      <div id="nextStepsList"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-sec" onclick="showTab(2)">← Zur Fehleranalyse</button>
+      <button class="btn-sec" onclick="showTab(1)">✍️ Neue Geschichte</button>
+      <button class="btn-sec btn-print" onclick="window.print()">🖨️ Drucken</button>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- Tooltip -->
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+// ── Tooltip ──────────────────────────────────────────────────────────────────
+const tooltip = document.getElementById('tooltip');
+document.addEventListener('mousemove', e => {
+  if(tooltip.classList.contains('visible')){
+    tooltip.style.left = Math.min(e.clientX + 10, window.innerWidth - 280) + 'px';
+    tooltip.style.top  = (e.clientY - 50) + 'px';
+  }
+});
+document.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+
+function attachTooltips(){
+  document.querySelectorAll('.err').forEach(el => {
+    el.addEventListener('mouseenter', e => {
+      tooltip.textContent = el.dataset.tip || '';
+      tooltip.classList.add('visible');
+    });
+    el.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+  });
+}
+
+// ── Word count ───────────────────────────────────────────────────────────────
+document.getElementById('storyInput').addEventListener('input', () => {
+  const txt = document.getElementById('storyInput').value.trim();
+  const wc = txt ? txt.split(/\s+/).length : 0;
+  document.getElementById('wordCount').textContent = wc;
+});
+
+// ── Tabs ─────────────────────────────────────────────────────────────────────
+function showTab(n){
+  ['panelInput','panelResult','panelGrade'].forEach((id,i) => {
+    document.getElementById(id).style.display = (i+1===n) ? '' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', i+1===n);
+  });
+}
+// init: hide result panels
+document.getElementById('panelResult').style.display = 'none';
+document.getElementById('panelGrade').style.display  = 'none';
+
+// ── Grade helpers ─────────────────────────────────────────────────────────────
+const GRADE_LABELS = {1:'1+', 2:'1', 3:'2+', 4:'2', 5:'3', 6:'3+', 7:'4', 8:'4+', 9:'5', 10:'6'};
+const GRADE_COLORS = {
+  1:'#1a8c4e',2:'#1a8c4e',3:'#2c6fb0',4:'#2c6fb0',
+  5:'#b87c0a',6:'#b87c0a',7:'#c06020',8:'#c06020',
+  9:'#c02020',10:'#c02020'
+};
+const GRADE_DESCS = {
+  1:'Hervorragend – weit über den Erwartungen',
+  2:'Sehr gut – vollständig und überzeugend',
+  3:'Gut – klar und im Wesentlichen korrekt',
+  4:'Befriedigend – grundlegende Anforderungen erfüllt',
+  5:'Ausreichend – Lücken sichtbar, aber verständlich',
+  6:'Mangelhaft – wesentliche Anforderungen nicht erfüllt',
+  7:'Mangelhaft – erhebliche Schwächen',
+  8:'Ungenügend',9:'Ungenügend',10:'Ungenügend'
+};
+
+function gradeNum2Display(n){
+  // n = 1..10 mapped to German 1–6 with + / -
+  const map = ['1+','1','2+','2','3+','3','4+','4','5','6'];
+  return map[Math.max(0,Math.min(9,n-1))];
+}
+function gradeBarColor(n){
+  if(n<=2) return '#2d7a4f';
+  if(n<=4) return '#2c6fb0';
+  if(n<=6) return '#b87c0a';
+  if(n<=7) return '#c06020';
+  return '#c0392b';
+}
+function gradeBarPct(n){ return Math.max(5, Math.round((10-n)/9*100)); }
+function gradeBadgeClass(n){
+  if(n<=2) return 'g1'; if(n<=4) return 'g2';
+  if(n<=5) return 'g3'; if(n<=6) return 'g4';
+  if(n<=7) return 'g5'; return 'g6';
+}
+
+// ── API call ─────────────────────────────────────────────────────────────────
+async function runAnalysis(){
+  const story   = document.getElementById('storyInput').value.trim();
+  const klasse  = document.getElementById('selKlasse').value;
+  const type    = document.getElementById('selType').value;
+  const schueler= document.getElementById('inpSchueler').value.trim() || 'S-?';
+
+  if(story.length < 20){
+    alert('Bitte füge zuerst die Geschichte des Kindes ein (mindestens 20 Zeichen).');
+    return;
+  }
+
+  // Show loading
+  document.getElementById('btnAnalyze').disabled = true;
+  document.getElementById('loadingBox').classList.add('active');
+
+  const loadMsgs = [
+    'KI liest die Geschichte…',
+    'Fehler werden markiert…',
+    'Bayern LP+ Kriterien werden geprüft…',
+    'Note wird berechnet…'
+  ];
+  let mi = 0;
+  const loadInterval = setInterval(() => {
+    mi = (mi+1) % loadMsgs.length;
+    document.getElementById('loadingMsg').textContent = loadMsgs[mi];
+  }, 1800);
+
+  const prompt = `Du bist eine erfahrene Grundschullehrkraft in Bayern. Analysiere die folgende Schülergeschichte aus Klasse ${klasse} (Aufgabentyp: ${type}) nach dem LehrplanPLUS Bayern Deutsch Klasse 3/4.
+
+SCHÜLER-ID: ${schueler}
+KLASSE: ${klasse}
+AUFGABENTYP: ${type}
+
+GESCHICHTE:
+"""
+${story}
+"""
+
+Antworte NUR mit einem validen JSON-Objekt, kein Markdown, keine Erklärungen davor oder danach.
+
+Das JSON muss genau diese Struktur haben:
+{
+  "annotatedStory": "...", 
+  "errors": [...],
+  "grade": {
+    "overall": 5,
+    "criteria": [...],
+    "strengths": "...",
+    "nextSteps": [...]
+  }
+}
+
+REGELN FÜR annotatedStory:
+- Kopiere den VOLLSTÄNDIGEN Originaltext des Kindes
+- Markiere jeden Fehler mit diesem HTML-Span: <span class="err err-TYPE" data-tip="ERKLÄRUNG">ORIGINALWORT</span>
+- TYPE ist einer von: spell (Rechtschreibung), grammar (Grammatik), capital (Großschreibung), punct (Zeichensetzung), style (Stilhinweis)
+- Bewahre alle Zeilenumbrüche und Abstände
+- Ändere NICHTS am Text außer den Fehler-Spans einzufügen
+- data-tip MUSS die Korrektur enthalten, z.B.: "→ richtig: 'spielte' (schwaches Verb, Präteritum)"
+
+REGELN FÜR errors:
+Jeder Fehler: { "type": "spell|grammar|capital|punct|style", "wrong": "...", "right": "...", "rule": "Kurze Regel auf Deutsch" }
+
+REGELN FÜR grade.overall:
+- Ganzzahl von 1 (sehr gut) bis 10 (ungenügend, entspricht Note 6)
+- Mapping: 1=1+, 2=1, 3=2+, 4=2, 5=3+, 6=3, 7=4+, 8=4, 9=5, 10=6
+- Sei realistisch für Klasse ${klasse}, berücksichtige Alter und LehrplanPLUS-Erwartungen
+
+REGELN FÜR grade.criteria (genau 6 Einträge):
+[
+  { "name": "Inhalt & Aufbau", "desc": "Erzählsituation, Ereignis, Ausgang (LP+ D3/4 LB 2)", "score": 1-10, "comment": "..." },
+  { "name": "Sprachliche Gestaltung", "desc": "Satzbau, Wortwahl, Ausdrucksvielfalt", "score": 1-10, "comment": "..." },
+  { "name": "Rechtschreibung", "desc": "Laut-Buchstaben-Beziehung, Wortschreibung, Dehnungs-h, ie/ei", "score": 1-10, "comment": "..." },
+  { "name": "Großschreibung", "desc": "Nomen, Satzanfänge, wörtliche Rede", "score": 1-10, "comment": "..." },
+  { "name": "Grammatik & Zeichensetzung", "desc": "Zeitformen, Kasus, Satzbau, Kommasetzung", "score": 1-10, "comment": "..." },
+  { "name": "Länge & Vollständigkeit", "desc": "Textlänge angemessen für Klasse ${klasse}, Aufgabenerfüllung", "score": 1-10, "comment": "..." }
+]
+
+REGELN FÜR grade.strengths: 2-3 Sätze auf Deutsch, kindgerecht und motivierend, konkrete Stärken nennen.
+
+REGELN FÜR grade.nextSteps: Array von 3 Strings, jeder ein konkreter Übungsvorschlag für zuhause, auf Deutsch, kurz (1 Satz).`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    clearInterval(loadInterval);
+    document.getElementById('loadingBox').classList.remove('active');
+    document.getElementById('btnAnalyze').disabled = false;
+
+    const data = await resp.json();
+    const raw = data.content.map(b => b.text||'').join('');
+    // Strip any markdown code fences
+    const clean = raw.replace(/^```json\s*/,'').replace(/```\s*$/,'').trim();
+    const result = JSON.parse(clean);
+
+    renderResult(result, klasse, schueler);
+
+  } catch(err) {
+    clearInterval(loadInterval);
+    document.getElementById('loadingBox').classList.remove('active');
+    document.getElementById('btnAnalyze').disabled = false;
+    console.error(err);
+    alert('Fehler bei der Analyse: ' + err.message + '\n\nBitte stelle sicher, dass du mit dem Internet verbunden bist und versuche es nochmal.');
+  }
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderResult(result, klasse, schueler){
+  // ── Tab 2: annotated story ──
+  document.getElementById('storyRendered').innerHTML = result.annotatedStory;
+  attachTooltips();
+
+  // Error list
+  const el = document.getElementById('errorList');
+  el.innerHTML = '';
+  const typeInfo = {
+    spell:   { icon:'🔴', label:'Rechtschreibung',  cls:'spell'   },
+    grammar: { icon:'🟡', label:'Grammatik',         cls:'grammar' },
+    capital: { icon:'🟣', label:'Großschreibung',    cls:'capital' },
+    punct:   { icon:'🔵', label:'Zeichensetzung',    cls:'punct'   },
+    style:   { icon:'🟢', label:'Stil-Hinweis',      cls:'style'   },
+  };
+  const grouped = {};
+  (result.errors||[]).forEach(e => {
+    if(!grouped[e.type]) grouped[e.type] = [];
+    grouped[e.type].push(e);
+  });
+  const order = ['spell','capital','grammar','punct','style'];
+  order.forEach(t => {
+    if(!grouped[t] || grouped[t].length===0) return;
+    const info = typeInfo[t];
+    const title = document.createElement('div');
+    title.className = 'error-group-title';
+    title.innerHTML = `${info.icon} ${info.label} (${grouped[t].length})`;
+    el.appendChild(title);
+    grouped[t].forEach(e => {
+      const row = document.createElement('div');
+      row.className = `error-row ${info.cls}`;
+      row.innerHTML = `
+        <span class="er-icon">${info.icon}</span>
+        <div class="er-body">
+          <span class="er-wrong">${escHtml(e.wrong)}</span> → <span class="er-right">${escHtml(e.right)}</span>
+          <div class="er-explain">${escHtml(e.rule)}</div>
+        </div>`;
+      el.appendChild(row);
+    });
+  });
+
+  if((result.errors||[]).length === 0){
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:#888;font-weight:700;">🎉 Keine Fehler gefunden!</div>';
+  }
+
+  // Show panels
+  document.getElementById('panelResult').style.display = '';
+  document.getElementById('panelGrade').style.display  = '';
+
+  // ── Tab 3: grade ──
+  const g = result.grade;
+  const ov = g.overall || 5;
+  const display = gradeNum2Display(ov);
+  const color   = gradeBarColor(ov);
+
+  document.getElementById('gradeKlasseLabel').textContent = klasse;
+  document.getElementById('gradeBig').textContent = display;
+  document.getElementById('gradeBig').style.color = color;
+  document.getElementById('gradeDesc').textContent = GRADE_DESCS[ov] || '';
+  document.getElementById('gradeSubLabel').textContent = `${document.getElementById('selType').options[document.getElementById('selType').selectedIndex].text} · ${schueler}`;
+
+  const grid = document.getElementById('criteriaGrid');
+  grid.innerHTML = '';
+  (g.criteria||[]).forEach(c => {
+    const sc = c.score || 5;
+    const cc = document.createElement('div');
+    cc.className = 'crit-card';
+    cc.innerHTML = `
+      <div class="crit-header">
+        <div class="crit-name">${escHtml(c.name)}<br><span style="font-size:.7rem;font-weight:600;color:#999">${escHtml(c.desc||'')}</span></div>
+        <div class="crit-badge ${gradeBadgeClass(sc)}">${gradeNum2Display(sc)}</div>
+      </div>
+      <div class="crit-bar-bg"><div class="crit-bar-fill" style="width:${gradeBarPct(sc)}%;background:${gradeBarColor(sc)}"></div></div>
+      <div class="crit-comment">${escHtml(c.comment||'')}</div>`;
+    grid.appendChild(cc);
+  });
+
+  document.getElementById('feedbackStrengths').textContent = g.strengths || '';
+
+  const ns = document.getElementById('nextStepsList');
+  ns.innerHTML = '';
+  (g.nextSteps||[]).forEach((step, i) => {
+    const div = document.createElement('div');
+    div.className = 'ns-item';
+    div.innerHTML = `<div class="ns-num">${i+1}</div><div>${escHtml(step)}</div>`;
+    ns.appendChild(div);
+  });
+
+  showTab(2);
+}
+
+function escHtml(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
