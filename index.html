@@ -1,198 +1,237 @@
-Paste this upgraded block into your `story.html` script section to replace the current **Edit Screen + Picture Book** part.
-
-It adds:
-- saving the full story to `localStorage`
-- opening `bewertung.html` from the last picture-book page
-- optional direct jump from the final story screen
+Paste this as your new `index.html`:
 
 ```html
-<script>
-const STORY_REVIEW_STORAGE_KEY = 'sw_story_review_payload_v1';
-
-function buildBewertungPayload(){
-  return {
-    savedAt: new Date().toISOString(),
-    lang: typeof _storyLang !== 'undefined' ? _storyLang : 'de',
-    title: document.title || 'Meine Geschichte',
-    chapters: CHAPTERS.map(ch => ({
-      id: ch.id,
-      label: ch.label,
-      icon: ch.icon,
-      text: answers[ch.id] || '',
-      good: revNotes[ch.id]?.good || '',
-      improve: revNotes[ch.id]?.improve || ''
-    })),
-    fullStory: CHAPTERS.map(ch => answers[ch.id] || '').filter(Boolean).join('\n\n'),
-    meta: {
-      screenshotData: typeof screenshotData !== 'undefined' ? screenshotData : null,
-      keywords: typeof keywords !== 'undefined' ? keywords : [],
-      selectedFeelings: typeof selectedFeelings !== 'undefined' ? selectedFeelings : []
-    }
-  };
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schreibwerkstatt – Klasse 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f7fb;
+  --surface:#ffffff;
+  --ink:#1f2540;
+  --ink2:#42506b;
+  --muted:#6d7a92;
+  --border:#d9e1ef;
+  --blue:#4d7edb;
+  --blue2:#2f5fb5;
+  --blueBg:#eaf2ff;
+  --green:#36a269;
+  --greenBg:#eaf8f1;
+  --amber:#d18a19;
+  --amberBg:#fff6e3;
+  --purple:#7a5de8;
+  --purpleBg:#f1edff;
+  --shadow:0 10px 30px rgba(31,37,64,.10);
+  --radius:22px;
+  --radiusSm:14px;
+  --fontHead:'Baloo 2',cursive;
+  --fontBody:'Quicksand',sans-serif;
 }
-
-function saveStoryForBewertung(){
-  try{
-    const payload = buildBewertungPayload();
-    localStorage.setItem(STORY_REVIEW_STORAGE_KEY, JSON.stringify(payload));
-  }catch(err){
-    console.error('Konnte Story-Daten nicht speichern:', err);
-  }
+body{
+  font-family:var(--fontBody);
+  background:
+    radial-gradient(circle at top left,#fff8e7 0,transparent 28%),
+    radial-gradient(circle at top right,#eaf4ff 0,transparent 26%),
+    var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  line-height:1.6;
 }
-
-function openBewertungPage(){
-  saveStoryForBewertung();
-  window.location.href = 'bewertung.html';
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 56px}
+.hero{
+  background:linear-gradient(135deg,#fffdf7,#eef5ff);
+  border:2px solid var(--border);
+  border-radius:28px;
+  box-shadow:var(--shadow);
+  padding:28px 22px;
+  margin-bottom:18px;
+  text-align:center;
 }
-
-// ═══════════════════════════════════════════════════════════
-// EDIT SCREEN
-// ═══════════════════════════════════════════════════════════
-function showEditScreen(){
-  const content=document.getElementById('write-content');
-  const fields=CHAPTERS.map(ch=>`
-    <div class="edit-ch">
-      <span class="edit-ch-label">${ch.icon} ${ch.label}</span>
-      <textarea class="edit-ta" id="edit-ta-${ch.id}" oninput="updateEditWc('${ch.id}',${ch.minWords})">${esc(answers[ch.id])}</textarea>
-      <div class="edit-wc" id="edit-wc-${ch.id}"></div>
-    </div>`).join('');
-  content.innerHTML=`
-    <div class="edit-screen">
-      <h2>✏️ Geschichte überarbeiten</h2>
-      <p class="edit-screen-sub">Lies deine Geschichte noch einmal durch und verbessere sie — dann geht es zum Bilderbuch! 📖</p>
-      ${fields}
-      <div class="btn-row" style="justify-content:center;gap:8px;flex-wrap:wrap;margin-top:.5rem;">
-        <button class="btn btn-secondary" onclick="showComplete()">◀ Zurück</button>
-        <button class="btn btn-primary" onclick="saveEditsAndShowBook()" style="font-size:15px;padding:.55rem 1.4rem;">📖 Zum Bilderbuch ▶</button>
-        <button class="btn btn-hint" onclick="openBewertungPage()" style="font-size:15px;padding:.55rem 1.1rem;">📝 Zur Bewertung</button>
-      </div>
-    </div>`;
-  CHAPTERS.forEach(ch=>updateEditWc(ch.id,ch.minWords));
-  window.scrollTo({top:0,behavior:'smooth'});
+.hero-icon{font-size:46px;display:block;margin-bottom:8px}
+.hero-title{
+  font-family:var(--fontHead);
+  font-size:clamp(2rem,5vw,3rem);
+  line-height:1.05;
+  margin-bottom:10px;
 }
-
-function updateEditWc(chId,minWords){
-  const ta=document.getElementById('edit-ta-'+chId);
-  const el=document.getElementById('edit-wc-'+chId);
-  if(!ta||!el)return;
-  const count=wc(ta.value);
-  el.textContent=count+' Wörter';
-  el.className='edit-wc'+(count>=minWords?' good':'');
+.hero-sub{
+  max-width:62ch;
+  margin:0 auto;
+  color:var(--muted);
+  font-size:15px;
 }
-
-function saveEditsAndShowBook(){
-  CHAPTERS.forEach(ch=>{
-    const ta=document.getElementById('edit-ta-'+ch.id);
-    if(ta)answers[ch.id]=ta.value;
-  });
-  saveStoryForBewertung();
-  showPictureBook();
+.badge-row{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:16px;
 }
-
-function showPictureBook(){
-  saveStoryForBewertung();
-  bookPage=0;
-  renderBookPage();
+.badge{
+  border-radius:999px;
+  padding:8px 12px;
+  font-size:12px;
+  font-weight:800;
+  border:2px solid var(--border);
+  background:#fff;
 }
-
-function renderBookPage(){
-  const existing=document.getElementById('book-overlay');
-  if(existing)existing.remove();
-
-  const pid=BOOK_PAGES[bookPage];
-  const isFirst=bookPage===0;
-  const isLast=bookPage===BOOK_PAGES.length-1;
-  let bodyHTML;
-
-  if(pid==='cover'){
-    const allText = CHAPTERS.map(ch => answers[ch.id] || '').filter(Boolean).join(' ');
-    const preview = esc(allText.slice(0, 180)) + (allText.length > 180 ? ' …' : '');
-    bodyHTML = `
-      <p class="book-page-text">${preview || 'Deine Geschichte ist bereit.'}</p>
-    `;
-  }else{
-    const txt = esc(answers[pid] || '');
-    bodyHTML = `<p class="book-page-text">${txt}</p>`;
-  }
-
-  const overlay=document.createElement('div');
-  overlay.id='book-overlay';
-  overlay.className='book-overlay';
-  overlay.innerHTML=`
-    <div class="book-page" style="background:${BOOK_BG[pid]};">
-      <div class="book-page-img">${BOOK_SVGS[pid]}</div>
-      <div class="book-page-body">
-        <span class="book-page-title">${BOOK_TITLE[pid]}</span>
-        ${bodyHTML}
-      </div>
-      <div class="book-nav">
-        <button class="btn btn-secondary" style="min-height:36px;padding:.4rem .9rem;" onclick="prevBookPage()" ${isFirst?'disabled':''}>◀ Zurück</button>
-        <span style="font-size:12px;color:#888;">${bookPage+1} / ${BOOK_PAGES.length}</span>
-        ${
-          isLast
-            ? `<button class="btn btn-primary" style="min-height:36px;padding:.4rem .9rem;" onclick="openBewertungPage()">📝 Zur Bewertung ▶</button>`
-            : `<button class="btn btn-primary" style="min-height:36px;padding:.4rem .9rem;" onclick="nextBookPage()">Weiter ▶</button>`
-        }
-      </div>
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.card{
+  background:var(--surface);
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:18px 16px;
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+.card-icon{font-size:34px;margin-bottom:8px}
+.card-title{
+  font-family:var(--fontHead);
+  font-size:1.35rem;
+  margin-bottom:6px;
+}
+.card-sub{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:14px;
+}
+.point-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:16px;
+}
+.point{
+  border-radius:12px;
+  padding:9px 10px;
+  font-size:13px;
+  font-weight:700;
+}
+.point.blue{background:var(--blueBg);color:var(--blue2)}
+.point.green{background:var(--greenBg);color:var(--green)}
+.point.amber{background:var(--amberBg);color:#9a670d}
+.point.purple{background:var(--purpleBg);color:var(--purple)}
+.btn{
+  margin-top:auto;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  min-height:48px;
+  width:100%;
+  padding:12px 14px;
+  border-radius:14px;
+  text-decoration:none;
+  font-weight:800;
+  font-size:15px;
+  border:2px solid;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:scale(.98)}
+.btn-blue{background:linear-gradient(135deg,var(--blue),var(--blue2));border-color:var(--blue2);color:#fff}
+.btn-green{background:linear-gradient(135deg,#42b57a,#238d58);border-color:#238d58;color:#fff}
+.btn-purple{background:linear-gradient(135deg,var(--purple),#5f44c7);border-color:#5f44c7;color:#fff}
+.info{
+  margin-top:18px;
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  padding:18px 16px;
+}
+.info h2{
+  font-family:var(--fontHead);
+  font-size:1.4rem;
+  margin-bottom:8px;
+}
+.info p{
+  color:var(--muted);
+  font-size:14px;
+}
+@media(max-width:860px){
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <span class="hero-icon">✍️📚</span>
+    <h1 class="hero-title">Schreibwerkstatt Klasse 3</h1>
+    <p class="hero-sub">
+      Hier können Kinder ruhig und Schritt für Schritt schreiben, Sätze üben und ihre Geschichte am Ende gemeinsam anschauen und bewerten.
+    </p>
+    <div class="badge-row">
+      <span class="badge">Deutsch · Klasse 3</span>
+      <span class="badge">Kindgerechtes Design</span>
+      <span class="badge">Mobil freundlich</span>
     </div>
-    <button class="book-close-btn" onclick="closePictureBook()" title="${_storyLang==='en'?'Close':_storyLang==='both'?'Schließen / Close':'Schließen'}">✕</button>`;
-  document.body.appendChild(overlay);
-}
+  </section>
 
-function nextBookPage(){
-  if(bookPage<BOOK_PAGES.length-1){
-    bookPage++;
-    renderBookPage();
-  }
-}
+  <section class="grid">
+    <article class="card">
+      <div class="card-icon">🧱</div>
+      <h2 class="card-title">Geschichte schreiben</h2>
+      <p class="card-sub">Das Schreibabenteuer führt das Kind durch die ganze Geschichte und zeigt am Ende ein Bilderbuch.</p>
+      <div class="point-list">
+        <div class="point blue">Schritt für Schritt schreiben</div>
+        <div class="point green">Am Ende noch einmal überarbeiten</div>
+        <div class="point purple">Bilderbuch-Ansicht der Geschichte</div>
+      </div>
+      <a class="btn btn-blue" href="story.html">📖 Zu story.html</a>
+    </article>
 
-function prevBookPage(){
-  if(bookPage>0){
-    bookPage--;
-    renderBookPage();
-  }
-}
+    <article class="card">
+      <div class="card-icon">✏️</div>
+      <h2 class="card-title">Sätze und Diktat üben</h2>
+      <p class="card-sub">Hier kann das Kind einzelne Sätze, Wortarten und Vergangenheit in einem klaren Übungsablauf trainieren.</p>
+      <div class="point-list">
+        <div class="point blue">Wort hören und Satz hören</div>
+        <div class="point amber">Vergangenheit mitüben</div>
+        <div class="point green">Direktes Feedback</div>
+      </div>
+      <a class="btn btn-green" href="satzwerkstatt.html">✍️ Zu satzwerkstatt.html</a>
+    </article>
 
-function closePictureBook(){
-  const el=document.getElementById('book-overlay');
-  if(el)el.remove();
-}
-</script>
+    <article class="card">
+      <div class="card-icon">📝</div>
+      <h2 class="card-title">Geschichte bewerten</h2>
+      <p class="card-sub">Auf der Bewertungsseite sehen Lehrkraft oder Eltern die ganze Geschichte und können Feedback speichern.</p>
+      <div class="point-list">
+        <div class="point purple">Komplette Geschichte sehen</div>
+        <div class="point blue">Sterne und Kommentare</div>
+        <div class="point green">Rückmeldung lokal speichern</div>
+      </div>
+      <a class="btn btn-purple" href="bewertung.html">📝 Zu bewertung.html</a>
+    </article>
+  </section>
+
+  <section class="info">
+    <h2>Wichtig</h2>
+    <p>
+      Achte darauf, dass auch die anderen Dateien ohne Markdown-Zeilen wie <strong>```html</strong> beginnen. Jede Seite sollte direkt mit <strong>&lt;!DOCTYPE html&gt;</strong> starten.
+    </p>
+  </section>
+</main>
+</body>
+</html>
 ```
 
-Also add this button inside your existing `showComplete()` button row if you want the connection there too:
+After that, the next important fixes are:
+- `story.html` needs the full real file restored
+- `satzwerkstatt.html` needs the leading ```html / ``` removed
+- `bewertung.html` needs the leading ```html / ``` removed
 
-```html
-<button class="btn btn-primary" onclick="openBewertungPage()">📝 Zur Bewertung</button>
-```
-
-And in `bewertung.html`, add this loader:
-
-```html
-<script>
-const STORY_REVIEW_STORAGE_KEY = 'sw_story_review_payload_v1';
-
-function loadStoryForBewertung(){
-  try{
-    const raw = localStorage.getItem(STORY_REVIEW_STORAGE_KEY);
-    if(!raw) return null;
-    return JSON.parse(raw);
-  }catch(err){
-    console.error('Konnte Story-Daten nicht laden:', err);
-    return null;
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const storyData = loadStoryForBewertung();
-  if(!storyData) return;
-
-  console.log('Story data for bewertung:', storyData);
-
-  // Example:
-  // document.getElementById('story-full').textContent = storyData.fullStory;
-});
-</script>
-```
-
-If you want, I can next send you the matching full `bewertung.html` code that reads this story and shows it nicely for teacher/parent feedback.
+If you want, I can give you a cleaned full `bewertung.html` next with no markdown fences.
