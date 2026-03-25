@@ -18,6 +18,7 @@
 body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 .topbar{background:linear-gradient(135deg,#1a1a2e,#2d2d5e);padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
 .topbar-title{font-family:"Baloo 2";font-weight:800;color:#fff;font-size:1.2rem}
+.topbar-links{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .tlink{font-size:.8rem;padding:6px 14px;border-radius:40px;border:1px solid rgba(255,255,255,.3);color:#fff;text-decoration:none;transition:all .2s}
 .tlink:hover{background:rgba(255,255,255,.2);color:#fff}
 .page{max-width:860px;margin:32px auto 60px;padding:0 16px;display:flex;flex-direction:column;gap:24px}
@@ -80,9 +81,11 @@ body{font-family:Nunito,sans-serif;background:var(--bg);color:var(--text);min-he
 <header class="topbar">
   <div class="topbar-title" data-i18n="topbarTitle">✏️ Satzwerkstatt</div>
   <nav class="topbar-links">
+    <a class="tlink" href="wortmaus.html" data-i18n="navWortmaus">🐭 Startseite</a>
     <a class="tlink" href="index.html" data-i18n="navBlockwelt">📖 Blockwelt</a>
     <a class="tlink" href="story.html" data-i18n="navSchreib">📝 Schreibwerkstatt</a>
     <a class="tlink" href="builder.html" data-i18n="navBaukasten">🧱 Baukasten</a>
+    <a class="tlink" href="grammatik.html" data-i18n="navGrammatik">🎨 Grammatik</a>
     <button id="sw-lang-toggle" onclick="swToggleLang()" style="background:var(--blue);color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;">🌐 DE</button>
   </nav>
 </header>
@@ -483,7 +486,9 @@ const SW_STRINGS = {
     topbarTitle:       '✏️ Satzwerkstatt',
     navBlockwelt:      '📖 Blockwelt',
     navSchreib:        '📝 Schreibwerkstatt',
+    navWortmaus:       '🐭 Startseite',
     navBaukasten:      '🧱 Baukasten',
+    navGrammatik:      '🎨 Grammatik',
     card1Title:        'Dein Satz',
     card1Sub:          'Schreibe irgendeinen Satz – ich prüfe ihn für dich!',
     sentencePlaceholder:'Schreibe hier deinen Satz …',
@@ -522,7 +527,9 @@ const SW_STRINGS = {
     topbarTitle:       '✏️ Sentence Workshop',
     navBlockwelt:      '📖 Story World',
     navSchreib:        '📝 Writing Workshop',
+    navWortmaus:       '🐭 Home',
     navBaukasten:      '🧱 Story Builder',
+    navGrammatik:      '🎨 Grammar',
     card1Title:        'Your Sentence',
     card1Sub:          'Write any sentence – I\'ll check it for you!',
     sentencePlaceholder:'Write your sentence here …',

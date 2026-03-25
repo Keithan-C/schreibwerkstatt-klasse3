@@ -172,6 +172,8 @@
     .tc-sun:hover        { border-color: var(--sun2); }
     .tc-sky::before      { background: var(--sky2); }
     .tc-sky:hover        { border-color: var(--sky2); }
+    .tc-rose::before     { background: #c026d3; }
+    .tc-rose:hover       { border-color: #c026d3; }
 
     .tool-icon { font-size: 3.2rem; line-height: 1; margin-top: .3rem; }
 
@@ -194,6 +196,7 @@
     .badge-g { background: var(--grass);    color: var(--grass3); }
     .badge-s { background: var(--sun);      color: var(--sun3); }
     .badge-k { background: var(--sky);      color: var(--sky3); }
+    .badge-r { background: #fdf4ff;        color: #7e22ce; }
 
     .tool-cta {
       display: flex; align-items: center; justify-content: center; gap: .35rem;
@@ -283,11 +286,12 @@
     .fu-2 { animation-delay: .13s; }
     .fu-3 { animation-delay: .20s; }
     .fu-4 { animation-delay: .27s; }
+    .fu-5 { animation-delay: .34s; }
 
     /* ── REDUCED MOTION ─────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
       .mascot-wrap { animation: none; }
-      .fu, .fu-1, .fu-2, .fu-3, .fu-4 { animation: none; }
+      .fu, .fu-1, .fu-2, .fu-3, .fu-4, .fu-5 { animation: none; }
       .tool-card { transition: none; }
     }
 
@@ -467,6 +471,17 @@
           </p>
           <span class="tool-badge badge-k">🔍 Gezielt üben</span>
           <span class="tool-cta cta-k" aria-hidden="true">Los geht's! →</span>
+        </a>
+
+        <a class="tool-card tc-rose fu fu-5" href="grammatik.html">
+          <div class="tool-icon" aria-hidden="true">🎨</div>
+          <div class="tool-name">Grammatikwerkstatt</div>
+          <p class="tool-desc">
+            Lerne Wortarten, Satzglieder und Rechtschreibregeln —
+            mit Übungen, Tabellen und klaren Erklärungen.
+          </p>
+          <span class="tool-badge badge-r">📚 Grammatik üben</span>
+          <span class="tool-cta" style="background:#c026d3;" aria-hidden="true">Los geht's! →</span>
         </a>
 
       </div>
