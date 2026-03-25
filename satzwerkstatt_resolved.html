@@ -3,672 +3,537 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satzwerkstatt – Klasse 3/4 Bayern</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>Diktat Übung – Klasse 3</title>
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-:root{
-  --forest:#2a5c1a; --forest2:#4a9c2a; --forest3:#c8ecb0; --forest4:#edf8e6;
-  --navy:#1c3f6e;   --navy2:#2e6ab8;   --navy3:#b8d8f0;   --navy4:#e4f0fb;
-  --amber:#6b4c1a;  --amber2:#b07828;  --amber3:#f0d080;  --amber4:#fdf5de;
-  --plum:#4a2d8a;   --plum2:#7a5adf;   --plum3:#d8ccf8;   --plum4:#f0ebff;
-  --clay:#8a3020;   --clay3:#f8ddd8;   --clay4:#fdf0ee;
-  --ink:#1c1a18;    --ink2:#3c3a36;    --muted:#6a6660;
-  --surface:#ffffff;--page:#f4f2ed;
-  --border:#ccc8be; --border-lt:#e4e2d8;
-  --font:'Nunito',sans-serif;
-  --r:14px; --r2:8px;
-  --sh:0 2px 10px rgba(0,0,0,.07);
-}
-body{font-family:var(--font);background:var(--page);color:var(--ink);min-height:100vh;}
-.wrap{max-width:700px;margin:0 auto;padding:0 1rem 6rem;}
+  :root {
+    --bg: #fef9f0;
+    --card: #ffffff;
+    --primary: #4a90d9;
+    --primary-dark: #2c6fad;
+    --success: #27ae60;
+    --error: #e74c3c;
+    --warn: #f39c12;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+    --border: #e0e0e0;
+    --star: #f1c40f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  header h1 { font-size: 2rem; color: var(--primary-dark); }
+  header p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
 
-/* HEADER */
-.site-header{background:var(--forest);padding:1.2rem 1.5rem 1.4rem;margin-bottom:1.6rem;text-align:center;}
-.header-title{font-size:clamp(20px,4vw,28px);font-weight:900;color:#fff;display:block;margin-bottom:.3rem;}
-.header-sub{font-size:14px;color:rgba(255,255,255,.82);display:block;margin-bottom:.6rem;}
-.header-badge{display:inline-block;font-size:12px;font-weight:700;background:rgba(255,255,255,.18);color:#fff;border:1.5px solid rgba(255,255,255,.35);border-radius:20px;padding:4px 14px;}
-.header-links{display:flex;gap:8px;justify-content:center;margin-top:.8rem;flex-wrap:wrap;}
-.hlink{font-size:13px;font-weight:700;padding:7px 16px;border-radius:20px;border:2px solid rgba(255,255,255,.4);color:rgba(255,255,255,.95);text-decoration:none;background:rgba(255,255,255,.12);}
-.hlink:hover{background:rgba(255,255,255,.22);}
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 560px;
+    background: var(--border);
+    border-radius: 20px;
+    height: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), #74b9ff);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+  }
 
-/* TABS */
-.tab-bar{display:flex;gap:0;margin-bottom:1rem;border:2px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--surface);box-shadow:var(--sh);}
-.tab-btn{flex:1;padding:12px 8px;border:none;background:var(--surface);color:var(--muted);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;border-right:2px solid var(--border);transition:background .15s;}
-.tab-btn:last-child{border-right:none;}
-.tab-btn.active{background:var(--forest4);color:var(--forest);}
-.tab-btn:hover:not(.active){background:var(--page);}
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
+  .card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 32px 28px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+  }
 
-/* OPTIONS CARD */
-.option-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
-.option-label{display:flex;gap:8px;align-items:center;font-weight:800;font-size:14px;color:var(--ink2);}
+  .step-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
 
-/* HELP CARD */
-.help-card{background:var(--navy4);border:2px solid var(--navy3);border-radius:var(--r);margin-bottom:1.2rem;overflow:hidden;}
-.help-summary{padding:12px 16px;cursor:pointer;font-weight:800;font-size:14px;color:var(--navy);list-style:none;display:flex;align-items:center;gap:8px;user-select:none;}
-.help-summary::-webkit-details-marker{display:none;}
-.help-body{padding:0 16px 14px;font-size:13px;color:var(--navy);line-height:1.75;}
-.help-body ol{margin-left:1.2rem;margin-top:.4rem;}
-.help-body li{margin-bottom:.3rem;}
+  .type-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    background: #eaf4ff;
+    color: var(--primary-dark);
+  }
 
-/* CARD */
-.card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);margin-bottom:1.2rem;box-shadow:var(--sh);overflow:hidden;}
-.card-accent{height:5px;}
-.ca-forest{background:var(--forest);}
-.ca-navy{background:var(--navy);}
-.ca-amber{background:var(--amber2);}
-.ca-plum{background:var(--plum);}
-.card-body{padding:1.1rem 1.2rem .9rem;}
-.card-eyebrow{font-size:11px;font-weight:800;color:var(--muted);display:block;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-.card-title{font-size:18px;font-weight:900;color:var(--ink);display:block;margin-bottom:.4rem;}
-.card-desc{font-size:14px;color:var(--muted);line-height:1.65;}
+  .sentence-box {
+    background: #f0f7ff;
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 1rem;
+    color: var(--text);
+    margin-bottom: 20px;
+    font-style: italic;
+    line-height: 1.5;
+    min-height: 48px;
+  }
 
-/* RULE */
-.rule-card{border:2.5px solid var(--navy3);border-radius:var(--r);background:var(--navy4);padding:12px 16px;margin-bottom:1.2rem;}
-.rule-title{font-size:13px;font-weight:900;color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:.5rem;}
-.rule-body{font-size:13px;color:var(--navy);line-height:1.75;}
-.rule-example{margin-top:.5rem;background:var(--surface);border:1.5px solid var(--navy3);border-radius:var(--r2);padding:8px 12px;font-size:13px;font-style:italic;color:var(--ink2);}
+  .audio-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .btn-audio {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-audio:hover { background: var(--primary-dark); transform: scale(1.03); }
+  .btn-audio:active { transform: scale(0.98); }
+  .btn-audio.secondary {
+    background: #ecf0f1;
+    color: var(--text);
+  }
+  .btn-audio.secondary:hover { background: #dfe6e9; }
 
-/* INPUTS */
-.main-textarea{width:100%;min-height:130px;border:2px solid var(--border);border-radius:var(--r2);padding:12px;font-family:var(--font);font-size:15px;line-height:1.8;resize:vertical;background:var(--surface);color:var(--ink);outline:none;}
-.main-textarea:focus{border-color:var(--navy2);background:#fafcff;}
-.ex-input{width:100%;border:2px solid var(--border);border-radius:var(--r2);padding:10px 12px;font-family:var(--font);font-size:14px;outline:none;background:var(--surface);}
-.ex-input:focus{border-color:var(--navy2);}
+  .input-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .word-input {
+    width: 100%;
+    font-size: 1.4rem;
+    padding: 12px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    background: #fafafa;
+  }
+  .word-input:focus { border-color: var(--primary); background: #fff; }
+  .word-input.correct { border-color: var(--success); background: #f0fff4; }
+  .word-input.incorrect { border-color: var(--error); background: #fff5f5; }
 
-/* BUTTONS */
-.btn-analyze{display:block;width:100%;margin-top:.8rem;padding:13px;border:none;border-radius:var(--r2);background:var(--forest);color:#fff;font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;}
-.btn-analyze:hover{background:var(--forest2);}
-.btn-check{padding:10px 20px;border:2px solid var(--forest);border-radius:var(--r2);background:var(--forest);color:#fff;font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;margin-top:.8rem;}
-.btn-check:hover{background:var(--forest2);}
-.btn-hint{padding:9px 16px;border:2px solid var(--amber2);border-radius:var(--r2);background:var(--amber4);color:var(--amber);font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;margin-top:.5rem;}
-.btn-hint:hover{background:var(--amber3);}
-.btn-nav{padding:10px 18px;border:2px solid var(--border);border-radius:var(--r2);background:var(--surface);color:var(--ink2);font-family:var(--font);font-size:14px;font-weight:800;cursor:pointer;}
-.btn-nav:hover{background:var(--page);}
-.nav-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:1rem;}
-.nav-counter{font-size:13px;font-weight:800;color:var(--muted);}
+  .sentence-input {
+    width: 100%;
+    font-size: 1rem;
+    padding: 12px 16px;
+    border: 2.5px solid var(--border);
+    border-radius: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    color: var(--text);
+    background: #fafafa;
+    resize: vertical;
+    min-height: 80px;
+    margin-top: 16px;
+  }
+  .sentence-input:focus { border-color: var(--primary); background: #fff; }
+  .sentence-input.correct { border-color: var(--success); background: #f0fff4; }
+  .sentence-input.incorrect { border-color: var(--error); background: #fff5f5; }
 
-/* RESULTS */
-.result-section{display:none;}
-.result-section.on{display:block;}
-.sent-pills,.starter-badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:.6rem;}
-.sent-pill{border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:5px;}
-.pill-short{background:var(--amber4);color:var(--amber);border:1.5px solid var(--amber3);}
-.pill-med{background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
-.pill-long{background:var(--navy4);color:var(--navy);border:1.5px solid var(--navy3);}
-.starter-badge{border-radius:6px;padding:5px 11px;font-size:13px;font-weight:700;}
-.sb-ok{background:var(--forest4);color:var(--forest);border:1.5px solid var(--forest3);}
-.sb-rep{background:var(--clay4);color:var(--clay);border:1.5px solid var(--clay3);}
-.feedback-box{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;margin-top:.8rem;line-height:1.6;}
-.fb-good{background:var(--forest4);color:var(--forest);border:2px solid var(--forest3);}
-.fb-tip{background:var(--amber4);color:var(--amber);border:2px solid var(--amber3);}
-.fb-info{background:var(--navy4);color:var(--navy);border:2px solid var(--navy3);}
-.fb-warn{background:var(--clay4);color:var(--clay);border:2px solid var(--clay3);}
-.marked-text{font-size:15px;line-height:2.1;padding:12px 14px;background:var(--surface);border:1.5px solid var(--border-lt);border-radius:var(--r2);margin-top:.6rem;}
-mark.hl-prät{background:#c8ecb0;color:#1a4010;border-radius:3px;padding:1px 3px;}
-mark.hl-präs{background:#f0d080;color:#5a3800;border-radius:3px;padding:1px 3px;}
-mark.hl-adj{background:#d8ccf8;color:#2d1a60;border-radius:3px;padding:1px 3px;}
-.hl-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:.5rem;font-size:12px;font-weight:700;}
-.hl-badge{padding:3px 10px;border-radius:12px;}
-.hlb-prät{background:#c8ecb0;color:#1a4010;}
-.hlb-präs{background:#f0d080;color:#5a3800;}
-.hlb-adj{background:#d8ccf8;color:#2d1a60;}
+  .feedback {
+    margin-top: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    min-height: 24px;
+  }
+  .feedback.ok { color: var(--success); }
+  .feedback.bad { color: var(--error); }
 
-/* EXERCISES */
-.ex-type-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.2rem;}
-.ex-type-btn{padding:9px 16px;border:2px solid var(--border);border-radius:20px;background:var(--surface);color:var(--muted);font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;}
-.ex-type-btn.active{background:var(--plum);color:#fff;border-color:var(--plum);}
-.ex-panel{display:none;}
-.ex-panel.active{display:block;}
-.ex-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;margin-bottom:1rem;box-shadow:var(--sh);}
-.ex-num{font-size:11px;font-weight:900;color:var(--muted);display:block;margin-bottom:.3rem;text-transform:uppercase;}
-.ex-original{background:var(--amber4);border:2px solid var(--amber3);border-radius:var(--r2);padding:10px 14px;font-size:15px;font-weight:700;color:var(--amber);margin-bottom:.8rem;line-height:1.6;}
-.ex-instruction{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:.6rem;line-height:1.5;}
-.ex-feedback{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;margin-top:.7rem;line-height:1.6;display:none;}
-.ex-feedback.on{display:block;}
-.ef-correct{background:var(--forest4);color:var(--forest);border:2px solid var(--forest3);}
-.ef-wrong{background:var(--clay4);color:var(--clay);border:2px solid var(--clay3);}
-.ef-hint{background:var(--amber4);color:var(--amber);border:2px solid var(--amber3);}
+  .btn-check {
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-check:hover { opacity: 0.92; transform: scale(1.01); }
+  .btn-check:active { transform: scale(0.98); }
+  .btn-check:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* WORD BANK */
-.word-bank{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.6rem;}
-.wb-word{padding:7px 14px;border:2px solid var(--plum3);border-radius:20px;background:var(--plum4);color:var(--plum);font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);}
-.wb-word:hover{background:var(--plum3);}
-.wb-word.used{background:var(--plum);color:#fff;border-color:var(--plum);}
-.blank-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:.6rem;}
-.blank-slot{display:inline-flex;flex-direction:column;align-items:flex-start;gap:3px;}
-.blank-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;}
-.blank-input{border:2px solid var(--border);border-radius:var(--r2);padding:7px 11px;font-family:var(--font);font-size:14px;font-weight:700;color:var(--plum);background:var(--plum4);width:130px;outline:none;}
-.blank-input:focus{border-color:var(--plum2);}
+  .btn-next {
+    margin-top: 12px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #ecf0f1;
+    color: var(--text);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: none;
+  }
+  .btn-next:hover { background: #dfe6e9; }
+  .btn-next.visible { display: block; }
 
-/* TENSE */
-.tense-choices{display:flex;flex-direction:column;gap:8px;margin-top:.8rem;}
-.tense-choice{padding:12px 14px;border:2.5px solid var(--border);border-radius:var(--r2);font-size:15px;font-weight:600;color:var(--ink2);cursor:pointer;background:var(--surface);text-align:left;font-family:var(--font);}
-.tense-choice:hover{border-color:var(--navy2);background:var(--navy4);}
-.tense-choice.correct{border-color:var(--forest2);background:var(--forest4);color:var(--forest);}
-.tense-choice.wrong-pick{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
-.tense-choice.reveal-wrong{border-color:var(--clay);background:var(--clay4);color:var(--clay);}
+  /* Results */
+  .results-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+    text-align: center;
+    display: none;
+  }
+  .results-card.visible { display: block; }
+  .score-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .stars { font-size: 2rem; margin-bottom: 12px; letter-spacing: 4px; }
+  .results-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+  .results-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 24px; }
 
-/* FREE CHECK */
-.fsc-row{display:flex;flex-direction:column;gap:.7rem;margin-top:.8rem;}
-.fsc-card{border-radius:var(--r2);padding:10px 14px;font-size:14px;font-weight:700;line-height:1.7;border:2px solid;}
-.fsc-ok{background:var(--forest4);color:var(--forest);border-color:var(--forest3);}
-.fsc-info{background:var(--navy4);color:var(--navy);border-color:var(--navy3);}
-.fsc-warn{background:var(--amber4);color:var(--amber);border-color:var(--amber3);}
-.fsc-label{font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;opacity:.75;display:block;margin-bottom:2px;}
-.fsc-hl-adj{background:var(--plum3);color:var(--plum);border-radius:4px;padding:1px 4px;}
+  .review-list { text-align: left; margin-bottom: 24px; }
+  .review-item {
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .review-item.ok { background: #f0fff4; }
+  .review-item.bad { background: #fff5f5; }
+  .review-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .review-text strong { display: block; font-size: 1rem; }
+  .review-text span { color: var(--muted); font-size: 0.82rem; }
 
-/* TOAST */
-.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:var(--forest);color:#fff;font-size:14px;font-weight:800;padding:10px 22px;border-radius:40px;box-shadow:0 4px 18px rgba(0,0,0,.18);z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;}
-.toast.show{opacity:1;}
+  .btn-restart {
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-restart:hover { opacity: 0.9; }
 
-/* Calm mode */
-body.calm .tab-panel.active{animation:none !important;}
-body.calm .toast{display:none;}
-
-@media(prefers-reduced-motion:no-preference){
-  .tab-panel.active{animation:fadeIn .18s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-  .toast{transition:opacity .2s;}
-}
-@media(prefers-reduced-motion:reduce){
-  .tab-panel.active{animation:none !important;}
-  .toast{transition:none !important;}
-}
-button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--navy2);outline-offset:2px;}
+  @media (max-width: 480px) {
+    header h1 { font-size: 1.5rem; }
+    .card { padding: 22px 16px; }
+  }
 </style>
 </head>
 <body>
 
-<div class="site-header">
-  <span class="header-title">✍️ Satzwerkstatt</span>
-  <span class="header-sub">Sätze verbessern · Adjektive · Zeitformen · Klasse 3/4 Bayern</span>
-  <span class="header-badge">📚 LehrplanPLUS Bayern · Deutsch 3/4 · LB 2.3</span>
-  <div class="header-links">
-    <a class="hlink" href="index.html">⛏ Blockwelt</a>
-    <a class="hlink" href="story.html">📖 Schreibwerkstatt</a>
-    <a class="hlink" href="builder.html">📖 Baukasten</a>
-    <a class="hlink" href="grammatik.html">🎨 Grammatik</a>
-  </div>
+<header>
+  <h1>✏️ Diktat Übung</h1>
+  <p>Klasse 3 – Bayern LehrplanPLUS</p>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
 </div>
 
-<div class="wrap">
-  <details class="help-card">
-    <summary class="help-summary">ℹ️ Wie benutze ich diese Seite?</summary>
-    <div class="help-body">
-      Diese Seite hat zwei Bereiche:
-      <ol>
-        <li><strong>📝 Mein Text prüfen</strong> — Gib deinen Text ein und klicke auf „Text prüfen".</li>
-        <li><strong>🎯 Übungen</strong> — Hier übst du Satzanfänge, Adjektive und Zeitform.</li>
-      </ol>
-      Tipp: Arbeite Schritt für Schritt. Ein Tipp reicht.
-    </div>
-  </details>
+<div class="card" id="quizCard">
+  <div class="step-label" id="stepLabel">Wort 1 von 12</div>
+  <div class="type-badge" id="typeBadge">Nomen</div>
+  <div class="sentence-box" id="sentenceBox">Klicke auf „Vorlesen" um den Satz zu hören.</div>
 
-  <div class="tab-bar">
-    <button class="tab-btn active" onclick="switchTab('analyze')">📝 Mein Text prüfen</button>
-    <button class="tab-btn" onclick="switchTab('exercises')">🎯 Übungen</button>
+  <div class="audio-section">
+    <button class="btn-audio" id="btnWord" onclick="speakWord()">🔊 Wort vorlesen</button>
+    <button class="btn-audio secondary" id="btnSentence" onclick="speakSentence()">📖 Satz vorlesen</button>
   </div>
 
-  <div class="card" style="margin-bottom:1rem;">
-    <div class="card-body option-row">
-      <label class="option-label"><input id="toggle-calm" type="checkbox" checked> Ruhemodus (weniger Reize)</label>
-      <label class="option-label"><input id="toggle-onetip" type="checkbox" checked> Nur 1 Tipp pro Prüfung</label>
-    </div>
-  </div>
+  <div class="input-label">Schreibe das Wort:</div>
+  <input class="word-input" type="text" id="wordInput" placeholder="Hier schreiben…" autocomplete="off" autocorrect="off" spellcheck="false" />
+  <div class="feedback" id="wordFeedback"></div>
 
-  <div id="tab-analyze" class="tab-panel active">
-    <div class="card">
-      <div class="card-accent ca-navy"></div>
-      <div class="card-body">
-        <span class="card-eyebrow">Schritt 1</span>
-        <span class="card-title">Schreib deinen Text</span>
-        <span class="card-desc">Schreib langsam. Dann klicke auf „Text prüfen".</span>
-        <textarea class="main-textarea" id="analyze-input" placeholder="Schreibe hier deinen Text …"></textarea>
-        <button class="btn-analyze" onclick="runAnalysis()">🔎 Text prüfen</button>
-      </div>
-    </div>
+  <div class="input-label" style="margin-top:16px" id="sentenceLabel">Schreibe den Satz ab (nach dem Hören):</div>
+  <textarea class="sentence-input" id="sentenceInput" placeholder="Satz hier eingeben…" spellcheck="false"></textarea>
+  <div class="feedback" id="sentenceFeedback"></div>
 
-    <div class="result-section" id="result-section">
-      <div class="card">
-        <div class="card-accent ca-navy"></div>
-        <div class="card-body">
-          <span class="card-title">Nächster Schritt</span>
-          <div class="feedback-box fb-info" id="fb-next-step" aria-live="polite">Hier steht dein nächster Tipp.</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-accent ca-plum"></div>
-        <div class="card-body">
-          <span class="card-eyebrow">Dein Text mit Markierungen</span>
-          <span class="card-title">📋 Übersicht</span>
-          <div class="hl-legend">
-            <span class="hl-badge hlb-prät">🟢 Präteritum</span>
-            <span class="hl-badge hlb-präs">🟡 Präsens</span>
-            <span class="hl-badge hlb-adj">🟣 Adjektive</span>
-          </div>
-          <div class="marked-text" id="marked-text"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-accent ca-amber"></div>
-        <div class="card-body">
-          <span class="card-eyebrow">Satzlänge</span>
-          <span class="card-title">📏 Wie lang sind deine Sätze?</span>
-          <div class="sent-pills" id="sent-pills"></div>
-          <div class="feedback-box" id="fb-length" aria-live="polite"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-accent ca-navy"></div>
-        <div class="card-body">
-          <span class="card-eyebrow">Satzanfänge</span>
-          <span class="card-title">🔤 Wie beginnen deine Sätze?</span>
-          <div class="starter-badges" id="starter-badges"></div>
-          <div class="feedback-box" id="fb-starters" aria-live="polite"></div>
-          <div id="starter-suggestions" style="display:none;margin-top:.7rem;font-size:13px;color:var(--navy);">
-            <strong>Tipp:</strong> Plötzlich … · Langsam … · Im Wald … · Danach …
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-accent ca-plum"></div>
-        <div class="card-body">
-          <span class="card-eyebrow">Adjektive</span>
-          <span class="card-title">🎨 Beschreibende Wörter</span>
-          <div class="feedback-box" id="fb-adj" aria-live="polite"></div>
-          <div id="adj-found" style="margin-top:.6rem;font-size:13px;color:var(--muted);"></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-accent ca-forest"></div>
-        <div class="card-body">
-          <span class="card-eyebrow">Zeitform</span>
-          <span class="card-title">⏰ Präteritum oder Präsens?</span>
-          <div class="feedback-box" id="fb-tense" aria-live="polite"></div>
-          <div id="tense-details" style="margin-top:.5rem;font-size:13px;color:var(--muted);"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="tab-exercises" class="tab-panel">
-    <div class="ex-type-bar">
-      <button class="ex-type-btn active" onclick="switchExType('starters')">🔄 Satzanfänge</button>
-      <button class="ex-type-btn" onclick="switchExType('adjectives')">🎨 Adjektive</button>
-      <button class="ex-type-btn" onclick="switchExType('tense')">⏰ Zeitform</button>
-      <button class="ex-type-btn" onclick="switchExType('free')">✍️ Dein Satz</button>
-    </div>
-
-    <div id="ex-starters" class="ex-panel active">
-      <div id="starter-ex-card"></div>
-    </div>
-    <div id="ex-adjectives" class="ex-panel">
-      <div id="adj-ex-card"></div>
-    </div>
-    <div id="ex-tense" class="ex-panel">
-      <div id="tense-ex-card"></div>
-    </div>
-    <div id="ex-free" class="ex-panel">
-      <div class="ex-card">
-        <span class="ex-num">Dein eigener Satz</span>
-        <div class="ex-instruction">Schreibe einen Satz. Du bekommst den nächsten Schritt.</div>
-        <input class="ex-input" id="free-input" type="text" placeholder="Schreibe hier einen Satz …" autocomplete="off">
-        <button class="btn-check" onclick="checkFreeSentence()">🔎 Satz prüfen</button>
-        <div id="free-results" class="fsc-row" style="display:none;" aria-live="polite"></div>
-      </div>
-    </div>
-  </div>
+  <button class="btn-check" id="btnCheck" onclick="checkAnswer()">Überprüfen ✓</button>
+  <button class="btn-next" id="btnNext" onclick="nextQuestion()">Weiter →</button>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="results-card" id="resultsCard">
+  <div class="score-ring" id="scoreRing"></div>
+  <div class="stars" id="starsDisplay"></div>
+  <div class="results-title" id="resultsTitle"></div>
+  <div class="results-sub" id="resultsSub"></div>
+  <div class="review-list" id="reviewList"></div>
+  <button class="btn-restart" onclick="restart()">🔄 Nochmal üben</button>
+</div>
 
 <script>
-const ADJ_SET = new Set([
-  'mutig','mutige','mutigen','klug','stark','freundlich','neugierig','ängstlich',
-  'tapfer','fröhlich','traurig','groß','klein','lang','kurz','alt','jung',
-  'gut','schön','dunkel','hell','warm','kalt','laut','leise','schnell','langsam',
-  'riesig','wild','ruhig','einsam','gefährlich','golden','bunt','rot','blau','grün'
-]);
-const PRÄT_SET = new Set([
-  'war','waren','hatte','hatten','ging','gingen','sah','sahen','kam','kamen','lief','liefen',
-  'rief','riefen','fand','fanden','gab','gaben','nahm','nahmen','blieb','blieben','sagte','sagten',
-  'fragte','fragten','spielte','spielten','lachte','lachten','weinte','weinten','hörte','hörten',
-  'suchte','suchten','rettete','retteten','sprang','sprangen','schlief','schliefen','zeigte','zeigten'
-]);
-const PRÄS_SET = new Set([
-  'bin','ist','sind','habe','hat','haben','gehe','geht','gehen','sehe','sieht','sehen','komme','kommt',
-  'laufen','läuft','laufe','rufe','ruft','rufen','finde','findet','finden','sage','sagt','sagen','frage',
-  'fragt','fragen','spiele','spielt','spielen','lache','lacht','lachen','weine','weint','weinen','höre','hört',
-  'suche','sucht','springe','springt','springen','schlafe','schläft','schlafen','zeige','zeigt','zeigen'
-]);
-
-const EX_STARTERS = [
-  { original:'Ich gehe langsam in den Wald.', instruction:'Schreibe neu. Beginne mit „Langsam …"', required:'langsam', hint:'Langsam gehe ich in den Wald.' },
-  { original:'Ich sah den großen Drachen.', instruction:'Schreibe neu. Beginne mit „Plötzlich …"', required:'plötzlich', hint:'Plötzlich sah ich den großen Drachen.' },
-  { original:'Ich lief durch den Tunnel.', instruction:'Schreibe neu. Beginne mit „Mutig …"', required:'mutig', hint:'Mutig lief ich durch den Tunnel.' }
+// ── Word bank: Klasse 3 Bayern ─────────────────────────────────────────────
+const allWords = [
+  // Nomen (capital letters)
+  { word:"Schmetterling", type:"Nomen", sentence:"Der bunte Schmetterling sitzt auf der Blume." },
+  { word:"Frühstück",     type:"Nomen", sentence:"Jeden Morgen essen wir zusammen Frühstück." },
+  { word:"Freundschaft",  type:"Nomen", sentence:"Freundschaft ist sehr wichtig im Leben." },
+  { word:"Bahnhof",       type:"Nomen", sentence:"Wir warten am Bahnhof auf den Zug." },
+  { word:"Geburtstag",    type:"Nomen", sentence:"An meinem Geburtstag bekomme ich Geschenke." },
+  { word:"Zeichnung",     type:"Nomen", sentence:"Die Zeichnung hängt jetzt an der Wand." },
+  { word:"Fahrrrad",      type:"Nomen", sentence:"Mein Fahrrad hat eine rote Klingel." },
+  // ie / ei / eu
+  { word:"spielen",  type:"ie/ei/eu", sentence:"Die Kinder spielen nach der Schule im Garten." },
+  { word:"schreiben", type:"ie/ei/eu", sentence:"Ich schreibe einen Brief an meine Oma." },
+  { word:"Freude",   type:"ie/ei/eu", sentence:"Die Freude war groß, als die Sonne schien." },
+  { word:"fliegen",  type:"ie/ei/eu", sentence:"Die Vögel fliegen im Herbst in den Süden." },
+  { word:"reisen",   type:"ie/ei/eu", sentence:"Im Sommer reisen wir ans Meer." },
+  // sch / sp / st
+  { word:"Schule",   type:"sch/sp/st", sentence:"In der Schule lernen wir Lesen und Rechnen." },
+  { word:"sprechen", type:"sch/sp/st", sentence:"Bitte spreche laut und deutlich." },
+  { word:"stellen",  type:"sch/sp/st", sentence:"Stell das Glas auf den Tisch." },
+  { word:"Straße",   type:"sch/sp/st", sentence:"Wir überqueren die Straße an der Ampel." },
+  { word:"Schrank",  type:"sch/sp/st", sentence:"Ich lege meine Kleider in den Schrank." },
+  // Dehnungs-h
+  { word:"fahren",   type:"Dehnungs-h", sentence:"Wir fahren am Wochenende zu Oma." },
+  { word:"Stuhl",    type:"Dehnungs-h", sentence:"Der Stuhl steht neben dem Tisch." },
+  { word:"Zahl",     type:"Dehnungs-h", sentence:"Welche Zahl kommt nach der Sieben?" },
+  { word:"Wahl",     type:"Dehnungs-h", sentence:"Er hatte die Wahl zwischen Apfel und Birne." },
+  // Verben & Adjektive
+  { word:"arbeiten",  type:"Verb/Adj.", sentence:"Mein Vater muss heute lange arbeiten." },
+  { word:"ruhig",     type:"Verb/Adj.", sentence:"Es ist sehr ruhig im Wald." },
+  { word:"wichtig",   type:"Verb/Adj.", sentence:"Schlafen ist sehr wichtig für das Gehirn." },
+  { word:"wünschen",  type:"Verb/Adj.", sentence:"Ich wünsche mir ein neues Buch." },
 ];
-const EX_ADJECTIVES = [
-  { template:'Der ___ Drache flog über den ___ Wald.', labels:['Drache:','Wald:'], bank:['riesig','klein','mutig','dunkel','wild','golden'] },
-  { template:'Das ___ Mädchen lief durch die ___ Höhle.', labels:['Mädchen:','Höhle:'], bank:['tapfere','neugierige','kleine','dunkle','alte','kühle'] }
-];
-const EX_TENSE = [
-  { sentences:['Lena geht in die Höhle.','Sie hatte Angst.','Dann sah sie Licht.'], wrongIdx:0, explain:'„geht“ ist Präsens. Für Erzählungen passt „ging“.' },
-  { sentences:['Max lief durch den Wald.','Er ruft laut.','Niemand hörte ihn.'], wrongIdx:1, explain:'„ruft“ ist Präsens. Für Erzählungen passt „rief“.' }
-];
 
-let starterExIdx = 0;
-let adjExIdx = 0;
-let tenseExIdx = 0;
-let adjSlots = ['',''];
-let tenseAnswered = false;
-let calmMode = true;
-let oneTipMode = true;
+// ── State ──────────────────────────────────────────────────────────────────
+let questions = [];
+let current = 0;
+let results = [];
+let checked = false;
 
-function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function tokenize(text){ return text.split(/(\b[a-zA-ZäöüÄÖÜß]+\b)/); }
-function wordCount(s){ return s.split(/\s+/).filter(Boolean).length; }
-function splitSentences(text){
-  const parts = text.match(/[^.!?]+[.!?]+/g) || [];
-  if(!parts.length) parts.push(text.trim());
-  return parts.map(s=>s.trim()).filter(s=>s.length>1);
-}
-function getNextStepTip({lenIssue, starterIssue, adjIssue, tenseIssue}) {
-  if (tenseIssue) return 'Nächster Schritt: Schreibe in der Vergangenheit (Präteritum), z.B. „ging“, „sah“, „hatte“.';
-  if (starterIssue) return 'Nächster Schritt: Starte den nächsten Satz anders, z.B. „Plötzlich …“ oder „Im Wald …“.';
-  if (adjIssue) return 'Nächster Schritt: Ergänze ein beschreibendes Wort, z.B. „dunkel“, „mutig“, „leise“.';
-  if (lenIssue) return 'Nächster Schritt: Mische kurze und längere Sätze.';
-  return 'Sehr gut! Dein Text ist klar und gut lesbar.';
-}
-function showToast(msg){
-  if(calmMode) return;
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._t);
-  t._t = setTimeout(()=>t.classList.remove('show'), 2400);
+// ── Init ───────────────────────────────────────────────────────────────────
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
 }
 
-function switchTab(tab){
-  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
-    b.classList.toggle('active', (i===0&&tab==='analyze')||(i===1&&tab==='exercises'));
+function restart() {
+  questions = shuffle(allWords).slice(0, 12);
+  current = 0;
+  results = [];
+  checked = false;
+  document.getElementById('resultsCard').classList.remove('visible');
+  document.getElementById('quizCard').style.display = '';
+  document.getElementById('progressBar').style.width = '0%';
+  loadQuestion();
+}
+
+function loadQuestion() {
+  checked = false;
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('stepLabel').textContent = `Wort ${current + 1} von ${total}`;
+  document.getElementById('typeBadge').textContent = q.type;
+  document.getElementById('sentenceBox').textContent = 'Klicke auf „Vorlesen" um den Satz zu hören.';
+
+  const wi = document.getElementById('wordInput');
+  wi.value = '';
+  wi.className = 'word-input';
+  wi.disabled = false;
+
+  const si = document.getElementById('sentenceInput');
+  si.value = '';
+  si.className = 'sentence-input';
+  si.disabled = false;
+
+  document.getElementById('wordFeedback').textContent = '';
+  document.getElementById('wordFeedback').className = 'feedback';
+  document.getElementById('sentenceFeedback').textContent = '';
+  document.getElementById('sentenceFeedback').className = 'feedback';
+
+  document.getElementById('btnCheck').disabled = false;
+  document.getElementById('btnNext').classList.remove('visible');
+
+  document.getElementById('progressBar').style.width = (current / total * 100) + '%';
+
+  wi.focus();
+}
+
+// ── Speech ─────────────────────────────────────────────────────────────────
+function speak(text) {
+  if (!window.speechSynthesis) return alert('Sprachausgabe nicht verfügbar.');
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+function speakWord() {
+  speak(questions[current].word);
+}
+
+function speakSentence() {
+  const q = questions[current];
+  document.getElementById('sentenceBox').textContent = q.sentence;
+  speak(q.sentence);
+}
+
+// ── Check ──────────────────────────────────────────────────────────────────
+function normalize(s) {
+  return s.trim().replace(/\s+/g, ' ')
+    .replace(/[.!?]$/, '')   // ignore trailing punctuation
+    .toLowerCase();
+}
+
+function checkAnswer() {
+  if (checked) return;
+  checked = true;
+
+  const q = questions[current];
+  const wordVal = document.getElementById('wordInput').value;
+  const sentVal = document.getElementById('sentenceInput').value;
+
+  // Word check (case-sensitive for Nomen)
+  const wordCorrect = wordVal.trim() === q.word;
+  const wi = document.getElementById('wordInput');
+  wi.disabled = true;
+  wi.classList.add(wordCorrect ? 'correct' : 'incorrect');
+
+  const wf = document.getElementById('wordFeedback');
+  if (wordCorrect) {
+    wf.textContent = '✅ Richtig!';
+    wf.className = 'feedback ok';
+  } else {
+    wf.textContent = `❌ Richtig: „${q.word}"`;
+    wf.className = 'feedback bad';
+  }
+
+  // Sentence check (case-insensitive, ignore trailing punctuation)
+  const sentCorrect = sentVal.trim().length > 0 && normalize(sentVal) === normalize(q.sentence);
+  const si = document.getElementById('sentenceInput');
+  si.disabled = true;
+  si.classList.add(sentCorrect ? 'correct' : 'incorrect');
+
+  const sf = document.getElementById('sentenceFeedback');
+  if (sentVal.trim().length === 0) {
+    sf.textContent = '⚠️ Keinen Satz eingegeben.';
+    sf.className = 'feedback bad';
+  } else if (sentCorrect) {
+    sf.textContent = '✅ Satz korrekt!';
+    sf.className = 'feedback ok';
+  } else {
+    sf.textContent = `❌ Richtig: „${q.sentence}"`;
+    sf.className = 'feedback bad';
+  }
+
+  results.push({ q, wordCorrect, sentCorrect });
+
+  document.getElementById('btnCheck').disabled = true;
+  document.getElementById('btnNext').classList.add('visible');
+  document.getElementById('btnNext').textContent =
+    current + 1 < questions.length ? 'Weiter →' : 'Ergebnis ansehen 🎉';
+}
+
+function nextQuestion() {
+  current++;
+  if (current < questions.length) {
+    loadQuestion();
+  } else {
+    showResults();
+  }
+}
+
+// ── Results ────────────────────────────────────────────────────────────────
+function showResults() {
+  document.getElementById('quizCard').style.display = 'none';
+  const rc = document.getElementById('resultsCard');
+  rc.classList.add('visible');
+  document.getElementById('progressBar').style.width = '100%';
+
+  const total = results.length;
+  const wordOk = results.filter(r => r.wordCorrect).length;
+  const sentOk = results.filter(r => r.sentCorrect).length;
+  const score = wordOk + sentOk;
+  const maxScore = total * 2;
+  const pct = Math.round(score / maxScore * 100);
+
+  // Ring color
+  const ring = document.getElementById('scoreRing');
+  ring.textContent = pct + '%';
+  if (pct >= 80) ring.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
+  else if (pct >= 50) ring.style.background = 'linear-gradient(135deg,#f39c12,#f1c40f)';
+  else ring.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
+
+  // Stars
+  let stars = pct >= 90 ? '⭐⭐⭐' : pct >= 70 ? '⭐⭐' : pct >= 40 ? '⭐' : '💪';
+  document.getElementById('starsDisplay').textContent = stars;
+
+  // Title
+  let title = pct >= 80 ? 'Super gemacht! 🎉' : pct >= 50 ? 'Gut geübt! Weiter so! 👍' : 'Noch üben – du schaffst das! 💪';
+  document.getElementById('resultsTitle').textContent = title;
+  document.getElementById('resultsSub').textContent =
+    `Wörter: ${wordOk}/${total} richtig · Sätze: ${sentOk}/${total} richtig`;
+
+  // Review list
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  results.forEach(r => {
+    const ok = r.wordCorrect && r.sentCorrect;
+    const div = document.createElement('div');
+    div.className = 'review-item ' + (ok ? 'ok' : 'bad');
+    div.innerHTML = `
+      <div class="review-icon">${ok ? '✅' : '❌'}</div>
+      <div class="review-text">
+        <strong>${r.q.word}</strong>
+        <span>${r.wordCorrect ? '✓ Wort' : '✗ Wort'} · ${r.sentCorrect ? '✓ Satz' : '✗ Satz'}</span>
+      </div>`;
+    list.appendChild(div);
   });
-  document.getElementById('tab-analyze').classList.toggle('active', tab==='analyze');
-  document.getElementById('tab-exercises').classList.toggle('active', tab==='exercises');
-}
-function switchExType(type){
-  document.querySelectorAll('.ex-type-btn').forEach((b,i)=>{
-    b.classList.toggle('active', ['starters','adjectives','tense','free'][i]===type);
-  });
-  document.querySelectorAll('.ex-panel').forEach((p,i)=>{
-    p.classList.toggle('active', ['ex-starters','ex-adjectives','ex-tense','ex-free'][i]==='ex-'+type);
-  });
-}
-function buildMarkedText(text){
-  return tokenize(text).map(tok=>{
-    const lower = tok.toLowerCase();
-    if(PRÄT_SET.has(lower)) return `<mark class="hl-prät">${escHtml(tok)}</mark>`;
-    if(PRÄS_SET.has(lower)) return `<mark class="hl-präs">${escHtml(tok)}</mark>`;
-    if(ADJ_SET.has(lower))  return `<mark class="hl-adj">${escHtml(tok)}</mark>`;
-    return escHtml(tok);
-  }).join('');
 }
 
-function runAnalysis(){
-  const text = document.getElementById('analyze-input').value.trim();
-  if(!text){ showToast('Bitte schreib erst einen Text.'); return; }
-
-  document.getElementById('result-section').classList.add('on');
-  document.getElementById('marked-text').innerHTML = buildMarkedText(text);
-
-  const sentences = splitSentences(text);
-  const allWords = text.toLowerCase().match(/\b[a-zäöüß]+\b/g)||[];
-
-  const counts = sentences.map(wordCount);
-  const pills = counts.map(c=>{
-    const cls = c<5?'pill-short':c<=12?'pill-med':'pill-long';
-    const lbl = c<5?'Kurz':c<=12?'Mittel':'Lang';
-    return `<span class="sent-pill ${cls}">${lbl} · ${c} Wörter</span>`;
-  }).join('');
-  document.getElementById('sent-pills').innerHTML = pills;
-
-  const uniqueLengths = new Set(counts.map(c=>c<5?'k':c<=12?'m':'l')).size;
-  const lenIssue = uniqueLengths===1 && sentences.length>1;
-  document.getElementById('fb-length').className = 'feedback-box ' + (lenIssue?'fb-tip':'fb-good');
-  document.getElementById('fb-length').textContent = lenIssue
-    ? 'Noch nicht ganz. Deine Sätze sind ähnlich lang.'
-    : 'Gut gemacht. Deine Satzlängen sind abwechslungsreich.';
-
-  const starters = sentences.map(s=>s.replace(/^["„«\s]+/,'').split(/\s+/)[0]?.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase()||'');
-  const starterCount = {};
-  starters.forEach(w=>{ starterCount[w]=(starterCount[w]||0)+1; });
-  document.getElementById('starter-badges').innerHTML = starters.map(w=>{
-    const cls = starterCount[w]>1 ? 'sb-rep' : 'sb-ok';
-    return `<span class="starter-badge ${cls}">${escHtml(w||'?')}</span>`;
-  }).join('');
-  const rep = Object.entries(starterCount).filter(([,v])=>v>1).map(([k])=>k);
-  const starterIssue = rep.length>0;
-  document.getElementById('fb-starters').className = 'feedback-box ' + (starterIssue?'fb-tip':'fb-good');
-  document.getElementById('fb-starters').textContent = starterIssue
-    ? 'Noch nicht ganz. Nimm verschiedene Satzanfänge.'
-    : 'Sehr gut. Deine Satzanfänge sind verschieden.';
-  document.getElementById('starter-suggestions').style.display = starterIssue ? 'block':'none';
-
-  const uniqueAdj = [...new Set(allWords.filter(w=>ADJ_SET.has(w)))];
-  const adjIssue = uniqueAdj.length===0;
-  document.getElementById('fb-adj').className = 'feedback-box ' + (adjIssue?'fb-tip':'fb-good');
-  document.getElementById('fb-adj').textContent = adjIssue
-    ? 'Noch nicht ganz. Füge ein Adjektiv hinzu.'
-    : `Gut gemacht. Gefundene Adjektive: ${uniqueAdj.join(', ')}`;
-  document.getElementById('adj-found').textContent = uniqueAdj.length ? `Adjektive: ${uniqueAdj.join(', ')}` : '';
-
-  const nPrät = allWords.filter(w=>PRÄT_SET.has(w)).length;
-  const nPräs = allWords.filter(w=>PRÄS_SET.has(w)).length;
-  const tenseIssue = (nPräs>0 && nPrät>0) || (nPräs>0 && nPrät===0);
-  document.getElementById('fb-tense').className = 'feedback-box ' + (tenseIssue?'fb-warn':'fb-good');
-  document.getElementById('fb-tense').textContent = tenseIssue
-    ? 'Noch nicht ganz. Für Erzählungen nutze Präteritum.'
-    : 'Sehr gut. Die Zeitform passt.';
-  document.getElementById('tense-details').textContent = `Präteritum: ${nPrät} · Präsens: ${nPräs}`;
-
-  const msg = getNextStepTip({lenIssue, starterIssue, adjIssue, tenseIssue});
-  document.getElementById('fb-next-step').textContent = msg;
-
-  if(oneTipMode){
-    document.getElementById('fb-starters').textContent='Schau auf „Nächster Schritt“.';
-    document.getElementById('fb-adj').textContent='Schau auf „Nächster Schritt“.';
-    document.getElementById('fb-tense').textContent='Schau auf „Nächster Schritt“.';
-  }
-
-  document.getElementById('result-section').scrollIntoView({behavior:'smooth',block:'start'});
-}
-
-/* Exercises */
-function renderStarterEx(){
-  const ex = EX_STARTERS[starterExIdx];
-  document.getElementById('starter-ex-card').innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${starterExIdx+1} von ${EX_STARTERS.length}</span>
-      <div class="ex-original">${escHtml(ex.original)}</div>
-      <div class="ex-instruction">${ex.instruction}</div>
-      <input class="ex-input" id="s-input" type="text" placeholder="Schreibe hier deinen Satz …" autocomplete="off">
-      <button class="btn-check" onclick="checkStarterEx()">✓ Prüfen</button>
-      <button class="btn-hint" onclick="showStarterHint()">💡 Tipp</button>
-      <div class="ex-feedback" id="s-feedback" aria-live="polite"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('starter')" ${starterExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${starterExIdx+1} / ${EX_STARTERS.length}</span>
-        <button class="btn-nav" onclick="nextEx('starter')" ${starterExIdx===EX_STARTERS.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-}
-function checkStarterEx(){
-  const ex = EX_STARTERS[starterExIdx];
-  const val = (document.getElementById('s-input').value||'').trim().toLowerCase();
-  if(!val){ showToast('Schreibe erst einen Satz.'); return; }
-  const ok = val.startsWith(ex.required);
-  const fb = document.getElementById('s-feedback');
-  fb.className = 'ex-feedback on ' + (ok?'ef-correct':'ef-wrong');
-  fb.innerHTML = ok
-    ? 'Sehr gut!'
-    : 'Noch nicht ganz. Starte mit dem vorgegebenen Anfang.';
-}
-function showStarterHint(){
-  document.getElementById('s-feedback').className = 'ex-feedback on ef-hint';
-  document.getElementById('s-feedback').textContent = 'Tipp: ' + EX_STARTERS[starterExIdx].hint;
-}
-function prevEx(type){
-  if(type==='starter'&&starterExIdx>0){starterExIdx--;renderStarterEx();}
-  if(type==='adj'&&adjExIdx>0){adjExIdx--;adjSlots=['',''];renderAdjEx();}
-  if(type==='tense'&&tenseExIdx>0){tenseExIdx--;tenseAnswered=false;renderTenseEx();}
-}
-function nextEx(type){
-  if(type==='starter'&&starterExIdx<EX_STARTERS.length-1){starterExIdx++;renderStarterEx();}
-  if(type==='adj'&&adjExIdx<EX_ADJECTIVES.length-1){adjExIdx++;adjSlots=['',''];renderAdjEx();}
-  if(type==='tense'&&tenseExIdx<EX_TENSE.length-1){tenseExIdx++;tenseAnswered=false;renderTenseEx();}
-}
-function renderAdjEx(){
-  const ex = EX_ADJECTIVES[adjExIdx];
-  const parts = ex.template.split('___');
-  const bankHtml = ex.bank.map(w=>`<button class="wb-word${adjSlots.includes(w)?' used':''}" onclick="pickAdjWord('${w}')">${escHtml(w)}</button>`).join('');
-  const s0=adjSlots[0]||'', s1=adjSlots[1]||'';
-  const preview = parts[0]+(s0||'___')+parts[1]+(s1||'___')+parts[2];
-  document.getElementById('adj-ex-card').innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${adjExIdx+1} von ${EX_ADJECTIVES.length}</span>
-      <div class="ex-instruction">Füge zwei Adjektive ein.</div>
-      <div class="word-bank">${bankHtml}</div>
-      <div class="blank-row">
-        <div class="blank-slot"><span class="blank-label">${escHtml(ex.labels[0])}</span><input class="blank-input" id="adj-slot-0" value="${escHtml(s0)}"></div>
-        <div class="blank-slot"><span class="blank-label">${escHtml(ex.labels[1])}</span><input class="blank-input" id="adj-slot-1" value="${escHtml(s1)}"></div>
-      </div>
-      <div style="background:var(--plum4);border:1.5px solid var(--plum3);border-radius:var(--r2);padding:10px 14px;">${escHtml(preview)}</div>
-      <button class="btn-check" onclick="checkAdjEx()">✓ Prüfen</button>
-      <div class="ex-feedback" id="adj-feedback" aria-live="polite"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('adj')" ${adjExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${adjExIdx+1} / ${EX_ADJECTIVES.length}</span>
-        <button class="btn-nav" onclick="nextEx('adj')" ${adjExIdx===EX_ADJECTIVES.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-  document.getElementById('adj-slot-0').addEventListener('input',e=>{adjSlots[0]=e.target.value;});
-  document.getElementById('adj-slot-1').addEventListener('input',e=>{adjSlots[1]=e.target.value;});
-}
-function pickAdjWord(w){
-  if(!adjSlots[0]) adjSlots[0]=w;
-  else if(!adjSlots[1]) adjSlots[1]=w;
-  else adjSlots[1]=w;
-  renderAdjEx();
-}
-function checkAdjEx(){
-  const s0=(document.getElementById('adj-slot-0').value||'').trim();
-  const s1=(document.getElementById('adj-slot-1').value||'').trim();
-  const fb=document.getElementById('adj-feedback');
-  const ok=s0&&s1;
-  fb.className='ex-feedback on '+(ok?'ef-correct':'ef-hint');
-  fb.textContent=ok?'Sehr gut!':'Noch ein Wort fehlt.';
-}
-function renderTenseEx(){
-  const ex = EX_TENSE[tenseExIdx];
-  const sentHtml = ex.sentences.map((s,i)=>`<button class="tense-choice" id="tc-${i}" onclick="pickTenseAnswer(${i})" ${tenseAnswered?'disabled':''}>${escHtml(s)}</button>`).join('');
-  document.getElementById('tense-ex-card').innerHTML = `
-    <div class="ex-card">
-      <span class="ex-num">Übung ${tenseExIdx+1} von ${EX_TENSE.length}</span>
-      <div class="ex-instruction">Klicke auf den Satz, der in der falschen Zeitform steht.</div>
-      <div class="tense-choices">${sentHtml}</div>
-      <div class="ex-feedback" id="tense-feedback" aria-live="polite"></div>
-      <div class="nav-row">
-        <button class="btn-nav" onclick="prevEx('tense')" ${tenseExIdx===0?'disabled':''}>← Zurück</button>
-        <span class="nav-counter">${tenseExIdx+1} / ${EX_TENSE.length}</span>
-        <button class="btn-nav" onclick="nextEx('tense')" ${tenseExIdx===EX_TENSE.length-1?'disabled':''}>Weiter →</button>
-      </div>
-    </div>`;
-}
-function pickTenseAnswer(i){
-  if(tenseAnswered) return;
-  tenseAnswered = true;
-  const ex = EX_TENSE[tenseExIdx];
-  const fb = document.getElementById('tense-feedback');
-  const correct = i===ex.wrongIdx;
-  document.querySelectorAll('.tense-choice').forEach((el,j)=>{
-    el.disabled=true;
-    if(j===ex.wrongIdx) el.classList.add('reveal-wrong');
-  });
-  if(correct){
-    document.getElementById('tc-'+i).className='tense-choice correct';
-    fb.className='ex-feedback on ef-correct';
-    fb.textContent='Richtig! '+ex.explain;
-  }else{
-    document.getElementById('tc-'+i).classList.add('wrong-pick');
-    fb.className='ex-feedback on ef-wrong';
-    fb.textContent='Noch nicht ganz. '+ex.explain;
-  }
-}
-
-/* Free sentence */
-function checkFreeSentence(){
-  const raw = (document.getElementById('free-input').value||'').trim();
-  if(!raw){ showToast('Schreibe erst einen Satz.'); return; }
-
-  const words = raw.split(/\s+/).filter(Boolean);
-  const count = words.length;
-  const lower = words.map(w=>w.replace(/[^a-zA-ZäöüÄÖÜß]/g,'').toLowerCase());
-
-  const lenIssue = count < 5 || count > 12;
-  const starterIssue = (lower[0]||'')==='ich';
-  const adjIssue = !lower.some(w=>ADJ_SET.has(w));
-  const hasPrät = lower.some(w=>PRÄT_SET.has(w));
-  const hasPräs = lower.some(w=>PRÄS_SET.has(w));
-  const tenseIssue = (hasPräs && !hasPrät) || (hasPräs && hasPrät);
-
-  const out = document.getElementById('free-results');
-  out.style.display = 'flex';
-
-  if(oneTipMode){
-    const msg = getNextStepTip({lenIssue, starterIssue, adjIssue, tenseIssue});
-    out.innerHTML = `<div class="fsc-card fsc-info"><span class="fsc-label">Nächster Schritt</span>${escHtml(msg)}</div>`;
-    return;
-  }
-
-  out.innerHTML = [
-    `<div class="fsc-card ${lenIssue?'fsc-warn':'fsc-ok'}"><span class="fsc-label">Satzlänge</span>${lenIssue?'Noch nicht ganz.':'Gut gemacht.'} (${count} Wörter)</div>`,
-    `<div class="fsc-card ${starterIssue?'fsc-warn':'fsc-ok'}"><span class="fsc-label">Satzanfang</span>${starterIssue?'Versuche einen anderen Anfang.':'Guter Satzanfang.'}</div>`,
-    `<div class="fsc-card ${adjIssue?'fsc-warn':'fsc-ok'}"><span class="fsc-label">Adjektive</span>${adjIssue?'Füge ein Adjektiv hinzu.':'Adjektiv erkannt.'}</div>`,
-    `<div class="fsc-card ${tenseIssue?'fsc-warn':'fsc-ok'}"><span class="fsc-label">Zeitform</span>${tenseIssue?'Nutze für Erzählungen Präteritum.':'Zeitform passt.'}</div>`
-  ].join('');
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  renderStarterEx();
-  renderAdjEx();
-  renderTenseEx();
-
-  const fi = document.getElementById('free-input');
-  if(fi) fi.addEventListener('keydown', e=>{ if(e.key==='Enter') checkFreeSentence(); });
-
-  const calm = document.getElementById('toggle-calm');
-  const oneTip = document.getElementById('toggle-onetip');
-
-  document.body.classList.add('calm');
-  if(calm){
-    calm.checked = true;
-    calm.addEventListener('change', ()=>{
-      calmMode = calm.checked;
-      document.body.classList.toggle('calm', calmMode);
-    });
-  }
-  if(oneTip){
-    oneTip.checked = true;
-    oneTip.addEventListener('change', ()=>{ oneTipMode = oneTip.checked; });
-  }
-});
+// ── Start ──────────────────────────────────────────────────────────────────
+restart();
 </script>
 </body>
 </html>
