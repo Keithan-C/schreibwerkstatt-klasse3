@@ -7,144 +7,151 @@
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #f4f7f9;
-  --surface:   #ffffff;
-  --border:    #dce3ea;
-  --blue:      #4a82c4;
-  --blue-lt:   #eaf1fb;
-  --blue-dk:   #2f5f99;
-  --green:     #3b9e6a;
-  --green-lt:  #e8f7ef;
-  --red:       #c0392b;
-  --red-lt:    #fdf0ef;
-  --amber:     #c97c10;
-  --amber-lt:  #fef6e8;
-  --purple:    #7c4dbd;
-  --purple-lt: #f0ebfb;
-  --text:      #1e2a35;
-  --text-mid:  #4a5e6d;
-  --text-soft: #8899aa;
-  --radius:    16px;
-  --radius-lg: 24px;
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
-  --font: 'Nunito', sans-serif;
-  --dur: 0.18s;
+  --bg:#f4f7f9; --surface:#ffffff; --border:#dce3ea;
+  --blue:#4a82c4; --blue-lt:#eaf1fb; --blue-dk:#2f5f99;
+  --green:#3b9e6a; --green-lt:#e8f7ef;
+  --red:#c0392b; --red-lt:#fdf0ef;
+  --amber:#c97c10; --amber-lt:#fef6e8;
+  --purple:#7c4dbd; --purple-lt:#f0ebfb;
+  --text:#1e2a35; --text-mid:#4a5e6d; --text-soft:#8899aa;
+  --radius:16px; --radius-lg:24px;
+  --shadow:0 4px 20px rgba(0,0,0,0.10);
+  --font:'Nunito',sans-serif; --dur:0.18s;
 }
-@media (prefers-reduced-motion: reduce) { :root { --dur: 0s; } }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 24px 16px 40px;
-}
-.topbar { width:100%; max-width:600px; display:flex; align-items:center; gap:14px; margin-bottom:24px; }
-.app-logo { font-size:1.7rem; }
-.app-title { font-size:1.25rem; font-weight:800; color:var(--blue-dk); line-height:1.1; }
-.app-title small { display:block; font-size:0.75rem; font-weight:600; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.06em; }
-.tracker { width:100%; max-width:600px; margin-bottom:20px; }
-.tracker-info { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
-.tracker-label { font-size:0.85rem; font-weight:700; color:var(--text-mid); }
-.tracker-count { font-size:0.8rem; color:var(--text-soft); font-weight:600; }
-.track-row { display:flex; gap:5px; }
-.track-dot { flex:1; height:8px; border-radius:99px; background:var(--border); transition:background var(--dur) ease; }
-.track-dot.done   { background:var(--green); }
-.track-dot.active { background:var(--blue); }
-.phase-strip { width:100%; max-width:600px; display:flex; border-radius:var(--radius); overflow:hidden; border:1.5px solid var(--border); margin-bottom:20px; background:var(--surface); }
-.phase-step { flex:1; padding:10px 4px; text-align:center; font-size:0.65rem; font-weight:700; color:var(--text-soft); display:flex; flex-direction:column; align-items:center; gap:3px; transition:background var(--dur),color var(--dur); }
-.phase-step .phase-icon { font-size:1.1rem; }
-.phase-step.active { background:var(--blue-lt); color:var(--blue-dk); }
-.phase-step.done   { background:var(--green-lt); color:var(--green); }
-.phase-divider { width:1px; background:var(--border); flex-shrink:0; }
-.card { background:var(--surface); border-radius:var(--radius-lg); padding:28px 24px; width:100%; max-width:600px; box-shadow:var(--shadow-md); border:1.5px solid var(--border); }
-.type-badge { display:inline-flex; align-items:center; gap:5px; font-size:0.72rem; font-weight:800; letter-spacing:0.07em; text-transform:uppercase; padding:4px 12px; border-radius:99px; background:var(--blue-lt); color:var(--blue-dk); margin-bottom:20px; }
-.instruction { background:var(--amber-lt); border:1.5px solid #f0c97a; border-radius:var(--radius); padding:12px 16px; font-size:0.88rem; font-weight:600; color:var(--amber); margin-bottom:20px; display:flex; align-items:flex-start; gap:10px; line-height:1.5; }
-.instruction-icon { font-size:1.2rem; flex-shrink:0; }
-.sentence-display { background:var(--blue-lt); border:1.5px solid #bbd5f5; border-radius:var(--radius); padding:14px 18px; font-size:1.05rem; font-weight:600; color:var(--text); line-height:1.6; margin-bottom:20px; min-height:56px; display:flex; align-items:center; }
-.sentence-placeholder { color:var(--text-soft); font-style:italic; font-weight:400; font-size:0.9rem; }
-.audio-row { display:flex; gap:10px; margin-bottom:24px; flex-wrap:wrap; }
-.btn-audio { display:flex; align-items:center; gap:8px; padding:12px 18px; border-radius:var(--radius); border:2px solid transparent; font-family:var(--font); font-size:0.92rem; font-weight:700; cursor:pointer; transition:background var(--dur),transform var(--dur); line-height:1; }
-.btn-audio:active { transform:scale(0.97); }
-.btn-word { background:var(--blue); color:#fff; flex:1; }
-.btn-word:hover { background:var(--blue-dk); }
-.btn-sentence { background:var(--surface); color:var(--blue-dk); border-color:var(--blue); flex:1; }
-.btn-sentence:hover { background:var(--blue-lt); }
-.btn-audio .btn-icon { font-size:1.1rem; }
-.input-block { margin-bottom:18px; }
-.input-label { display:flex; align-items:center; gap:7px; font-size:0.82rem; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; color:var(--text-mid); margin-bottom:8px; }
-.field-word { width:100%; font-family:var(--font); font-size:1.5rem; font-weight:700; padding:14px 18px; border-radius:var(--radius); border:2.5px solid var(--border); background:#fafbfc; color:var(--text); outline:none; letter-spacing:0.03em; transition:border-color var(--dur),background var(--dur); }
-.field-word:focus { border-color:var(--blue); background:#fff; }
-.field-word.correct   { border-color:var(--green); background:var(--green-lt); }
-.field-word.incorrect { border-color:var(--red);   background:var(--red-lt); }
-.field-word:disabled  { cursor:default; }
-.field-sentence { width:100%; font-family:var(--font); font-size:1rem; font-weight:600; padding:14px 18px; border-radius:var(--radius); border:2.5px solid var(--border); background:#fafbfc; color:var(--text); outline:none; resize:none; min-height:88px; line-height:1.6; transition:border-color var(--dur),background var(--dur); }
-.field-sentence:focus { border-color:var(--blue); background:#fff; }
-.field-sentence.correct   { border-color:var(--green); background:var(--green-lt); }
-.field-sentence.incorrect { border-color:var(--red);   background:var(--red-lt); }
-.field-sentence:disabled  { cursor:default; }
-.feedback-chip { display:inline-flex; align-items:center; gap:6px; margin-top:8px; padding:6px 12px; border-radius:99px; font-size:0.82rem; font-weight:700; line-height:1.3; }
-.feedback-chip.ok   { background:var(--green-lt); color:var(--green); }
-.feedback-chip.bad  { background:var(--red-lt);   color:var(--red); }
-.feedback-chip.warn { background:var(--amber-lt); color:var(--amber); }
+@media(prefers-reduced-motion:reduce){:root{--dur:0s;}}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 48px;}
 
-/* ── Wortart ── */
-.wortart-section { margin-top:24px; border-top:2px dashed var(--border); padding-top:20px; display:none; }
-.wortart-section.visible { display:block; }
-.wortart-question { font-size:1rem; font-weight:800; color:var(--purple); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
-.wortart-buttons { display:flex; gap:10px; flex-wrap:wrap; }
-.btn-wortart { flex:1; min-width:100px; padding:16px 10px; border-radius:var(--radius); border:2.5px solid var(--border); background:var(--surface); color:var(--text); font-family:var(--font); font-size:1rem; font-weight:800; cursor:pointer; text-align:center; transition:border-color var(--dur),background var(--dur),transform var(--dur); display:flex; flex-direction:column; align-items:center; gap:4px; }
-.btn-wortart:hover:not(:disabled) { border-color:var(--purple); background:var(--purple-lt); color:var(--purple); transform:translateY(-2px); }
-.btn-wortart:active:not(:disabled) { transform:translateY(0); }
-.btn-wortart:disabled { cursor:default; }
-.btn-wortart.selected-correct { border-color:var(--green); background:var(--green-lt); color:var(--green); }
-.btn-wortart.selected-wrong   { border-color:var(--red);   background:var(--red-lt);   color:var(--red); }
-.btn-wortart.reveal-correct   { border-color:var(--green); background:var(--green-lt); color:var(--green); }
-.btn-wortart .wa-icon { font-size:1.4rem; }
-.btn-wortart .wa-hint { font-size:0.65rem; font-weight:600; color:inherit; opacity:0.75; }
-.wortart-feedback { margin-top:12px; }
-.wortart-tip { margin-top:12px; background:var(--purple-lt); border:1.5px solid #c9aef5; border-radius:var(--radius); padding:10px 14px; font-size:0.82rem; font-weight:600; color:var(--purple); display:none; }
-.wortart-tip.visible { display:block; }
+/* ── Shared ── */
+.topbar{width:100%;max-width:620px;display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.app-logo{font-size:1.8rem;}
+.app-title{font-size:1.25rem;font-weight:800;color:var(--blue-dk);line-height:1.1;}
+.app-title small{display:block;font-size:0.73rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:.06em;}
+.btn-primary{width:100%;padding:16px;font-family:var(--font);font-size:1.05rem;font-weight:800;border:none;border-radius:var(--radius);background:var(--blue);color:#fff;cursor:pointer;transition:background var(--dur),transform var(--dur);display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-primary:hover:not(:disabled){background:var(--blue-dk);}
+.btn-primary:active:not(:disabled){transform:scale(.98);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;}
+.btn-secondary{width:100%;padding:14px;font-family:var(--font);font-size:.95rem;font-weight:700;border:2px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text-mid);cursor:pointer;transition:background var(--dur),border-color var(--dur);display:none;align-items:center;justify-content:center;gap:8px;}
+.btn-secondary:hover{background:var(--bg);border-color:var(--blue);color:var(--blue-dk);}
+.btn-secondary.visible{display:flex;}
+.chip{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:6px 12px;border-radius:99px;font-size:.82rem;font-weight:700;line-height:1.3;}
+.chip.ok{background:var(--green-lt);color:var(--green);}
+.chip.bad{background:var(--red-lt);color:var(--red);}
+.chip.warn{background:var(--amber-lt);color:var(--amber);}
 
-/* Actions */
-.action-row { display:flex; flex-direction:column; gap:10px; margin-top:24px; }
-.btn-primary { width:100%; padding:16px; font-family:var(--font); font-size:1.05rem; font-weight:800; border:none; border-radius:var(--radius); background:var(--blue); color:#fff; cursor:pointer; transition:background var(--dur),transform var(--dur); display:flex; align-items:center; justify-content:center; gap:8px; }
-.btn-primary:hover:not(:disabled)  { background:var(--blue-dk); }
-.btn-primary:active:not(:disabled) { transform:scale(0.98); }
-.btn-primary:disabled { opacity:0.45; cursor:not-allowed; }
-.btn-secondary { width:100%; padding:14px; font-family:var(--font); font-size:0.95rem; font-weight:700; border:2px solid var(--border); border-radius:var(--radius); background:var(--surface); color:var(--text-mid); cursor:pointer; transition:background var(--dur),border-color var(--dur); display:none; align-items:center; justify-content:center; gap:8px; }
-.btn-secondary:hover { background:var(--bg); border-color:var(--blue); color:var(--blue-dk); }
-.btn-secondary.visible { display:flex; }
+/* ── Screen visibility ── */
+.screen{display:none;width:100%;max-width:620px;flex-direction:column;gap:0;}
+.screen.active{display:flex;}
 
-/* Results */
-.results-wrap { width:100%; max-width:600px; display:none; flex-direction:column; gap:16px; }
-.results-wrap.visible { display:flex; }
-.result-hero { background:var(--surface); border-radius:var(--radius-lg); padding:32px 24px; text-align:center; border:1.5px solid var(--border); box-shadow:var(--shadow-md); }
-.result-emoji { font-size:3.5rem; margin-bottom:12px; }
-.result-title { font-size:1.5rem; font-weight:800; margin-bottom:6px; }
-.result-sub   { font-size:0.9rem; color:var(--text-mid); font-weight:600; }
-.score-row { display:flex; gap:10px; justify-content:center; margin:20px 0 0; flex-wrap:wrap; }
-.score-pill { display:flex; flex-direction:column; align-items:center; background:var(--bg); border-radius:var(--radius); padding:14px 16px; min-width:80px; border:1.5px solid var(--border); }
-.score-pill .sp-num { font-size:1.6rem; font-weight:800; color:var(--blue-dk); }
-.score-pill .sp-lbl { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-soft); margin-top:2px; }
-.review-card { background:var(--surface); border-radius:var(--radius-lg); border:1.5px solid var(--border); overflow:hidden; }
-.review-header { padding:14px 20px; font-size:0.8rem; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-soft); border-bottom:1px solid var(--border); background:var(--bg); }
-.review-item { display:flex; align-items:flex-start; gap:14px; padding:14px 20px; border-bottom:1px solid var(--border); }
-.review-item:last-child { border-bottom:none; }
-.ri-icon { font-size:1.2rem; flex-shrink:0; margin-top:1px; }
-.ri-word { font-size:1.05rem; font-weight:800; }
-.ri-detail { font-size:0.78rem; font-weight:600; color:var(--text-soft); margin-top:3px; display:flex; flex-wrap:wrap; gap:6px; }
-.ri-detail span { padding:2px 8px; border-radius:99px; background:var(--bg); }
-.ri-correct { color:var(--green); background:var(--green-lt)!important; }
-.ri-wrong   { color:var(--red);   background:var(--red-lt)!important; }
-.restart-area { text-align:center; }
+/* ══ THEME SELECTOR ══ */
+#screenTheme{gap:20px;}
+.theme-intro{background:var(--surface);border-radius:var(--radius-lg);padding:28px 24px;border:1.5px solid var(--border);box-shadow:var(--shadow);}
+.theme-intro h2{font-size:1.3rem;font-weight:800;margin-bottom:6px;}
+.theme-intro p{font-size:.9rem;color:var(--text-mid);font-weight:600;}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.theme-card{background:var(--surface);border:2.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 16px;cursor:pointer;transition:border-color var(--dur),background var(--dur),transform var(--dur);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;}
+.theme-card:hover{border-color:var(--blue);background:var(--blue-lt);transform:translateY(-2px);}
+.theme-card.selected{border-color:var(--blue);background:var(--blue-lt);}
+.theme-card .tc-check{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;font-size:.75rem;display:none;align-items:center;justify-content:center;font-weight:800;}
+.theme-card.selected .tc-check{display:flex;}
+.tc-icon{font-size:2rem;}
+.tc-title{font-size:.95rem;font-weight:800;color:var(--text);}
+.tc-desc{font-size:.72rem;font-weight:600;color:var(--text-soft);}
+.theme-actions{display:flex;flex-direction:column;gap:10px;}
+.btn-mix{padding:14px;font-family:var(--font);font-size:.92rem;font-weight:700;border:2px solid var(--blue);border-radius:var(--radius);background:var(--surface);color:var(--blue-dk);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-mix:hover{background:var(--blue-lt);}
 
-@media (max-width:480px) {
-  body { padding:16px 12px 32px; }
-  .card { padding:20px 16px; }
-  .field-word { font-size:1.2rem; }
-  .btn-wortart { min-width:80px; font-size:0.88rem; }
+/* ══ QUIZ ══ */
+#screenQuiz{gap:0;}
+.tracker{width:100%;margin-bottom:18px;}
+.tracker-info{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.tracker-label{font-size:.85rem;font-weight:700;color:var(--text-mid);}
+.tracker-count{font-size:.8rem;color:var(--text-soft);font-weight:600;}
+.track-row{display:flex;gap:5px;}
+.track-dot{flex:1;height:8px;border-radius:99px;background:var(--border);transition:background var(--dur);}
+.track-dot.done{background:var(--green);}
+.track-dot.active{background:var(--blue);}
+.phase-strip{width:100%;display:flex;border-radius:var(--radius);overflow:hidden;border:1.5px solid var(--border);margin-bottom:18px;background:var(--surface);}
+.phase-step{flex:1;padding:10px 4px;text-align:center;font-size:.63rem;font-weight:700;color:var(--text-soft);display:flex;flex-direction:column;align-items:center;gap:3px;transition:background var(--dur),color var(--dur);}
+.phase-step .pi{font-size:1rem;}
+.phase-step.active{background:var(--blue-lt);color:var(--blue-dk);}
+.phase-step.done{background:var(--green-lt);color:var(--green);}
+.phase-div{width:1px;background:var(--border);flex-shrink:0;}
+.card{background:var(--surface);border-radius:var(--radius-lg);padding:28px 24px;width:100%;box-shadow:var(--shadow);border:1.5px solid var(--border);}
+.type-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:4px 12px;border-radius:99px;background:var(--blue-lt);color:var(--blue-dk);margin-bottom:18px;}
+.instruction{background:var(--amber-lt);border:1.5px solid #f0c97a;border-radius:var(--radius);padding:12px 16px;font-size:.87rem;font-weight:600;color:var(--amber);margin-bottom:18px;display:flex;align-items:flex-start;gap:10px;line-height:1.5;}
+.sentence-display{background:var(--blue-lt);border:1.5px solid #bbd5f5;border-radius:var(--radius);padding:14px 18px;font-size:1.05rem;font-weight:600;color:var(--text);line-height:1.6;margin-bottom:18px;min-height:54px;display:flex;align-items:center;}
+.sentence-placeholder{color:var(--text-soft);font-style:italic;font-weight:400;font-size:.88rem;}
+.audio-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+.btn-audio{display:flex;align-items:center;gap:8px;padding:12px 18px;border-radius:var(--radius);border:2px solid transparent;font-family:var(--font);font-size:.92rem;font-weight:700;cursor:pointer;transition:background var(--dur),transform var(--dur);line-height:1;}
+.btn-audio:active{transform:scale(.97);}
+.btn-word{background:var(--blue);color:#fff;flex:1;}
+.btn-word:hover{background:var(--blue-dk);}
+.btn-word.speaking{background:#1a4f88;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.7;}}
+.btn-sentence{background:var(--surface);color:var(--blue-dk);border-color:var(--blue);flex:1;}
+.btn-sentence:hover{background:var(--blue-lt);}
+.btn-sentence.speaking{background:var(--blue-lt);animation:pulse 1s infinite;}
+.input-block{margin-bottom:16px;}
+.input-label{display:flex;align-items:center;gap:7px;font-size:.8rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text-mid);margin-bottom:8px;}
+.field-word{width:100%;font-family:var(--font);font-size:1.5rem;font-weight:700;padding:14px 18px;border-radius:var(--radius);border:2.5px solid var(--border);background:#fafbfc;color:var(--text);outline:none;letter-spacing:.03em;transition:border-color var(--dur),background var(--dur);}
+.field-word:focus{border-color:var(--blue);background:#fff;}
+.field-word.correct{border-color:var(--green);background:var(--green-lt);}
+.field-word.incorrect{border-color:var(--red);background:var(--red-lt);}
+.field-word:disabled{cursor:default;}
+.field-sentence{width:100%;font-family:var(--font);font-size:1rem;font-weight:600;padding:14px 18px;border-radius:var(--radius);border:2.5px solid var(--border);background:#fafbfc;color:var(--text);outline:none;resize:none;min-height:84px;line-height:1.6;transition:border-color var(--dur),background var(--dur);}
+.field-sentence:focus{border-color:var(--blue);background:#fff;}
+.field-sentence.correct{border-color:var(--green);background:var(--green-lt);}
+.field-sentence.incorrect{border-color:var(--red);background:var(--red-lt);}
+.field-sentence:disabled{cursor:default;}
+/* Wortart */
+.wortart-section{margin-top:22px;border-top:2px dashed var(--border);padding-top:18px;display:none;}
+.wortart-section.visible{display:block;}
+.wortart-q{font-size:1rem;font-weight:800;color:var(--purple);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.wortart-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-wa{flex:1;min-width:90px;padding:14px 8px;border-radius:var(--radius);border:2.5px solid var(--border);background:var(--surface);color:var(--text);font-family:var(--font);font-size:.95rem;font-weight:800;cursor:pointer;text-align:center;transition:border-color var(--dur),background var(--dur),transform var(--dur);display:flex;flex-direction:column;align-items:center;gap:4px;}
+.btn-wa:hover:not(:disabled){border-color:var(--purple);background:var(--purple-lt);color:var(--purple);transform:translateY(-2px);}
+.btn-wa:disabled{cursor:default;}
+.btn-wa.ok{border-color:var(--green);background:var(--green-lt);color:var(--green);}
+.btn-wa.wrong{border-color:var(--red);background:var(--red-lt);color:var(--red);}
+.btn-wa.reveal{border-color:var(--green);background:var(--green-lt);color:var(--green);}
+.wa-icon{font-size:1.3rem;}
+.wa-hint{font-size:.62rem;font-weight:600;opacity:.75;}
+.wa-tip{margin-top:12px;background:var(--purple-lt);border:1.5px solid #c9aef5;border-radius:var(--radius);padding:10px 14px;font-size:.82rem;font-weight:600;color:var(--purple);display:none;}
+.wa-tip.visible{display:block;}
+.action-row{display:flex;flex-direction:column;gap:10px;margin-top:22px;}
+
+/* ══ RESULTS ══ */
+#screenResults{gap:16px;}
+.result-hero{background:var(--surface);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;border:1.5px solid var(--border);box-shadow:var(--shadow);}
+.result-emoji{font-size:3.5rem;margin-bottom:10px;}
+.result-title{font-size:1.5rem;font-weight:800;margin-bottom:6px;}
+.result-sub{font-size:.9rem;color:var(--text-mid);font-weight:600;}
+.score-row{display:flex;gap:10px;justify-content:center;margin:20px 0 0;flex-wrap:wrap;}
+.score-pill{display:flex;flex-direction:column;align-items:center;background:var(--bg);border-radius:var(--radius);padding:14px 14px;min-width:76px;border:1.5px solid var(--border);}
+.sp-num{font-size:1.6rem;font-weight:800;color:var(--blue-dk);}
+.sp-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-soft);margin-top:2px;}
+.review-card{background:var(--surface);border-radius:var(--radius-lg);border:1.5px solid var(--border);overflow:hidden;}
+.review-hdr{padding:14px 20px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text-soft);border-bottom:1px solid var(--border);background:var(--bg);}
+.review-item{display:flex;align-items:flex-start;gap:14px;padding:13px 20px;border-bottom:1px solid var(--border);}
+.review-item:last-child{border-bottom:none;}
+.ri-icon{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+.ri-word{font-size:1rem;font-weight:800;}
+.ri-detail{font-size:.76rem;font-weight:600;color:var(--text-soft);margin-top:3px;display:flex;flex-wrap:wrap;gap:5px;}
+.ri-detail span{padding:2px 8px;border-radius:99px;background:var(--bg);}
+.ri-ok{color:var(--green);background:var(--green-lt)!important;}
+.ri-no{color:var(--red);background:var(--red-lt)!important;}
+.restart-row{display:flex;gap:10px;flex-wrap:wrap;}
+.restart-row .btn-primary{flex:1;}
+.btn-change{flex:1;padding:14px;font-family:var(--font);font-size:.95rem;font-weight:700;border:2px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text-mid);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-change:hover{background:var(--bg);border-color:var(--blue);color:var(--blue-dk);}
+
+@media(max-width:480px){
+  body{padding:16px 12px 36px;}
+  .card{padding:20px 16px;}
+  .field-word{font-size:1.2rem;}
+  .theme-grid{grid-template-columns:1fr 1fr;}
+  .btn-wa{min-width:76px;font-size:.82rem;}
 }
 </style>
 </head>
@@ -155,330 +162,481 @@ body {
   <div class="app-title">Diktat Übung <small>Klasse 3 · Bayern</small></div>
 </div>
 
-<div class="tracker">
-  <div class="tracker-info">
-    <span class="tracker-label" id="trackerLabel">Wort 1 von 12</span>
-    <span class="tracker-count" id="trackerCount">0 von 12 fertig</span>
-  </div>
-  <div class="track-row" id="trackRow"></div>
-</div>
-
-<div class="phase-strip" id="phaseStrip">
-  <div class="phase-step active" id="ph1"><span class="phase-icon">🔊</span>Hören</div>
-  <div class="phase-divider"></div>
-  <div class="phase-step" id="ph2"><span class="phase-icon">✍️</span>Schreiben</div>
-  <div class="phase-divider"></div>
-  <div class="phase-step" id="ph3"><span class="phase-icon">✅</span>Prüfen</div>
-  <div class="phase-divider"></div>
-  <div class="phase-step" id="ph4"><span class="phase-icon">🏷️</span>Wortart</div>
-</div>
-
-<div class="card" id="quizCard">
-  <div class="type-badge" id="typeBadge">📌 Nomen</div>
-
-  <div class="instruction">
-    <span class="instruction-icon">👆</span>
-    <span id="instructionText">Klicke zuerst auf <strong>„Wort hören"</strong>, dann auf <strong>„Satz hören"</strong>. Danach schreibe beides unten.</span>
+<!-- ══════════════ THEME SCREEN ══════════════ -->
+<div class="screen active" id="screenTheme">
+  <div class="theme-intro">
+    <h2>📚 Wähle dein Thema</h2>
+    <p>Wähle einen oder mehrere Schwerpunkte aus, dann starten wir!</p>
   </div>
 
-  <div class="sentence-display" id="sentenceDisplay">
-    <span class="sentence-placeholder">Der Satz erscheint hier, wenn du auf „Satz hören" klickst.</span>
-  </div>
-
-  <div class="audio-row">
-    <button class="btn-audio btn-word" onclick="speakWord()"><span class="btn-icon">🔊</span> Wort hören</button>
-    <button class="btn-audio btn-sentence" onclick="speakSentence()"><span class="btn-icon">📖</span> Satz hören</button>
-  </div>
-
-  <div class="input-block">
-    <div class="input-label"><span>✍️</span> Schreibe das Wort:</div>
-    <input class="field-word" type="text" id="wordInput" placeholder="Hier tippen…"
-      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-    <div id="wordFeedback"></div>
-  </div>
-
-  <div class="input-block">
-    <div class="input-label"><span>📝</span> Schreibe den Satz:</div>
-    <textarea class="field-sentence" id="sentenceInput" placeholder="Schreibe den Satz hier…" spellcheck="false"></textarea>
-    <div id="sentenceFeedback"></div>
-  </div>
-
-  <!-- Wortart — revealed after spelling check -->
-  <div class="wortart-section" id="wortartSection">
-    <div class="wortart-question"><span>🏷️</span> Was ist das Wort? Welche Wortart?</div>
-    <div class="wortart-buttons" id="wortartButtons">
-      <button class="btn-wortart" onclick="selectWortart('Nomen')" id="btn-Nomen">
-        <span class="wa-icon">🔠</span>Nomen<span class="wa-hint">Dinge &amp; Lebewesen</span>
-      </button>
-      <button class="btn-wortart" onclick="selectWortart('Verb')" id="btn-Verb">
-        <span class="wa-icon">🏃</span>Verb<span class="wa-hint">Tätigkeiten</span>
-      </button>
-      <button class="btn-wortart" onclick="selectWortart('Adjektiv')" id="btn-Adjektiv">
-        <span class="wa-icon">🎨</span>Adjektiv<span class="wa-hint">Eigenschaften</span>
-      </button>
+  <div class="theme-grid" id="themeGrid">
+    <div class="theme-card" data-theme="nomen" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">🔠</div>
+      <div class="tc-title">Nomen</div>
+      <div class="tc-desc">Großschreibung</div>
     </div>
-    <div class="wortart-feedback" id="wortartFeedback"></div>
-    <div class="wortart-tip" id="wortartTip"></div>
+    <div class="theme-card" data-theme="ie" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">🔤</div>
+      <div class="tc-title">ie / ei / eu</div>
+      <div class="tc-desc">Vokalkombinationen</div>
+    </div>
+    <div class="theme-card" data-theme="sch" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">💬</div>
+      <div class="tc-title">sch / sp / st</div>
+      <div class="tc-desc">Konsonantenverbindungen</div>
+    </div>
+    <div class="theme-card" data-theme="dehnungs" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">📏</div>
+      <div class="tc-title">Dehnungs-h</div>
+      <div class="tc-desc">fahren, Stuhl, Zahl…</div>
+    </div>
+    <div class="theme-card" data-theme="doppel" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">✌️</div>
+      <div class="tc-title">Doppelkonsonanten</div>
+      <div class="tc-desc">ll, mm, nn, ss, tt…</div>
+    </div>
+    <div class="theme-card" data-theme="verb" onclick="toggleTheme(this)">
+      <div class="tc-check">✓</div>
+      <div class="tc-icon">🌿</div>
+      <div class="tc-title">Verben &amp; Adjektive</div>
+      <div class="tc-desc">Tätigkeiten &amp; Eigenschaften</div>
+    </div>
   </div>
 
-  <div class="action-row">
-    <button class="btn-primary" id="btnCheck" onclick="checkAnswer()">✓ Antwort überprüfen</button>
-    <button class="btn-secondary" id="btnNext" onclick="nextQuestion()">Weiter zum nächsten Wort →</button>
+  <div class="theme-actions">
+    <button class="btn-mix" onclick="startMix()">🎲 Alles gemischt üben</button>
+    <button class="btn-primary" id="btnStartTheme" onclick="startWithThemes()" disabled>▶ Ausgewählte Themen starten</button>
   </div>
 </div>
 
-<!-- Results -->
-<div class="results-wrap" id="resultsWrap">
+<!-- ══════════════ QUIZ SCREEN ══════════════ -->
+<div class="screen" id="screenQuiz">
+  <div class="tracker">
+    <div class="tracker-info">
+      <span class="tracker-label" id="trackerLabel">Wort 1 von 12</span>
+      <span class="tracker-count" id="trackerCount">0 von 12 fertig</span>
+    </div>
+    <div class="track-row" id="trackRow"></div>
+  </div>
+
+  <div class="phase-strip">
+    <div class="phase-step active" id="ph1"><span class="pi">🔊</span>Hören</div>
+    <div class="phase-div"></div>
+    <div class="phase-step" id="ph2"><span class="pi">✍️</span>Schreiben</div>
+    <div class="phase-div"></div>
+    <div class="phase-step" id="ph3"><span class="pi">✅</span>Prüfen</div>
+    <div class="phase-div"></div>
+    <div class="phase-step" id="ph4"><span class="pi">🏷️</span>Wortart</div>
+  </div>
+
+  <div class="card">
+    <div class="type-badge" id="typeBadge">📌</div>
+
+    <div class="instruction">
+      <span style="font-size:1.2rem;flex-shrink:0;">👆</span>
+      <span id="instructionText">Klicke zuerst auf <strong>„Wort hören"</strong>, dann auf <strong>„Satz hören"</strong>. Danach schreibe beides unten.</span>
+    </div>
+
+    <div class="sentence-display" id="sentenceDisplay">
+      <span class="sentence-placeholder">Der Satz erscheint hier nach „Satz hören".</span>
+    </div>
+
+    <div class="audio-row">
+      <button class="btn-audio btn-word" id="btnWord" onclick="speakWord()">🔊 Wort hören</button>
+      <button class="btn-audio btn-sentence" id="btnSentence" onclick="speakSentence()">📖 Satz hören</button>
+    </div>
+
+    <div class="input-block">
+      <div class="input-label">✍️ Schreibe das Wort:</div>
+      <input class="field-word" type="text" id="wordInput" placeholder="Hier tippen…"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <div id="wordFeedback"></div>
+    </div>
+
+    <div class="input-block">
+      <div class="input-label">📝 Schreibe den Satz:</div>
+      <textarea class="field-sentence" id="sentenceInput" placeholder="Schreibe den Satz hier…" spellcheck="false"></textarea>
+      <div id="sentenceFeedback"></div>
+    </div>
+
+    <div class="wortart-section" id="wortartSection">
+      <div class="wortart-q">🏷️ Was ist das Wort – welche Wortart?</div>
+      <div class="wortart-btns">
+        <button class="btn-wa" onclick="selectWA('Nomen')" id="wa-Nomen">
+          <span class="wa-icon">🔠</span>Nomen<span class="wa-hint">Dinge &amp; Orte</span>
+        </button>
+        <button class="btn-wa" onclick="selectWA('Verb')" id="wa-Verb">
+          <span class="wa-icon">🏃</span>Verb<span class="wa-hint">Tätigkeiten</span>
+        </button>
+        <button class="btn-wa" onclick="selectWA('Adjektiv')" id="wa-Adjektiv">
+          <span class="wa-icon">🎨</span>Adjektiv<span class="wa-hint">Eigenschaften</span>
+        </button>
+      </div>
+      <div id="waFeedback"></div>
+      <div class="wa-tip" id="waTip"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-primary" id="btnCheck" onclick="checkAnswer()">✓ Antwort überprüfen</button>
+      <button class="btn-secondary" id="btnNext" onclick="nextQuestion()">Weiter →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ RESULTS SCREEN ══════════════ -->
+<div class="screen" id="screenResults">
   <div class="result-hero">
-    <div class="result-emoji" id="resultEmoji"></div>
-    <div class="result-title" id="resultTitle"></div>
-    <div class="result-sub"  id="resultSub"></div>
+    <div class="result-emoji" id="resEmoji"></div>
+    <div class="result-title" id="resTitle"></div>
+    <div class="result-sub" id="resSub"></div>
     <div class="score-row">
-      <div class="score-pill"><div class="sp-num" id="spWords">-</div><div class="sp-lbl">Wörter</div></div>
-      <div class="score-pill"><div class="sp-num" id="spSents">-</div><div class="sp-lbl">Sätze</div></div>
-      <div class="score-pill"><div class="sp-num" id="spWortart">-</div><div class="sp-lbl">Wortart</div></div>
+      <div class="score-pill"><div class="sp-num" id="spW">-</div><div class="sp-lbl">Wörter</div></div>
+      <div class="score-pill"><div class="sp-num" id="spS">-</div><div class="sp-lbl">Sätze</div></div>
+      <div class="score-pill"><div class="sp-num" id="spWA">-</div><div class="sp-lbl">Wortart</div></div>
       <div class="score-pill"><div class="sp-num" id="spPct">-</div><div class="sp-lbl">Gesamt</div></div>
     </div>
   </div>
   <div class="review-card">
-    <div class="review-header">Deine Übersicht</div>
+    <div class="review-hdr">Deine Übersicht</div>
     <div id="reviewList"></div>
   </div>
-  <div class="restart-area">
-    <button class="btn-primary" style="max-width:320px;margin:0 auto;" onclick="restart()">🔄 Noch einmal üben</button>
+  <div class="restart-row">
+    <button class="btn-primary" onclick="restartSame()">🔄 Nochmal</button>
+    <button class="btn-change" onclick="goThemeScreen()">📚 Thema wechseln</button>
   </div>
 </div>
 
 <script>
-const WORDS = [
-  { word:"Schmetterling", wortart:"Nomen",    type:"Nomen",       sentence:"Der bunte Schmetterling sitzt auf der Blume.",    tip:"Nomen schreibt man groß. Du kannst 'der/die/das' davor setzen: 'der Schmetterling'." },
-  { word:"Frühstück",     wortart:"Nomen",    type:"Nomen",       sentence:"Jeden Morgen essen wir zusammen Frühstück.",       tip:"'das Frühstück' – Nomen schreibt man groß!" },
-  { word:"Freundschaft",  wortart:"Nomen",    type:"Nomen",       sentence:"Freundschaft ist sehr wichtig im Leben.",          tip:"'die Freundschaft' – ein Nomen. Nomen schreibt man groß." },
-  { word:"Bahnhof",       wortart:"Nomen",    type:"Nomen",       sentence:"Wir warten am Bahnhof auf den Zug.",              tip:"'der Bahnhof' – ein Ort. Orte sind Nomen und werden großgeschrieben." },
-  { word:"Geburtstag",    wortart:"Nomen",    type:"Nomen",       sentence:"An meinem Geburtstag bekomme ich Geschenke.",      tip:"'der Geburtstag' – Nomen schreibt man groß." },
-  { word:"Zeichnung",     wortart:"Nomen",    type:"Nomen",       sentence:"Die Zeichnung hängt jetzt an der Wand.",          tip:"'die Zeichnung' – du kannst 'die' davor setzen. Das zeigt: es ist ein Nomen." },
-  { word:"Fahrrad",       wortart:"Nomen",    type:"Nomen",       sentence:"Mein Fahrrad hat eine rote Klingel.",             tip:"'das Fahrrad' – ein Ding. Dinge sind Nomen und werden großgeschrieben." },
-  { word:"spielen",       wortart:"Verb",     type:"ie/ei/eu",    sentence:"Die Kinder spielen nach der Schule im Garten.",   tip:"'spielen' ist ein Verb – es beschreibt eine Tätigkeit. Was machen die Kinder? Sie spielen!" },
-  { word:"schreiben",     wortart:"Verb",     type:"ie/ei/eu",    sentence:"Ich schreibe einen Brief an meine Oma.",          tip:"'schreiben' ist ein Verb – eine Handlung, die man tut." },
-  { word:"fliegen",       wortart:"Verb",     type:"ie/ei/eu",    sentence:"Die Vögel fliegen im Herbst in den Süden.",       tip:"'fliegen' ist ein Verb. Was machen die Vögel? Sie fliegen!" },
-  { word:"reisen",        wortart:"Verb",     type:"ie/ei/eu",    sentence:"Im Sommer reisen wir ans Meer.",                  tip:"'reisen' ist ein Verb – eine Tätigkeit." },
-  { word:"Freude",        wortart:"Nomen",    type:"ie/ei/eu",    sentence:"Die Freude war groß, als die Sonne schien.",      tip:"'die Freude' ist ein Nomen – ein Gefühl, das wie ein Ding behandelt wird." },
-  { word:"Schule",        wortart:"Nomen",    type:"sch/sp/st",   sentence:"In der Schule lernen wir Lesen und Rechnen.",     tip:"'die Schule' ist ein Nomen – ein Ort." },
-  { word:"sprechen",      wortart:"Verb",     type:"sch/sp/st",   sentence:"Bitte sprich laut und deutlich.",                 tip:"'sprechen' ist ein Verb – eine Tätigkeit des Redens." },
-  { word:"stellen",       wortart:"Verb",     type:"sch/sp/st",   sentence:"Stell das Glas auf den Tisch.",                  tip:"'stellen' ist ein Verb – eine Handlung." },
-  { word:"Straße",        wortart:"Nomen",    type:"sch/sp/st",   sentence:"Wir überqueren die Straße an der Ampel.",        tip:"'die Straße' ist ein Nomen – ein Ort." },
-  { word:"Schrank",       wortart:"Nomen",    type:"sch/sp/st",   sentence:"Ich lege meine Kleider in den Schrank.",         tip:"'der Schrank' ist ein Nomen – ein Ding." },
-  { word:"fahren",        wortart:"Verb",     type:"Dehnungs-h",  sentence:"Wir fahren am Wochenende zu Oma.",               tip:"'fahren' ist ein Verb. Was machen wir? Wir fahren!" },
-  { word:"Stuhl",         wortart:"Nomen",    type:"Dehnungs-h",  sentence:"Der Stuhl steht neben dem Tisch.",               tip:"'der Stuhl' ist ein Nomen – ein Möbelstück." },
-  { word:"Zahl",          wortart:"Nomen",    type:"Dehnungs-h",  sentence:"Welche Zahl kommt nach der Sieben?",             tip:"'die Zahl' ist ein Nomen – du kannst 'die' davor setzen." },
-  { word:"Wahl",          wortart:"Nomen",    type:"Dehnungs-h",  sentence:"Er hatte die Wahl zwischen Apfel und Birne.",    tip:"'die Wahl' ist ein Nomen." },
-  { word:"arbeiten",      wortart:"Verb",     type:"Verb/Adj.",   sentence:"Mein Vater muss heute lange arbeiten.",          tip:"'arbeiten' ist ein Verb – eine Tätigkeit." },
-  { word:"wünschen",      wortart:"Verb",     type:"Verb/Adj.",   sentence:"Ich wünsche mir ein neues Buch.",                tip:"'wünschen' ist ein Verb – eine Handlung." },
-  { word:"ruhig",         wortart:"Adjektiv", type:"Verb/Adj.",   sentence:"Es ist sehr ruhig im Wald.",                    tip:"'ruhig' ist ein Adjektiv – es beschreibt, wie etwas ist. Adjektive sagen uns eine Eigenschaft." },
-  { word:"wichtig",       wortart:"Adjektiv", type:"Verb/Adj.",   sentence:"Schlafen ist sehr wichtig für das Gehirn.",      tip:"'wichtig' ist ein Adjektiv – eine Eigenschaft." },
-  { word:"lustig",        wortart:"Adjektiv", type:"Verb/Adj.",   sentence:"Das Buch ist sehr lustig und spannend.",         tip:"'lustig' ist ein Adjektiv – es sagt uns, wie das Buch ist." },
-  { word:"fleißig",       wortart:"Adjektiv", type:"Verb/Adj.",   sentence:"Der fleißige Schüler macht seine Hausaufgaben.", tip:"'fleißig' ist ein Adjektiv – eine Eigenschaft einer Person." },
+// ══════════════════════════════════════════════════════
+// WORD BANK
+// theme: nomen | ie | sch | dehnungs | doppel | verb
+// wortart: Nomen | Verb | Adjektiv
+// phonetic: optional TTS override (spoken differently than written)
+// ══════════════════════════════════════════════════════
+const BANK = [
+  // ── Nomen (Großschreibung) ──
+  {theme:"nomen", word:"Schmetterling", wortart:"Nomen",    sentence:"Der bunte Schmetterling sitzt auf der Blume.",     tip:"Nomen schreibt man groß. 'der Schmetterling' – du kannst 'der' davor setzen!"},
+  {theme:"nomen", word:"Frühstück",     wortart:"Nomen",    sentence:"Jeden Morgen essen wir zusammen Frühstück.",        tip:"'das Frühstück' – Nomen schreibt man groß."},
+  {theme:"nomen", word:"Freundschaft",  wortart:"Nomen",    sentence:"Freundschaft ist sehr wichtig im Leben.",           tip:"'die Freundschaft' – ein Nomen. Nomen schreibt man groß."},
+  {theme:"nomen", word:"Bahnhof",       wortart:"Nomen",    sentence:"Wir warten am Bahnhof auf den Zug.",               tip:"'der Bahnhof' – ein Ort. Orte sind Nomen und werden großgeschrieben."},
+  {theme:"nomen", word:"Geburtstag",    wortart:"Nomen",    sentence:"An meinem Geburtstag bekomme ich Geschenke.",       tip:"'der Geburtstag' – Nomen schreibt man groß."},
+  {theme:"nomen", word:"Zeichnung",     wortart:"Nomen",    sentence:"Die Zeichnung hängt jetzt an der Wand.",           tip:"'die Zeichnung' – du kannst 'die' davor setzen."},
+  {theme:"nomen", word:"Fahrrad",       wortart:"Nomen",    sentence:"Mein Fahrrad hat eine rote Klingel.",              tip:"'das Fahrrad' – ein Ding. Dinge sind Nomen, großgeschrieben."},
+  {theme:"nomen", word:"Hausaufgabe",   wortart:"Nomen",    sentence:"Ich mache heute meine Hausaufgabe schnell.",        tip:"'die Hausaufgabe' – Nomen schreibt man groß."},
+
+  // ── ie / ei / eu ──
+  {theme:"ie", word:"spielen",   wortart:"Verb",     sentence:"Die Kinder spielen nach der Schule im Garten.",   tip:"'spielen' ist ein Verb – eine Tätigkeit. Was machen die Kinder? Sie spielen!"},
+  {theme:"ie", word:"schreiben", wortart:"Verb",     sentence:"Ich schreibe einen Brief an meine Oma.",          tip:"'schreiben' ist ein Verb – eine Handlung."},
+  {theme:"ie", word:"fliegen",   wortart:"Verb",     sentence:"Die Vögel fliegen im Herbst in den Süden.",       tip:"'fliegen' ist ein Verb – eine Tätigkeit."},
+  {theme:"ie", word:"reisen",    wortart:"Verb",     sentence:"Im Sommer reisen wir ans Meer.",                  tip:"'reisen' ist ein Verb – eine Tätigkeit."},
+  {theme:"ie", word:"Freude",    wortart:"Nomen",    sentence:"Die Freude war groß, als die Sonne schien.",      tip:"'die Freude' – ein Gefühl als Nomen. Nomen schreibt man groß."},
+  {theme:"ie", word:"lieben",    wortart:"Verb",     sentence:"Kinder lieben das Spielen im Freien.",            tip:"'lieben' ist ein Verb – eine Tätigkeit/Gefühl."},
+  {theme:"ie", word:"Biene",     wortart:"Nomen",    sentence:"Die Biene sammelt Nektar von den Blumen.",        tip:"'die Biene' – Nomen schreibt man groß."},
+  {theme:"ie", word:"leise",     wortart:"Adjektiv", sentence:"Das Kätzchen schläft leise in seinem Körbchen.",  tip:"'leise' ist ein Adjektiv – es beschreibt, wie das Kätzchen schläft."},
+
+  // ── sch / sp / st ──
+  {theme:"sch", word:"Schule",   wortart:"Nomen",    sentence:"In der Schule lernen wir Lesen und Rechnen.",     tip:"'die Schule' – ein Ort. Orte sind Nomen, großgeschrieben."},
+  {theme:"sch", word:"sprechen", wortart:"Verb",     sentence:"Bitte sprich laut und deutlich.",                 tip:"'sprechen' ist ein Verb – eine Tätigkeit des Redens."},
+  {theme:"sch", word:"stellen",  wortart:"Verb",     sentence:"Stell das Glas vorsichtig auf den Tisch.",        tip:"'stellen' ist ein Verb – eine Handlung."},
+  {theme:"sch", word:"Straße",   wortart:"Nomen",    sentence:"Wir überqueren die Straße an der Ampel.",         tip:"'die Straße' – ein Ort. Nomen schreibt man groß."},
+  {theme:"sch", word:"Schrank",  wortart:"Nomen",    sentence:"Ich lege meine Kleider in den Schrank.",          tip:"'der Schrank' – ein Ding. Nomen schreibt man groß."},
+  {theme:"sch", word:"schwimmen",wortart:"Verb",     sentence:"Wir schwimmen jeden Dienstag im Hallenbad.",      tip:"'schwimmen' ist ein Verb – eine Tätigkeit."},
+  {theme:"sch", word:"springen", wortart:"Verb",     sentence:"Die Kinder springen über die Pfützen.",           tip:"'springen' ist ein Verb – eine Bewegung."},
+
+  // ── Dehnungs-h ──
+  {theme:"dehnungs", word:"fahren", wortart:"Verb",  sentence:"Wir fahren am Wochenende zu Oma.",               tip:"'fahren' ist ein Verb. Was machen wir? Wir fahren!"},
+  {theme:"dehnungs", word:"Stuhl",  wortart:"Nomen", sentence:"Der Stuhl steht neben dem Tisch.",               tip:"'der Stuhl' – ein Möbelstück. Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"Zahl",   wortart:"Nomen", sentence:"Welche Zahl kommt nach der Sieben?",             tip:"'die Zahl' – Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"Wahl",   wortart:"Nomen", sentence:"Er hatte die Wahl zwischen Apfel und Birne.",    tip:"'die Wahl' – ein Nomen."},
+  {theme:"dehnungs", word:"führen", wortart:"Verb",  sentence:"Der Lehrer führt die Klasse in die Bibliothek.", tip:"'führen' ist ein Verb – eine Tätigkeit.", phonetic:"füren"},
+  {theme:"dehnungs", word:"Bahn",   wortart:"Nomen", sentence:"Wir fahren mit der Bahn in die Stadt.",          tip:"'die Bahn' – Nomen schreibt man groß."},
+  {theme:"dehnungs", word:"wohnen", wortart:"Verb",  sentence:"Wir wohnen in einem großen Haus.",               tip:"'wohnen' ist ein Verb – eine Tätigkeit.", phonetic:"woonen"},
+
+  // ── Doppelkonsonanten ──
+  {theme:"doppel", word:"Wasser",  wortart:"Nomen",    sentence:"Das Wasser im See ist heute sehr kalt.",        tip:"'das Wasser' – Nomen schreibt man groß. Achte auf das Doppel-s!"},
+  {theme:"doppel", word:"Teller",  wortart:"Nomen",    sentence:"Stell den Teller bitte auf den Tisch.",         tip:"'der Teller' – Nomen schreibt man groß. Doppel-l!"},
+  {theme:"doppel", word:"rennen",  wortart:"Verb",     sentence:"Die Kinder rennen auf dem Sportplatz.",         tip:"'rennen' ist ein Verb. Achte auf das Doppel-n!"},
+  {theme:"doppel", word:"Kette",   wortart:"Nomen",    sentence:"Die goldene Kette gehört meiner Oma.",          tip:"'die Kette' – Nomen schreibt man groß. Doppel-t!"},
+  {theme:"doppel", word:"fallen",  wortart:"Verb",     sentence:"Im Herbst fallen die bunten Blätter.",          tip:"'fallen' ist ein Verb. Doppel-l!"},
+  {theme:"doppel", word:"Sommer",  wortart:"Nomen",    sentence:"Im Sommer fahren wir ans Meer.",                tip:"'der Sommer' – Nomen schreibt man groß. Doppel-m!"},
+  {theme:"doppel", word:"Mitte",   wortart:"Nomen",    sentence:"Das Buch liegt in der Mitte des Tisches.",      tip:"'die Mitte' – Nomen schreibt man groß. Doppel-t!"},
+  {theme:"doppel", word:"nass",    wortart:"Adjektiv", sentence:"Nach dem Regen ist der Boden ganz nass.",       tip:"'nass' ist ein Adjektiv – eine Eigenschaft. Doppel-s!"},
+  {theme:"doppel", word:"Kissen",  wortart:"Nomen",    sentence:"Das weiche Kissen liegt auf dem Sofa.",         tip:"'das Kissen' – Nomen schreibt man groß. Doppel-s!"},
+  {theme:"doppel", word:"witzig",  wortart:"Adjektiv", sentence:"Der Clown ist sehr witzig und bunt.",           tip:"'witzig' ist ein Adjektiv – eine Eigenschaft."},
+
+  // ── Verben & Adjektive ──
+  {theme:"verb", word:"arbeiten",  wortart:"Verb",     sentence:"Mein Vater muss heute lange arbeiten.",         tip:"'arbeiten' ist ein Verb – eine Tätigkeit."},
+  {theme:"verb", word:"wünschen",  wortart:"Verb",     sentence:"Ich wünsche mir ein neues Buch.",               tip:"'wünschen' ist ein Verb – eine Handlung.", phonetic:"wünschen"},
+  {theme:"verb", word:"ruhig",     wortart:"Adjektiv", sentence:"Es ist sehr ruhig im Wald.",                    tip:"'ruhig' ist ein Adjektiv – es beschreibt, wie etwas ist."},
+  {theme:"verb", word:"wichtig",   wortart:"Adjektiv", sentence:"Schlafen ist sehr wichtig für das Gehirn.",     tip:"'wichtig' ist ein Adjektiv – eine Eigenschaft."},
+  {theme:"verb", word:"lustig",    wortart:"Adjektiv", sentence:"Das Buch ist sehr lustig und spannend.",        tip:"'lustig' ist ein Adjektiv – es sagt uns, wie das Buch ist."},
+  {theme:"verb", word:"fleißig",   wortart:"Adjektiv", sentence:"Der fleißige Schüler macht seine Hausaufgaben.",tip:"'fleißig' ist ein Adjektiv – eine Eigenschaft einer Person."},
+  {theme:"verb", word:"lachen",    wortart:"Verb",     sentence:"Die Kinder lachen über den lustigen Witz.",     tip:"'lachen' ist ein Verb – eine Tätigkeit."},
+  {theme:"verb", word:"freundlich",wortart:"Adjektiv", sentence:"Die Lehrerin ist sehr freundlich und nett.",    tip:"'freundlich' ist ein Adjektiv – eine Eigenschaft."},
 ];
 
-const TYPE_ICONS = { "Nomen":"🔠","ie/ei/eu":"🔤","sch/sp/st":"💬","Dehnungs-h":"📏","Verb/Adj.":"🌿" };
+const THEME_ICONS = {nomen:"🔠",ie:"🔤",sch:"💬",dehnungs:"📏",doppel:"✌️",verb:"🌿"};
+const THEME_LABELS = {nomen:"Nomen",ie:"ie/ei/eu",sch:"sch/sp/st",dehnungs:"Dehnungs-h",doppel:"Doppelkonsonanten",verb:"Verben & Adjektive"};
 const TOTAL = 12;
-let questions=[], current=0, results=[], checked=false, wortartDone=false;
 
-function shuffle(a){ return [...a].sort(()=>Math.random()-0.5); }
+let selectedThemes = [];
+let questions=[], current=0, results=[], checked=false, waDone=false;
+let deVoice = null;
+
+// ── Voice init ──────────────────────────────────────────────────────────────
+function initVoice(){
+  const load = () => {
+    const voices = window.speechSynthesis.getVoices();
+    // Priority: de-DE voices – prefer names with 'Anna', 'Petra', 'Markus', 'Hans', 'Hedda', 'Katja'
+    const preferred = ['anna','katja','petra','hedda','hans','markus','helena','yannick'];
+    let best = null;
+    for(const p of preferred){
+      best = voices.find(v => v.lang.startsWith('de') && v.name.toLowerCase().includes(p));
+      if(best) break;
+    }
+    if(!best) best = voices.find(v => v.lang === 'de-DE');
+    if(!best) best = voices.find(v => v.lang.startsWith('de'));
+    deVoice = best || null;
+  };
+  load();
+  window.speechSynthesis.onvoiceschanged = load;
+}
+
+function speak(text, rate=0.78, onEnd=null){
+  if(!window.speechSynthesis){ alert('Sprachausgabe nicht verfügbar.'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'de-DE';
+  u.rate = rate;
+  u.pitch = 1.0;
+  if(deVoice) u.voice = deVoice;
+  if(onEnd) u.onend = onEnd;
+  window.speechSynthesis.speak(u);
+}
+
+function speakWord(){
+  const q = questions[current];
+  // Use phonetic override if present, else speak the word slowly
+  const text = q.phonetic || q.word;
+  document.getElementById('btnWord').classList.add('speaking');
+  speak(text, 0.65, () => document.getElementById('btnWord').classList.remove('speaking'));
+  setPhase(1);
+  document.getElementById('instructionText').innerHTML = '✅ Gut! Jetzt klicke auf <strong>„Satz hören"</strong>.';
+}
+
+function speakSentence(){
+  const q = questions[current];
+  document.getElementById('sentenceDisplay').textContent = q.sentence;
+  document.getElementById('btnSentence').classList.add('speaking');
+  speak(q.sentence, 0.78, () => document.getElementById('btnSentence').classList.remove('speaking'));
+  setPhase(2);
+  document.getElementById('instructionText').innerHTML = '✅ Super! Schreibe jetzt <strong>Wort</strong> und <strong>Satz</strong> in die Felder unten.';
+  document.getElementById('wordInput').focus();
+}
+
+// ── Theme selection ─────────────────────────────────────────────────────────
+function toggleTheme(card){
+  card.classList.toggle('selected');
+  selectedThemes = Array.from(document.querySelectorAll('.theme-card.selected')).map(c => c.dataset.theme);
+  document.getElementById('btnStartTheme').disabled = selectedThemes.length === 0;
+}
+function startWithThemes(){ buildQuestions(selectedThemes); showQuiz(); }
+function startMix(){ buildQuestions(Object.keys(THEME_LABELS)); showQuiz(); }
+
+function buildQuestions(themes){
+  const pool = BANK.filter(w => themes.includes(w.theme));
+  // Shuffle and pick TOTAL, but ensure variety if pool big enough
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  questions = shuffled.slice(0, TOTAL);
+  // If pool smaller than TOTAL, repeat
+  if(questions.length < TOTAL){
+    while(questions.length < TOTAL){
+      questions.push(...shuffled.slice(0, TOTAL - questions.length));
+    }
+  }
+  current = 0; results = []; checked = false; waDone = false;
+}
+
+function showQuiz(){
+  showScreen('screenQuiz');
+  loadQuestion();
+}
+function goThemeScreen(){ showScreen('screenTheme'); }
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── Quiz logic ───────────────────────────────────────────────────────────────
+function shuffle(a){ return [...a].sort(() => Math.random() - 0.5); }
 function norm(s){ return s.trim().replace(/\s+/g,' ').replace(/[.!?,;]+$/,'').toLowerCase(); }
 
 function renderTrack(){
-  const row=document.getElementById('trackRow');
-  row.innerHTML='';
+  const row = document.getElementById('trackRow');
+  row.innerHTML = '';
   for(let i=0;i<TOTAL;i++){
-    const d=document.createElement('div');
-    d.className='track-dot'+(i<current?' done':i===current?' active':'');
+    const d = document.createElement('div');
+    d.className = 'track-dot' + (i<current?' done':i===current?' active':'');
     row.appendChild(d);
   }
-  document.getElementById('trackerLabel').textContent=`Wort ${current+1} von ${TOTAL}`;
-  document.getElementById('trackerCount').textContent=`${current} von ${TOTAL} fertig`;
+  document.getElementById('trackerLabel').textContent = `Wort ${current+1} von ${TOTAL}`;
+  document.getElementById('trackerCount').textContent = `${current} von ${TOTAL} fertig`;
 }
 
 function setPhase(n){
   ['ph1','ph2','ph3','ph4'].forEach((id,i)=>{
-    document.getElementById(id).className='phase-step'+(i+1<n?' done':i+1===n?' active':'');
+    document.getElementById(id).className = 'phase-step' + (i+1<n?' done':i+1===n?' active':'');
   });
 }
 
 function loadQuestion(){
-  checked=false; wortartDone=false;
-  const q=questions[current];
-  document.getElementById('typeBadge').textContent=`${TYPE_ICONS[q.type]||'📌'} ${q.type}`;
-  document.getElementById('instructionText').innerHTML='Klicke zuerst auf <strong>„Wort hören"</strong>, dann auf <strong>„Satz hören"</strong>. Danach schreibe beides unten.';
-  document.getElementById('sentenceDisplay').innerHTML='<span class="sentence-placeholder">Der Satz erscheint hier, wenn du auf „Satz hören" klickst.</span>';
+  checked = false; waDone = false;
+  const q = questions[current];
+  const icon = THEME_ICONS[q.theme] || '📌';
+  const label = THEME_LABELS[q.theme] || q.theme;
+  document.getElementById('typeBadge').textContent = `${icon} ${label}`;
+  document.getElementById('instructionText').innerHTML = 'Klicke zuerst auf <strong>„Wort hören"</strong>, dann auf <strong>„Satz hören"</strong>. Danach schreibe beides unten.';
+  document.getElementById('sentenceDisplay').innerHTML = '<span class="sentence-placeholder">Der Satz erscheint hier nach „Satz hören".</span>';
 
-  ['wordInput','sentenceInput'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.value=''; el.className=el.tagName==='INPUT'?'field-word':'field-sentence'; el.disabled=false;
+  ['wordInput','sentenceInput'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = ''; el.className = el.tagName==='INPUT' ? 'field-word' : 'field-sentence'; el.disabled = false;
   });
-  document.getElementById('wordFeedback').innerHTML='';
-  document.getElementById('sentenceFeedback').innerHTML='';
+  document.getElementById('wordFeedback').innerHTML = '';
+  document.getElementById('sentenceFeedback').innerHTML = '';
 
   // Reset wortart
   document.getElementById('wortartSection').classList.remove('visible');
-  document.getElementById('wortartFeedback').innerHTML='';
-  document.getElementById('wortartTip').classList.remove('visible');
-  ['btn-Nomen','btn-Verb','btn-Adjektiv'].forEach(id=>{
-    const b=document.getElementById(id); b.className='btn-wortart'; b.disabled=false;
+  document.getElementById('waFeedback').innerHTML = '';
+  document.getElementById('waTip').classList.remove('visible');
+  ['wa-Nomen','wa-Verb','wa-Adjektiv'].forEach(id => {
+    const b = document.getElementById(id);
+    b.className = 'btn-wa'; b.disabled = false;
   });
 
-  document.getElementById('btnCheck').disabled=false;
-  const bn=document.getElementById('btnNext');
+  document.getElementById('btnCheck').disabled = false;
+  const bn = document.getElementById('btnNext');
   bn.classList.remove('visible');
-  bn.textContent=current+1<TOTAL?'Weiter zum nächsten Wort →':'Ergebnis ansehen 🎉';
+  bn.textContent = current+1<TOTAL ? 'Weiter zum nächsten Wort →' : 'Ergebnis ansehen 🎉';
 
   setPhase(1); renderTrack();
   document.getElementById('wordInput').focus();
 }
 
-function speak(text,rate=0.82){
-  if(!window.speechSynthesis){alert('Sprachausgabe nicht verfügbar.');return;}
-  window.speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.lang='de-DE'; u.rate=rate;
-  window.speechSynthesis.speak(u);
-}
-function speakWord(){
-  speak(questions[current].word,0.75); setPhase(1);
-  document.getElementById('instructionText').innerHTML='✅ Gut! Jetzt klicke auf <strong>„Satz hören"</strong>.';
-}
-function speakSentence(){
-  const q=questions[current];
-  document.getElementById('sentenceDisplay').textContent=q.sentence;
-  speak(q.sentence,0.82); setPhase(2);
-  document.getElementById('instructionText').innerHTML='✅ Super! Jetzt schreibe das <strong>Wort</strong> und den <strong>Satz</strong> in die Felder unten.';
-  document.getElementById('wordInput').focus();
-}
-
-function chip(cls,txt){ return `<div class="feedback-chip ${cls}">${txt}</div>`; }
+function chip(cls,txt){ return `<div class="chip ${cls}">${txt}</div>`; }
 
 function checkAnswer(){
-  if(checked)return;
-  checked=true; setPhase(3);
-  const q=questions[current];
-  const wv=document.getElementById('wordInput').value;
-  const sv=document.getElementById('sentenceInput').value;
+  if(checked) return;
+  checked = true; setPhase(3);
+  const q = questions[current];
+  const wv = document.getElementById('wordInput').value;
+  const sv = document.getElementById('sentenceInput').value;
 
-  const wOk=wv.trim()===q.word;
-  const wi=document.getElementById('wordInput');
-  wi.disabled=true; wi.classList.add(wOk?'correct':'incorrect');
-  document.getElementById('wordFeedback').innerHTML=wOk
-    ?chip('ok','✅ Richtig geschrieben!')
-    :chip('bad',`❌ Richtig: „${q.word}"`);
+  const wOk = wv.trim() === q.word;
+  const wi = document.getElementById('wordInput');
+  wi.disabled = true; wi.classList.add(wOk?'correct':'incorrect');
+  document.getElementById('wordFeedback').innerHTML = wOk
+    ? chip('ok','✅ Richtig geschrieben!')
+    : chip('bad',`❌ Richtig: „${q.word}"`);
 
-  const sEmpty=sv.trim().length===0;
-  const sOk=!sEmpty&&norm(sv)===norm(q.sentence);
-  const si=document.getElementById('sentenceInput');
-  si.disabled=true; si.classList.add(sOk?'correct':'incorrect');
-  document.getElementById('sentenceFeedback').innerHTML=sEmpty
-    ?chip('warn','⚠️ Kein Satz eingegeben.')
-    :sOk?chip('ok','✅ Satz korrekt!'):chip('bad',`❌ Richtig: „${q.sentence}"`);
+  const sEmpty = sv.trim().length === 0;
+  const sOk = !sEmpty && norm(sv) === norm(q.sentence);
+  const si = document.getElementById('sentenceInput');
+  si.disabled = true; si.classList.add(sOk?'correct':'incorrect');
+  document.getElementById('sentenceFeedback').innerHTML = sEmpty
+    ? chip('warn','⚠️ Kein Satz eingegeben.')
+    : sOk ? chip('ok','✅ Satz korrekt!') : chip('bad',`❌ Richtig: „${q.sentence}"`);
 
   results.push({q, wOk, sOk, waOk:null});
-
   document.getElementById('wortartSection').classList.add('visible');
   setPhase(4);
-  document.getElementById('instructionText').innerHTML='🏷️ Fast fertig! <strong>Was ist das Wort – Nomen, Verb oder Adjektiv?</strong>';
-  document.getElementById('btnCheck').disabled=true;
+  document.getElementById('instructionText').innerHTML = '🏷️ Fast fertig! <strong>Was ist das Wort – Nomen, Verb oder Adjektiv?</strong>';
+  document.getElementById('btnCheck').disabled = true;
 }
 
-function selectWortart(chosen){
-  if(wortartDone)return;
-  wortartDone=true;
-  const q=questions[current];
-  const correct=q.wortart;
-  const isOk=(chosen===correct);
-
-  ['Nomen','Verb','Adjektiv'].forEach(w=>{
-    const b=document.getElementById('btn-'+w);
-    b.disabled=true;
-    if(w===chosen&&isOk) b.classList.add('selected-correct');
-    else if(w===chosen&&!isOk) b.classList.add('selected-wrong');
-    else if(w===correct) b.classList.add('reveal-correct');
+function selectWA(chosen){
+  if(waDone) return;
+  waDone = true;
+  const q = questions[current];
+  const correct = q.wortart;
+  const isOk = chosen === correct;
+  ['Nomen','Verb','Adjektiv'].forEach(w => {
+    const b = document.getElementById('wa-'+w);
+    b.disabled = true;
+    if(w===chosen && isOk) b.classList.add('ok');
+    else if(w===chosen && !isOk) b.classList.add('wrong');
+    else if(w===correct) b.classList.add('reveal');
   });
-
-  document.getElementById('wortartFeedback').innerHTML=isOk
-    ?chip('ok',`✅ Richtig! „${q.word}" ist ein ${correct}.`)
-    :chip('bad',`❌ „${q.word}" ist ein ${correct}.`);
-
-  const tipEl=document.getElementById('wortartTip');
-  tipEl.textContent=q.tip; tipEl.classList.add('visible');
-
-  results[results.length-1].waOk=isOk;
-
+  document.getElementById('waFeedback').innerHTML = isOk
+    ? chip('ok',`✅ Richtig! „${q.word}" ist ein ${correct}.`)
+    : chip('bad',`❌ „${q.word}" ist ein ${correct}.`);
+  const tipEl = document.getElementById('waTip');
+  tipEl.textContent = q.tip; tipEl.classList.add('visible');
+  results[results.length-1].waOk = isOk;
   document.getElementById('btnNext').classList.add('visible');
-  document.getElementById('instructionText').innerHTML=isOk
-    ?'🌟 Sehr gut! Klicke auf „Weiter".'
-    :'👀 Schau dir die Erklärung an. Dann klicke auf „Weiter".';
+  document.getElementById('instructionText').innerHTML = isOk
+    ? '🌟 Sehr gut! Klicke auf „Weiter".'
+    : '👀 Schau dir die Erklärung an. Dann klicke auf „Weiter".';
 }
 
 function nextQuestion(){
-  if(!wortartDone&&results.length>0&&results[results.length-1].waOk===null){
-    results[results.length-1].waOk=false;
-  }
+  if(!waDone && results.length>0 && results[results.length-1].waOk===null)
+    results[results.length-1].waOk = false;
   current++;
-  if(current<TOTAL){loadQuestion();}else{showResults();}
+  if(current < TOTAL) loadQuestion(); else showResults();
 }
 
 function showResults(){
-  document.getElementById('quizCard').style.display='none';
-  document.getElementById('phaseStrip').style.display='none';
-  document.getElementById('resultsWrap').classList.add('visible');
-  const n=results.length;
-  const wOk=results.filter(r=>r.wOk).length;
-  const sOk=results.filter(r=>r.sOk).length;
-  const waOk=results.filter(r=>r.waOk).length;
-  const pct=Math.round((wOk+sOk+waOk)/(n*3)*100);
-
+  showScreen('screenResults');
+  const n = results.length;
+  const wOk = results.filter(r=>r.wOk).length;
+  const sOk = results.filter(r=>r.sOk).length;
+  const waOk = results.filter(r=>r.waOk).length;
+  const pct = Math.round((wOk+sOk+waOk)/(n*3)*100);
   let emoji,title,sub;
-  if(pct>=90){emoji='🌟';title='Fantastisch!';sub='Du hast das sehr gut gemacht.';}
-  else if(pct>=70){emoji='😊';title='Gut gemacht!';sub='Du machst große Fortschritte.';}
+  if(pct>=90){emoji='🌟';title='Fantastisch!';sub='Du hast das sehr gut gemacht!';}
+  else if(pct>=70){emoji='😊';title='Gut gemacht!';sub='Du machst große Fortschritte!';}
   else if(pct>=50){emoji='💪';title='Weiter üben!';sub='Jedes Üben macht dich besser.';}
-  else{emoji='📚';title='Noch üben!';sub='Keine Sorge – beim nächsten Mal klappt es besser.';}
-
-  document.getElementById('resultEmoji').textContent=emoji;
-  document.getElementById('resultTitle').textContent=title;
-  document.getElementById('resultSub').textContent=sub;
-  document.getElementById('spWords').textContent=`${wOk}/${n}`;
-  document.getElementById('spSents').textContent=`${sOk}/${n}`;
-  document.getElementById('spWortart').textContent=`${waOk}/${n}`;
-  document.getElementById('spPct').textContent=pct+'%';
-
-  const list=document.getElementById('reviewList');
-  list.innerHTML='';
-  results.forEach(r=>{
-    const allOk=r.wOk&&r.sOk&&r.waOk;
-    const div=document.createElement('div');
-    div.className='review-item';
-    div.innerHTML=`
+  else{emoji='📚';title='Noch üben!';sub='Keine Sorge – beim nächsten Mal klappt es besser!';}
+  document.getElementById('resEmoji').textContent = emoji;
+  document.getElementById('resTitle').textContent = title;
+  document.getElementById('resSub').textContent = sub;
+  document.getElementById('spW').textContent = `${wOk}/${n}`;
+  document.getElementById('spS').textContent = `${sOk}/${n}`;
+  document.getElementById('spWA').textContent = `${waOk}/${n}`;
+  document.getElementById('spPct').textContent = pct+'%';
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  results.forEach(r => {
+    const allOk = r.wOk && r.sOk && r.waOk;
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
       <div class="ri-icon">${allOk?'✅':r.wOk&&r.sOk?'🟡':'❌'}</div>
       <div>
         <div class="ri-word">${r.q.word}</div>
         <div class="ri-detail">
-          <span class="${r.wOk?'ri-correct':'ri-wrong'}">${r.wOk?'✓ Wort':'✗ Wort'}</span>
-          <span class="${r.sOk?'ri-correct':'ri-wrong'}">${r.sOk?'✓ Satz':'✗ Satz'}</span>
-          <span class="${r.waOk?'ri-correct':'ri-wrong'}">${r.waOk?`✓ ${r.q.wortart}`:`✗ ${r.q.wortart}`}</span>
+          <span class="${r.wOk?'ri-ok':'ri-no'}">${r.wOk?'✓ Wort':'✗ Wort'}</span>
+          <span class="${r.sOk?'ri-ok':'ri-no'}">${r.sOk?'✓ Satz':'✗ Satz'}</span>
+          <span class="${r.waOk?'ri-ok':'ri-no'}">${r.waOk?`✓ ${r.q.wortart}`:`✗ ${r.q.wortart}`}</span>
         </div>
       </div>`;
     list.appendChild(div);
   });
 }
 
-function restart(){
-  questions=shuffle(WORDS).slice(0,TOTAL);
-  current=0; results=[]; checked=false; wortartDone=false;
-  document.getElementById('resultsWrap').classList.remove('visible');
-  document.getElementById('quizCard').style.display='';
-  document.getElementById('phaseStrip').style.display='';
-  loadQuestion();
+function restartSame(){
+  buildQuestions(selectedThemes.length ? selectedThemes : Object.keys(THEME_LABELS));
+  showQuiz();
 }
 
-restart();
+// ── Boot ─────────────────────────────────────────────────────────────────────
+initVoice();
 </script>
 </body>
 </html>
