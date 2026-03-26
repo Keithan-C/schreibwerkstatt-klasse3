@@ -1243,47 +1243,40 @@ body {
      JAVASCRIPT
 ══════════════════════════════════════════ -->
 <script>
+/* ── LANGUAGE ─────────────────────────────── */
+const SW_LANG = localStorage.getItem('sw_lang') || 'de';
+const IS_EN   = SW_LANG === 'en';
+
 /* ── DATA ─────────────────────────────────── */
 const CHARS = [
-  { emoji:'👧', name:'Emma',   desc:'Mutiges Mädchen',    pronoun:'Sie' },
-  { emoji:'👦', name:'Luca',   desc:'Neugieriger Junge',   pronoun:'Er' },
-  { emoji:'🐕', name:'Bello',  desc:'Freundlicher Hund',   pronoun:'Er' },
-  { emoji:'🐱', name:'Mia',    desc:'Schlaue Katze',       pronoun:'Sie' },
-  { emoji:'🦊', name:'Felix',  desc:'Schlauer Fuchs',      pronoun:'Er' },
-  { emoji:'🐉', name:'Drako',  desc:'Freundlicher Drache', pronoun:'Er' },
+  { emoji:'👧', name:'Emma',   desc:'Mutiges Mädchen',    descEn:'Brave girl',       pronoun:'Sie', pronounEn:'She' },
+  { emoji:'👦', name:'Luca',   desc:'Neugieriger Junge',  descEn:'Curious boy',      pronoun:'Er',  pronounEn:'He'  },
+  { emoji:'🐕', name:'Bello',  desc:'Freundlicher Hund',  descEn:'Friendly dog',     pronoun:'Er',  pronounEn:'He'  },
+  { emoji:'🐱', name:'Mia',    desc:'Schlaue Katze',      descEn:'Clever cat',       pronoun:'Sie', pronounEn:'She' },
+  { emoji:'🦊', name:'Felix',  desc:'Schlauer Fuchs',     descEn:'Smart fox',        pronoun:'Er',  pronounEn:'He'  },
+  { emoji:'🐉', name:'Drako',  desc:'Freundlicher Drache',descEn:'Friendly dragon',  pronoun:'Er',  pronounEn:'He'  },
 ];
 
 const SETS = [
-  { emoji:'🌲', name:'Im Wald',          desc:'Große Bäume' },
-  { emoji:'🏫', name:'In der Schule',    desc:'Klassenzimmer' },
-  { emoji:'🏖️', name:'Am Strand',        desc:'Sand und Meer' },
-  { emoji:'🏙️', name:'In der Stadt',     desc:'Straßen und Häuser' },
-  { emoji:'🏡', name:'Auf dem Bauernhof',desc:'Tiere und Felder' },
-  { emoji:'⛰️', name:'In den Bergen',    desc:'Schnee und Gipfel' },
+  { emoji:'🌲', name:'Im Wald',           nameEn:'In the forest',  desc:'Große Bäume',        descEn:'Big trees' },
+  { emoji:'🏫', name:'In der Schule',     nameEn:'At school',      desc:'Klassenzimmer',      descEn:'Classroom' },
+  { emoji:'🏖️', name:'Am Strand',         nameEn:'At the beach',   desc:'Sand und Meer',      descEn:'Sand and sea' },
+  { emoji:'🏙️', name:'In der Stadt',      nameEn:'In the city',    desc:'Straßen und Häuser', descEn:'Streets and houses' },
+  { emoji:'🏡', name:'Auf dem Bauernhof', nameEn:'On the farm',    desc:'Tiere und Felder',   descEn:'Animals and fields' },
+  { emoji:'⛰️', name:'In den Bergen',     nameEn:'In the mountains',desc:'Schnee und Gipfel', descEn:'Snow and peaks' },
 ];
 
 const STARTERS = {
-  begin: [
-    'Es war einmal …',
-    'An einem sonnigen Morgen …',
-    'Eines Tages …',
-    'In [ORT] lebte …',
-    '[FIGUR] wachte auf und …',
-  ],
-  middle: [
-    'Plötzlich …',
-    'Da sah [FIGUR] …',
-    'Auf einmal …',
-    'Oh nein! …',
-    'Dann passierte etwas …',
-  ],
-  end: [
-    'Zum Glück …',
-    'Am Ende …',
-    'Danach war alles …',
-    '[FIGUR] war sehr froh, weil …',
-    'Von nun an …',
-  ],
+  de: {
+    begin:  ['Es war einmal …','An einem sonnigen Morgen …','Eines Tages …','In [ORT] lebte …','[FIGUR] wachte auf und …'],
+    middle: ['Plötzlich …','Da sah [FIGUR] …','Auf einmal …','Oh nein! …','Dann passierte etwas …'],
+    end:    ['Zum Glück …','Am Ende …','Danach war alles …','[FIGUR] war sehr froh, weil …','Von nun an …'],
+  },
+  en: {
+    begin:  ['Once upon a time …','On a sunny morning …','One day …','In [ORT] there lived …','[FIGUR] woke up and …'],
+    middle: ['Suddenly …','Then [FIGUR] saw …','All at once …','Oh no! …','Something happened …'],
+    end:    ['Luckily …','In the end …','After that everything …','[FIGUR] was very happy because …','From then on …'],
+  },
 };
 
 /* ── STATE ────────────────────────────────── */
@@ -1302,7 +1295,8 @@ function buildCharGrid() {
     const el = document.createElement('div');
     el.className = 'mini-card';
     el.id = `cc-${i}`;
-    el.innerHTML = `<span class="mc-emoji">${c.emoji}</span>${c.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${c.desc}</span>`;
+    const desc = IS_EN ? c.descEn : c.desc;
+    el.innerHTML = `<span class="mc-emoji">${c.emoji}</span>${c.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${desc}</span>`;
     el.onclick = () => { st.charIdx = i; selectMini('cc', i, CHARS.length); onCharSetChange(); };
     g.appendChild(el);
   });
@@ -1313,7 +1307,9 @@ function buildSettingGrid() {
     const el = document.createElement('div');
     el.className = 'mini-card';
     el.id = `sc-${i}`;
-    el.innerHTML = `<span class="mc-emoji">${s.emoji}</span>${s.name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${s.desc}</span>`;
+    const name = IS_EN ? s.nameEn : s.name;
+    const desc = IS_EN ? s.descEn : s.desc;
+    el.innerHTML = `<span class="mc-emoji">${s.emoji}</span>${name} <span style="color:var(--muted);font-size:.78rem;font-weight:600">${desc}</span>`;
     el.onclick = () => { st.setIdx = i; selectMini('sc', i, SETS.length); onCharSetChange(); };
     g.appendChild(el);
   });
@@ -1336,9 +1332,9 @@ function onCharSetChange() {
   const chipCLbl  = document.getElementById('chipCharLabel');
   const chipSLbl  = document.getElementById('chipSetLabel');
   if (char) { chipChar.classList.remove('empty'); chipCLbl.textContent = char.name; chipChar.querySelector('.chip-icon').textContent = char.emoji; }
-  else      { chipChar.classList.add('empty');    chipCLbl.textContent = 'Figur wählen…'; chipChar.querySelector('.chip-icon').textContent = '🧒'; }
-  if (set)  { chipSet.classList.remove('empty');  chipSLbl.textContent = set.name;  chipSet.querySelector('.chip-icon').textContent = set.emoji; }
-  else      { chipSet.classList.add('empty');     chipSLbl.textContent = 'Ort wählen…';  chipSet.querySelector('.chip-icon').textContent = '🗺️'; }
+  else      { chipChar.classList.add('empty');    chipCLbl.textContent = IS_EN ? 'Choose character…' : 'Figur wählen…'; chipChar.querySelector('.chip-icon').textContent = '🧒'; }
+  if (set)  { chipSet.classList.remove('empty');  chipSLbl.textContent = IS_EN ? set.nameEn : set.name;  chipSet.querySelector('.chip-icon').textContent = set.emoji; }
+  else      { chipSet.classList.add('empty');     chipSLbl.textContent = IS_EN ? 'Choose place…' : 'Ort wählen…';  chipSet.querySelector('.chip-icon').textContent = '🗺️'; }
 
   // setup step badges
   document.getElementById('numChar').className = 'setup-num' + (char ? ' done' : '');
@@ -1352,12 +1348,15 @@ function onCharSetChange() {
     if (se) se.textContent = set  ? set.emoji  : '🌲';
   });
 
-  const name = char ? char.name : 'die Figur';
-  const place = set ? set.name : 'dem Ort';
+  const name  = char ? char.name  : (IS_EN ? 'the character' : 'die Figur');
+  const place = set  ? (IS_EN ? set.nameEn : set.name) : (IS_EN ? 'the place' : 'dem Ort');
 
+  const sceneVerbs = IS_EN
+    ? { begin: 'explores', middle: 'experiences something at', end: 'ends up in' }
+    : { begin: 'erkundet', middle: 'erlebt etwas bei',         end: 'endet in'   };
   ['begin','middle','end'].forEach(part => {
     const lbl = document.getElementById(`scene-${part}-label`);
-    if (lbl) lbl.textContent = `${name} ${part === 'begin' ? 'erkundet' : part === 'middle' ? 'erlebt etwas bei' : 'endet in'} ${place}`;
+    if (lbl) lbl.textContent = `${name} ${sceneVerbs[part]} ${place}`;
   });
 
   // rebuild starters with name injected
@@ -1372,7 +1371,8 @@ function buildStarters(part, name, place) {
   const wrap = document.getElementById(`starters-${part}`);
   if (!wrap) return;
   wrap.innerHTML = '';
-  (STARTERS[part] || []).forEach(s => {
+  const langStarters = IS_EN ? STARTERS.en : STARTERS.de;
+  (langStarters[part] || []).forEach(s => {
     const text = s.replace('[FIGUR]', name).replace('[ORT]', place);
     const btn = document.createElement('button');
     btn.className = 'starter';

@@ -1,0 +1,370 @@
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bewertung – Meine Geschichte</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a2e;--ink2:#2d2d44;
+  --sky:#e8f4fd;--sky2:#c8e6f8;
+  --sun:#fff3cd;--sun2:#ffd966;--sun3:#e6b800;
+  --grass:#d4edda;--grass2:#5cb85c;--grass3:#2f7b39;
+  --coral:#ffe0d6;--coral2:#ff7043;--coral3:#d84315;
+  --lavender:#ede7f6;--lavender2:#7c4dff;--lavender3:#4527a0;
+  --white:#ffffff;--offwhite:#fafaf7;--muted:#7a7a8c;--border:#ddd8f0;
+  --shadow:0 4px 20px rgba(26,26,46,.10);
+  --radius:16px;--radius-sm:10px;
+  --font-head:'Baloo 2',cursive;--font-body:'Quicksand',sans-serif;
+}
+body{font-family:var(--font-body);background:var(--offwhite);color:var(--ink);min-height:100vh;padding:24px 16px 48px}
+.wrap{max-width:900px;margin:0 auto}
+.topbar{
+  background:linear-gradient(135deg,#1a1a2e,#2d2d5e);
+  color:#fff;border-radius:20px;padding:18px 20px;margin-bottom:18px;
+  box-shadow:var(--shadow);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;
+}
+.topbar-title{font-family:var(--font-head);font-size:1.4rem;line-height:1.1}
+.topbar-sub{font-size:.82rem;color:rgba(255,255,255,.75);margin-top:4px}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  font-family:var(--font-body);font-size:.95rem;font-weight:800;padding:12px 16px;
+  border-radius:12px;border:2px solid;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{background:linear-gradient(135deg,var(--lavender2),var(--lavender3));border-color:var(--lavender3);color:#fff}
+.btn-secondary{background:var(--white);border-color:var(--border);color:var(--ink2)}
+.btn-secondary:hover{background:var(--sky)}
+.card{
+  background:var(--white);border:1.5px solid var(--border);border-radius:20px;
+  box-shadow:var(--shadow);padding:22px 20px;margin-bottom:16px;
+}
+.card-title{font-family:var(--font-head);font-size:1.2rem;margin-bottom:6px}
+.card-sub{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.notice{
+  background:var(--sun);border:1.5px solid var(--sun2);color:#8a5c00;
+  border-radius:14px;padding:14px 16px;font-size:.95rem;line-height:1.6;
+}
+.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.meta-box{
+  background:var(--offwhite);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;
+}
+.meta-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:block;margin-bottom:4px}
+.meta-value{font-size:.98rem;font-weight:700;color:var(--ink)}
+.story-full{
+  background:#fffefb;border:2px solid var(--border);border-radius:16px;padding:18px;
+  line-height:1.9;font-size:1rem;white-space:pre-wrap;
+}
+.chapter{border:1.5px solid var(--border);border-radius:16px;padding:14px 15px;background:var(--offwhite);margin-bottom:12px}
+.chapter:last-child{margin-bottom:0}
+.chapter-label{font-family:var(--font-head);font-size:1rem;margin-bottom:8px}
+.chapter-text{white-space:pre-wrap;line-height:1.8;font-size:.98rem;margin-bottom:10px}
+.feedback-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fb-box{border-radius:12px;padding:10px 12px;font-size:.9rem;line-height:1.65}
+.fb-good{background:var(--grass);color:var(--grass3)}
+.fb-improve{background:var(--sky);color:#1a4a7a}
+.fb-label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.rating-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.star{
+  width:54px;height:54px;border-radius:50%;border:2px solid var(--border);
+  background:var(--white);font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+.star:hover{transform:scale(1.06);border-color:var(--sun3);background:var(--sun)}
+.star.active{background:var(--sun);border-color:var(--sun3)}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.8rem;font-weight:800;color:var(--ink2);margin-bottom:6px}
+.field textarea,.field input{
+  width:100%;border:2px solid var(--border);border-radius:12px;padding:12px 14px;
+  font:inherit;background:#fff;outline:none;
+}
+.field textarea:focus,.field input:focus{border-color:var(--lavender2)}
+.field textarea{min-height:110px;resize:vertical;line-height:1.7}
+.saved-box{
+  display:none;margin-top:14px;background:var(--grass);border:1.5px solid var(--grass2);color:var(--grass3);
+  border-radius:14px;padding:14px 16px;line-height:1.7;
+}
+.saved-box.show{display:block}
+.saved-title{font-weight:800;margin-bottom:5px}
+.saved-body{white-space:pre-wrap}
+.empty-state{text-align:center;padding:24px}
+.empty-state h2{font-family:var(--font-head);margin-bottom:8px}
+.empty-state p{color:var(--muted);line-height:1.7;margin-bottom:14px}
+.photo-wrap{margin-top:10px}
+.photo-wrap img{max-width:100%;border-radius:14px;border:2px solid var(--border);display:block}
+@media(max-width:700px){
+  .meta-grid,.feedback-row{grid-template-columns:1fr}
+}
+@media print{
+  body{background:#fff;padding:0}
+  .topbar-actions,.no-print{display:none!important}
+  .card,.topbar{box-shadow:none}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <div>
+      <div class="topbar-title">📝 Bewertung der Geschichte</div>
+      <div class="topbar-sub">Lehrkraft / Elternansicht</div>
+    </div>
+    <div class="topbar-actions no-print">
+      <a class="btn btn-secondary" href="story.html">◀ Zurück zur Geschichte</a>
+      <button class="btn btn-secondary" onclick="window.print()">🖨️ Drucken</button>
+    </div>
+  </header>
+
+  <div id="emptyState" class="card empty-state" style="display:none">
+    <h2>Keine Geschichte gefunden</h2>
+    <p>Öffne zuerst die Geschichte und gehe dann über das Bilderbuch oder den Bewertungsbutton auf diese Seite.</p>
+    <a class="btn btn-primary" href="story.html">📖 Zu story.html</a>
+  </div>
+
+  <div id="content" style="display:none">
+    <section class="card">
+      <div class="card-title">Übersicht</div>
+      <div class="card-sub">Die Geschichte des Kindes wurde von der Story-Seite übernommen.</div>
+      <div class="meta-grid">
+        <div class="meta-box">
+          <span class="meta-label">Sprache</span>
+          <div class="meta-value" id="metaLang">-</div>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">Kapitel</span>
+          <div class="meta-value" id="metaChapters">-</div>
+        </div>
+        <div class="meta-box">
+          <span class="meta-label">Gespeichert</span>
+          <div class="meta-value" id="metaSaved">-</div>
+        </div>
+      </div>
+      <div id="photoWrap" class="photo-wrap" style="display:none">
+        <div class="card-sub" style="margin-top:14px;margin-bottom:8px">Bild aus der Geschichte</div>
+        <img id="storyPhoto" alt="Bild aus der Geschichte">
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Komplette Geschichte</div>
+      <div class="card-sub">So sieht der gesamte Text des Kindes aus.</div>
+      <div class="story-full" id="fullStory"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Kapitel mit bisherigen Hinweisen</div>
+      <div class="card-sub">Hier siehst du jeden Teil der Geschichte mit vorhandenen Überarbeitungsnotizen.</div>
+      <div id="chaptersList"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-title">Eigene Bewertung</div>
+      <div class="card-sub">Gib eine Rückmeldung für das Kind. Die Hinweise werden lokal im Browser gespeichert.</div>
+
+      <div class="field">
+        <label for="reviewerName">Name der Lehrkraft / Eltern</label>
+        <input id="reviewerName" type="text" placeholder="Zum Beispiel: Frau Müller">
+      </div>
+
+      <div class="field">
+        <label>Bewertung mit Sternen</label>
+        <div class="rating-row" id="starRow">
+          <button type="button" class="star" data-value="1">⭐</button>
+          <button type="button" class="star" data-value="2">⭐</button>
+          <button type="button" class="star" data-value="3">⭐</button>
+          <button type="button" class="star" data-value="4">⭐</button>
+          <button type="button" class="star" data-value="5">⭐</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="feedbackGood">✅ Das war besonders gut</label>
+        <textarea id="feedbackGood" placeholder="Zum Beispiel: Spannende Idee, schöne Wörter, klarer Anfang …"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="feedbackImprove">💡 Das kann das Kind als Nächstes üben</label>
+        <textarea id="feedbackImprove" placeholder="Zum Beispiel: Noch mehr Adjektive, auf Satzzeichen achten, Nomen großschreiben …"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="finalComment">🗨️ Persönlicher Kommentar</label>
+        <textarea id="finalComment" placeholder="Zum Beispiel: Ich bin stolz auf deine Geschichte. Lies sie noch einmal laut vor."></textarea>
+      </div>
+
+      <div class="topbar-actions" style="margin-top:6px">
+        <button class="btn btn-primary" onclick="saveBewertung()">💾 Bewertung speichern</button>
+      </div>
+
+      <div id="savedBox" class="saved-box">
+        <div class="saved-title">Bewertung gespeichert</div>
+        <div id="savedBody" class="saved-body"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+const STORY_REVIEW_STORAGE_KEY = 'sw_story_review_payload_v1';
+const STORY_FEEDBACK_STORAGE_KEY = 'sw_story_feedback_payload_v1';
+
+let storyData = null;
+let currentRating = 0;
+
+function loadStoryForBewertung(){
+  try{
+    const raw = localStorage.getItem(STORY_REVIEW_STORAGE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(err){
+    console.error('Konnte Story-Daten nicht laden:', err);
+    return null;
+  }
+}
+
+function loadSavedBewertung(){
+  try{
+    const raw = localStorage.getItem(STORY_FEEDBACK_STORAGE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  }catch(err){
+    console.error('Konnte Bewertung nicht laden:', err);
+    return null;
+  }
+}
+
+function esc(text){
+  return String(text || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function formatLang(lang){
+  if(lang === 'both') return 'Deutsch / Englisch';
+  if(lang === 'en') return 'Englisch';
+  return 'Deutsch';
+}
+
+function formatDate(iso){
+  if(!iso) return '-';
+  try{
+    return new Date(iso).toLocaleString('de-DE');
+  }catch(err){
+    return iso;
+  }
+}
+
+function renderStory(){
+  document.getElementById('metaLang').textContent = formatLang(storyData.lang);
+  document.getElementById('metaChapters').textContent = String(storyData.chapters.length);
+  document.getElementById('metaSaved').textContent = formatDate(storyData.savedAt);
+  document.getElementById('fullStory').textContent = storyData.fullStory || 'Keine Geschichte gefunden.';
+
+  if(storyData.meta && storyData.meta.screenshotData){
+    document.getElementById('photoWrap').style.display = 'block';
+    document.getElementById('storyPhoto').src = storyData.meta.screenshotData;
+  }
+
+  const chaptersList = document.getElementById('chaptersList');
+  chaptersList.innerHTML = storyData.chapters.map(ch => `
+    <div class="chapter">
+      <div class="chapter-label">${esc(ch.icon)} ${esc(ch.label)}</div>
+      <div class="chapter-text">${esc(ch.text || 'Kein Text')}</div>
+      <div class="feedback-row">
+        <div class="fb-box fb-good">
+          <span class="fb-label">Schon notiert: Gut</span>
+          ${esc(ch.good || 'Noch keine Notiz')}
+        </div>
+        <div class="fb-box fb-improve">
+          <span class="fb-label">Schon notiert: Verbessern</span>
+          ${esc(ch.improve || 'Noch keine Notiz')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSavedBewertung(data){
+  if(!data) return;
+  document.getElementById('reviewerName').value = data.reviewerName || '';
+  document.getElementById('feedbackGood').value = data.feedbackGood || '';
+  document.getElementById('feedbackImprove').value = data.feedbackImprove || '';
+  document.getElementById('finalComment').value = data.finalComment || '';
+  currentRating = data.rating || 0;
+  updateStars();
+  if(data.savedText){
+    document.getElementById('savedBox').classList.add('show');
+    document.getElementById('savedBody').textContent = data.savedText;
+  }
+}
+
+function updateStars(){
+  document.querySelectorAll('.star').forEach(btn => {
+    const value = Number(btn.dataset.value);
+    btn.classList.toggle('active', value <= currentRating);
+  });
+}
+
+function saveBewertung(){
+  const reviewerName = document.getElementById('reviewerName').value.trim();
+  const feedbackGood = document.getElementById('feedbackGood').value.trim();
+  const feedbackImprove = document.getElementById('feedbackImprove').value.trim();
+  const finalComment = document.getElementById('finalComment').value.trim();
+
+  const lines = [];
+  if(reviewerName) lines.push('Name: ' + reviewerName);
+  if(currentRating) lines.push('Bewertung: ' + '⭐'.repeat(currentRating));
+  if(feedbackGood) lines.push('✅ Das war besonders gut:\n' + feedbackGood);
+  if(feedbackImprove) lines.push('💡 Das kann das Kind als Nächstes üben:\n' + feedbackImprove);
+  if(finalComment) lines.push('🗨️ Persönlicher Kommentar:\n' + finalComment);
+
+  const savedText = lines.join('\n\n') || 'Es wurde noch kein Text eingegeben.';
+
+  const payload = {
+    savedAt: new Date().toISOString(),
+    reviewerName,
+    rating: currentRating,
+    feedbackGood,
+    feedbackImprove,
+    finalComment,
+    savedText
+  };
+
+  try{
+    localStorage.setItem(STORY_FEEDBACK_STORAGE_KEY, JSON.stringify(payload));
+  }catch(err){
+    console.error('Konnte Bewertung nicht speichern:', err);
+  }
+
+  document.getElementById('savedBox').classList.add('show');
+  document.getElementById('savedBody').textContent = savedText;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  storyData = loadStoryForBewertung();
+
+  if(!storyData){
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('content').style.display = 'block';
+  renderStory();
+
+  document.querySelectorAll('.star').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentRating = Number(btn.dataset.value);
+      updateStars();
+    });
+  });
+
+  renderSavedBewertung(loadSavedBewertung());
+});
+</script>
+</body>
+</html>
+```
