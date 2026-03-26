@@ -47,7 +47,7 @@ textarea{
   border:1px solid #ccc;
 }
 textarea:focus{outline:3px solid #2f6f95;}
-button{
+button, select{
   background:#2f6f95;
   color:white;
   border:none;
@@ -58,7 +58,7 @@ button{
   margin-top:12px;
   margin-right:10px;
 }
-button:hover{background:#245b79;}
+button:hover, select:hover{background:#245b79;}
 .feedback{
   margin-top:18px;
   padding:15px;
@@ -81,12 +81,23 @@ button:hover{background:#245b79;}
 
 <div class="container">
 
+<!-- TEXT ÜBEN -->
 <div class="panel">
 <h2>1. Text schreiben</h2>
 <div class="instructions">
 Schreibe eine kurze Geschichte.<br>
+Wähle ein Thema unten oder lasse frei.<br>
 Drücke danach auf <b>Text prüfen</b>.
 </div>
+<select id="themeSelect">
+  <option value="all">Alles</option>
+  <option value="doppelkonsonanten">Doppelkonsonanten</option>
+  <option value="ie">ie / i</option>
+  <option value="das_dass">das / dass</option>
+  <option value="nomen_gross">Nomen groß</option>
+  <option value="satzanfang">Satzanfang groß</option>
+  <option value="satzende">Satzende Punkt</option>
+</select>
 <textarea id="textInput" placeholder="Heute ging ich in den Wald..."></textarea>
 <br>
 <button onclick="runCheck()">Text prüfen</button>
@@ -94,14 +105,21 @@ Drücke danach auf <b>Text prüfen</b>.
 <div id="feedback" class="feedback"></div>
 </div>
 
+<!-- DIKTAT ÜBEN -->
 <div class="panel">
 <h2>2. Diktat üben</h2>
 <div class="instructions">
-1. Klicke einmal auf die Seite (Audio aktivieren)<br>
+1. Wähle ein Thema<br>
 2. Höre den Satz Wort für Wort<br>
 3. Schreibe ihn auf<br>
 4. Prüfe dein Diktat
 </div>
+<select id="diktatThemeSelect" onchange="newDiktat()">
+  <option value="all">Alles</option>
+  <option value="doppelkonsonanten">Doppelkonsonanten</option>
+  <option value="ie">ie / i</option>
+  <option value="das_dass">das / dass</option>
+</select>
 <div id="diktatDisplay" class="diktatSentence">Klicke auf „Neues Diktat“</div>
 <button onclick="newDiktat()">Neues Diktat</button>
 <button id="playButton" onclick="playDiktat()" disabled>🔊 Satz hören</button>
@@ -109,12 +127,37 @@ Drücke danach auf <b>Text prüfen</b>.
 <br>
 <button onclick="checkDiktat()">Diktat prüfen</button>
 <div id="diktatFeedback" class="feedback"></div>
+<audio id="diktatAudio"></audio>
 </div>
 
 </div>
 
 <script>
-/* ---------- Textprüfung ---------- */
+/* ---------- GLOBAL ---------- */
+let currentDiktat=null;
+
+/* ---------- DIKTAT DATEN ---------- */
+const diktate={
+  doppelkonsonanten:[
+    {text:"Der Ball rollt schnell.", audio:"audio/doppelkonsonanten1.mp3"},
+    {text:"Die Mitte des Spielfelds ist markiert.", audio:"audio/doppelkonsonanten2.mp3"}
+  ],
+  ie:[
+    {text:"Ich habe viel zu tun.", audio:"audio/ie1.mp3"},
+    {text:"Er will ein Eis essen.", audio:"audio/ie2.mp3"}
+  ],
+  das_dass:[
+    {text:"Ich weiß, dass du müde bist.", audio:"audio/dass1.mp3"},
+    {text:"Das Haus ist groß.", audio:"audio/das1.mp3"}
+  ],
+  all:[
+    {text:"Der kleine Hund läuft durch den Wald.", audio:"audio/all1.mp3"},
+    {text:"Das Mädchen hört ein Geräusch im Garten.", audio:"audio/all2.mp3"},
+    {text:"Plötzlich fliegt ein Vogel über das Haus.", audio:"audio/all3.mp3"}
+  ]
+};
+
+/* ---------- TEXT ÜBEN ---------- */
 function clearText(){
   document.getElementById("textInput").value="";
   document.getElementById("feedback").innerHTML="";
@@ -126,110 +169,83 @@ function runCheck(){
     document.getElementById("feedback").innerHTML="<span class='warn'>Bitte schreibe mehr Text.</span>";
     return;
   }
+
+  let theme=document.getElementById("themeSelect").value;
   let feedback="";
-  let sentences=text.split(/[.!?]/).map(s=>s.trim()).filter(s=>s.length>0);
 
-  feedback+="<div class='rule'>Satzanfang groß</div>";
-  sentences.forEach(s=>{
-    let first=s.match(/[A-Za-zÄÖÜäöüß]/);
-    if(first && first[0]!==first[0].toUpperCase()){
-      feedback+="<div class='warn'>Ein Satz beginnt klein: '"+s+"'</div>";
-    }
-  });
-
-  feedback+="<div class='rule'>Satzende</div>";
-  if(!text.match(/[.!?]$/)){
-    feedback+="<div class='warn'>Am Ende fehlt ein Punkt.</div>";
-  }else{feedback+="<div class='good'>Satzende vorhanden.</div>";}
-
-  feedback+="<div class='rule'>Doppelte Wörter</div>";
-  let words=text.toLowerCase().split(/\s+/);
-  for(let i=0;i<words.length;i++){
-    if(words[i]===words[i+1]){
-      feedback+="<div class='warn'>Doppeltes Wort: "+words[i]+"</div>";
-    }
+  // GRUNDPRÜFUNGEN
+  if(theme==="all" || theme==="satzanfang"){
+    let sentences=text.split(/[.!?]/).map(s=>s.trim()).filter(s=>s.length>0);
+    sentences.forEach(s=>{
+      let first=s.match(/[A-Za-zÄÖÜäöüß]/);
+      if(first && first[0]!==first[0].toUpperCase()){
+        feedback+="<div class='warn'>Satzanfang klein: '"+s+"'</div>";
+      }
+    });
   }
 
-  feedback+="<div class='rule'>Sehr lange Sätze</div>";
-  sentences.forEach(s=>{
-    if(s.split(" ").length>15){
-      feedback+="<div class='warn'>Sehr langer Satz: "+s+"</div>";
-    }
-  });
+  if(theme==="all" || theme==="satzende"){
+    if(!text.match(/[.!?]$/)){
+      feedback+="<div class='warn'>Am Ende fehlt ein Punkt.</div>";
+    } else {feedback+="<div class='good'>Satzende vorhanden.</div>";}
+  }
 
-  feedback+="<div class='rule'>Nomen groß schreiben</div>";
-  let nouns=["hund","katze","haus","wald","baum","freund","schule","garten"];
-  words.forEach(w=>{
-    if(nouns.includes(w)){
-      feedback+="<div class='warn'>Nomen groß schreiben: "+w+"</div>";
-    }
-  });
+  if(theme==="all" || theme==="nomen_gross"){
+    let nouns=["hund","katze","haus","wald","baum","freund","schule","garten"];
+    text.toLowerCase().split(/\s+/).forEach(w=>{
+      if(nouns.includes(w)){
+        feedback+="<div class='warn'>Nomen groß schreiben: "+w+"</div>";
+      }
+    });
+  }
 
-  feedback+="<div class='rule'>das oder dass</div>";
-  if(text.includes("dass das")){feedback+="<div class='warn'>Überprüfe: dass / das</div>";}
+  if(theme==="all" || theme==="doppelkonsonanten"){
+    let doubles=["ball","mitte","tasse","klasse"];
+    text.toLowerCase().split(/\s+/).forEach(w=>{
+      if(doubles.includes(w)){
+        feedback+="<div class='good'>Doppelkonsonant korrekt erkannt: "+w+"</div>";
+      }
+    });
+  }
 
-  feedback+="<div class='rule'>Viele 'und'</div>";
-  let undCount=(text.match(/\bund\b/g)||[]).length;
-  if(undCount>=3){feedback+="<div class='warn'>Du benutzt oft 'und'.</div>";}
+  if(theme==="all" || theme==="ie"){
+    let words=text.toLowerCase().split(/\s+/);
+    words.forEach(w=>{
+      if(w.includes("ie")) feedback+="<div class='good'>„ie“-Wort erkannt: "+w+"</div>";
+    });
+  }
 
-  feedback+="<div class='rule'>Rechtschreibung</div>";
-  let mistakes=[];
-  words.forEach(w=>{if(w.length>9) mistakes.push(w);});
-  mistakes=[...new Set(mistakes)];
-  if(mistakes.length>0){
-    feedback+="<div class='warn'>Überprüfe diese Wörter:</div>"+mistakes.join(", ");
-  }else{feedback+="<div class='good'>Keine auffälligen Fehler.</div>";}
+  if(theme==="all" || theme==="das_dass"){
+    if(text.includes("dass")) feedback+="<div class='good'>„dass“ erkannt</div>";
+    if(text.includes("das")) feedback+="<div class='good'>„das“ erkannt</div>";
+  }
 
   document.getElementById("feedback").innerHTML=feedback;
 }
 
-/* ---------- Diktat ---------- */
-let currentDiktat="";
-const diktate=[
-  "Der kleine Hund läuft durch den Wald.",
-  "Das Mädchen hört ein Geräusch im Garten.",
-  "Der Junge findet einen Schatz.",
-  "Plötzlich fliegt ein Vogel über das Haus.",
-  "Am Morgen geht die Katze in den Garten."
-];
-
-let germanVoice=null;
-document.body.addEventListener("click",()=>{
-  const voices=speechSynthesis.getVoices();
-  germanVoice=voices.find(v=>v.lang.startsWith("de"))||voices[0];
-  document.getElementById("playButton").disabled=false;
-},{once:true});
-
+/* ---------- DIKTAT ---------- */
 function newDiktat(){
-  currentDiktat=diktate[Math.floor(Math.random()*diktate.length)];
-  document.getElementById("diktatDisplay").innerText="Höre den Satz Wort für Wort.";
+  let theme=document.getElementById("diktatThemeSelect").value;
+  let pool=diktate[theme] || diktate["all"];
+  currentDiktat=pool[Math.floor(Math.random()*pool.length)];
+  document.getElementById("diktatDisplay").innerText="Höre den Satz.";
   document.getElementById("diktatInput").value="";
   document.getElementById("diktatFeedback").innerHTML="";
+  document.getElementById("playButton").disabled=false;
 }
 
 function playDiktat(){
   if(!currentDiktat) return;
-  if(!germanVoice){setTimeout(playDiktat,100); return;}
-  const words=currentDiktat.split(" ");
-  let delay=0;
-  words.forEach(word=>{
-    setTimeout(()=>{
-      let utter=new SpeechSynthesisUtterance(word);
-      utter.voice=germanVoice;
-      utter.lang="de-DE";
-      utter.rate=0.7;
-      utter.pitch=1;
-      speechSynthesis.speak(utter);
-    }, delay);
-    delay+=800; // 800ms pause between words
-  });
+  const audio=document.getElementById("diktatAudio");
+  audio.src=currentDiktat.audio;
+  audio.play();
 }
 
 function checkDiktat(){
   let input=document.getElementById("diktatInput").value.trim();
   if(!input){document.getElementById("diktatFeedback").innerHTML="<span class='warn'>Bitte schreibe den Satz.</span>"; return;}
   let inputWords=input.split(" ");
-  let correctWords=currentDiktat.split(" ");
+  let correctWords=currentDiktat.text.split(" ");
   let result="";
   correctWords.forEach((w,i)=>{
     if(inputWords[i]!==w){result+="Fehler bei Wort "+(i+1)+": "+w+"<br>";}
