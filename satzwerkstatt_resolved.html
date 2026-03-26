@@ -1,539 +1,342 @@
+```html
 <!DOCTYPE html>
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Diktat Übung – Klasse 3</title>
+<title>Satzwerkstatt – Klasse 3/4</title>
+
 <style>
-  :root {
-    --bg: #fef9f0;
-    --card: #ffffff;
-    --primary: #4a90d9;
-    --primary-dark: #2c6fad;
-    --success: #27ae60;
-    --error: #e74c3c;
-    --warn: #f39c12;
-    --text: #2c3e50;
-    --muted: #7f8c8d;
-    --border: #e0e0e0;
-    --star: #f1c40f;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  header h1 { font-size: 2rem; color: var(--primary-dark); }
-  header p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; }
 
-  .progress-bar-wrap {
-    width: 100%;
-    max-width: 560px;
-    background: var(--border);
-    border-radius: 20px;
-    height: 12px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary), #74b9ff);
-    border-radius: 20px;
-    transition: width 0.4s ease;
-  }
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#f4f6f8;
+margin:0;
+color:#222;
+}
 
-  .card {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 32px 28px;
-    width: 100%;
-    max-width: 560px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-  }
+header{
+background:#2f6f95;
+color:white;
+padding:16px;
+font-size:22px;
+}
 
-  .step-label {
-    font-size: 0.8rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-  }
+.container{
+max-width:900px;
+margin:auto;
+padding:20px;
+}
 
-  .type-badge {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    background: #eaf4ff;
-    color: var(--primary-dark);
-  }
+.panel{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:8px;
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
 
-  .sentence-box {
-    background: #f0f7ff;
-    border-left: 4px solid var(--primary);
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 1rem;
-    color: var(--text);
-    margin-bottom: 20px;
-    font-style: italic;
-    line-height: 1.5;
-    min-height: 48px;
-  }
+textarea{
+width:100%;
+height:180px;
+font-size:18px;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}
 
-  .audio-section {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-  }
-  .btn-audio {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 12px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s, transform 0.1s;
-  }
-  .btn-audio:hover { background: var(--primary-dark); transform: scale(1.03); }
-  .btn-audio:active { transform: scale(0.98); }
-  .btn-audio.secondary {
-    background: #ecf0f1;
-    color: var(--text);
-  }
-  .btn-audio.secondary:hover { background: #dfe6e9; }
+button{
+background:#2f6f95;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:6px;
+font-size:16px;
+margin-top:10px;
+cursor:pointer;
+}
 
-  .input-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .word-input {
-    width: 100%;
-    font-size: 1.4rem;
-    padding: 12px 16px;
-    border: 2.5px solid var(--border);
-    border-radius: 12px;
-    outline: none;
-    transition: border-color 0.2s;
-    font-family: inherit;
-    color: var(--text);
-    background: #fafafa;
-  }
-  .word-input:focus { border-color: var(--primary); background: #fff; }
-  .word-input.correct { border-color: var(--success); background: #f0fff4; }
-  .word-input.incorrect { border-color: var(--error); background: #fff5f5; }
+button:hover{
+background:#255a77;
+}
 
-  .sentence-input {
-    width: 100%;
-    font-size: 1rem;
-    padding: 12px 16px;
-    border: 2.5px solid var(--border);
-    border-radius: 12px;
-    outline: none;
-    transition: border-color 0.2s;
-    font-family: inherit;
-    color: var(--text);
-    background: #fafafa;
-    resize: vertical;
-    min-height: 80px;
-    margin-top: 16px;
-  }
-  .sentence-input:focus { border-color: var(--primary); background: #fff; }
-  .sentence-input.correct { border-color: var(--success); background: #f0fff4; }
-  .sentence-input.incorrect { border-color: var(--error); background: #fff5f5; }
+.feedback{
+margin-top:15px;
+padding:10px;
+background:#eef3f7;
+border-radius:6px;
+}
 
-  .feedback {
-    margin-top: 12px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    min-height: 24px;
-  }
-  .feedback.ok { color: var(--success); }
-  .feedback.bad { color: var(--error); }
+.error{
+background:#ffd6d6;
+padding:2px 4px;
+border-radius:3px;
+}
 
-  .btn-check {
-    margin-top: 20px;
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .btn-check:hover { opacity: 0.92; transform: scale(1.01); }
-  .btn-check:active { transform: scale(0.98); }
-  .btn-check:disabled { opacity: 0.5; cursor: not-allowed; }
+.good{
+color:#2c9c59;
+}
 
-  .btn-next {
-    margin-top: 12px;
-    width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    background: #ecf0f1;
-    color: var(--text);
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: background 0.2s;
-    display: none;
-  }
-  .btn-next:hover { background: #dfe6e9; }
-  .btn-next.visible { display: block; }
+.warn{
+color:#c47a00;
+}
 
-  /* Results */
-  .results-card {
-    background: var(--card);
-    border-radius: 20px;
-    padding: 36px 28px;
-    width: 100%;
-    max-width: 560px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.09);
-    text-align: center;
-    display: none;
-  }
-  .results-card.visible { display: block; }
-  .score-ring {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: #fff;
-  }
-  .stars { font-size: 2rem; margin-bottom: 12px; letter-spacing: 4px; }
-  .results-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
-  .results-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 24px; }
+.step{
+font-weight:bold;
+margin-top:10px;
+}
 
-  .review-list { text-align: left; margin-bottom: 24px; }
-  .review-item {
-    padding: 10px 14px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-  }
-  .review-item.ok { background: #f0fff4; }
-  .review-item.bad { background: #fff5f5; }
-  .review-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-  .review-text strong { display: block; font-size: 1rem; }
-  .review-text span { color: var(--muted); font-size: 0.82rem; }
-
-  .btn-restart {
-    padding: 14px 32px;
-    font-size: 1rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-    color: #fff;
-    border: none;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-  .btn-restart:hover { opacity: 0.9; }
-
-  @media (max-width: 480px) {
-    header h1 { font-size: 1.5rem; }
-    .card { padding: 22px 16px; }
-  }
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>✏️ Diktat Übung</h1>
-  <p>Klasse 3 – Bayern LehrplanPLUS</p>
+✏️ Satzwerkstatt – Schreiben prüfen (Klasse 3/4)
 </header>
 
-<div class="progress-bar-wrap">
-  <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+<div class="container">
+
+<div class="panel">
+
+<h2>1 Schreiben</h2>
+
+<textarea id="textInput" placeholder="Schreibe hier deine Geschichte..."></textarea>
+
+<button onclick="runCheck()">Text prüfen</button>
+
+<div id="feedback" class="feedback"></div>
+
 </div>
 
-<div class="card" id="quizCard">
-  <div class="step-label" id="stepLabel">Wort 1 von 12</div>
-  <div class="type-badge" id="typeBadge">Nomen</div>
-  <div class="sentence-box" id="sentenceBox">Klicke auf „Vorlesen" um den Satz zu hören.</div>
 
-  <div class="audio-section">
-    <button class="btn-audio" id="btnWord" onclick="speakWord()">🔊 Wort vorlesen</button>
-    <button class="btn-audio secondary" id="btnSentence" onclick="speakSentence()">📖 Satz vorlesen</button>
-  </div>
 
-  <div class="input-label">Schreibe das Wort:</div>
-  <input class="word-input" type="text" id="wordInput" placeholder="Hier schreiben…" autocomplete="off" autocorrect="off" spellcheck="false" />
-  <div class="feedback" id="wordFeedback"></div>
+<div class="panel">
 
-  <div class="input-label" style="margin-top:16px" id="sentenceLabel">Schreibe den Satz ab (nach dem Hören):</div>
-  <textarea class="sentence-input" id="sentenceInput" placeholder="Satz hier eingeben…" spellcheck="false"></textarea>
-  <div class="feedback" id="sentenceFeedback"></div>
+<h2>2 Diktat üben</h2>
 
-  <button class="btn-check" id="btnCheck" onclick="checkAnswer()">Überprüfen ✓</button>
-  <button class="btn-next" id="btnNext" onclick="nextQuestion()">Weiter →</button>
+<div id="diktatDisplay">Klicke auf "Neues Diktat".</div>
+
+<button onclick="newDiktat()">Neues Diktat</button>
+<button onclick="playDiktat()">🔊 Anhören</button>
+
+<textarea id="diktatInput" placeholder="Schreibe den Satz hier..."></textarea>
+
+<button onclick="checkDiktat()">Diktat prüfen</button>
+
+<div id="diktatFeedback" class="feedback"></div>
+
 </div>
 
-<div class="results-card" id="resultsCard">
-  <div class="score-ring" id="scoreRing"></div>
-  <div class="stars" id="starsDisplay"></div>
-  <div class="results-title" id="resultsTitle"></div>
-  <div class="results-sub" id="resultsSub"></div>
-  <div class="review-list" id="reviewList"></div>
-  <button class="btn-restart" onclick="restart()">🔄 Nochmal üben</button>
 </div>
+
+
 
 <script>
-// ── Word bank: Klasse 3 Bayern ─────────────────────────────────────────────
-const allWords = [
-  // Nomen (capital letters)
-  { word:"Schmetterling", type:"Nomen", sentence:"Der bunte Schmetterling sitzt auf der Blume." },
-  { word:"Frühstück",     type:"Nomen", sentence:"Jeden Morgen essen wir zusammen Frühstück." },
-  { word:"Freundschaft",  type:"Nomen", sentence:"Freundschaft ist sehr wichtig im Leben." },
-  { word:"Bahnhof",       type:"Nomen", sentence:"Wir warten am Bahnhof auf den Zug." },
-  { word:"Geburtstag",    type:"Nomen", sentence:"An meinem Geburtstag bekomme ich Geschenke." },
-  { word:"Zeichnung",     type:"Nomen", sentence:"Die Zeichnung hängt jetzt an der Wand." },
-  { word:"Fahrrrad",      type:"Nomen", sentence:"Mein Fahrrad hat eine rote Klingel." },
-  // ie / ei / eu
-  { word:"spielen",  type:"ie/ei/eu", sentence:"Die Kinder spielen nach der Schule im Garten." },
-  { word:"schreiben", type:"ie/ei/eu", sentence:"Ich schreibe einen Brief an meine Oma." },
-  { word:"Freude",   type:"ie/ei/eu", sentence:"Die Freude war groß, als die Sonne schien." },
-  { word:"fliegen",  type:"ie/ei/eu", sentence:"Die Vögel fliegen im Herbst in den Süden." },
-  { word:"reisen",   type:"ie/ei/eu", sentence:"Im Sommer reisen wir ans Meer." },
-  // sch / sp / st
-  { word:"Schule",   type:"sch/sp/st", sentence:"In der Schule lernen wir Lesen und Rechnen." },
-  { word:"sprechen", type:"sch/sp/st", sentence:"Bitte spreche laut und deutlich." },
-  { word:"stellen",  type:"sch/sp/st", sentence:"Stell das Glas auf den Tisch." },
-  { word:"Straße",   type:"sch/sp/st", sentence:"Wir überqueren die Straße an der Ampel." },
-  { word:"Schrank",  type:"sch/sp/st", sentence:"Ich lege meine Kleider in den Schrank." },
-  // Dehnungs-h
-  { word:"fahren",   type:"Dehnungs-h", sentence:"Wir fahren am Wochenende zu Oma." },
-  { word:"Stuhl",    type:"Dehnungs-h", sentence:"Der Stuhl steht neben dem Tisch." },
-  { word:"Zahl",     type:"Dehnungs-h", sentence:"Welche Zahl kommt nach der Sieben?" },
-  { word:"Wahl",     type:"Dehnungs-h", sentence:"Er hatte die Wahl zwischen Apfel und Birne." },
-  // Verben & Adjektive
-  { word:"arbeiten",  type:"Verb/Adj.", sentence:"Mein Vater muss heute lange arbeiten." },
-  { word:"ruhig",     type:"Verb/Adj.", sentence:"Es ist sehr ruhig im Wald." },
-  { word:"wichtig",   type:"Verb/Adj.", sentence:"Schlafen ist sehr wichtig für das Gehirn." },
-  { word:"wünschen",  type:"Verb/Adj.", sentence:"Ich wünsche mir ein neues Buch." },
+
+const commonWords = [
+"der","die","das","ein","eine","und","ich","du","er","sie","es",
+"wir","ging","sah","kam","lief","war","hatte","haus","hund",
+"katze","wald","baum","kind","spiel","gingen","waren","hatten",
+"gehen","sehen","laufen","spielen","mädchen","freund","freundin"
 ];
 
-// ── State ──────────────────────────────────────────────────────────────────
-let questions = [];
-let current = 0;
-let results = [];
-let checked = false;
+function runCheck(){
 
-// ── Init ───────────────────────────────────────────────────────────────────
-function shuffle(arr) {
-  return [...arr].sort(() => Math.random() - 0.5);
+let text=document.getElementById("textInput").value.trim();
+
+let feedback="";
+
+if(text.length<10){
+
+feedback="Bitte schreibe einen längeren Text.";
+
+document.getElementById("feedback").innerHTML=feedback;
+
+return;
+
 }
 
-function restart() {
-  questions = shuffle(allWords).slice(0, 12);
-  current = 0;
-  results = [];
-  checked = false;
-  document.getElementById('resultsCard').classList.remove('visible');
-  document.getElementById('quizCard').style.display = '';
-  document.getElementById('progressBar').style.width = '0%';
-  loadQuestion();
+let sentences=text
+.split(/[.!?]/)
+.map(s=>s.trim())
+.filter(s=>s.length>0);
+
+
+feedback+="<div class='step'>Schritt 1: Satzanfänge</div>";
+
+sentences.forEach(s=>{
+
+let first=s.match(/[A-Za-zÄÖÜäöüß]/);
+
+if(first && first[0]!==first[0].toUpperCase()){
+
+feedback+="<div class='warn'>Satzanfang klein: "+s+"</div>";
+
 }
 
-function loadQuestion() {
-  checked = false;
-  const q = questions[current];
-  const total = questions.length;
+});
 
-  document.getElementById('stepLabel').textContent = `Wort ${current + 1} von ${total}`;
-  document.getElementById('typeBadge').textContent = q.type;
-  document.getElementById('sentenceBox').textContent = 'Klicke auf „Vorlesen" um den Satz zu hören.';
 
-  const wi = document.getElementById('wordInput');
-  wi.value = '';
-  wi.className = 'word-input';
-  wi.disabled = false;
 
-  const si = document.getElementById('sentenceInput');
-  si.value = '';
-  si.className = 'sentence-input';
-  si.disabled = false;
+feedback+="<div class='step'>Schritt 2: Satzzeichen</div>";
 
-  document.getElementById('wordFeedback').textContent = '';
-  document.getElementById('wordFeedback').className = 'feedback';
-  document.getElementById('sentenceFeedback').textContent = '';
-  document.getElementById('sentenceFeedback').className = 'feedback';
+if(!text.match(/[.!?]$/)){
 
-  document.getElementById('btnCheck').disabled = false;
-  document.getElementById('btnNext').classList.remove('visible');
+feedback+="<div class='warn'>Am Ende fehlt ein Punkt.</div>";
 
-  document.getElementById('progressBar').style.width = (current / total * 100) + '%';
+}else{
 
-  wi.focus();
+feedback+="<div class='good'>Satzende vorhanden.</div>";
+
 }
 
-// ── Speech ─────────────────────────────────────────────────────────────────
-function speak(text) {
-  if (!window.speechSynthesis) return alert('Sprachausgabe nicht verfügbar.');
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'de-DE';
-  u.rate = 0.85;
-  window.speechSynthesis.speak(u);
+
+
+feedback+="<div class='step'>Schritt 3: Wortwiederholungen</div>";
+
+let starts={};
+
+sentences.forEach(s=>{
+
+let word=s.split(" ")[0].toLowerCase();
+
+starts[word]=(starts[word]||0)+1;
+
+});
+
+for(let w in starts){
+
+if(starts[w]>=3){
+
+feedback+="<div class='warn'>Viele Sätze beginnen mit '"+w+"'.</div>";
+
 }
 
-function speakWord() {
-  speak(questions[current].word);
 }
 
-function speakSentence() {
-  const q = questions[current];
-  document.getElementById('sentenceBox').textContent = q.sentence;
-  speak(q.sentence);
+
+
+feedback+="<div class='step'>Schritt 4: mögliche Rechtschreibfehler</div>";
+
+let words=text.toLowerCase().match(/\b[\wäöüß]+\b/g);
+
+let errors=[];
+
+words.forEach(w=>{
+
+if(!commonWords.includes(w) && w.length>4){
+
+errors.push(w);
+
 }
 
-// ── Check ──────────────────────────────────────────────────────────────────
-function normalize(s) {
-  return s.trim().replace(/\s+/g, ' ')
-    .replace(/[.!?]$/, '')   // ignore trailing punctuation
-    .toLowerCase();
+});
+
+errors=[...new Set(errors)];
+
+if(errors.length>0){
+
+feedback+="<div class='warn'>Überprüfe diese Wörter:</div>";
+
+feedback+=errors.join(", ");
+
+}else{
+
+feedback+="<div class='good'>Keine offensichtlichen Fehler gefunden.</div>";
+
 }
 
-function checkAnswer() {
-  if (checked) return;
-  checked = true;
 
-  const q = questions[current];
-  const wordVal = document.getElementById('wordInput').value;
-  const sentVal = document.getElementById('sentenceInput').value;
 
-  // Word check (case-sensitive for Nomen)
-  const wordCorrect = wordVal.trim() === q.word;
-  const wi = document.getElementById('wordInput');
-  wi.disabled = true;
-  wi.classList.add(wordCorrect ? 'correct' : 'incorrect');
+document.getElementById("feedback").innerHTML=feedback;
 
-  const wf = document.getElementById('wordFeedback');
-  if (wordCorrect) {
-    wf.textContent = '✅ Richtig!';
-    wf.className = 'feedback ok';
-  } else {
-    wf.textContent = `❌ Richtig: „${q.word}"`;
-    wf.className = 'feedback bad';
-  }
-
-  // Sentence check (case-insensitive, ignore trailing punctuation)
-  const sentCorrect = sentVal.trim().length > 0 && normalize(sentVal) === normalize(q.sentence);
-  const si = document.getElementById('sentenceInput');
-  si.disabled = true;
-  si.classList.add(sentCorrect ? 'correct' : 'incorrect');
-
-  const sf = document.getElementById('sentenceFeedback');
-  if (sentVal.trim().length === 0) {
-    sf.textContent = '⚠️ Keinen Satz eingegeben.';
-    sf.className = 'feedback bad';
-  } else if (sentCorrect) {
-    sf.textContent = '✅ Satz korrekt!';
-    sf.className = 'feedback ok';
-  } else {
-    sf.textContent = `❌ Richtig: „${q.sentence}"`;
-    sf.className = 'feedback bad';
-  }
-
-  results.push({ q, wordCorrect, sentCorrect });
-
-  document.getElementById('btnCheck').disabled = true;
-  document.getElementById('btnNext').classList.add('visible');
-  document.getElementById('btnNext').textContent =
-    current + 1 < questions.length ? 'Weiter →' : 'Ergebnis ansehen 🎉';
 }
 
-function nextQuestion() {
-  current++;
-  if (current < questions.length) {
-    loadQuestion();
-  } else {
-    showResults();
-  }
+
+
+const diktate=[
+
+"Plötzlich lief der kleine Hund in den Wald.",
+"Am Morgen hörte das Mädchen ein Geräusch.",
+"Der mutige Ritter kämpfte gegen den Drachen.",
+"Langsam ging die Katze über den Zaun."
+
+];
+
+let currentDiktat="";
+
+function newDiktat(){
+
+currentDiktat=diktate[Math.floor(Math.random()*diktate.length)];
+
+document.getElementById("diktatDisplay").innerText="Höre den Satz.";
+
+document.getElementById("diktatInput").value="";
+
+document.getElementById("diktatFeedback").innerHTML="";
+
 }
 
-// ── Results ────────────────────────────────────────────────────────────────
-function showResults() {
-  document.getElementById('quizCard').style.display = 'none';
-  const rc = document.getElementById('resultsCard');
-  rc.classList.add('visible');
-  document.getElementById('progressBar').style.width = '100%';
 
-  const total = results.length;
-  const wordOk = results.filter(r => r.wordCorrect).length;
-  const sentOk = results.filter(r => r.sentCorrect).length;
-  const score = wordOk + sentOk;
-  const maxScore = total * 2;
-  const pct = Math.round(score / maxScore * 100);
 
-  // Ring color
-  const ring = document.getElementById('scoreRing');
-  ring.textContent = pct + '%';
-  if (pct >= 80) ring.style.background = 'linear-gradient(135deg,#27ae60,#2ecc71)';
-  else if (pct >= 50) ring.style.background = 'linear-gradient(135deg,#f39c12,#f1c40f)';
-  else ring.style.background = 'linear-gradient(135deg,#e74c3c,#c0392b)';
+function playDiktat(){
 
-  // Stars
-  let stars = pct >= 90 ? '⭐⭐⭐' : pct >= 70 ? '⭐⭐' : pct >= 40 ? '⭐' : '💪';
-  document.getElementById('starsDisplay').textContent = stars;
+let speech=new SpeechSynthesisUtterance(currentDiktat);
 
-  // Title
-  let title = pct >= 80 ? 'Super gemacht! 🎉' : pct >= 50 ? 'Gut geübt! Weiter so! 👍' : 'Noch üben – du schaffst das! 💪';
-  document.getElementById('resultsTitle').textContent = title;
-  document.getElementById('resultsSub').textContent =
-    `Wörter: ${wordOk}/${total} richtig · Sätze: ${sentOk}/${total} richtig`;
+speech.lang="de-DE";
 
-  // Review list
-  const list = document.getElementById('reviewList');
-  list.innerHTML = '';
-  results.forEach(r => {
-    const ok = r.wordCorrect && r.sentCorrect;
-    const div = document.createElement('div');
-    div.className = 'review-item ' + (ok ? 'ok' : 'bad');
-    div.innerHTML = `
-      <div class="review-icon">${ok ? '✅' : '❌'}</div>
-      <div class="review-text">
-        <strong>${r.q.word}</strong>
-        <span>${r.wordCorrect ? '✓ Wort' : '✗ Wort'} · ${r.sentCorrect ? '✓ Satz' : '✗ Satz'}</span>
-      </div>`;
-    list.appendChild(div);
-  });
+speech.rate=0.8;
+
+speechSynthesis.speak(speech);
+
 }
 
-// ── Start ──────────────────────────────────────────────────────────────────
-restart();
+
+
+function checkDiktat(){
+
+let input=document.getElementById("diktatInput").value.trim();
+
+let correct=currentDiktat;
+
+let result="";
+
+if(!input){
+
+result="Bitte schreibe den Satz.";
+
+document.getElementById("diktatFeedback").innerHTML=result;
+
+return;
+
+}
+
+let inputWords=input.split(" ");
+
+let correctWords=correct.split(" ");
+
+correctWords.forEach((word,i)=>{
+
+if(inputWords[i]!==word){
+
+result+="Fehler bei Wort "+(i+1)+": "+word+"<br>";
+
+}
+
+});
+
+if(result===""){
+
+result="<span class='good'>Perfekt geschrieben!</span>";
+
+}
+
+document.getElementById("diktatFeedback").innerHTML=result;
+
+}
+
 </script>
+
 </body>
 </html>
+```
