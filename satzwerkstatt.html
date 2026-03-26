@@ -97,9 +97,10 @@ Drücke danach auf <b>Text prüfen</b>.
 <div class="panel">
 <h2>2. Diktat üben</h2>
 <div class="instructions">
-1. Höre den Satz<br>
-2. Schreibe ihn auf<br>
-3. Prüfe dein Diktat
+1. Klicke irgendwo auf die Seite (einmal) um die Audio-Funktion zu aktivieren.<br>
+2. Höre den Satz<br>
+3. Schreibe ihn auf<br>
+4. Prüfe dein Diktat
 </div>
 <div id="diktatDisplay" class="diktatSentence">Klicke auf „Neues Diktat“</div>
 <button onclick="newDiktat()">Neues Diktat</button>
@@ -183,6 +184,22 @@ function runCheck(){
 }
 
 /* ---------- Diktat ---------- */
+let currentDiktat = "";
+let voicesLoaded=false;
+let germanVoice=null;
+const playBtn=document.getElementById("playButton");
+
+function initVoices(){
+  const voices=speechSynthesis.getVoices();
+  if(voices.length===0){setTimeout(initVoices,100);return;}
+  germanVoice=voices.find(v=>v.lang.startsWith("de"))||voices[0];
+  voicesLoaded=true;
+  playBtn.disabled=false;
+}
+
+// Initialize voices after first click anywhere
+document.body.addEventListener("click", initVoices, {once:true});
+
 const diktate=[
   "Der kleine Hund läuft durch den Wald.",
   "Das Mädchen hört ein Geräusch im Garten.",
@@ -190,21 +207,6 @@ const diktate=[
   "Plötzlich fliegt ein Vogel über das Haus.",
   "Am Morgen geht die Katze in den Garten."
 ];
-
-let voicesLoaded=false;
-let germanVoice=null;
-const playBtn=document.getElementById("playButton");
-
-function loadVoices(){
-  const voices=speechSynthesis.getVoices();
-  if(voices.length===0) return;
-  germanVoice=voices.find(v=>v.lang==="de-DE"||v.lang.startsWith("de"));
-  if(!germanVoice) germanVoice=voices[0];
-  voicesLoaded=true;
-  playBtn.disabled=false; // enable button
-}
-
-speechSynthesis.onvoiceschanged=loadVoices;
 
 function newDiktat(){
   currentDiktat=diktate[Math.floor(Math.random()*diktate.length)];
@@ -214,33 +216,25 @@ function newDiktat(){
 }
 
 function playDiktat(){
-  if(currentDiktat==="") return;
-  if(!voicesLoaded){
-    setTimeout(playDiktat,200);
-    return;
-  }
-  let speech=new SpeechSynthesisUtterance(currentDiktat);
-  speech.lang="de-DE";
-  if(germanVoice) speech.voice=germanVoice;
-  speech.rate=0.75;
-  speech.pitch=1;
+  if(!currentDiktat) return;
+  if(!voicesLoaded){setTimeout(playDiktat,100);return;}
+  let utter=new SpeechSynthesisUtterance(currentDiktat);
+  utter.lang="de-DE";
+  utter.voice=germanVoice;
+  utter.rate=0.75;
+  utter.pitch=1;
   speechSynthesis.cancel();
-  speechSynthesis.speak(speech);
+  speechSynthesis.speak(utter);
 }
 
 function checkDiktat(){
   let input=document.getElementById("diktatInput").value.trim();
-  if(!input){
-    document.getElementById("diktatFeedback").innerHTML="<span class='warn'>Bitte schreibe den Satz.</span>";
-    return;
-  }
+  if(!input){document.getElementById("diktatFeedback").innerHTML="<span class='warn'>Bitte schreibe den Satz.</span>"; return;}
   let inputWords=input.split(" ");
   let correctWords=currentDiktat.split(" ");
   let result="";
   correctWords.forEach((w,i)=>{
-    if(inputWords[i]!==w){
-      result+="Fehler bei Wort "+(i+1)+": "+w+"<br>";
-    }
+    if(inputWords[i]!==w){result+="Fehler bei Wort "+(i+1)+": "+w+"<br>";}
   });
   if(result==="") result="<span class='good'>Sehr gut! Alles richtig.</span>";
   document.getElementById("diktatFeedback").innerHTML=result;
