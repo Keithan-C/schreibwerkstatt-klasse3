@@ -6,7 +6,6 @@
 <title>Satzwerkstatt – Schreiben üben</title>
 
 <style>
-
 body{
 font-family: Arial, Helvetica, sans-serif;
 background:#f4f7fa;
@@ -37,9 +36,7 @@ border-radius:12px;
 box-shadow:0 3px 10px rgba(0,0,0,0.08);
 }
 
-h2{
-margin-top:0;
-}
+h2{margin-top:0;}
 
 .instructions{
 background:#eef4f8;
@@ -58,9 +55,7 @@ border-radius:8px;
 border:1px solid #ccc;
 }
 
-textarea:focus{
-outline:3px solid #2f6f95;
-}
+textarea:focus{outline:3px solid #2f6f95;}
 
 button{
 background:#2f6f95;
@@ -74,9 +69,7 @@ margin-top:12px;
 margin-right:10px;
 }
 
-button:hover{
-background:#245b79;
-}
+button:hover{background:#245b79;}
 
 .feedback{
 margin-top:18px;
@@ -90,17 +83,8 @@ font-size:18px;
 .warn{color:#c47a00;}
 .error{color:#b30000;}
 
-.rule{
-margin-top:10px;
-font-weight:bold;
-}
-
-.diktatSentence{
-font-size:22px;
-font-weight:bold;
-margin:10px 0;
-}
-
+.rule{margin-top:10px;font-weight:bold;}
+.diktatSentence{font-size:22px;font-weight:bold;margin:10px 0;}
 </style>
 </head>
 
@@ -113,86 +97,58 @@ margin:10px 0;
 <div class="container">
 
 <div class="panel">
-
 <h2>1. Text schreiben</h2>
-
 <div class="instructions">
 Schreibe eine kurze Geschichte.<br>
 Drücke danach auf <b>Text prüfen</b>.
 </div>
-
 <textarea id="textInput" placeholder="Heute ging ich in den Wald..."></textarea>
-
 <br>
-
 <button onclick="runCheck()">Text prüfen</button>
 <button onclick="clearText()">Text löschen</button>
-
 <div id="feedback" class="feedback"></div>
-
 </div>
 
-
-
 <div class="panel">
-
 <h2>2. Diktat üben</h2>
-
 <div class="instructions">
 1. Höre den Satz<br>
 2. Schreibe ihn auf<br>
 3. Prüfe dein Diktat
 </div>
-
 <div id="diktatDisplay" class="diktatSentence">
 Klicke auf „Neues Diktat“
 </div>
-
 <button onclick="newDiktat()">Neues Diktat</button>
 <button onclick="playDiktat()">🔊 Satz hören</button>
-
 <textarea id="diktatInput" placeholder="Schreibe den Satz hier..."></textarea>
-
 <br>
-
 <button onclick="checkDiktat()">Diktat prüfen</button>
-
 <div id="diktatFeedback" class="feedback"></div>
-
 </div>
 
 </div>
 
 <script>
 
+/* ---------- Textprüfung ---------- */
 
 function clearText(){
 document.getElementById("textInput").value="";
 document.getElementById("feedback").innerHTML="";
 }
 
-
-
 function runCheck(){
-
 let text=document.getElementById("textInput").value.trim();
-
 if(text.length<10){
 document.getElementById("feedback").innerHTML="<span class='warn'>Bitte schreibe mehr Text.</span>";
 return;
 }
-
 let feedback="";
-
 let sentences=text.split(/[.!?]/).map(s=>s.trim()).filter(s=>s.length>0);
 
-
-
-
 /* 1 Satzanfang groß */
-
 feedback+="<div class='rule'>Satzanfang groß</div>";
-
 sentences.forEach(s=>{
 let first=s.match(/[A-Za-zÄÖÜäöüß]/);
 if(first && first[0]!==first[0].toUpperCase()){
@@ -200,57 +156,38 @@ feedback+="<div class='warn'>Ein Satz beginnt klein: '"+s+"'</div>";
 }
 });
 
-
-
 /* 2 Punkt am Ende */
-
 feedback+="<div class='rule'>Satzende</div>";
-
 if(!text.match(/[.!?]$/)){
 feedback+="<div class='warn'>Am Ende fehlt ein Punkt.</div>";
 }else{
 feedback+="<div class='good'>Satzende vorhanden.</div>";
 }
 
-
-
-/* 3 Wortwiederholung */
-
+/* 3 Wiederholte Satzanfänge */
 feedback+="<div class='rule'>Satzanfänge</div>";
-
 let starters={};
-
 sentences.forEach(s=>{
 let first=s.split(" ")[0].toLowerCase();
 starters[first]=(starters[first]||0)+1;
 });
-
 for(let w in starters){
 if(starters[w]>=3){
 feedback+="<div class='warn'>Viele Sätze beginnen mit '"+w+"'</div>";
 }
 }
 
-
-
 /* 4 Doppeltes Wort */
-
 feedback+="<div class='rule'>Doppelte Wörter</div>";
-
 let words=text.toLowerCase().split(/\s+/);
-
 for(let i=0;i<words.length;i++){
 if(words[i]===words[i+1]){
 feedback+="<div class='warn'>Doppeltes Wort: "+words[i]+"</div>";
 }
 }
 
-
-
-/* 5 Länge Satz */
-
+/* 5 Sehr lange Sätze */
 feedback+="<div class='rule'>Sehr lange Sätze</div>";
-
 sentences.forEach(s=>{
 let count=s.split(" ").length;
 if(count>15){
@@ -258,46 +195,29 @@ feedback+="<div class='warn'>Sehr langer Satz: "+s+"</div>";
 }
 });
 
-
-
-/* 6 Großschreibung Nomen */
-
+/* 6 Nomen groß schreiben */
 feedback+="<div class='rule'>Nomen groß schreiben</div>";
-
 let nouns=["hund","katze","haus","wald","baum","freund","schule","garten"];
-
 words.forEach(w=>{
 if(nouns.includes(w)){
 feedback+="<div class='warn'>Nomen groß schreiben: "+w+"</div>";
 }
 });
 
-
-
-/* 7 dass / das */
-
+/* 7 das / dass */
 feedback+="<div class='rule'>das oder dass</div>";
-
 if(text.includes("dass das")){
 feedback+="<div class='warn'>Überprüfe: dass / das</div>";
 }
 
-
-
 /* 8 Artikel */
-
 feedback+="<div class='rule'>Artikel</div>";
-
 if(text.includes("der Katze")){
 feedback+="<div class='warn'>Vielleicht: die Katze?</div>";
 }
 
-
-
-/* 9 fehlende Wörter */
-
+/* 9 Sehr kurze Sätze */
 feedback+="<div class='rule'>Sehr kurze Sätze</div>";
-
 sentences.forEach(s=>{
 let count=s.split(" ").length;
 if(count<3){
@@ -305,130 +225,98 @@ feedback+="<div class='warn'>Sehr kurzer Satz: "+s+"</div>";
 }
 });
 
-
-
-/* 10 Großschreibung nach Punkt */
-
+/* 10 Groß nach Punkt */
 feedback+="<div class='rule'>Groß nach Punkt</div>";
-
 let pattern=/\.\s+[a-zäöü]/;
-
 if(pattern.test(text)){
 feedback+="<div class='warn'>Nach Punkt groß schreiben.</div>";
 }
 
-
-
-/* 11 viele und */
-
+/* 11 Viele 'und' */
 feedback+="<div class='rule'>Viele 'und'</div>";
-
 let undCount=(text.match(/\bund\b/g)||[]).length;
-
 if(undCount>=3){
 feedback+="<div class='warn'>Du benutzt oft 'und'.</div>";
 }
 
-
-
 /* 12 Rechtschreibung grob */
-
 feedback+="<div class='rule'>Rechtschreibung</div>";
-
 let mistakes=[];
-
 words.forEach(w=>{
 if(w.length>9){
 mistakes.push(w);
 }
 });
-
 mistakes=[...new Set(mistakes)];
-
 if(mistakes.length>0){
 feedback+="<div class='warn'>Überprüfe diese Wörter:</div>"+mistakes.join(", ");
 }else{
 feedback+="<div class='good'>Keine auffälligen Fehler.</div>";
 }
 
-
-
 document.getElementById("feedback").innerHTML=feedback;
-
 }
 
-
-
-/* DIKTAT */
+/* ---------- Diktat ---------- */
 
 const diktate=[
-
 "Der kleine Hund läuft durch den Wald.",
 "Das Mädchen hört ein Geräusch im Garten.",
 "Der Junge findet einen Schatz.",
 "Plötzlich fliegt ein Vogel über das Haus.",
 "Am Morgen geht die Katze in den Garten."
-
 ];
 
 let currentDiktat="";
 
+/* Deutsche Stimme laden */
+let germanVoice = null;
+
+function loadVoices() {
+const voices = speechSynthesis.getVoices();
+germanVoice = voices.find(v => v.lang==="de-DE" || v.lang.startsWith("de"));
+if(!germanVoice){ germanVoice = voices[0]; }
+}
+
+speechSynthesis.onvoiceschanged = loadVoices;
+
 function newDiktat(){
-
 currentDiktat=diktate[Math.floor(Math.random()*diktate.length)];
-
 document.getElementById("diktatDisplay").innerText="Höre den Satz.";
-
 document.getElementById("diktatInput").value="";
 document.getElementById("diktatFeedback").innerHTML="";
-
 }
 
 function playDiktat(){
-
 if(currentDiktat==="") return;
-
 let speech=new SpeechSynthesisUtterance(currentDiktat);
-
 speech.lang="de-DE";
-speech.rate=0.8;
-
+if(germanVoice){speech.voice=germanVoice;}
+speech.rate=0.75;
+speech.pitch=1;
+speechSynthesis.cancel();
 speechSynthesis.speak(speech);
-
 }
 
-
-
 function checkDiktat(){
-
 let input=document.getElementById("diktatInput").value.trim();
-
 let correct=currentDiktat;
-
 if(!input){
 document.getElementById("diktatFeedback").innerHTML="<span class='warn'>Bitte schreibe den Satz.</span>";
 return;
 }
-
 let inputWords=input.split(" ");
 let correctWords=correct.split(" ");
-
 let result="";
-
 correctWords.forEach((word,i)=>{
-
 if(inputWords[i]!==word){
 result+="Fehler bei Wort "+(i+1)+": "+word+"<br>";
 }
-
 });
-
 if(result===""){
 result="<span class='good'>Sehr gut! Alles richtig.</span>";
 }
-
 document.getElementById("diktatFeedback").innerHTML=result;
-
 }
 
 </script>
