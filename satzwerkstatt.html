@@ -1,258 +1,136 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Satzwerkstatt – Schreiben üben</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Satzwerkstatt Klasse 3/4 Bayern</title>
 <style>
-body{
-  font-family: Arial, Helvetica, sans-serif;
-  background:#f4f7fa;
-  margin:0;
-  color:#222;
-  line-height:1.6;
-}
-header{
-  background:#2f6f95;
-  color:white;
-  padding:18px;
-  font-size:26px;
-  text-align:center;
-}
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:25px;
-}
-.panel{
-  background:white;
-  padding:25px;
-  margin-bottom:25px;
-  border-radius:12px;
-  box-shadow:0 3px 10px rgba(0,0,0,0.08);
-}
-h2{margin-top:0;}
-.instructions{
-  background:#eef4f8;
-  padding:14px;
-  border-radius:8px;
-  margin-bottom:15px;
-  font-size:18px;
-}
-textarea{
-  width:100%;
-  height:180px;
-  font-size:20px;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #ccc;
-}
-textarea:focus{outline:3px solid #2f6f95;}
-button, select{
-  background:#2f6f95;
-  color:white;
-  border:none;
-  padding:12px 18px;
-  border-radius:8px;
-  font-size:18px;
-  cursor:pointer;
-  margin-top:12px;
-  margin-right:10px;
-}
-button:hover, select:hover{background:#245b79;}
-.feedback{
-  margin-top:18px;
-  padding:15px;
-  border-radius:8px;
-  background:#f0f4f7;
-  font-size:18px;
-}
-.good{color:#2c9c59;font-weight:bold;}
-.warn{color:#c47a00;}
-.error{color:#b30000;}
-.rule{margin-top:10px;font-weight:bold;}
-.diktatSentence{font-size:22px;font-weight:bold;margin:10px 0;}
+:root{--bg:#f4f6fb;--card:#fff;--accent:#4caf50;--border:#e5e7eb;--muted:#6b7280}
+body{font-family:Arial,sans-serif;background:var(--bg);margin:0;padding:16px}
+.container{max-width:900px;margin:auto}
+.card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px}
+h1{margin:0 0 10px}
+.structure{display:flex;justify-content:space-around;background:#eef6ff;padding:10px;border-radius:10px}
+.sentence-box{font-size:22px;border:2px dashed var(--border);padding:10px;border-radius:10px;margin:10px 0}
+.word-group{display:flex;flex-wrap:wrap;gap:6px}
+.word{padding:10px;border:1px solid var(--border);border-radius:8px;cursor:pointer}
+.word.selected{background:#dbeafe}
+.btn{padding:10px;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
+.primary{background:var(--accent);color:white}
+.feedback{margin-top:10px;font-weight:bold}
+.ok{color:green}
+.warn{color:red}
 </style>
 </head>
 <body>
-
-<header>
-✏️ Satzwerkstatt – Schreiben üben (3./4. Klasse)
-</header>
-
 <div class="container">
 
-<!-- TEXT ÜBEN -->
-<div class="panel">
-<h2>1. Text schreiben</h2>
-<div class="instructions">
-Schreibe eine kurze Geschichte.<br>
-Wähle ein Thema unten oder lasse frei.<br>
-Drücke danach auf <b>Text prüfen</b>.
+<div class="card">
+<h1>Satzwerkstatt (Bayern 3./4. Klasse)</h1>
+<div class="structure">
+<div>👤 Wer</div>
+<div>⚡ Verb</div>
+<div>📍 Wo</div>
 </div>
-<select id="themeSelect">
-  <option value="all">Alles</option>
-  <option value="doppelkonsonanten">Doppelkonsonanten</option>
-  <option value="ie">ie / i</option>
-  <option value="das_dass">das / dass</option>
-  <option value="nomen_gross">Nomen groß</option>
-  <option value="satzanfang">Satzanfang groß</option>
-  <option value="satzende">Satzende Punkt</option>
-</select>
-<textarea id="textInput" placeholder="Heute ging ich in den Wald..."></textarea>
-<br>
-<button onclick="runCheck()">Text prüfen</button>
-<button onclick="clearText()">Text löschen</button>
+
+<div class="sentence-box" id="sentence">___ ___ ___</div>
+
+<h3>Wer?</h3>
+<div class="word-group" id="wer"></div>
+
+<h3>Verb</h3>
+<div class="word-group" id="verb"></div>
+
+<h3>Wo?</h3>
+<div class="word-group" id="wo"></div>
+
+<button class="btn primary" onclick="checkSentence()">Prüfen</button>
 <div id="feedback" class="feedback"></div>
 </div>
 
-<!-- DIKTAT ÜBEN -->
-<div class="panel">
-<h2>2. Diktat üben</h2>
-<div class="instructions">
-1. Wähle ein Thema<br>
-2. Höre den Satz Wort für Wort<br>
-3. Schreibe ihn auf<br>
-4. Prüfe dein Diktat
-</div>
-<select id="diktatThemeSelect" onchange="newDiktat()">
-  <option value="all">Alles</option>
-  <option value="doppelkonsonanten">Doppelkonsonanten</option>
-  <option value="ie">ie / i</option>
-  <option value="das_dass">das / dass</option>
-</select>
-<div id="diktatDisplay" class="diktatSentence">Klicke auf „Neues Diktat“</div>
-<button onclick="newDiktat()">Neues Diktat</button>
-<button id="playButton" onclick="playDiktat()" disabled>🔊 Satz hören</button>
-<textarea id="diktatInput" placeholder="Schreibe den Satz hier..."></textarea>
-<br>
-<button onclick="checkDiktat()">Diktat prüfen</button>
-<div id="diktatFeedback" class="feedback"></div>
-<audio id="diktatAudio"></audio>
+<div class="card">
+<h2>Eigener Satz</h2>
+<input id="customInput" type="text" placeholder="Der Hund läuft im Garten." style="width:100%;padding:10px">
+<button class="btn primary" onclick="checkCustom()">Prüfen</button>
+<div id="customFeedback" class="feedback"></div>
 </div>
 
 </div>
 
 <script>
-/* ---------- GLOBAL ---------- */
-let currentDiktat=null;
+let state={wer:"",verb:"",wo:""};
 
-/* ---------- DIKTAT DATEN ---------- */
-const diktate={
-  doppelkonsonanten:[
-    {text:"Der Ball rollt schnell.", audio:"audio/doppelkonsonanten1.mp3"},
-    {text:"Die Mitte des Spielfelds ist markiert.", audio:"audio/doppelkonsonanten2.mp3"}
-  ],
-  ie:[
-    {text:"Ich habe viel zu tun.", audio:"audio/ie1.mp3"},
-    {text:"Er will ein Eis essen.", audio:"audio/ie2.mp3"}
-  ],
-  das_dass:[
-    {text:"Ich weiß, dass du müde bist.", audio:"audio/dass1.mp3"},
-    {text:"Das Haus ist groß.", audio:"audio/das1.mp3"}
-  ],
-  all:[
-    {text:"Der kleine Hund läuft durch den Wald.", audio:"audio/all1.mp3"},
-    {text:"Das Mädchen hört ein Geräusch im Garten.", audio:"audio/all2.mp3"},
-    {text:"Plötzlich fliegt ein Vogel über das Haus.", audio:"audio/all3.mp3"}
-  ]
+// Bayern Grade 3/4 appropriate vocabulary (simple, repetitive, spelling patterns)
+const data={
+wer:["Der Hund","Die Katze","Der Junge","Das Mädchen","Der Lehrer"],
+verb:["läuft","rennt","spielt","geht","springt"],
+wo:["im Garten","im Wald","im Park","in der Schule","auf dem Spielplatz"]
 };
 
-/* ---------- TEXT ÜBEN ---------- */
-function clearText(){
-  document.getElementById("textInput").value="";
-  document.getElementById("feedback").innerHTML="";
+function render(){
+renderGroup("wer",data.wer);
+renderGroup("verb",data.verb);
+renderGroup("wo",data.wo);
+updateSentence();
 }
 
-function runCheck(){
-  let text=document.getElementById("textInput").value.trim();
-  if(text.length<10){
-    document.getElementById("feedback").innerHTML="<span class='warn'>Bitte schreibe mehr Text.</span>";
-    return;
-  }
-
-  let theme=document.getElementById("themeSelect").value;
-  let feedback="";
-
-  // GRUNDPRÜFUNGEN
-  if(theme==="all" || theme==="satzanfang"){
-    let sentences=text.split(/[.!?]/).map(s=>s.trim()).filter(s=>s.length>0);
-    sentences.forEach(s=>{
-      let first=s.match(/[A-Za-zÄÖÜäöüß]/);
-      if(first && first[0]!==first[0].toUpperCase()){
-        feedback+="<div class='warn'>Satzanfang klein: '"+s+"'</div>";
-      }
-    });
-  }
-
-  if(theme==="all" || theme==="satzende"){
-    if(!text.match(/[.!?]$/)){
-      feedback+="<div class='warn'>Am Ende fehlt ein Punkt.</div>";
-    } else {feedback+="<div class='good'>Satzende vorhanden.</div>";}
-  }
-
-  if(theme==="all" || theme==="nomen_gross"){
-    let nouns=["hund","katze","haus","wald","baum","freund","schule","garten"];
-    text.toLowerCase().split(/\s+/).forEach(w=>{
-      if(nouns.includes(w)){
-        feedback+="<div class='warn'>Nomen groß schreiben: "+w+"</div>";
-      }
-    });
-  }
-
-  if(theme==="all" || theme==="doppelkonsonanten"){
-    let doubles=["ball","mitte","tasse","klasse"];
-    text.toLowerCase().split(/\s+/).forEach(w=>{
-      if(doubles.includes(w)){
-        feedback+="<div class='good'>Doppelkonsonant korrekt erkannt: "+w+"</div>";
-      }
-    });
-  }
-
-  if(theme==="all" || theme==="ie"){
-    let words=text.toLowerCase().split(/\s+/);
-    words.forEach(w=>{
-      if(w.includes("ie")) feedback+="<div class='good'>„ie“-Wort erkannt: "+w+"</div>";
-    });
-  }
-
-  if(theme==="all" || theme==="das_dass"){
-    if(text.includes("dass")) feedback+="<div class='good'>„dass“ erkannt</div>";
-    if(text.includes("das")) feedback+="<div class='good'>„das“ erkannt</div>";
-  }
-
-  document.getElementById("feedback").innerHTML=feedback;
+function renderGroup(id,arr){
+const el=document.getElementById(id);
+el.innerHTML=arr.map(w=>`<button class='word' onclick="select('${id}','${w}')">${w}</button>`).join("");
 }
 
-/* ---------- DIKTAT ---------- */
-function newDiktat(){
-  let theme=document.getElementById("diktatThemeSelect").value;
-  let pool=diktate[theme] || diktate["all"];
-  currentDiktat=pool[Math.floor(Math.random()*pool.length)];
-  document.getElementById("diktatDisplay").innerText="Höre den Satz.";
-  document.getElementById("diktatInput").value="";
-  document.getElementById("diktatFeedback").innerHTML="";
-  document.getElementById("playButton").disabled=false;
+function select(type,value){
+state[type]=value;
+highlight(type,value);
+updateSentence();
 }
 
-function playDiktat(){
-  if(!currentDiktat) return;
-  const audio=document.getElementById("diktatAudio");
-  audio.src=currentDiktat.audio;
-  audio.play();
+function highlight(type,value){
+[...document.getElementById(type).children].forEach(btn=>{
+btn.classList.toggle("selected",btn.innerText===value);
+});
 }
 
-function checkDiktat(){
-  let input=document.getElementById("diktatInput").value.trim();
-  if(!input){document.getElementById("diktatFeedback").innerHTML="<span class='warn'>Bitte schreibe den Satz.</span>"; return;}
-  let inputWords=input.split(" ");
-  let correctWords=currentDiktat.text.split(" ");
-  let result="";
-  correctWords.forEach((w,i)=>{
-    if(inputWords[i]!==w){result+="Fehler bei Wort "+(i+1)+": "+w+"<br>";}
-  });
-  if(result==="") result="<span class='good'>Sehr gut! Alles richtig.</span>";
-  document.getElementById("diktatFeedback").innerHTML=result;
+function updateSentence(){
+document.getElementById("sentence").innerText=
+`${state.wer||"___"} ${state.verb||"___"} ${state.wo||"___"}`;
 }
+
+function checkSentence(){
+const fb=document.getElementById("feedback");
+if(!state.wer) return fb.innerHTML="<span class='warn'>Wer fehlt</span>";
+if(!state.verb) return fb.innerHTML="<span class='warn'>Verb fehlt</span>";
+if(!state.wo) return fb.innerHTML="<span class='warn'>Ort fehlt</span>";
+
+fb.innerHTML="<span class='ok'>Super! Richtiger Satz.</span>";
+}
+
+// --- Custom sentence check ---
+function checkCustom(){
+const text=document.getElementById("customInput").value.trim();
+const fb=document.getElementById("customFeedback");
+
+if(!text) return fb.innerHTML="<span class='warn'>Bitte Satz eingeben</span>";
+
+const words=text.split(" ");
+
+// common verbs (grade 3/4 level)
+const verbs=["läuft","rennt","geht","spielt","springt","ist","hat"];
+
+const hasVerb=words.some(w=>verbs.includes(w.toLowerCase()));
+
+if(words.length<2) return fb.innerHTML="<span class='warn'>Zu kurz</span>";
+if(!hasVerb) return fb.innerHTML="<span class='warn'>Kein Verb gefunden</span>";
+
+// simple spelling check (double consonants / ie)
+if(text.includes("ie")||text.match(/(ll|nn|tt)/)){
+fb.innerHTML="<span class='ok'>Gut! Satz + richtige Schreibmuster erkannt.</span>";
+}else{
+fb.innerHTML="<span class='ok'>Guter Satz! Achte auch auf Schreibregeln (ie, doppelte Konsonanten).</span>";
+}
+}
+
+render();
 </script>
 
 </body>
