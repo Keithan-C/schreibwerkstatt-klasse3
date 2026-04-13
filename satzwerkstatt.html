@@ -6,73 +6,30 @@
 <title>Satzwerkstatt</title>
 
 <style>
-body {
-  font-family: Arial;
-  background: #f4f6fb;
-  padding: 20px;
-}
+body { font-family: Arial; background:#f4f6fb; padding:20px; }
+.container { max-width:900px; margin:auto; }
+.card { background:white; padding:20px; border-radius:12px; margin-bottom:20px; }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-}
+.structure { display:flex; justify-content:space-around; background:#eef6ff; padding:10px; border-radius:10px; }
 
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-}
+.sentence-box { font-size:22px; border:2px dashed #ccc; padding:10px; margin:15px 0; }
 
-.structure {
-  display: flex;
-  justify-content: space-around;
-  background: #eef6ff;
-  padding: 10px;
-  border-radius: 10px;
-}
+.word-group { display:flex; flex-wrap:wrap; gap:8px; }
+.word { padding:10px; border:1px solid #ccc; border-radius:8px; cursor:pointer; }
+.word.selected { background:#dbeafe; }
 
-.sentence-box {
-  font-size: 22px;
-  border: 2px dashed #ccc;
-  padding: 10px;
-  margin: 15px 0;
-}
+.btn { padding:10px; margin-top:10px; border:none; border-radius:8px; background:#4caf50; color:white; cursor:pointer; }
 
-.word-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+.feedback { margin-top:10px; font-weight:bold; }
+.ok { color:green; }
+.warn { color:red; }
 
-.word {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  cursor: pointer;
+.correction-box {
+  border:2px solid #ddd;
+  padding:10px;
+  margin-top:10px;
+  border-radius:10px;
 }
-
-.word.selected {
-  background: #dbeafe;
-}
-
-.btn {
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #4caf50;
-  color: white;
-  cursor: pointer;
-}
-
-.feedback {
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-.ok { color: green; }
-.warn { color: red; }
 </style>
 </head>
 
@@ -108,11 +65,14 @@ body {
 <div class="card">
 <h2>Eigener Satz</h2>
 
-<input id="customInput" type="text" placeholder="z.B. Der Hund läuft im Park." style="width:100%; padding:10px">
+<input id="customInput" type="text" placeholder="z.B. der hund im park" style="width:100%; padding:10px">
 
-<button class="btn" onclick="checkCustom()">Prüfen</button>
+<button class="btn" onclick="analyzeSentence()">Prüfen & Verbessern</button>
 
 <div id="customFeedback" class="feedback"></div>
+
+<div id="correctionArea" class="correction-box" style="display:none;"></div>
+
 </div>
 
 </div>
@@ -121,9 +81,9 @@ body {
 let state = {wer:"", verb:"", wo:""};
 
 const data = {
-wer: ["Der Hund","Die Katze","Das Mädchen","Der Junge","Der Lehrer"],
-verb: ["läuft","rennt","geht","spielt","springt"],
-wo: ["im Park","im Garten","im Wald","in der Schule","auf dem Spielplatz"]
+wer:["Der Hund","Die Katze","Das Mädchen","Der Junge"],
+verb:["läuft","rennt","geht","spielt"],
+wo:["im Park","im Garten","im Wald","in der Schule"]
 };
 
 function render(){
@@ -133,141 +93,143 @@ function render(){
 }
 
 function renderGroup(id, arr){
-  const el = document.getElementById(id);
-  el.innerHTML = arr.map(w =>
-    `<button class="word" onclick="select('${id}','${w}')">${w}</button>`
-  ).join("");
+  document.getElementById(id).innerHTML =
+    arr.map(w=>`<button class="word" onclick="select('${id}','${w}')">${w}</button>`).join("");
 }
 
-function select(type, value){
-  state[type] = value;
-
-  [...document.getElementById(type).children].forEach(btn=>{
-    btn.classList.toggle("selected", btn.innerText === value);
-  });
-
+function select(type,value){
+  state[type]=value;
   updateSentence();
 }
 
 function updateSentence(){
   document.getElementById("sentence").innerText =
-    `${state.wer || "___"} ${state.verb || "___"} ${state.wo || "___"}`;
+    `${state.wer||"___"} ${state.verb||"___"} ${state.wo||"___"}`;
 }
 
 function checkSentence(){
   const fb = document.getElementById("feedback");
+  if(!state.wer) return fb.innerHTML="Wer fehlt";
+  if(!state.verb) return fb.innerHTML="Verb fehlt";
+  if(!state.wo) return fb.innerHTML="Ort fehlt";
 
-  if(!state.wer) return fb.innerHTML = "<span class='warn'>Wer fehlt</span>";
-  if(!state.verb) return fb.innerHTML = "<span class='warn'>Verb fehlt</span>";
-  if(!state.wo) return fb.innerHTML = "<span class='warn'>Ort fehlt</span>";
-
-  fb.innerHTML = "<span class='ok'>Super! Richtiger Satz.</span>";
+  fb.innerHTML="<span class='ok'>Super!</span>";
 }
 
 
 // ==========================
-// ADVANCED CUSTOM CHECK
+// INTERACTIVE CORRECTION
 // ==========================
-function checkCustom(){
 
+let currentWords = [];
+
+function analyzeSentence(){
   const text = document.getElementById("customInput").value.trim();
   const fb = document.getElementById("customFeedback");
+  const area = document.getElementById("correctionArea");
 
   if(!text){
-    fb.innerHTML = "<span class='warn'>⚠ Bitte einen Satz eingeben.</span>";
+    fb.innerHTML="⚠ Bitte Satz eingeben";
     return;
   }
 
-  const clean = text.replace(/[.,!?]/g,'');
-  const words = clean.split(/\s+/);
+  currentWords = text.replace(/[.,!?]/g,'').split(/\s+/);
 
   let errors = [];
-  let suggestions = [...words];
 
-  // 1 Length
-  if(words.length < 2){
-    errors.push("Ein Satz braucht mindestens 2 Wörter.");
-  }
-
-  // 2 Capital
-  if(words[0][0] !== words[0][0].toUpperCase()){
-    errors.push("Satzanfang muss groß sein.");
-    suggestions[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
-  }
-
-  // 3 Verb detection
-  const verbs = [
-    "läuft","rennt","geht","spielt","springt",
-    "ist","sind","war","waren",
-    "hat","haben","kommt","kommen",
-    "sieht","sehen","isst","essen"
-  ];
-
-  let verbIndex = words.findIndex(w => verbs.includes(w.toLowerCase()));
+  // Verb check
+  const verbs = ["läuft","rennt","geht","spielt","ist","hat"];
+  let verbIndex = currentWords.findIndex(w=>verbs.includes(w.toLowerCase()));
 
   if(verbIndex === -1){
-    errors.push("Es fehlt ein Verb.");
-    suggestions.splice(1, 0, "läuft");
-    verbIndex = 1;
+    errors.push("Verb fehlt");
   }
 
-  // 4 Verb position
-  if(verbIndex !== 1 && verbIndex !== -1){
-    errors.push("Verb steht nicht an 2. Stelle.");
-    const verb = words[verbIndex];
-    suggestions.splice(verbIndex,1);
-    suggestions.splice(1,0,verb);
+  if(currentWords[0][0] !== currentWords[0][0].toUpperCase()){
+    errors.push("Satzanfang groß");
   }
 
-  // 5 Article
-  const articles = ["der","die","das","ein","eine"];
-  if(!articles.includes(words[0].toLowerCase())){
-    errors.push("Beginne mit der/die/das oder ein/eine.");
-    suggestions.unshift("Der");
+  if(verbIndex !== -1 && verbIndex !== 1){
+    errors.push("Verb an 2. Stelle");
   }
 
-  // 6 Location
-  const hasLocation = words.some(w =>
-    ["im","in","auf","am"].includes(w.toLowerCase())
-  );
-
-  if(!hasLocation){
-    errors.push("Ein Ort fehlt (Wo?).");
-    suggestions.push("im Park");
-  }
-
-  // 7 Spelling hints
-  if(!text.includes("ie")){
-    errors.push("Achte auf 'ie' (z.B. spielen).");
-  }
-
-  if(!text.match(/(ll|nn|tt|mm)/)){
-    errors.push("Achte auf doppelte Konsonanten (rennen, kommen).");
-  }
-
-  let corrected = suggestions.join(" ");
-
-  // OUTPUT
   if(errors.length === 0){
-    fb.innerHTML = `
-      <span class='ok'>
-        ✅ Super! Dein Satz ist richtig.<br>
-        👉 ${text}
-      </span>
-    `;
-  } else {
-    fb.innerHTML = `
-      <span class='warn'>
-        ⚠ Fehler:<br>
-        - ${errors.join("<br>- ")}
-      </span>
-      <br><br>
-      <span class='ok'>
-        💡 Vorschlag:<br>
-        👉 ${corrected}
-      </span>
+    fb.innerHTML="<span class='ok'>✅ Sehr gut!</span>";
+    area.style.display="none";
+    return;
+  }
+
+  fb.innerHTML = "⚠ Fehler gefunden: " + errors.join(", ");
+  area.style.display="block";
+
+  buildCorrectionUI(errors);
+}
+
+
+function buildCorrectionUI(errors){
+  const area = document.getElementById("correctionArea");
+
+  let html = "<h3>Verbessere den Satz:</h3>";
+
+  // Step 1: Capital
+  if(errors.includes("Satzanfang groß")){
+    html += `
+      <p>👉 Mache den ersten Buchstaben groß:</p>
+      <button onclick="fixCapital()">Großschreibung korrigieren</button>
     `;
   }
+
+  // Step 2: Add verb
+  if(errors.includes("Verb fehlt")){
+    html += `
+      <p>👉 Füge ein Verb hinzu:</p>
+      <button onclick="addVerb('läuft')">läuft</button>
+      <button onclick="addVerb('rennt')">rennt</button>
+    `;
+  }
+
+  // Step 3: Verb position
+  if(errors.includes("Verb an 2. Stelle")){
+    html += `
+      <p>👉 Setze das Verb an die 2. Stelle:</p>
+      <button onclick="fixVerbPosition()">Korrigieren</button>
+    `;
+  }
+
+  html += `<p><b>Aktueller Satz:</b> <span id="liveSentence">${currentWords.join(" ")}</span></p>`;
+
+  area.innerHTML = html;
+}
+
+
+function updateLive(){
+  document.getElementById("liveSentence").innerText = currentWords.join(" ");
+}
+
+
+// FIX FUNCTIONS
+
+function fixCapital(){
+  currentWords[0] = currentWords[0].charAt(0).toUpperCase() + currentWords[0].slice(1);
+  updateLive();
+}
+
+function addVerb(v){
+  currentWords.splice(1,0,v);
+  updateLive();
+}
+
+function fixVerbPosition(){
+  const verbs = ["läuft","rennt","geht","spielt","ist","hat"];
+  let i = currentWords.findIndex(w=>verbs.includes(w.toLowerCase()));
+
+  if(i !== -1){
+    const verb = currentWords[i];
+    currentWords.splice(i,1);
+    currentWords.splice(1,0,verb);
+  }
+
+  updateLive();
 }
 
 render();
