@@ -1,133 +1,273 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Satzwerkstatt Klasse 3/4 Bayern</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satzwerkstatt</title>
+
 <style>
-:root{--bg:#f4f6fb;--card:#fff;--accent:#4caf50;--border:#e5e7eb;--muted:#6b7280}
-body{font-family:Arial,sans-serif;background:var(--bg);margin:0;padding:16px}
-.container{max-width:900px;margin:auto}
-.card{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px}
-h1{margin:0 0 10px}
-.structure{display:flex;justify-content:space-around;background:#eef6ff;padding:10px;border-radius:10px}
-.sentence-box{font-size:22px;border:2px dashed var(--border);padding:10px;border-radius:10px;margin:10px 0}
-.word-group{display:flex;flex-wrap:wrap;gap:6px}
-.word{padding:10px;border:1px solid var(--border);border-radius:8px;cursor:pointer}
-.word.selected{background:#dbeafe}
-.btn{padding:10px;border:none;border-radius:8px;cursor:pointer;margin-top:10px}
-.primary{background:var(--accent);color:white}
-.feedback{margin-top:10px;font-weight:bold}
-.ok{color:green}
-.warn{color:red}
+body {
+  font-family: Arial;
+  background: #f4f6fb;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.structure {
+  display: flex;
+  justify-content: space-around;
+  background: #eef6ff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.sentence-box {
+  font-size: 22px;
+  border: 2px dashed #ccc;
+  padding: 10px;
+  margin: 15px 0;
+}
+
+.word-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.word {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.word.selected {
+  background: #dbeafe;
+}
+
+.btn {
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #4caf50;
+  color: white;
+  cursor: pointer;
+}
+
+.feedback {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.ok { color: green; }
+.warn { color: red; }
 </style>
 </head>
+
 <body>
+
 <div class="container">
 
 <div class="card">
-<h1>Satzwerkstatt (Bayern 3./4. Klasse)</h1>
+<h2>Satz bauen</h2>
+
 <div class="structure">
 <div>👤 Wer</div>
 <div>⚡ Verb</div>
 <div>📍 Wo</div>
 </div>
 
-<div class="sentence-box" id="sentence">___ ___ ___</div>
+<div id="sentence" class="sentence-box">___ ___ ___</div>
 
 <h3>Wer?</h3>
-<div class="word-group" id="wer"></div>
+<div id="wer" class="word-group"></div>
 
 <h3>Verb</h3>
-<div class="word-group" id="verb"></div>
+<div id="verb" class="word-group"></div>
 
 <h3>Wo?</h3>
-<div class="word-group" id="wo"></div>
+<div id="wo" class="word-group"></div>
 
-<button class="btn primary" onclick="checkSentence()">Prüfen</button>
+<button class="btn" onclick="checkSentence()">Prüfen</button>
 <div id="feedback" class="feedback"></div>
+
 </div>
 
 <div class="card">
 <h2>Eigener Satz</h2>
-<input id="customInput" type="text" placeholder="Der Hund läuft im Garten." style="width:100%;padding:10px">
-<button class="btn primary" onclick="checkCustom()">Prüfen</button>
+
+<input id="customInput" type="text" placeholder="z.B. Der Hund läuft im Park." style="width:100%; padding:10px">
+
+<button class="btn" onclick="checkCustom()">Prüfen</button>
+
 <div id="customFeedback" class="feedback"></div>
 </div>
 
 </div>
 
 <script>
-let state={wer:"",verb:"",wo:""};
+let state = {wer:"", verb:"", wo:""};
 
-// Bayern Grade 3/4 appropriate vocabulary (simple, repetitive, spelling patterns)
-const data={
-wer:["Der Hund","Die Katze","Der Junge","Das Mädchen","Der Lehrer"],
-verb:["läuft","rennt","spielt","geht","springt"],
-wo:["im Garten","im Wald","im Park","in der Schule","auf dem Spielplatz"]
+const data = {
+wer: ["Der Hund","Die Katze","Das Mädchen","Der Junge","Der Lehrer"],
+verb: ["läuft","rennt","geht","spielt","springt"],
+wo: ["im Park","im Garten","im Wald","in der Schule","auf dem Spielplatz"]
 };
 
 function render(){
-renderGroup("wer",data.wer);
-renderGroup("verb",data.verb);
-renderGroup("wo",data.wo);
-updateSentence();
+  renderGroup("wer", data.wer);
+  renderGroup("verb", data.verb);
+  renderGroup("wo", data.wo);
 }
 
-function renderGroup(id,arr){
-const el=document.getElementById(id);
-el.innerHTML=arr.map(w=>`<button class='word' onclick="select('${id}','${w}')">${w}</button>`).join("");
+function renderGroup(id, arr){
+  const el = document.getElementById(id);
+  el.innerHTML = arr.map(w =>
+    `<button class="word" onclick="select('${id}','${w}')">${w}</button>`
+  ).join("");
 }
 
-function select(type,value){
-state[type]=value;
-highlight(type,value);
-updateSentence();
-}
+function select(type, value){
+  state[type] = value;
 
-function highlight(type,value){
-[...document.getElementById(type).children].forEach(btn=>{
-btn.classList.toggle("selected",btn.innerText===value);
-});
+  [...document.getElementById(type).children].forEach(btn=>{
+    btn.classList.toggle("selected", btn.innerText === value);
+  });
+
+  updateSentence();
 }
 
 function updateSentence(){
-document.getElementById("sentence").innerText=
-`${state.wer||"___"} ${state.verb||"___"} ${state.wo||"___"}`;
+  document.getElementById("sentence").innerText =
+    `${state.wer || "___"} ${state.verb || "___"} ${state.wo || "___"}`;
 }
 
 function checkSentence(){
-const fb=document.getElementById("feedback");
-if(!state.wer) return fb.innerHTML="<span class='warn'>Wer fehlt</span>";
-if(!state.verb) return fb.innerHTML="<span class='warn'>Verb fehlt</span>";
-if(!state.wo) return fb.innerHTML="<span class='warn'>Ort fehlt</span>";
+  const fb = document.getElementById("feedback");
 
-fb.innerHTML="<span class='ok'>Super! Richtiger Satz.</span>";
+  if(!state.wer) return fb.innerHTML = "<span class='warn'>Wer fehlt</span>";
+  if(!state.verb) return fb.innerHTML = "<span class='warn'>Verb fehlt</span>";
+  if(!state.wo) return fb.innerHTML = "<span class='warn'>Ort fehlt</span>";
+
+  fb.innerHTML = "<span class='ok'>Super! Richtiger Satz.</span>";
 }
 
-// --- Custom sentence check ---
+
+// ==========================
+// ADVANCED CUSTOM CHECK
+// ==========================
 function checkCustom(){
-const text=document.getElementById("customInput").value.trim();
-const fb=document.getElementById("customFeedback");
 
-if(!text) return fb.innerHTML="<span class='warn'>Bitte Satz eingeben</span>";
+  const text = document.getElementById("customInput").value.trim();
+  const fb = document.getElementById("customFeedback");
 
-const words=text.split(" ");
+  if(!text){
+    fb.innerHTML = "<span class='warn'>⚠ Bitte einen Satz eingeben.</span>";
+    return;
+  }
 
-// common verbs (grade 3/4 level)
-const verbs=["läuft","rennt","geht","spielt","springt","ist","hat"];
+  const clean = text.replace(/[.,!?]/g,'');
+  const words = clean.split(/\s+/);
 
-const hasVerb=words.some(w=>verbs.includes(w.toLowerCase()));
+  let errors = [];
+  let suggestions = [...words];
 
-if(words.length<2) return fb.innerHTML="<span class='warn'>Zu kurz</span>";
-if(!hasVerb) return fb.innerHTML="<span class='warn'>Kein Verb gefunden</span>";
+  // 1 Length
+  if(words.length < 2){
+    errors.push("Ein Satz braucht mindestens 2 Wörter.");
+  }
 
-// simple spelling check (double consonants / ie)
-if(text.includes("ie")||text.match(/(ll|nn|tt)/)){
-fb.innerHTML="<span class='ok'>Gut! Satz + richtige Schreibmuster erkannt.</span>";
-}else{
-fb.innerHTML="<span class='ok'>Guter Satz! Achte auch auf Schreibregeln (ie, doppelte Konsonanten).</span>";
-}
+  // 2 Capital
+  if(words[0][0] !== words[0][0].toUpperCase()){
+    errors.push("Satzanfang muss groß sein.");
+    suggestions[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+  }
+
+  // 3 Verb detection
+  const verbs = [
+    "läuft","rennt","geht","spielt","springt",
+    "ist","sind","war","waren",
+    "hat","haben","kommt","kommen",
+    "sieht","sehen","isst","essen"
+  ];
+
+  let verbIndex = words.findIndex(w => verbs.includes(w.toLowerCase()));
+
+  if(verbIndex === -1){
+    errors.push("Es fehlt ein Verb.");
+    suggestions.splice(1, 0, "läuft");
+    verbIndex = 1;
+  }
+
+  // 4 Verb position
+  if(verbIndex !== 1 && verbIndex !== -1){
+    errors.push("Verb steht nicht an 2. Stelle.");
+    const verb = words[verbIndex];
+    suggestions.splice(verbIndex,1);
+    suggestions.splice(1,0,verb);
+  }
+
+  // 5 Article
+  const articles = ["der","die","das","ein","eine"];
+  if(!articles.includes(words[0].toLowerCase())){
+    errors.push("Beginne mit der/die/das oder ein/eine.");
+    suggestions.unshift("Der");
+  }
+
+  // 6 Location
+  const hasLocation = words.some(w =>
+    ["im","in","auf","am"].includes(w.toLowerCase())
+  );
+
+  if(!hasLocation){
+    errors.push("Ein Ort fehlt (Wo?).");
+    suggestions.push("im Park");
+  }
+
+  // 7 Spelling hints
+  if(!text.includes("ie")){
+    errors.push("Achte auf 'ie' (z.B. spielen).");
+  }
+
+  if(!text.match(/(ll|nn|tt|mm)/)){
+    errors.push("Achte auf doppelte Konsonanten (rennen, kommen).");
+  }
+
+  let corrected = suggestions.join(" ");
+
+  // OUTPUT
+  if(errors.length === 0){
+    fb.innerHTML = `
+      <span class='ok'>
+        ✅ Super! Dein Satz ist richtig.<br>
+        👉 ${text}
+      </span>
+    `;
+  } else {
+    fb.innerHTML = `
+      <span class='warn'>
+        ⚠ Fehler:<br>
+        - ${errors.join("<br>- ")}
+      </span>
+      <br><br>
+      <span class='ok'>
+        💡 Vorschlag:<br>
+        👉 ${corrected}
+      </span>
+    `;
+  }
 }
 
 render();
