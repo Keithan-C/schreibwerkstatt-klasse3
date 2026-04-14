@@ -63,7 +63,7 @@ body{font-family:var(--fb);background:var(--bg);color:var(--ink);min-height:100v
 
 /* ── ADVENTURE FLOW STEPPER (Roblox game-HUD style) ── */
 .stepper{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:0;
   margin-bottom:1.5rem;background:#0d1b2a;border:3px solid #1e3a5c;
   border-radius:var(--r);overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.35);
 }
@@ -640,6 +640,174 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,canvas:focus-vis
 button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
   outline:3px solid var(--lavender2);outline-offset:3px;
 }
+
+/* ══ BLOCKWELT SATZWELT GAME ══ */
+/* Game HUD (level badge + star bar) */
+.bw-hud{
+  background:linear-gradient(135deg,#0d1b2a,#1a2a40);
+  border:2px solid #1e3a5c;border-radius:var(--r);
+  padding:.8rem 1rem;margin-bottom:1rem;
+  display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+  flex-wrap:wrap;box-shadow:0 4px 20px rgba(0,0,0,.3);
+}
+.bw-level-badge{
+  font-family:var(--fp);font-size:7px;color:#ffd060;
+  background:rgba(255,208,96,.2);border:2px solid rgba(255,208,96,.4);
+  padding:5px 14px;border-radius:8px;line-height:2;white-space:nowrap;
+  text-shadow:0 0 12px rgba(255,208,96,.5);
+}
+.bw-stars-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;min-width:100px;}
+.bw-stars-row{font-size:20px;letter-spacing:4px;}
+.bw-progress-track{height:8px;background:rgba(255,255,255,.1);border-radius:4px;width:100%;overflow:hidden;}
+.bw-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--amber2),var(--amber3));
+  border-radius:4px;transition:width .4s ease;
+}
+.bw-level-label{font-family:var(--fp);font-size:4px;color:rgba(255,255,255,.45);margin-top:2px;line-height:1.6;}
+.bw-total-badge{
+  font-family:var(--fp);font-size:4.5px;color:rgba(255,255,255,.5);
+  line-height:1.8;text-align:right;white-space:nowrap;
+}
+.bw-total-badge span{color:var(--amber3);font-size:6px;}
+
+/* World display area */
+.bw-world{
+  background:linear-gradient(180deg,#1a3060 0%,#2a5090 40%,#3a7020 72%,#2a5018 100%);
+  border:3px solid #1565c0;border-radius:var(--r);
+  min-height:130px;padding:.8rem 1rem 1rem;margin-bottom:1rem;
+  position:relative;overflow:hidden;
+  box-shadow:0 6px 24px rgba(0,0,0,.35);
+}
+.bw-world-tiles{
+  position:relative;z-index:2;
+  display:flex;flex-wrap:wrap;gap:.7rem;align-items:flex-end;
+  min-height:90px;padding-top:1rem;
+}
+.bw-tile{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  animation:bwTilePop .45s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes bwTilePop{
+  from{transform:scale(0) translateY(24px);opacity:0}
+  to{transform:scale(1) translateY(0);opacity:1}
+}
+.bw-tile-emoji{font-size:30px;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5));display:block;}
+.bw-tile-label{
+  font-family:var(--fp);font-size:3.5px;color:rgba(255,255,255,.9);
+  background:rgba(0,0,0,.5);padding:2px 6px;border-radius:3px;line-height:1.6;
+  white-space:nowrap;
+}
+.bw-world-empty{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--fp);font-size:5.5px;color:rgba(255,255,255,.4);line-height:2.2;
+  text-align:center;padding:1rem;z-index:2;
+}
+.bw-sentence-count{
+  position:absolute;top:8px;right:10px;
+  font-family:var(--fp);font-size:4px;color:rgba(255,255,255,.55);z-index:3;line-height:1.8;
+}
+
+/* Sentence builder card */
+.bw-builder{
+  background:var(--surface);border:2.5px solid var(--border);
+  border-radius:var(--r);padding:1rem;margin-bottom:1rem;
+}
+.bw-level-hint{
+  font-family:var(--fp);font-size:5px;color:var(--blue);line-height:1.9;
+  background:var(--blue3);border:1.5px solid var(--blue2);
+  border-radius:var(--r2);padding:7px 12px;margin-bottom:.9rem;
+}
+/* Sentence preview */
+.bw-sentence-preview{
+  background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r2);
+  padding:10px 14px;font-size:16px;font-weight:800;color:var(--ink);
+  min-height:52px;margin-bottom:.9rem;line-height:1.6;
+}
+/* Word groups */
+.bw-word-group{margin-bottom:.9rem;}
+.bw-word-group:last-child{margin-bottom:0;}
+.bw-word-group-label{
+  font-family:var(--fp);font-size:5px;color:var(--muted);
+  display:block;margin-bottom:7px;line-height:1.8;
+}
+.bw-word-row{display:flex;flex-wrap:wrap;gap:7px;}
+.bw-word-btn{
+  padding:10px 14px;border:2.5px solid var(--border);border-radius:var(--r2);
+  background:var(--bg);font-family:var(--fb);font-size:14px;font-weight:700;
+  color:var(--ink2);cursor:pointer;transition:all .18s;min-height:46px;
+  box-shadow:0 3px 0 var(--border);
+}
+.bw-word-btn:hover{border-color:var(--green2);background:var(--green4);color:var(--green);}
+.bw-word-btn.selected{
+  border-color:var(--green);background:var(--green2);color:#fff;
+  box-shadow:0 3px 0 var(--green);transform:translateY(-1px);
+}
+.bw-word-btn:active{transform:translateY(2px);box-shadow:none;}
+/* Partial-sentence level */
+.bw-partial-fill{
+  font-size:16px;line-height:2.5;color:var(--ink);margin-bottom:.7rem;
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-weight:700;
+}
+.bw-blank{
+  border:none;border-bottom:3px solid var(--green2);
+  background:transparent;font-family:var(--fb);font-size:16px;font-weight:800;
+  color:var(--green);min-width:110px;padding:2px 4px;outline:none;
+  transition:border-color .2s;
+}
+.bw-blank:focus{border-bottom-color:var(--green);}
+/* Free-text level */
+.bw-free-input{
+  width:100%;border:2.5px solid var(--border);border-radius:var(--r2);
+  padding:13px 15px;font-family:var(--fb);font-size:16px;color:var(--ink);
+  background:var(--bg);outline:none;transition:border .2s,background .2s;
+  min-height:54px;
+}
+.bw-free-input:focus{border-color:var(--green2);background:var(--green4);}
+
+/* Feedback strip */
+.bw-feedback{
+  border-radius:var(--r2);padding:12px 14px;margin-bottom:1rem;
+  font-size:14px;line-height:1.7;display:none;
+}
+.bw-feedback.visible{display:block;animation:bwFbIn .25s ease both;}
+@keyframes bwFbIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.bw-feedback.success{background:var(--green4);border:2px solid var(--green2);color:var(--green);font-weight:700;}
+.bw-feedback.error{background:var(--coral3);border:2px solid var(--coral2);color:var(--coral);}
+.bw-hint-btn{
+  display:inline-block;margin-top:8px;padding:8px 14px;
+  border:2px solid var(--amber2);border-radius:var(--r2);
+  background:var(--amber4);color:var(--amber);font-family:var(--fb);
+  font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;
+}
+.bw-hint-btn:hover{background:var(--amber3);}
+
+/* Level-Up banner */
+.bw-levelup-banner{
+  background:linear-gradient(135deg,var(--amber4),#fffbe8);
+  border:3px solid var(--amber2);border-radius:var(--r);
+  padding:1.4rem;text-align:center;margin-bottom:1rem;display:none;
+}
+.bw-levelup-banner.show{
+  display:block;
+  animation:bwLUPop .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes bwLUPop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
+.bw-levelup-title{
+  font-family:var(--fp);font-size:10px;color:var(--amber);
+  line-height:2;display:block;margin-bottom:.4rem;
+  text-shadow:0 0 16px rgba(212,131,10,.4);
+}
+.bw-levelup-msg{font-size:15px;color:var(--amber);line-height:1.8;margin-bottom:.8rem;}
+/* Gate section */
+.bw-gate{
+  background:var(--green4);border:2px solid var(--green2);
+  border-radius:var(--r2);padding:.9rem 1rem;text-align:center;
+  margin-top:.5rem;
+}
+.bw-gate-hint{
+  font-family:var(--fp);font-size:5px;color:var(--green);
+  margin-bottom:.7rem;line-height:2;
+}
 </style>
 </head>
 <body>
@@ -691,25 +859,29 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 
 <!-- ══ STEPPER ══ -->
 <div class="stepper">
-  <div class="step active" id="step-play" onclick="goStep('play')">
+  <div class="step active" id="step-satzwelt" onclick="goStep('satzwelt')">
+    <span class="step-icon">🌍</span>
+    <span class="step-label">1. Satzwelt</span>
+  </div>
+  <div class="step locked" id="step-play" onclick="goStep('play')">
     <span class="step-icon">🎮</span>
-    <span class="step-label">1. Spielen</span>
+    <span class="step-label">2. Spielen</span>
   </div>
   <div class="step locked" id="step-capture" onclick="goStep('capture')">
     <span class="step-icon">📸</span>
-    <span class="step-label">2. Festhalten</span>
+    <span class="step-label">3. Festhalten</span>
   </div>
   <div class="step locked" id="step-narrate" onclick="goStep('narrate')">
     <span class="step-icon">🎙️</span>
-    <span class="step-label">3. Erzählen</span>
+    <span class="step-label">4. Erzählen</span>
   </div>
   <div class="step locked" id="step-scaffold" onclick="goStep('scaffold')">
     <span class="step-icon">💡</span>
-    <span class="step-label">4. Ideen</span>
+    <span class="step-label">5. Ideen</span>
   </div>
   <div class="step locked" id="step-write" onclick="goStep('write')">
     <span class="step-icon">✏️</span>
-    <span class="step-label">5. Schreiben</span>
+    <span class="step-label">6. Schreiben</span>
   </div>
 </div>
 
@@ -732,9 +904,122 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 <div class="star-row" id="star-row"></div>
 
 <!-- ══════════════════════════════════════════════
+     PHASE 0: SATZWELT — Game-like sentence builder
+     (Sentence → Action → World Change → Progress)
+══════════════════════════════════════════════ -->
+<div class="phase active" id="phase-satzwelt">
+  <div class="step-banner">
+    <div class="step-banner-dots">
+      <div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div>
+    </div>
+    Schritt 1 von 6: Satzwelt — Baue Sätze, lass deine Welt wachsen!
+  </div>
+
+  <!-- Level-Up banner (shown on level up) -->
+  <div class="bw-levelup-banner" id="bw-levelup-banner">
+    <span class="bw-levelup-title" id="bw-levelup-title">⭐ LEVEL UP!</span>
+    <p class="bw-levelup-msg" id="bw-levelup-msg">Toll gemacht!</p>
+    <button class="btn btn-primary" onclick="bwDismissLevelup()" style="margin-top:.6rem;width:auto;padding:10px 24px;">OK — weiter! ▶</button>
+  </div>
+
+  <!-- HUD: level + stars + progress -->
+  <div class="bw-hud">
+    <div class="bw-level-badge">⭐ Level <span id="bw-level-num">1</span></div>
+    <div class="bw-stars-wrap">
+      <div class="bw-stars-row" id="bw-stars-row">☆☆☆</div>
+      <div class="bw-progress-track">
+        <div class="bw-progress-fill" id="bw-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="bw-level-label"><span id="bw-stars-count">0</span> / 3 Sterne bis Level-Up</div>
+    </div>
+    <div class="bw-total-badge">
+      Sätze<br><span id="bw-total-count">0</span>
+    </div>
+  </div>
+
+  <!-- World display: grows with each correct sentence -->
+  <div class="bw-world">
+    <div class="bw-world-empty" id="bw-world-empty">
+      Schreib einen Satz —<br>und deine Welt erscheint! 🌍
+    </div>
+    <div class="bw-world-tiles" id="bw-world-tiles"></div>
+    <div class="bw-sentence-count" id="bw-sentence-count"></div>
+  </div>
+
+  <!-- Sentence builder: changes by level -->
+  <div class="bw-builder" id="bw-builder">
+
+    <!-- ── LEVEL 1: Guided button-based building ── -->
+    <div id="bw-guided">
+      <div class="bw-level-hint">
+        Level 1 — Tippe auf Wörter und baue deinen Satz!<br>
+        Wer? → Was tut er/sie? → Wo?
+      </div>
+      <div class="bw-sentence-preview" id="bw-preview-guided">
+        <span style="opacity:.4;font-size:13px;font-weight:400;">Tippe auf Wörter unten, um deinen Satz zu bauen …</span>
+      </div>
+      <div id="bw-word-groups"><!-- rendered by bwRenderGuided() --></div>
+    </div>
+
+    <!-- ── LEVEL 2: Partial sentence, fill in missing verb ── -->
+    <div id="bw-partial" style="display:none">
+      <div class="bw-level-hint">
+        Level 2 — Ergänze das fehlende Verb im Satz!<br>
+        Was tut die Person oder das Tier?
+      </div>
+      <div id="bw-partial-content"><!-- rendered by bwRenderPartial() --></div>
+    </div>
+
+    <!-- ── LEVEL 3: Free text input ── -->
+    <div id="bw-free" style="display:none">
+      <div class="bw-level-hint">
+        Level 3 — Schreibe einen eigenen Satz!<br>
+        Denke an: Wer + Verb + Wo? (Drücke Enter zum Abschicken)
+      </div>
+      <input class="bw-free-input" type="text" id="bw-free-input"
+        placeholder="z.B. Der Hund läuft im Park."
+        autocomplete="off" spellcheck="true" lang="de"
+        onkeydown="if(event.key==='Enter')bwSubmitSentence()"
+      >
+    </div>
+
+  </div><!-- /bw-builder -->
+
+  <!-- Feedback strip -->
+  <div class="bw-feedback" id="bw-feedback"></div>
+
+  <!-- Action buttons -->
+  <div class="btn-row" style="margin-bottom:.8rem;">
+    <button class="btn btn-primary" id="bw-submit-btn" onclick="bwSubmitSentence()">
+      ✅ Satz eintragen!
+    </button>
+    <button class="btn btn-secondary" onclick="bwReset()">↺ Neu</button>
+  </div>
+
+  <!-- Continue gate: unlock after 3 correct sentences -->
+  <div class="bw-gate">
+    <div class="bw-gate-hint" id="bw-gate-hint">
+      Schreibe 3 richtige Sätze, um zum Spielen weiterzugehen!
+    </div>
+    <button class="btn btn-primary" id="bw-continue-btn" disabled onclick="bwContinue()" style="width:100%;">
+      🎮 Weiter zum Spielen ▶
+    </button>
+  </div>
+
+  <!-- Info card -->
+  <div class="card" style="margin-top:.9rem;">
+    <div class="card-stripe cs-green"></div>
+    <div class="card-body">
+      <span class="card-title">🌍 Was du hier lernst (LP+ D3/4)</span>
+      <p class="card-sub">Schreibe einfache deutsche Sätze und sieh, wie deine Blockwelt wächst! Du übst: <strong>Wer — Was tut er/sie? — Wo?</strong> — und verdienst Sterne für jeden richtigen Satz!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
      PHASE 1: SPIELEN
 ══════════════════════════════════════════════ -->
-<div class="phase active" id="phase-play">
+<div class="phase" id="phase-play">
   <div class="step-banner"><div class="step-banner-dots"><div class="sbd active"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div><div class="sbd"></div></div>Schritt 1 von 5: Spielen / Step 1 of 5: Play your game first</div>
   <!-- Builder banner (shown when launched from builder.html) -->
   <div id="builder-banner" style="display:none;background:var(--green4);border:2.5px solid var(--green2);border-radius:var(--r);padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:1rem;line-height:1.7;">
@@ -1127,7 +1412,7 @@ button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-const STEPS=['play','capture','narrate','scaffold','write'];
+const STEPS=['satzwelt','play','capture','narrate','scaffold','write'];
 const CHAPTERS=[
   {
     id:'begin',icon:'🌱',label:'Erzählsituation',
@@ -1232,7 +1517,7 @@ const CRIT={
   ]
 };
 
-let currentStep='play';
+let currentStep='satzwelt';
 let currentChapter=0;
 let writePhase='write'; // write | revise
 let playChecks={1:false,2:false,3:false,4:false};
@@ -1278,6 +1563,7 @@ function init(){
   buildStars();
   buildStarRow();
   renderStep();
+  bwInit(); // initialise Blockwelt Satzwelt game
   // Load builder data if launched from builder.html
   const builderRaw=localStorage.getItem('builder-data');
   if(builderRaw){
@@ -1387,6 +1673,11 @@ function goStep(step){
   const curIdx=STEPS.indexOf(currentStep);
   // Allow going back freely, forward only if unlocked
   if(idx>curIdx){
+    // Gate: must complete Satzwelt before Play
+    if(step==='play'&&!bwSatzweltDone){
+      notice.innerHTML='🔒 Schreibe zuerst 3 Sätze in der Satzwelt!';
+      notice.classList.add('on');return;
+    }
     if(step==='capture'&&curIdx<STEPS.indexOf('capture')){
       notice.innerHTML='🔒 Spiele zuerst und tippe auf "Ich bin fertig gespielt"!';
       notice.classList.add('on');return;
@@ -2982,6 +3273,463 @@ function appendSpeechText(text){
     if(ta){ta.value=(ta.value?ta.value+' ':'')+text;answers[chId]=ta.value;liveUpdate(ta.value);}
   }
 }
+
+// ═══════════════════════════════════════════════════════════
+// BLOCKWELT SATZWELT — GAME LOGIC
+// Design: Sentence → Action → World Change → Progress
+// ═══════════════════════════════════════════════════════════
+
+// === VOCABULARY MAPS ===
+// Subject words (characters) → emoji
+const BW_SUBJECTS = {
+  'hund':'🐶','katze':'🐱','kind':'👦','mädchen':'👧','junge':'👦',
+  'held':'🦸','frosch':'🐸','vogel':'🐦','bär':'🐻','fuchs':'🦊',
+  'drache':'🐲','ritter':'⚔️','ente':'🦆','hase':'🐰','löwe':'🦁',
+  'pferd':'🐴','fisch':'🐟','mann':'👨','frau':'👩','elefant':'🐘',
+  'affe':'🐒','eichhörnchen':'🐿️','igel':'🦔','wolf':'🐺','tiger':'🐯'
+};
+// Location words → emoji
+const BW_LOCATIONS = {
+  'park':'🌳','schule':'🏫','wald':'🌲','haus':'🏠','see':'💧',
+  'berg':'⛰️','wiese':'🌻','garten':'🌹','strand':'🏖️','höhle':'⛏️',
+  'dorf':'🏘️','turm':'🗼','küche':'🍳','zimmer':'🛋️','feld':'🌾',
+  'fluss':'🏞️','stadt':'🏙️','spielplatz':'🎠','schloss':'🏰','markt':'🏪'
+};
+// Known verbs — sentence valid if one found
+const BW_VERBS = [
+  'läuft','rennt','springt','spielt','singt','schläft','arbeitet',
+  'lacht','weint','klettert','schwimmt','fliegt','baut','kämpft',
+  'sucht','findet','sieht','hört','lebt','wohnt','isst','trinkt',
+  'liest','schreibt','malt','tanzt','fährt','geht','kommt','steht',
+  'sitzt','liegt','hilft','lernt','spricht','ruft','wandert','reitet',
+  'schaut','hüpft','kriecht','gräbt','sammelt','pflückt','bringt'
+];
+
+// === LEVEL WORD SETS ===
+// Guided word buttons (level 1)
+const BW_GUIDED_WORDS = {
+  subjects: ['Der Hund','Die Katze','Das Kind','Der Held','Der Fuchs','Der Junge','Das Mädchen'],
+  verbs:    ['läuft','springt','spielt','schläft','sucht','rennt','singt','klettert'],
+  locations:['im Park','im Wald','in der Schule','am See','auf dem Berg','auf der Wiese','im Garten','am Strand']
+};
+// Partial-sentence templates (level 2): subject + _blank_ + rest
+const BW_PARTIAL_TEMPLATES = [
+  {before:'Der Hund',  after:'im Park.',    correct:['läuft','springt','spielt','rennt','sucht','schläft']},
+  {before:'Die Katze', after:'auf dem Berg.',correct:['klettert','springt','sitzt','schläft','läuft']},
+  {before:'Das Kind',  after:'in der Schule.',correct:['lernt','liest','schreibt','malt','spielt']},
+  {before:'Der Fuchs', after:'im Wald.',    correct:['rennt','läuft','sucht','springt','schläft']},
+  {before:'Der Held',  after:'am See.',     correct:['schwimmt','kämpft','sucht','sitzt','steht','schaut']},
+  {before:'Das Mädchen',after:'auf der Wiese.',correct:['singt','tanzt','läuft','springt','spielt']},
+  {before:'Der Junge', after:'am Strand.',  correct:['schwimmt','rennt','spielt','sucht','läuft']}
+];
+
+// === WORLD STATE ===
+// Each correct sentence adds characters & locations to the world
+let world        = [];           // [{type,emoji,label,sentence}]
+let bwProgress   = {
+  level:          1,             // 1 = guided, 2 = partial, 3 = free
+  stars:          0,             // stars earned toward next level
+  required:       3,             // stars needed to level up
+  totalSentences: 0              // running total of accepted sentences
+};
+let bwGuidedParts    = {subject:'',verb:'',location:''};
+let bwCurrentTemplate = null;   // level-2 partial template in use
+let bwSatzweltDone   = false;   // gate flag — unlocked after 3 sentences
+
+// === INIT ===
+function bwInit(){
+  bwCurrentTemplate = BW_PARTIAL_TEMPLATES[0];
+  bwRenderHUD();
+  bwRenderWorld();
+  bwRenderBuilder();
+}
+
+// ── SENTENCE PARSING ──────────────────────────────────────
+// Rule-based detection of subject / verb / location in a German sentence.
+// No NLP: just dictionary lookup on the lowercased text.
+function bwParseSentence(sentence){
+  const lower = sentence.toLowerCase();
+  let subject=null, subjectEmoji=null;
+  let verbFound=false;
+  let location=null, locationEmoji=null;
+
+  // Detect subject (first match wins)
+  for(const [key,emoji] of Object.entries(BW_SUBJECTS)){
+    if(lower.includes(key)){subject=key;subjectEmoji=emoji;break;}
+  }
+  // Detect verb
+  for(const verb of BW_VERBS){
+    if(lower.includes(verb)){verbFound=true;break;}
+  }
+  // Detect location
+  for(const [key,emoji] of Object.entries(BW_LOCATIONS)){
+    if(lower.includes(key)){location=key;locationEmoji=emoji;break;}
+  }
+
+  const startsCapital = /^[A-ZÄÖÜ]/.test(sentence.trim());
+  const hasEnding     = /[.!?]$/.test(sentence.trim());
+
+  // ── Validation (ONE clear error at a time) ──
+  if(!subject && !verbFound){
+    return{valid:false,
+      feedback:'⚠ Wer macht was?',
+      hintText:'Füge eine Person oder ein Tier ein — z.B. "Der Hund".'};
+  }
+  if(!verbFound){
+    return{valid:false,
+      feedback:'⚠ Verb fehlt',
+      hintText:'Was tut die Person? — z.B. "läuft", "spielt", "springt"'};
+  }
+  if(!subject){
+    return{valid:false,
+      feedback:'⚠ Wer macht das?',
+      hintText:'Schreibe am Anfang, wer etwas tut — z.B. "Der Hund" oder "Das Kind".'};
+  }
+
+  // Build success feedback
+  const subjectDisplay = subject.charAt(0).toUpperCase()+subject.slice(1);
+  const parts = [`${subjectEmoji} ${subjectDisplay} ist jetzt in deiner Welt!`];
+  if(location && locationEmoji) parts.push(`${locationEmoji} Du findest ihn/sie ${location}.`);
+  if(!hasEnding)    parts.push('💡 Denke an den Punkt am Ende!');
+  if(!startsCapital) parts.push('💡 Beginne mit einem großen Buchstaben!');
+
+  return{valid:true,subject,subjectEmoji,verbFound,location,locationEmoji,
+    feedback:parts.join('  ')};
+}
+
+// ── ADD TO WORLD ─────────────────────────────────────────
+// Each new subject / location tile appears once in the world display.
+function bwAddToWorld(parsed, sentence){
+  if(parsed.subjectEmoji &&
+     !world.some(w=>w.emoji===parsed.subjectEmoji)){
+    world.push({type:'subject',emoji:parsed.subjectEmoji,
+                label:parsed.subject,sentence});
+  }
+  if(parsed.locationEmoji &&
+     !world.some(w=>w.emoji===parsed.locationEmoji)){
+    world.push({type:'location',emoji:parsed.locationEmoji,
+                label:parsed.location,sentence});
+  }
+  bwProgress.totalSentences++;
+}
+
+// ── STAR AWARD & LEVEL UP ─────────────────────────────────
+function bwAwardStar(){
+  bwProgress.stars++;
+  if(bwProgress.stars >= bwProgress.required){
+    bwProgress.stars = 0;
+    bwProgress.level = Math.min(bwProgress.level+1, 3);
+    bwShowLevelUpBanner();
+  }
+  bwRenderHUD();
+  // Unlock continue button once the child has written 3 sentences total
+  if(bwProgress.totalSentences >= 3) bwUnlockContinue();
+}
+
+function bwUnlockContinue(){
+  if(bwSatzweltDone) return;
+  bwSatzweltDone = true;
+  const btn  = document.getElementById('bw-continue-btn');
+  const hint = document.getElementById('bw-gate-hint');
+  if(btn)  btn.disabled = false;
+  if(hint){
+    hint.textContent = '✅ Super! Du kannst jetzt zum Spielen weitergehen!';
+    hint.style.color = 'var(--green)';
+  }
+  // Also unlock Play step in stepper
+  const playStep = document.getElementById('step-play');
+  if(playStep) playStep.classList.remove('locked');
+}
+
+// ── LEVEL-UP BANNER ───────────────────────────────────────
+function bwShowLevelUpBanner(){
+  const banner = document.getElementById('bw-levelup-banner');
+  const title  = document.getElementById('bw-levelup-title');
+  const msg    = document.getElementById('bw-levelup-msg');
+  if(!banner) return;
+  const MAP = {
+    2:['⭐⭐  LEVEL 2!','Super! Jetzt ergänzt du das fehlende Wort im Satz!'],
+    3:['⭐⭐⭐  LEVEL 3!','Fantastisch! Jetzt schreibst du ganz eigene Sätze!']
+  };
+  const [t,m] = MAP[bwProgress.level] || ['⭐  LEVEL UP!','Weiter so!'];
+  if(title) title.textContent = t;
+  if(msg)   msg.textContent   = m;
+  banner.classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function bwDismissLevelup(){
+  const banner = document.getElementById('bw-levelup-banner');
+  if(banner) banner.classList.remove('show');
+  bwRenderBuilder(); // switch UI for new level
+}
+
+// ── SUBMIT ────────────────────────────────────────────────
+function bwSubmitSentence(){
+  let sentence = '';
+
+  // ── Level 1: guided word buttons ──
+  if(bwProgress.level === 1){
+    const {subject,verb,location} = bwGuidedParts;
+    if(!subject){ bwShowFeedback('error','⚠ Wähle eine Person oder ein Tier (Wer?)','');return; }
+    if(!verb)   { bwShowFeedback('error','⚠ Wähle eine Aktion (Was tut er/sie?)','');return; }
+    sentence = [subject,verb,location].filter(Boolean).join(' ').replace(/\s+\./,'.')+'.';
+    // Build a parsed object directly (buttons always produce valid sentences)
+    const subKey = subject.toLowerCase().replace(/^(der|die|das)\s+/i,'');
+    const locKey = location ? location.toLowerCase()
+                    .replace(/^(im|in der|in dem|am|auf dem|auf der|an der|an dem)\s+/i,'')
+                    : null;
+    const fakeResult = {
+      valid:true,
+      subject:       subKey,
+      subjectEmoji:  BW_SUBJECTS[subKey] || '🧑',
+      verbFound:     true,
+      location:      locKey,
+      locationEmoji: locKey ? (BW_LOCATIONS[locKey]||null) : null,
+      feedback:`✅ Super! ${BW_SUBJECTS[subKey]||'🧑'} ${subKey.charAt(0).toUpperCase()+subKey.slice(1)} ist jetzt in deiner Welt!`
+        + (locKey && BW_LOCATIONS[locKey] ? `  ${BW_LOCATIONS[locKey]} ${locKey}` : '')
+    };
+    bwHandleSuccess(fakeResult, sentence);
+    return;
+  }
+
+  // ── Level 2: fill-in-the-blank verb ──
+  if(bwProgress.level === 2){
+    const inp = document.getElementById('bw-verb-input');
+    const verbVal = inp ? inp.value.trim() : '';
+    if(!verbVal){ bwShowFeedback('error','⚠ Schreibe das fehlende Verb ein!','');return; }
+    const tmpl = bwCurrentTemplate;
+    const ok   = tmpl.correct.some(v=>v.toLowerCase()===verbVal.toLowerCase())
+               || BW_VERBS.includes(verbVal.toLowerCase());
+    if(!ok){
+      bwShowFeedback('error','⚠ Das Wort passt noch nicht als Verb!',
+        `Versuche z.B.: ${tmpl.correct.slice(0,3).join(', ')}`);
+      return;
+    }
+    sentence = `${tmpl.before} ${verbVal} ${tmpl.after}`;
+    const result = bwParseSentence(sentence);
+    if(result.valid){ bwHandleSuccess(result,sentence); }
+    else { bwShowFeedback('error',result.feedback,result.hintText); }
+    return;
+  }
+
+  // ── Level 3: free text ──
+  const inp = document.getElementById('bw-free-input');
+  sentence   = inp ? inp.value.trim() : '';
+  if(!sentence){ bwShowFeedback('error','⚠ Bitte schreibe einen Satz!','');return; }
+  const result = bwParseSentence(sentence);
+  if(result.valid){
+    bwHandleSuccess(result,sentence);
+    if(inp) inp.value = '';
+  } else {
+    bwShowFeedback('error',result.feedback,result.hintText);
+  }
+}
+
+function bwHandleSuccess(result, sentence){
+  bwAddToWorld(result, sentence);
+  bwAwardStar();
+  bwRenderWorld();
+  bwRenderHUD();
+  bwShowFeedback('success',`✅ Super! ${result.feedback}`,'');
+  // Reset input for guided mode; auto-rotate partial template
+  if(bwProgress.level === 1){
+    bwGuidedParts = {subject:'',verb:'',location:''};
+    bwRenderBuilder();
+  } else if(bwProgress.level === 2){
+    const idx = BW_PARTIAL_TEMPLATES.indexOf(bwCurrentTemplate);
+    bwCurrentTemplate = BW_PARTIAL_TEMPLATES[(idx+1)%BW_PARTIAL_TEMPLATES.length];
+    setTimeout(()=>bwRenderBuilder(),1400);
+  }
+}
+
+// ── FEEDBACK DISPLAY ──────────────────────────────────────
+// Shows ONE clear message at a time — ASD-friendly design.
+function bwShowFeedback(type, msg, hintText){
+  const fb = document.getElementById('bw-feedback');
+  if(!fb) return;
+  fb.className = `bw-feedback visible ${type}`;
+  let html = esc(msg).replace(/✅/g,'✅').replace(/⚠/g,'⚠');
+  // Restore emoji (they got escaped — re-insert raw)
+  html = msg; // use raw since esc would break emoji
+  if(hintText){
+    html += `<div style="margin-top:6px;font-weight:400;font-size:13px;color:inherit;opacity:.85;">
+      <button class="bw-hint-btn" onclick="bwDismissFeedback()">💡 ${esc(hintText)}</button>
+    </div>`;
+  }
+  fb.innerHTML = html;
+  fb.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function bwDismissFeedback(){
+  const fb = document.getElementById('bw-feedback');
+  if(fb) fb.className = 'bw-feedback';
+}
+
+// ── RESET ─────────────────────────────────────────────────
+function bwReset(){
+  if(bwProgress.level===1){
+    bwGuidedParts={subject:'',verb:'',location:''};
+    bwRenderBuilder();
+  } else if(bwProgress.level===2){
+    const inp=document.getElementById('bw-verb-input');
+    if(inp)inp.value='';
+  } else {
+    const inp=document.getElementById('bw-free-input');
+    if(inp)inp.value='';
+  }
+  bwDismissFeedback();
+}
+
+// ── HUD RENDERER ─────────────────────────────────────────
+function bwRenderHUD(){
+  const levelNum = document.getElementById('bw-level-num');
+  if(levelNum) levelNum.textContent = bwProgress.level;
+
+  const starsRow = document.getElementById('bw-stars-row');
+  if(starsRow){
+    let html='';
+    for(let i=0;i<bwProgress.required;i++)
+      html += i<bwProgress.stars ? '⭐' : '☆';
+    starsRow.textContent = html;
+  }
+
+  const fill = document.getElementById('bw-progress-fill');
+  if(fill) fill.style.width=(bwProgress.stars/bwProgress.required*100)+'%';
+
+  const sc = document.getElementById('bw-stars-count');
+  if(sc) sc.textContent = bwProgress.stars;
+
+  const tc = document.getElementById('bw-total-count');
+  if(tc) tc.textContent = bwProgress.totalSentences;
+}
+
+// ── WORLD RENDERER ───────────────────────────────────────
+// Renders world tiles, each with fade-in animation.
+function bwRenderWorld(){
+  const empty = document.getElementById('bw-world-empty');
+  const tiles = document.getElementById('bw-world-tiles');
+  const sc    = document.getElementById('bw-sentence-count');
+  if(!tiles) return;
+
+  if(world.length===0){
+    if(empty) empty.style.display='flex';
+    tiles.innerHTML='';
+    if(sc) sc.textContent='';
+    return;
+  }
+  if(empty) empty.style.display='none';
+
+  tiles.innerHTML = world.map((item,i)=>
+    `<div class="bw-tile" style="animation-delay:${i*0.05}s" title="${esc(item.sentence)}">
+       <span class="bw-tile-emoji">${item.emoji}</span>
+       <span class="bw-tile-label">${esc(item.label)}</span>
+     </div>`
+  ).join('');
+
+  const n = bwProgress.totalSentences;
+  if(sc) sc.textContent = `${n} Satz${n===1?'':'e'}`;
+}
+
+// ── BUILDER RENDERER ─────────────────────────────────────
+// Switches UI pane based on level.
+function bwRenderBuilder(){
+  const level   = bwProgress.level;
+  const guided  = document.getElementById('bw-guided');
+  const partial = document.getElementById('bw-partial');
+  const free    = document.getElementById('bw-free');
+  if(guided)  guided.style.display  = level===1?'block':'none';
+  if(partial) partial.style.display = level===2?'block':'none';
+  if(free)    free.style.display    = level===3?'block':'none';
+
+  if(level===1) bwRenderGuided();
+  else if(level===2) bwRenderPartial();
+  // Level 3 is static HTML
+}
+
+// Level 1: render word-button groups
+function bwRenderGuided(){
+  const grp     = document.getElementById('bw-word-groups');
+  const preview = document.getElementById('bw-preview-guided');
+  if(!grp) return;
+
+  const previewText = bwGetGuidedPreview();
+  if(preview){
+    preview.innerHTML = previewText
+      ? `<strong>${esc(previewText)}</strong>`
+      : '<span style="opacity:.4;font-size:13px;font-weight:400;">Tippe auf Wörter unten, um deinen Satz zu bauen …</span>';
+  }
+
+  const {subjects,verbs,locations} = BW_GUIDED_WORDS;
+  grp.innerHTML = `
+    <div class="bw-word-group">
+      <span class="bw-word-group-label">1. Wer? — Person oder Tier wählen</span>
+      <div class="bw-word-row">
+        ${subjects.map(w=>`<button class="bw-word-btn${bwGuidedParts.subject===w?' selected':''}"
+          onclick="bwSelectPart('subject',${JSON.stringify(w)})">${w}</button>`).join('')}
+      </div>
+    </div>
+    <div class="bw-word-group">
+      <span class="bw-word-group-label">2. Was tut er/sie/es? — Verb wählen</span>
+      <div class="bw-word-row">
+        ${verbs.map(w=>`<button class="bw-word-btn${bwGuidedParts.verb===w?' selected':''}"
+          onclick="bwSelectPart('verb',${JSON.stringify(w)})">${w}</button>`).join('')}
+      </div>
+    </div>
+    <div class="bw-word-group">
+      <span class="bw-word-group-label">3. Wo? — Ort wählen (optional)</span>
+      <div class="bw-word-row">
+        ${locations.map(w=>`<button class="bw-word-btn${bwGuidedParts.location===w?' selected':''}"
+          onclick="bwSelectPart('location',${JSON.stringify(w)})">${w}</button>`).join('')}
+      </div>
+    </div>`;
+}
+
+function bwSelectPart(part, value){
+  // Toggle: clicking the same word again de-selects it
+  bwGuidedParts[part] = bwGuidedParts[part]===value ? '' : value;
+  bwDismissFeedback();
+  bwRenderGuided();
+}
+
+function bwGetGuidedPreview(){
+  const {subject,verb,location} = bwGuidedParts;
+  if(!subject && !verb) return '';
+  return [subject,verb,location].filter(Boolean).join(' ')+(verb?'.':'');
+}
+
+// Level 2: render fill-in-the-blank template
+function bwRenderPartial(){
+  const container = document.getElementById('bw-partial-content');
+  if(!container || !bwCurrentTemplate) return;
+  const tmpl = bwCurrentTemplate;
+  container.innerHTML = `
+    <div class="bw-partial-fill">
+      <span>${esc(tmpl.before)}</span>
+      <input class="bw-blank" type="text" id="bw-verb-input"
+        placeholder="Verb …" autocomplete="off"
+        onkeydown="if(event.key==='Enter')bwSubmitSentence()"
+        style="width:130px;"
+      >
+      <span>${esc(tmpl.after)}</span>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;line-height:1.7;">
+      Zum Beispiel: ${tmpl.correct.slice(0,4).map(v=>`<em>${v}</em>`).join(', ')} …
+    </div>`;
+  // Auto-focus the input
+  setTimeout(()=>{
+    const inp=document.getElementById('bw-verb-input');
+    if(inp) inp.focus();
+  },100);
+}
+
+// ── CONTINUE ─────────────────────────────────────────────
+function bwContinue(){
+  if(!bwSatzweltDone) return;
+  currentStep='play';
+  document.getElementById('step-play').classList.remove('locked');
+  renderStep();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
 </script>
 
 <!-- ══ FOCUS MODE OVERLAY ══ -->
