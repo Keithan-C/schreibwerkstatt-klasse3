@@ -18,9 +18,7 @@
   --radius: 14px;
   --radius-sm: 8px;
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 body {
   font-family: 'Nunito', sans-serif;
   background: var(--bg);
@@ -28,43 +26,19 @@ body {
   padding: 20px;
   min-height: 100vh;
 }
-
 .wrap { max-width: 780px; margin: 0 auto; }
-
-h1 {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 4px;
-}
-.subtitle {
-  font-size: 15px;
-  color: var(--muted);
-  margin-bottom: 20px;
-}
-
-/* ── Phase nav ── */
+h1 { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.subtitle { font-size: 15px; color: var(--muted); margin-bottom: 20px; }
 .phase-nav {
-  display: flex;
-  gap: 0;
-  margin-bottom: 24px;
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1.5px solid var(--border);
-  background: var(--card);
+  display: flex; gap: 0; margin-bottom: 24px;
+  border-radius: var(--radius); overflow: hidden;
+  border: 1.5px solid var(--border); background: var(--card);
 }
 .phase-btn {
-  flex: 1;
-  padding: 12px 10px;
-  text-align: center;
-  font-family: 'Nunito', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  background: var(--card);
-  color: var(--muted);
-  border: none;
-  border-right: 1.5px solid var(--border);
-  cursor: pointer;
+  flex: 1; padding: 12px 10px; text-align: center;
+  font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+  background: var(--card); color: var(--muted); border: none;
+  border-right: 1.5px solid var(--border); cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 .phase-btn:last-child { border-right: none; }
@@ -72,98 +46,34 @@ h1 {
 .phase-btn .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
 .phase-btn.active { background: var(--wer-light); color: var(--wer-dark); }
 .phase-btn.done { background: var(--wo-light); color: var(--wo-dark); }
-.phase-btn.active-verb { background: var(--verb-light); color: var(--verb-dark); }
-.phase-btn.active-wo { background: var(--wo-light); color: var(--wo-dark); }
-
-/* ── Cards ── */
 .card {
-  background: var(--card);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 22px 24px;
-  margin-bottom: 16px;
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: var(--radius); padding: 22px 24px; margin-bottom: 16px;
 }
-
-/* ── Example phase ── */
-.example-sentence {
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 14px;
-  letter-spacing: -0.01em;
-}
-.label-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-.pill {
-  font-size: 13px;
-  font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 20px;
-}
-.pill-wer { background: var(--wer-light); color: var(--wer-dark); }
-.pill-verb { background: var(--verb-light); color: var(--verb-dark); }
-.pill-wo { background: var(--wo-light); color: var(--wo-dark); }
-
 .rule-row {
-  display: flex;
-  gap: 10px;
-  background: #f4f3ff;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 18px;
-  align-items: flex-start;
+  display: flex; gap: 10px; background: #f4f3ff;
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-size: 14px; color: var(--muted); margin-bottom: 18px; align-items: flex-start;
 }
 .rule-row strong { color: var(--text); }
-
-/* ── Build phase ── */
-.slots {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
+.slots { display: flex; gap: 10px; margin-bottom: 20px; }
 .slot {
-  flex: 1;
-  min-height: 64px;
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-sm);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--muted);
-  transition: all 0.25s;
-  padding: 6px 8px;
-  text-align: center;
-  position: relative;
+  flex: 1; min-height: 64px; border: 2px dashed var(--border);
+  border-radius: var(--radius-sm); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; font-size: 15px;
+  font-weight: 700; color: var(--muted); transition: all 0.25s;
+  padding: 6px 8px; text-align: center; position: relative;
 }
-.slot .tag {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 4px;
-  opacity: 0.7;
-}
+.slot .tag { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; opacity: 0.7; }
 .slot .val { font-size: 16px; }
 .slot.filled-wer { border: 2px solid var(--wer-mid); background: var(--wer-light); color: var(--wer-dark); }
 .slot.filled-verb { border: 2px solid var(--verb-mid); background: var(--verb-light); color: var(--verb-dark); }
 .slot.filled-wo { border: 2px solid var(--wo-mid); background: var(--wo-light); color: var(--wo-dark); }
-
 .divider { height: 1.5px; background: var(--border); margin: 16px 0; }
-
 .group-label {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-  margin-top: 14px;
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; display: flex; align-items: center;
+  gap: 6px; margin-bottom: 8px; margin-top: 14px;
 }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .dot-wer { background: var(--wer-mid); }
@@ -172,268 +82,153 @@ h1 {
 .label-wer { color: var(--wer-dark); }
 .label-verb { color: var(--verb-dark); }
 .label-wo { color: var(--wo-dark); }
-
 .words { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
 .word {
-  padding: 9px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  background: var(--card);
-  color: var(--text);
-  transition: all 0.15s;
-  user-select: none;
+  padding: 9px 16px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer;
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 600;
+  background: var(--card); color: var(--text); transition: all 0.15s; user-select: none;
 }
 .word:hover { background: #f4f3ff; }
 .word.sel-wer { background: var(--wer-light); border-color: var(--wer-mid); color: var(--wer-dark); }
 .word.sel-verb { background: var(--verb-light); border-color: var(--verb-mid); color: var(--verb-dark); }
 .word.sel-wo { background: var(--wo-light); border-color: var(--wo-mid); color: var(--wo-dark); }
-
-/* ── Buttons ── */
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  background: var(--wo-mid);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 16px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; background: var(--wo-mid); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s; margin-top: 16px;
 }
 .btn-primary:hover { background: var(--wo-dark); }
 .btn-primary:disabled { background: var(--border); color: var(--muted); cursor: default; }
-
 .btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 22px;
-  background: transparent;
-  color: var(--text);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 12px;
-  margin-left: 8px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; background: transparent; color: var(--text);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s; margin-top: 12px; margin-left: 8px;
 }
 .btn-secondary:hover { background: #f4f3ff; }
-
-/* ── Feedback ── */
 .feedback {
-  padding: 14px 16px;
-  border-radius: var(--radius-sm);
-  font-size: 15px;
-  margin-top: 14px;
-  display: none;
-  line-height: 1.6;
+  padding: 14px 16px; border-radius: var(--radius-sm);
+  font-size: 15px; margin-top: 14px; display: none; line-height: 1.6;
 }
 .feedback.ok { background: var(--wo-light); border: 1.5px solid var(--wo-mid); color: var(--wo-dark); display: block; }
 .feedback.warn { background: #FAEEDA; border: 1.5px solid #EF9F27; color: #633806; display: block; }
 .feedback.error { background: #FCEBEB; border: 1.5px solid #F09595; color: #A32D2D; display: block; }
-
-/* ── Transfer / Phase 3 ── */
-.scaffold-strip {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
+.scaffold-strip { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
 .sc-slot {
-  flex: 1;
-  min-width: 100px;
-  padding: 10px 12px;
-  border: 2px dashed var(--border);
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  text-align: center;
+  flex: 1; min-width: 100px; padding: 10px 12px;
+  border: 2px dashed var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600; color: var(--muted); text-align: center;
+  transition: border-color 0.2s, background 0.2s;
 }
-
+/* topic-specific slot colours set via JS */
+.sc-slot.slot-wer  { border-color: var(--wer-mid);  background: var(--wer-light);  color: var(--wer-dark); }
+.sc-slot.slot-verb { border-color: var(--verb-mid); background: var(--verb-light); color: var(--verb-dark); }
+.sc-slot.slot-wo   { border-color: var(--wo-mid);   background: var(--wo-light);   color: var(--wo-dark); }
 .hint-box {
-  background: #f4f3ff;
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 14px;
-  display: flex;
-  gap: 10px;
+  background: #f4f3ff; border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: 14px; color: var(--muted);
+  margin-bottom: 14px; display: flex; gap: 10px;
 }
 .hint-box strong { color: var(--text); }
-
 .try-dots { display: flex; gap: 7px; margin-bottom: 12px; }
 .try-dot {
   width: 12px; height: 12px; border-radius: 50%;
-  background: var(--bg);
-  border: 1.5px solid var(--border);
-  transition: all 0.2s;
+  background: var(--bg); border: 1.5px solid var(--border); transition: all 0.2s;
 }
 .try-dot.tried { background: #EF9F27; border-color: #BA7517; }
 .try-dot.correct { background: var(--wo-mid); border-color: var(--wo-dark); }
-
 .sentence-input {
-  width: 100%;
-  padding: 13px 16px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius-sm);
-  font-family: 'Nunito', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--text);
-  background: var(--card);
-  margin-bottom: 4px;
-  transition: border-color 0.2s;
+  width: 100%; padding: 13px 16px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'Nunito', sans-serif;
+  font-size: 17px; font-weight: 600; color: var(--text);
+  background: var(--card); margin-bottom: 4px; transition: border-color 0.2s;
 }
 .sentence-input:focus { outline: none; border-color: var(--wo-mid); }
-
 .ai-loading {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: #f4f3ff;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  color: var(--muted);
-  margin-top: 12px;
+  display: none; align-items: center; gap: 10px;
+  padding: 14px 16px; background: #f4f3ff;
+  border-radius: var(--radius-sm); font-size: 14px;
+  color: var(--muted); margin-top: 12px;
 }
 .spinner {
-  width: 18px; height: 18px;
-  border: 2px solid var(--border);
-  border-top-color: var(--wer-mid);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  flex-shrink: 0;
+  width: 18px; height: 18px; border: 2px solid var(--border);
+  border-top-color: var(--wer-mid); border-radius: 50%;
+  animation: spin 0.7s linear infinite; flex-shrink: 0;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.correction-steps {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+.correction-steps { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .correction-step {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: #FAEEDA;
-  border: 1px solid #EF9F27;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  color: #633806;
-  font-weight: 600;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; background: #FAEEDA;
+  border: 1px solid #EF9F27; border-radius: var(--radius-sm);
+  font-size: 14px; color: #633806; font-weight: 600;
 }
 .fix-btn {
-  padding: 5px 12px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  border: 1.5px solid #BA7517;
-  border-radius: 6px;
-  background: #fff;
-  color: #633806;
-  cursor: pointer;
-  margin-left: auto;
-  white-space: nowrap;
+  padding: 5px 12px; font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 700; border: 1.5px solid #BA7517;
+  border-radius: 6px; background: #fff; color: #633806;
+  cursor: pointer; margin-left: auto; white-space: nowrap;
 }
 .fix-btn:hover { background: #FAEEDA; }
-
 .live-preview {
-  font-size: 20px;
-  font-weight: 700;
-  padding: 12px 16px;
-  background: var(--bg);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  margin-top: 10px;
-  border: 1.5px solid var(--border);
-  min-height: 50px;
+  font-size: 20px; font-weight: 700; padding: 12px 16px;
+  background: var(--bg); border-radius: var(--radius-sm);
+  color: var(--text); margin-top: 10px;
+  border: 1.5px solid var(--border); min-height: 50px;
 }
-
-/* ── Sections ── */
 .section { display: none; }
 .section.visible { display: block; }
-
-/* ── Confetti ── */
 canvas#confetti {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  z-index: 999;
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%; pointer-events: none; z-index: 999;
 }
-
-/* ── Topic picker ── */
 .topic-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 10px;
-  margin-bottom: 18px;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 10px; margin-bottom: 18px;
 }
 .topic-btn {
-  padding: 12px 14px;
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--card);
-  cursor: pointer;
-  text-align: left;
-  font-family: 'Nunito', sans-serif;
-  transition: all 0.15s;
+  padding: 12px 14px; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); background: var(--card);
+  cursor: pointer; text-align: left;
+  font-family: 'Nunito', sans-serif; transition: all 0.15s;
 }
 .topic-btn:hover { background: #f4f3ff; border-color: var(--wer-mid); }
 .topic-btn.active { border: 2px solid var(--wer-mid); background: var(--wer-light); }
 .topic-btn .t-icon { font-size: 20px; display: block; margin-bottom: 4px; }
 .topic-btn .t-name { font-size: 13px; font-weight: 700; color: var(--text); display: block; }
 .topic-btn .t-sub { font-size: 11px; color: var(--muted); display: block; margin-top: 2px; }
-
-.example-block { display: none; }
-.example-block.visible { display: block; }
-
 .anno-sentence {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--text);
-  margin-bottom: 14px;
-  letter-spacing: -0.01em;
-  line-height: 1.4;
+  font-size: 22px; font-weight: 800; color: var(--text);
+  margin-bottom: 14px; letter-spacing: -0.01em; line-height: 1.4;
 }
-.anno-sentence .hl-wer { background: var(--wer-light); color: var(--wer-dark); border-radius: 4px; padding: 0 4px; }
+.anno-sentence .hl-wer  { background: var(--wer-light);  color: var(--wer-dark);  border-radius: 4px; padding: 0 4px; }
 .anno-sentence .hl-verb { background: var(--verb-light); color: var(--verb-dark); border-radius: 4px; padding: 0 4px; }
-.anno-sentence .hl-wo { background: var(--wo-light); color: var(--wo-dark); border-radius: 4px; padding: 0 4px; }
-.anno-sentence .hl-adj { background: #FBEAF0; color: #72243E; border-radius: 4px; padding: 0 4px; }
+.anno-sentence .hl-wo   { background: var(--wo-light);   color: var(--wo-dark);   border-radius: 4px; padding: 0 4px; }
+.anno-sentence .hl-adj  { background: #FBEAF0; color: #72243E; border-radius: 4px; padding: 0 4px; }
 .anno-sentence .hl-pron { background: #FAEEDA; color: #633806; border-radius: 4px; padding: 0 4px; }
 .anno-sentence .hl-zeit { background: #E6F1FB; color: #185FA5; border-radius: 4px; padding: 0 4px; }
 .anno-sentence .hl-bind { background: #EAF3DE; color: #3B6D11; border-radius: 4px; padding: 0 4px; }
-
 .legend-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-.legend-pill {
-  font-size: 12px; font-weight: 700;
-  padding: 3px 10px; border-radius: 20px;
-}
-.lp-wer { background: var(--wer-light); color: var(--wer-dark); }
+.legend-pill { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.lp-wer  { background: var(--wer-light);  color: var(--wer-dark); }
 .lp-verb { background: var(--verb-light); color: var(--verb-dark); }
-.lp-wo { background: var(--wo-light); color: var(--wo-dark); }
-.lp-adj { background: #FBEAF0; color: #72243E; }
+.lp-wo   { background: var(--wo-light);   color: var(--wo-dark); }
+.lp-adj  { background: #FBEAF0; color: #72243E; }
 .lp-pron { background: #FAEEDA; color: #633806; }
 .lp-zeit { background: #E6F1FB; color: #185FA5; }
 .lp-bind { background: #EAF3DE; color: #3B6D11; }
 .lp-rede { background: #EEEDFE; color: #3C3489; }
+
+/* topic-themed hint box in Phase 3 */
+.hint-topic {
+  border-radius: var(--radius-sm); padding: 10px 14px;
+  font-size: 13px; font-weight: 700; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
 </style>
 </head>
 <body>
@@ -441,7 +236,6 @@ canvas#confetti {
 <canvas id="confetti"></canvas>
 
 <div class="wrap">
-
   <h1>Satzwerkstatt</h1>
   <p class="subtitle">Lerne, wie ein guter Satz aufgebaut ist.</p>
 
@@ -457,55 +251,51 @@ canvas#confetti {
     </button>
   </nav>
 
-  <!-- ════ PHASE 1: BEISPIEL ════ -->
+  <!-- PHASE 1: BEISPIEL -->
   <div id="s0" class="section visible">
     <div class="card">
       <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--wer-dark);margin-bottom:12px">Wähle ein Thema:</div>
-
       <div class="topic-grid" id="topicGrid"></div>
-
       <div id="exampleArea"></div>
-
       <button class="btn-primary" id="tryBtn" style="display:none" onclick="goPhase(1)">Jetzt selbst bauen! →</button>
     </div>
   </div>
 
-  <!-- ════ PHASE 2: BAUEN ════ -->
+  <!-- PHASE 2: BAUEN -->
   <div id="s1" class="section">
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px">Klicke ein Wort aus jeder Gruppe an — dann erscheint dein Satz oben.</div>
-
+      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:4px" id="build-intro">Klicke ein Wort aus jeder Gruppe an — dann erscheint dein Satz oben.</div>
+      <div id="build-topic-hint" style="margin-bottom:12px"></div>
       <div class="slots">
         <div class="slot" id="slot-wer"><span class="tag">Wer?</span><span class="val" id="sv-wer">___</span></div>
         <div class="slot" id="slot-verb"><span class="tag">Was tun?</span><span class="val" id="sv-verb">___</span></div>
         <div class="slot" id="slot-wo"><span class="tag">Wo?</span><span class="val" id="sv-wo">___</span></div>
       </div>
-
       <div class="divider"></div>
-
       <div class="group-label label-wer"><span class="dot dot-wer"></span> Wer?</div>
       <div class="words" id="wer"></div>
-
       <div class="group-label label-verb"><span class="dot dot-verb"></span> Was tun? (Verb)</div>
       <div class="words" id="verb"></div>
-
       <div class="group-label label-wo"><span class="dot dot-wo"></span> Wo?</div>
       <div class="words" id="wo"></div>
-
       <button class="btn-primary" id="checkBtn" onclick="checkBuild()" disabled>Satz prüfen ✓</button>
       <div id="buildFeedback" class="feedback"></div>
     </div>
   </div>
 
-  <!-- ════ PHASE 3: EIGENER SATZ ════ -->
+  <!-- PHASE 3: EIGENER SATZ -->
   <div id="s2" class="section">
     <div class="card">
-      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px">Schreibe jetzt deinen <strong>eigenen</strong> Satz. Denke an die drei Teile:</div>
+      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px" id="own-intro">Schreibe jetzt deinen <strong>eigenen</strong> Satz zum Thema <strong id="own-topic-name">Satzaufbau</strong>:</div>
 
-      <div class="scaffold-strip">
-        <div class="sc-slot">Wer?<br><span style="font-size:11px;font-weight:400">z.B. Die Katze</span></div>
-        <div class="sc-slot">Was tun?<br><span style="font-size:11px;font-weight:400">z.B. schläft</span></div>
-        <div class="sc-slot">Wo?<br><span style="font-size:11px;font-weight:400">z.B. im Garten</span></div>
+      <!-- topic-specific hint shown here -->
+      <div id="own-topic-hint" class="hint-topic" style="display:none"></div>
+
+      <!-- scaffold strip — updated per topic -->
+      <div class="scaffold-strip" id="scaffold-strip">
+        <div class="sc-slot slot-wer">Wer?<br><span id="sc-wer-hint" style="font-size:11px;font-weight:400">z.B. Der Hund</span></div>
+        <div class="sc-slot slot-verb">Was tun?<br><span id="sc-verb-hint" style="font-size:11px;font-weight:400">z.B. rennt</span></div>
+        <div class="sc-slot slot-wo">Wo?<br><span id="sc-wo-hint" style="font-size:11px;font-weight:400">z.B. im Park</span></div>
       </div>
 
       <div class="hint-box">
@@ -521,7 +311,6 @@ canvas#confetti {
       </div>
 
       <input id="ownInput" class="sentence-input" type="text" placeholder="Mein Satz ..." autocomplete="off" spellcheck="false">
-
       <button class="btn-primary" id="ownCheckBtn" onclick="checkOwn()">Prüfen lassen ✓</button>
       <button class="btn-secondary" onclick="resetOwn()">Neu versuchen ↺</button>
 
@@ -529,20 +318,17 @@ canvas#confetti {
         <div class="spinner"></div>
         <span>Ich lese deinen Satz …</span>
       </div>
-
       <div id="ownFeedback" class="feedback"></div>
-
       <div id="correctionSteps" class="correction-steps" style="display:none"></div>
-
       <div id="livePreview" class="live-preview" style="display:none"></div>
     </div>
 
     <div class="card" id="tryAnotherCard" style="display:none">
       <div style="font-size:15px;font-weight:700;margin-bottom:10px">Schreibe noch einen Satz!</div>
-      <div class="scaffold-strip">
-        <div class="sc-slot">Wer?</div>
-        <div class="sc-slot">Was tun?</div>
-        <div class="sc-slot">Wo?</div>
+      <div class="scaffold-strip" id="scaffold-strip2">
+        <div class="sc-slot slot-wer">Wer?<br><span id="sc-wer-hint2" style="font-size:11px;font-weight:400">z.B. Der Hund</span></div>
+        <div class="sc-slot slot-verb">Was tun?<br><span id="sc-verb-hint2" style="font-size:11px;font-weight:400">z.B. rennt</span></div>
+        <div class="sc-slot slot-wo">Wo?<br><span id="sc-wo-hint2" style="font-size:11px;font-weight:400">z.B. im Park</span></div>
       </div>
       <input id="ownInput2" class="sentence-input" type="text" placeholder="Mein nächster Satz ..." autocomplete="off" spellcheck="false">
       <button class="btn-primary" onclick="checkOwn2()">Prüfen lassen ✓</button>
@@ -557,51 +343,101 @@ canvas#confetti {
 </div>
 
 <script>
-const data = {
-  wer: ["Der Hund","Die Katze","Das Mädchen","Der Junge","Die Lehrerin"],
-  verb: ["läuft","rennt","geht","spielt","sitzt","schläft"],
-  wo: ["im Park","im Garten","im Wald","in der Schule","auf dem Spielplatz"]
+// ── Per-topic word banks + scaffold examples ──────────────────────────────────
+// Each topic has words that match the example sentence shown in Phase 1,
+// so the child builds and writes sentences in the same world as the example.
+const TOPIC_DATA = {
+  satzaufbau: {
+    wer:      ['Der Hund','Die Katze','Das Mädchen','Der Junge','Die Lehrerin'],
+    verb:     ['läuft','rennt','geht','spielt','sitzt','schläft'],
+    wo:       ['im Park','im Garten','im Wald','in der Schule','auf dem Spielplatz'],
+    scaffold: { wer:'Der Hund', verb:'rennt', wo:'im Park' },
+    hint:     null  // no extra hint needed for basic Satzaufbau
+  },
+  woertliche_rede: {
+    wer:      ['Das Mädchen','Der Junge','Die Lehrerin','Max','Emma'],
+    verb:     ['ruft','sagt','flüstert','fragt','antwortet'],
+    wo:       ['"Komm her!"','"Hilfe!"','"Super!"','"Warte auf mich!"','"Ich komme!"'],
+    scaffold: { wer:'Das Mädchen', verb:'ruft', wo:'"Komm her!"' },
+    hint:     { icon:'💬', text:'Schreibe einen Satz mit wörtlicher Rede — z.B.: Das Mädchen ruft: "Komm her!"', bg:'#EEEDFE', color:'#3C3489' }
+  },
+  satzarten: {
+    wer:      ['Der Junge','Die Katze','Tim','Das Kind','Wir'],
+    verb:     ['spielt','rennt','liest','singt','kommt'],
+    wo:       ['im Garten','im Park','in der Schule','zu Hause','auf dem Spielplatz'],
+    scaffold: { wer:'Der Junge', verb:'spielt', wo:'im Garten' },
+    hint:     { icon:'❓', text:'Schreibe einen Aussagesatz (.), einen Fragesatz (?) oder eine Aufforderung (!).', bg:'#E6F1FB', color:'#185FA5' }
+  },
+  adjektive: {
+    wer:      ['Die kleine Katze','Der große Hund','Das mutige Kind','Eine freundliche Lehrerin','Ein bunter Schmetterling'],
+    verb:     ['schläft','springt','spielt','läuft','sitzt'],
+    wo:       ['auf dem weichen Sofa','im grünen Garten','auf der langen Wiese','neben dem alten Baum','in der warmen Küche'],
+    scaffold: { wer:'Die kleine Katze', verb:'schläft', wo:'auf dem weichen Sofa' },
+    hint:     { icon:'🎨', text:'Benutze mindestens ein Adjektiv (Wie-Wort) — z.B. die kleine Katze, der große Hund.', bg:'#FBEAF0', color:'#72243E' }
+  },
+  zeitformen: {
+    wer:      ['Der Junge','Die Mädchen','Das Kind','Wir','Emma'],
+    verb:     ['spielte','lief','sang','malte','rannte'],
+    wo:       ['im Garten','in der Schule','im Park','zu Hause','auf dem Spielplatz'],
+    scaffold: { wer:'Der Junge', verb:'spielte', wo:'im Garten' },
+    hint:     { icon:'⏰', text:'Schreibe im Präteritum (Vergangenheit) — z.B. spielte, lief, sang.', bg:'#E6F1FB', color:'#185FA5' }
+  },
+  nomen: {
+    wer:      ['Der Hund','Die Schule','Das Mädchen','Ein Freund','Die Katze'],
+    verb:     ['bellt','öffnet','lacht','hilft','schläft'],
+    wo:       ['den ganzen Tag','die ganze Nacht','am Morgen','im Haus','auf dem Hof'],
+    scaffold: { wer:'Der Hund', verb:'bellt', wo:'den ganzen Tag' },
+    hint:     { icon:'🏷️', text:'Schreibe alle Nomen (Namenwörter) GROSS — z.B. der Hund, die Schule, das Kind.', bg:'var(--wer-light)', color:'var(--wer-dark)' }
+  },
+  pronomen: {
+    wer:      ['Lisa','Max','Die Kinder','Mein Bruder','Meine Freundin'],
+    verb:     ['liest','spielt','rennen','schläft','lacht'],
+    wo:       ['ein Buch','im Garten','auf dem Schulhof','in der Schule','mit mir'],
+    scaffold: { wer:'Lisa', verb:'liest', wo:'ein Buch' },
+    hint:     { icon:'👤', text:'Schreibe zuerst einen Satz mit einem Namen — dann ersetze ihn durch ein Pronomen (er/sie/es).', bg:'#FAEEDA', color:'#633806' }
+  },
+  bindew: {
+    wer:      ['Der Hund','Das Kind','Die Katze','Max','Wir'],
+    verb:     ['bellt','weint','schläft','bleibt','spielen'],
+    wo:       ['weil er Hunger hat','weil sie müde ist','weil es regnet','obwohl es kalt ist','und wir sind froh'],
+    scaffold: { wer:'Der Hund', verb:'bellt', wo:'weil er Hunger hat' },
+    hint:     { icon:'🔗', text:'Verbinde zwei Sätze mit einem Bindewort — z.B.: Der Hund bellt, weil er Hunger hat.', bg:'#EAF3DE', color:'#3B6D11' }
+  }
 };
 
-const sel = {wer:"",verb:"",wo:""};
+// Active word bank — updated when topic is selected
+let data = { ...TOPIC_DATA.satzaufbau };
+
+const sel = { wer:'', verb:'', wo:'' };
 let attempts = 0;
 let currentPhase = 0;
 let currentWords = [];
+let currentTopicId = 'satzaufbau';
 
-
-// ── Topic data (Bayern LehrplanPLUS Klasse 3) ──
+// ── Topic definitions (example sentences, legends, rules) ────────────────────
 const topics = [
   {
-    id: 'satzaufbau',
-    icon: '&#x1F3D7;',
-    name: 'Satzaufbau',
-    sub: 'Wer, Verb, Wo',
+    id: 'satzaufbau', icon: '&#x1F3D7;', name: 'Satzaufbau', sub: 'Wer, Verb, Wo',
     sentence: '<span class="hl-wer">Der Hund</span> <span class="hl-verb">rennt</span> <span class="hl-wo">im Park</span>.',
     legend: [
-      {cls:'lp-wer', text:'Wer? (Subjekt) &#8594; Der Hund'},
+      {cls:'lp-wer',  text:'Wer? (Subjekt) &#8594; Der Hund'},
       {cls:'lp-verb', text:'Was tun? (Verb) &#8594; rennt'},
-      {cls:'lp-wo', text:'Wo? &#8594; im Park'}
+      {cls:'lp-wo',   text:'Wo? &#8594; im Park'}
     ],
     rule: 'Ein Satz hat immer ein <strong>Subjekt</strong> (Wer/Was?) und ein <strong>Verb</strong> (Was tun?). Das Verb steht im Aussagesatz an der <strong>2. Stelle</strong>.'
   },
   {
-    id: 'woertliche_rede',
-    icon: '&#x1F4AC;',
-    name: 'W&#246;rtliche Rede',
-    sub: 'Anf&#252;hrungszeichen',
+    id: 'woertliche_rede', icon: '&#x1F4AC;', name: 'W&#246;rtliche Rede', sub: 'Anf&#252;hrungszeichen',
     sentence: '<span class="hl-wer">Das M&#228;dchen</span> <span class="hl-verb">ruft</span>: <span style="background:#EEEDFE;color:#3C3489;border-radius:4px;padding:0 4px">&#8222;Komm schnell her!&#8220;</span>',
     legend: [
-      {cls:'lp-wer', text:'Wer spricht &#8594; Das M&#228;dchen'},
+      {cls:'lp-wer',  text:'Wer spricht &#8594; Das M&#228;dchen'},
       {cls:'lp-verb', text:'Sprechverb &#8594; ruft'},
       {cls:'lp-rede', text:'W&#246;rtliche Rede &#8594; &#8222;Komm schnell her!&#8220;'}
     ],
     rule: 'Die <strong>w&#246;rtliche Rede</strong> steht in Anf&#252;hrungszeichen: <strong>&#8222; &#8220;</strong><br>Davor steht ein <strong>Redebegleitsatz</strong> mit Doppelpunkt.<br>Sprechverben: sagte, rief, fragte, fl&#252;sterte, antwortete'
   },
   {
-    id: 'satzarten',
-    icon: '&#x2753;',
-    name: 'Satzarten',
-    sub: 'Aussage, Frage, Aufforderung',
+    id: 'satzarten', icon: '&#x2753;', name: 'Satzarten', sub: 'Aussage, Frage, Aufforderung',
     sentence: '<span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">Aussage:</span> <span class="hl-wer">Der Junge</span> <span class="hl-verb">spielt</span> Fu&#223;ball.<br><span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">Frage:</span> <span class="hl-verb">Spielst</span> <span class="hl-pron">du</span> mit?<br><span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">Aufforderung:</span> <span class="hl-verb">Komm</span> her!',
     legend: [
       {cls:'lp-zeit', text:'Aussagesatz &#8594; Punkt .'},
@@ -611,23 +447,17 @@ const topics = [
     rule: '<strong>Aussagesatz:</strong> Subjekt vorne, Verb an 2. Stelle &#8594; Punkt<br><strong>Fragesatz:</strong> Verb steht am Anfang &#8594; Fragezeichen<br><strong>Aufforderungssatz:</strong> Verb am Anfang, Befehlsform &#8594; Ausrufezeichen'
   },
   {
-    id: 'adjektive',
-    icon: '&#x1F3A8;',
-    name: 'Adjektive',
-    sub: 'Wie-W&#246;rter &amp; Steigerung',
+    id: 'adjektive', icon: '&#x1F3A8;', name: 'Adjektive', sub: 'Wie-W&#246;rter &amp; Steigerung',
     sentence: '<span class="hl-wer">Die <span class="hl-adj">kleine</span> Katze</span> <span class="hl-verb">schl&#228;ft</span> auf dem <span class="hl-adj">weichen</span> Sofa.',
     legend: [
       {cls:'lp-wer', text:'Nomen &#8594; Katze, Sofa (gro&#223;)'},
       {cls:'lp-adj', text:'Adjektiv &#8594; klein, weich (Wie-Wort, klein)'},
-      {cls:'lp-verb', text:'Verb &#8594; schl&#228;ft'}
+      {cls:'lp-verb',text:'Verb &#8594; schl&#228;ft'}
     ],
     rule: '<strong>Adjektive</strong> beschreiben Nomen: die <u>kleine</u> Katze<br>Steigerung: klein &#8594; kleiner &#8594; am kleinsten<br>Adjektive werden <strong>kleingeschrieben</strong>.'
   },
   {
-    id: 'zeitformen',
-    icon: '&#x23F0;',
-    name: 'Zeitformen',
-    sub: 'Gegenwart &amp; Vergangenheit',
+    id: 'zeitformen', icon: '&#x23F0;', name: 'Zeitformen', sub: 'Gegenwart &amp; Vergangenheit',
     sentence: '<span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">Jetzt:</span> <span class="hl-wer">Der Junge</span> <span class="hl-verb">spielt</span>.<br><span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">1. Verg.:</span> <span class="hl-wer">Der Junge</span> <span class="hl-zeit">spielte</span>.<br><span style="background:#E6F1FB;color:#185FA5;border-radius:4px;padding:0 3px;font-size:15px">2. Verg.:</span> <span class="hl-wer">Der Junge</span> <span class="hl-zeit">hat gespielt</span>.',
     legend: [
       {cls:'lp-verb', text:'Pr&#228;sens (jetzt) &#8594; spielt'},
@@ -637,71 +467,65 @@ const topics = [
     rule: '<strong>Pr&#228;sens:</strong> Was passiert gerade? &#8594; spielt<br><strong>Pr&#228;teritum:</strong> Was passierte? &#8594; spielte<br><strong>Perfekt:</strong> Was ist passiert? &#8594; hat gespielt'
   },
   {
-    id: 'nomen',
-    icon: '&#x1F3F7;',
-    name: 'Nomen',
-    sub: 'Gro&#223;schreibung &amp; Artikel',
+    id: 'nomen', icon: '&#x1F3F7;', name: 'Nomen', sub: 'Gro&#223;schreibung &amp; Artikel',
     sentence: '<span class="hl-wer">Der <u>Hund</u></span> <span class="hl-verb">bellt</span> den ganzen <span class="hl-wo"><u>Tag</u></span>.',
     legend: [
       {cls:'lp-wer', text:'Nomen &#8594; immer GROSSGESCHRIEBEN'},
-      {cls:'lp-wo', text:'Artikel: der/die/das bestimmen'},
+      {cls:'lp-wo',  text:'Artikel: der/die/das bestimmen'},
       {cls:'lp-adj', text:'Zusammengesetzt: Hund + H&#252;tte = Hundeh&#252;tte'}
     ],
     rule: '<strong>Nomen</strong> (Namenw&#246;rter) werden immer <strong>gro&#223;geschrieben</strong>.<br>Artikel: <em>der</em> (m&#228;nnlich), <em>die</em> (weiblich), <em>das</em> (s&#228;chlich)<br>Tipp: Kannst du &#8222;der/die/das&#8220; davor stellen?'
   },
   {
-    id: 'pronomen',
-    icon: '&#x1F464;',
-    name: 'Pronomen',
-    sub: 'F&#252;rw&#246;rter',
+    id: 'pronomen', icon: '&#x1F464;', name: 'Pronomen', sub: 'F&#252;rw&#246;rter',
     sentence: '<span class="hl-wer">Lisa</span> <span class="hl-verb">liest</span> ein Buch. <span class="hl-pron">Sie</span> <span class="hl-verb">mag</span> es sehr.',
     legend: [
-      {cls:'lp-wer', text:'Nomen &#8594; Lisa'},
+      {cls:'lp-wer',  text:'Nomen &#8594; Lisa'},
       {cls:'lp-pron', text:'Pronomen &#8594; sie (ersetzt Lisa)'},
       {cls:'lp-pron', text:'ich, du, er, sie, es, wir, ihr, sie'}
     ],
     rule: '<strong>Pronomen</strong> ersetzen ein Nomen, damit man es nicht wiederholen muss.<br>Personalpronomen: ich &#8211; du &#8211; er/sie/es &#8211; wir &#8211; ihr &#8211; sie<br>Pronomen werden <strong>kleingeschrieben</strong>.'
   },
   {
-    id: 'bindew',
-    icon: '&#x1F517;',
-    name: 'S&#228;tze verbinden',
-    sub: 'Bindew&#246;rter',
+    id: 'bindew', icon: '&#x1F517;', name: 'S&#228;tze verbinden', sub: 'Bindew&#246;rter',
     sentence: '<span class="hl-wer">Der Hund</span> <span class="hl-verb">bellt</span><span class="hl-bind">, weil</span> <span class="hl-pron">er</span> Hunger <span class="hl-verb">hat</span>.',
     legend: [
-      {cls:'lp-wer', text:'1. Satz &#8594; Der Hund bellt'},
+      {cls:'lp-wer',  text:'1. Satz &#8594; Der Hund bellt'},
       {cls:'lp-bind', text:'Bindewort &#8594; weil, und, aber, denn'},
       {cls:'lp-pron', text:'2. Satz &#8594; Verb steht am Ende nach weil'}
     ],
     rule: '<strong>Bindew&#246;rter</strong> verbinden zwei S&#228;tze: und, aber, denn, weil, als, wenn<br>Nach <em>weil, als, wenn, damit, obwohl</em> steht das Verb am <strong>Ende</strong>!<br>Beispiel: weil er Hunger <u>hat</u>.'
   }
-]
+];
 
-let currentTopicId = null;
-
+// ── Topic initialisation ──────────────────────────────────────────────────────
 function initTopics() {
-  const grid = document.getElementById("topicGrid");
+  const grid = document.getElementById('topicGrid');
   grid.innerHTML = topics.map(t => `
     <button class="topic-btn" id="tb-${t.id}" onclick="showTopic('${t.id}')">
       <span class="t-icon">${t.icon}</span>
       <span class="t-name">${t.name}</span>
       <span class="t-sub">${t.sub}</span>
     </button>
-  `).join("");
-  showTopic("satzaufbau");
+  `).join('');
+  showTopic('satzaufbau');
 }
 
 function showTopic(id) {
   const t = topics.find(x => x.id === id);
-  if(!t) return;
+  if (!t) return;
   currentTopicId = id;
-  document.querySelectorAll(".topic-btn").forEach(b => b.classList.remove("active"));
-  const btn = document.getElementById("tb-"+id);
-  if(btn) btn.classList.add("active");
+
+  // Highlight active button
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('tb-' + id);
+  if (btn) btn.classList.add('active');
+
+  // Show example sentence + legend + rule
   const legendHtml = t.legend.map(l =>
     `<span class="legend-pill ${l.cls}">${l.text}</span>`
-  ).join("");
-  document.getElementById("exampleArea").innerHTML = `
+  ).join('');
+  document.getElementById('exampleArea').innerHTML = `
     <div style="height:1px;background:var(--border);margin:16px 0"></div>
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:10px">${t.icon} ${t.name} — Beispiel</div>
     <div class="anno-sentence">${t.sentence}</div>
@@ -711,271 +535,301 @@ function showTopic(id) {
       <span style="font-size:14px;line-height:1.6">${t.rule}</span>
     </div>
   `;
-  document.getElementById("tryBtn").style.display = "inline-flex";
+  document.getElementById('tryBtn').style.display = 'inline-flex';
+
+  // ── Update word bank (Phase 2) ──────────────────────────────────────────────
+  const td = TOPIC_DATA[id] || TOPIC_DATA.satzaufbau;
+  data.wer  = td.wer;
+  data.verb = td.verb;
+  data.wo   = td.wo;
+  // Re-render if Phase 2 already visited
+  if (document.getElementById('wer').innerHTML) renderBuild();
+
+  // ── Update scaffold hints (Phase 3) ────────────────────────────────────────
+  const sc = td.scaffold;
+  // First scaffold strip
+  document.getElementById('sc-wer-hint').textContent  = 'z.B. ' + sc.wer;
+  document.getElementById('sc-verb-hint').textContent = 'z.B. ' + sc.verb;
+  document.getElementById('sc-wo-hint').textContent   = 'z.B. ' + sc.wo;
+  // Second scaffold strip (tryAnotherCard)
+  document.getElementById('sc-wer-hint2').textContent  = 'z.B. ' + sc.wer;
+  document.getElementById('sc-verb-hint2').textContent = 'z.B. ' + sc.verb;
+  document.getElementById('sc-wo-hint2').textContent   = 'z.B. ' + sc.wo;
+
+  // ── Update Phase 3 topic header ─────────────────────────────────────────────
+  const nameEl = document.getElementById('own-topic-name');
+  if (nameEl) nameEl.textContent = t.name;
+
+  // ── Show topic-specific hint in Phase 3 ────────────────────────────────────
+  const hintEl = document.getElementById('own-topic-hint');
+  if (td.hint) {
+    hintEl.style.display = 'flex';
+    hintEl.style.background = td.hint.bg;
+    hintEl.style.color = td.hint.color;
+    hintEl.innerHTML = `<span style="font-size:18px;flex-shrink:0">${td.hint.icon}</span><span style="font-size:14px;line-height:1.5">${td.hint.text}</span>`;
+  } else {
+    hintEl.style.display = 'none';
+  }
+
+  // ── Update input placeholder ────────────────────────────────────────────────
+  const input1 = document.getElementById('ownInput');
+  const input2 = document.getElementById('ownInput2');
+  const ph = 'Mein ' + t.name + '-Satz …';
+  if (input1) input1.placeholder = ph;
+  if (input2) input2.placeholder = ph;
+
+  // ── Update Phase 2 topic hint ───────────────────────────────────────────────
+  const buildHint = document.getElementById('build-topic-hint');
+  if (buildHint) {
+    if (td.hint) {
+      buildHint.innerHTML = `<div style="display:flex;gap:8px;align-items:center;padding:8px 12px;border-radius:var(--radius-sm);background:${td.hint.bg};color:${td.hint.color};font-size:13px;font-weight:700;">${td.hint.icon} ${td.hint.text}</div>`;
+    } else {
+      buildHint.innerHTML = '';
+    }
+  }
 }
 
-/* ── Phase navigation ── */
+// ── Phase navigation ──────────────────────────────────────────────────────────
 function goPhase(n) {
   [0,1,2].forEach(i => {
-    document.getElementById("s"+i).classList.toggle("visible", i===n);
-    const btn = document.querySelectorAll(".phase-btn")[i];
-    btn.classList.remove("active","done","active-verb","active-wo");
-    if(i===n) btn.classList.add("active");
-    else if(i<n) btn.classList.add("done");
+    document.getElementById('s' + i).classList.toggle('visible', i === n);
+    const btn = document.querySelectorAll('.phase-btn')[i];
+    btn.classList.remove('active','done','active-verb','active-wo');
+    if (i === n) btn.classList.add('active');
+    else if (i < n) btn.classList.add('done');
   });
   currentPhase = n;
-  if(n===1) renderBuild();
+  if (n === 1) renderBuild();
 }
 
-/* ── Phase 2: Build ── */
+// ── Phase 2: Build ────────────────────────────────────────────────────────────
 function renderBuild() {
-  ["wer","verb","wo"].forEach(type => {
+  ['wer','verb','wo'].forEach(type => {
     document.getElementById(type).innerHTML =
       data[type].map(w =>
-        `<button class="word" id="b-${type}-${w.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'')}" onclick="pick('${type}','${w.replace(/'/g,"\\'")}')">  ${w}</button>`
-      ).join("");
+        `<button class="word" id="b-${type}-${w.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'')}" onclick="pick('${type}','${w.replace(/'/g,"\\'")}')">${w}</button>`
+      ).join('');
   });
+  // Reset selection state
+  sel.wer = ''; sel.verb = ''; sel.wo = '';
+  ['wer','verb','wo'].forEach(type => {
+    document.getElementById('sv-' + type).textContent = '___';
+    document.getElementById('slot-' + type).className = 'slot';
+  });
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('buildFeedback').className = 'feedback';
 }
 
 function pick(type, value) {
-  document.querySelectorAll(`#${type} .word`).forEach(b => {
-    b.classList.remove("sel-wer","sel-verb","sel-wo");
-  });
+  document.querySelectorAll(`#${type} .word`).forEach(b => b.classList.remove('sel-wer','sel-verb','sel-wo'));
   const key = `b-${type}-${value.replace(/\s/g,'_').replace(/[^a-zA-Z0-9_]/g,'')}`;
   const el = document.getElementById(key);
-  if(el) el.classList.add(`sel-${type}`);
+  if (el) el.classList.add('sel-' + type);
   sel[type] = value;
-  document.getElementById("sv-"+type).textContent = value;
-  document.getElementById("slot-"+type).className = `slot filled-${type}`;
-  document.getElementById("checkBtn").disabled = !(sel.wer && sel.verb && sel.wo);
+  document.getElementById('sv-' + type).textContent = value;
+  document.getElementById('slot-' + type).className = 'slot filled-' + type;
+  document.getElementById('checkBtn').disabled = !(sel.wer && sel.verb && sel.wo);
 }
 
 function checkBuild() {
-  const fb = document.getElementById("buildFeedback");
-  fb.className = "feedback ok";
+  const fb = document.getElementById('buildFeedback');
+  fb.className = 'feedback ok';
   fb.innerHTML = `<strong>Super!</strong> Dein Satz lautet:<br><em style="font-size:18px">${sel.wer} ${sel.verb} ${sel.wo}.</em><br><span style="font-size:13px;margin-top:6px;display:block">Wer, Verb und Wo — alles richtig!</span>`;
   setTimeout(() => {
-    const nb = document.createElement("button");
-    nb.className = "btn-secondary";
-    nb.style.marginTop = "10px";
-    nb.style.marginLeft = "0";
-    nb.textContent = "Eigenen Satz schreiben →";
+    const nb = document.createElement('button');
+    nb.className = 'btn-secondary';
+    nb.style.marginTop = '10px';
+    nb.style.marginLeft = '0';
+    nb.textContent = 'Eigenen Satz schreiben →';
     nb.onclick = () => goPhase(2);
     fb.appendChild(nb);
     launchConfetti();
   }, 300);
 }
 
-/* ── Phase 3: Own sentence ── */
+// ── Phase 3: Own sentence ─────────────────────────────────────────────────────
 function resetOwn() {
   attempts = 0;
   currentWords = [];
-  document.getElementById("ownInput").value = "";
-  document.getElementById("ownFeedback").className = "feedback";
-  document.getElementById("correctionSteps").style.display = "none";
-  document.getElementById("livePreview").style.display = "none";
-  document.getElementById("tryAnotherCard").style.display = "none";
+  document.getElementById('ownInput').value = '';
+  document.getElementById('ownFeedback').className = 'feedback';
+  document.getElementById('correctionSteps').style.display = 'none';
+  document.getElementById('livePreview').style.display = 'none';
+  document.getElementById('tryAnotherCard').style.display = 'none';
   [0,1,2].forEach(i => {
-    const d = document.getElementById("td"+i);
-    d.classList.remove("tried","correct");
+    const d = document.getElementById('td' + i);
+    d.classList.remove('tried','correct');
   });
 }
 
 async function checkOwn() {
-  const text = document.getElementById("ownInput").value.trim();
-  const fb = document.getElementById("ownFeedback");
-  const loading = document.getElementById("aiLoading");
-  const stepsEl = document.getElementById("correctionSteps");
-  const preview = document.getElementById("livePreview");
+  const text = document.getElementById('ownInput').value.trim();
+  const fb   = document.getElementById('ownFeedback');
+  const loading = document.getElementById('aiLoading');
+  const stepsEl = document.getElementById('correctionSteps');
+  const preview = document.getElementById('livePreview');
 
-  if(!text) {
-    fb.className = "feedback warn";
-    fb.innerHTML = "Bitte schreibe zuerst einen Satz.";
-    return;
-  }
+  if (!text) { fb.className = 'feedback warn'; fb.innerHTML = 'Bitte schreibe zuerst einen Satz.'; return; }
 
-  loading.style.display = "flex";
-  fb.className = "feedback";
-  stepsEl.style.display = "none";
-  preview.style.display = "none";
+  loading.style.display = 'flex';
+  fb.className = 'feedback';
+  stepsEl.style.display = 'none';
+  preview.style.display = 'none';
 
-  const dot = document.getElementById("td"+Math.min(attempts,2));
+  const dot = document.getElementById('td' + Math.min(attempts, 2));
 
   try {
     const result = await callAI(text);
-    loading.style.display = "none";
+    loading.style.display = 'none';
 
-    if(result.correct) {
-      if(dot) { dot.classList.remove("tried"); dot.classList.add("correct"); }
-      fb.className = "feedback ok";
+    if (result.correct) {
+      if (dot) { dot.classList.remove('tried'); dot.classList.add('correct'); }
+      fb.className = 'feedback ok';
       fb.innerHTML = `<strong>Sehr gut!</strong> Dein Satz ist richtig:<br><em style="font-size:18px">${result.corrected}</em><br><span style="font-size:13px;margin-top:6px;display:block">${result.praise}</span>`;
       launchConfetti();
-      setTimeout(() => {
-        document.getElementById("tryAnotherCard").style.display = "block";
-      }, 600);
+      setTimeout(() => { document.getElementById('tryAnotherCard').style.display = 'block'; }, 600);
     } else {
-      if(dot) dot.classList.add("tried");
+      if (dot) dot.classList.add('tried');
       attempts++;
-      fb.className = "feedback warn";
+      fb.className = 'feedback warn';
       const errCount = result.errors.length;
-      fb.innerHTML = `<strong>${errCount === 1 ? "1 Fehler gefunden" : errCount + " Fehler gefunden"}</strong>${result.summary ? `<br><span style="font-size:13px;font-weight:400">${result.summary}</span>` : ""}`;
+      fb.innerHTML = `<strong>${errCount === 1 ? '1 Fehler gefunden' : errCount + ' Fehler gefunden'}</strong>${result.summary ? `<br><span style="font-size:13px;font-weight:400">${result.summary}</span>` : ''}`;
 
-      currentWords = text.replace(/[.!?]+$/, "").split(/\s+/);
-      preview.style.display = "block";
+      currentWords = text.replace(/[.!?]+$/, '').split(/\s+/);
+      preview.style.display = 'block';
       renderLivePreview(result.errors);
+      stepsEl.style.display = 'flex';
 
-      stepsEl.style.display = "flex";
       const errHtml = result.errors.map((e, i) => {
         const wordTag = (e.word && e.correction)
           ? `<span style="background:#fff3e0;border:1px solid #BA7517;border-radius:5px;padding:1px 7px;font-size:13px;margin-right:6px"><s>${e.word}</s>&nbsp;&rarr;&nbsp;<strong>${e.correction}</strong></span>`
-          : "";
-        const safeFix = e.fix ? e.fix.replace(/\\/g,'\\\\').replace(/'/g,"\\'") : null;
-        const safeWord = (e.word || "").replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-        const safeCorr = (e.correction || "").replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+          : '';
+        const safeFix  = e.fix  ? e.fix.replace(/\\/g,'\\\\').replace(/'/g,"\\'")  : null;
+        const safeWord = (e.word || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+        const safeCorr = (e.correction || '').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
         return `<div class="correction-step">
           <span style="flex:1">${wordTag}${e.message}</span>
-          ${safeFix ? `<button class="fix-btn" onclick="applyFix(${i},'${safeFix}','${e.type}','${safeWord}','${safeCorr}')">${e.fixLabel}</button>` : ""}
+          ${safeFix ? `<button class="fix-btn" onclick="applyFix(${i},'${safeFix}','${e.type}','${safeWord}','${safeCorr}')">${e.fixLabel}</button>` : ''}
         </div>`;
-      }).join("");
+      }).join('');
 
-      // Corrected sentence shown at the bottom
       const correctedHtml = result.corrected
         ? `<div style="margin-top:12px;padding:12px 14px;background:#E1F5EE;border:1.5px solid #1D9E75;border-radius:var(--radius-sm)">
             <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#085041;margin-bottom:4px">Richtig so:</div>
             <div style="font-size:18px;font-weight:700;color:#085041">${result.corrected}</div>
            </div>`
-        : "";
+        : '';
 
       stepsEl.innerHTML = errHtml + correctedHtml;
     }
   } catch(err) {
-    loading.style.display = "none";
+    loading.style.display = 'none';
     fallbackCheck(text, fb, stepsEl, preview, dot);
   }
 }
 
 function renderLivePreview(errors) {
-  const preview = document.getElementById("livePreview");
-  // Highlight words that have errors
+  const preview = document.getElementById('livePreview');
   const wrongWords = errors.filter(e => e.word).map(e => e.word.toLowerCase());
   preview.innerHTML = currentWords.map(w => {
-    const clean = w.replace(/[.,!?]/g,"");
-    if(wrongWords.includes(clean.toLowerCase())) {
+    const clean = w.replace(/[.,!?]/g,'');
+    if (wrongWords.includes(clean.toLowerCase())) {
       return `<span style="background:#FCEBEB;border-bottom:2px solid #E24B4A;border-radius:3px;padding:0 2px">${w}</span>`;
     }
     return w;
-  }).join(" ");
+  }).join(' ');
 }
 
 function applyFix(idx, fix, type, wrongWord, correction) {
-  if(type === "capital_start" || type === "capital") {
+  if (type === 'capital_start' || type === 'capital') {
     currentWords[0] = currentWords[0].charAt(0).toUpperCase() + currentWords[0].slice(1);
-  } else if(type === "capital_noun" && wrongWord && correction) {
+  } else if (type === 'capital_noun' && wrongWord && correction) {
     const wi = currentWords.findIndex(w => w.toLowerCase() === wrongWord.toLowerCase());
-    if(wi !== -1) currentWords[wi] = correction;
-  } else if(type === "spelling" && wrongWord && correction) {
-    const wi = currentWords.findIndex(w => w.replace(/[.,!?]/g,"").toLowerCase() === wrongWord.toLowerCase());
-    if(wi !== -1) {
-      // preserve trailing punctuation
-      const trail = currentWords[wi].match(/[.,!?]+$/)?.[0] || "";
+    if (wi !== -1) currentWords[wi] = correction;
+  } else if (type === 'spelling' && wrongWord && correction) {
+    const wi = currentWords.findIndex(w => w.replace(/[.,!?]/g,'').toLowerCase() === wrongWord.toLowerCase());
+    if (wi !== -1) {
+      const trail = currentWords[wi].match(/[.,!?]+$/)?.[0] || '';
       currentWords[wi] = correction + trail;
     }
-  } else if(type === "verb_form" && wrongWord && correction) {
+  } else if ((type === 'verb_form' || type === 'article') && wrongWord && correction) {
     const wi = currentWords.findIndex(w => w.toLowerCase() === wrongWord.toLowerCase());
-    if(wi !== -1) currentWords[wi] = correction;
-  } else if(type === "article" && wrongWord && correction) {
-    const wi = currentWords.findIndex(w => w.toLowerCase() === wrongWord.toLowerCase());
-    if(wi !== -1) currentWords[wi] = correction;
-  } else if(type === "verb_missing") {
+    if (wi !== -1) currentWords[wi] = correction;
+  } else if (type === 'verb_missing') {
     currentWords.splice(1, 0, fix);
-  } else if(type === "verb_pos") {
-    // Use the AI-identified verb word if available, otherwise try fix
-    const verbTarget = (wrongWord || fix || "").toLowerCase();
-    let vi = verbTarget
-      ? currentWords.findIndex(w => w.toLowerCase() === verbTarget)
-      : -1;
-    // fallback: find any word that looks like a verb conjugation (ends in t/en/st)
-    if(vi === -1) vi = currentWords.findIndex((w,i) => i !== 0 && i !== 1 && /[^e][ts]$|en$/.test(w.toLowerCase()));
-    if(vi !== -1 && vi !== 1) {
-      const v = currentWords.splice(vi, 1)[0];
-      currentWords.splice(1, 0, v);
-    }
-  } else if(type === "subordinate_clause" || type === "nebensatz_word_order") {
-    // Can't auto-fix word order in subordinate clauses — just fade the step
-  } else if(type === "punctuation") {
-    // ensure sentence ends with a period
+  } else if (type === 'verb_pos') {
+    const verbTarget = (wrongWord || fix || '').toLowerCase();
+    let vi = verbTarget ? currentWords.findIndex(w => w.toLowerCase() === verbTarget) : -1;
+    if (vi === -1) vi = currentWords.findIndex((w,i) => i !== 0 && i !== 1 && /[^e][ts]$|en$/.test(w.toLowerCase()));
+    if (vi !== -1 && vi !== 1) { const v = currentWords.splice(vi,1)[0]; currentWords.splice(1,0,v); }
+  } else if (type === 'punctuation') {
     const last = currentWords[currentWords.length-1];
-    if(!/[.!?]$/.test(last)) currentWords[currentWords.length-1] = last + ".";
-  } else if(fix) {
-    // generic: try to swap wrong word for fix
-    if(wrongWord) {
-      const wi = currentWords.findIndex(w => w.replace(/[.,!?]/g,"").toLowerCase() === wrongWord.toLowerCase());
-      if(wi !== -1) { const trail = currentWords[wi].match(/[.,!?]+$/)?.[0] || ""; currentWords[wi] = fix + trail; }
-    }
+    if (!/[.!?]$/.test(last)) currentWords[currentWords.length-1] = last + '.';
+  } else if (fix && wrongWord) {
+    const wi = currentWords.findIndex(w => w.replace(/[.,!?]/g,'').toLowerCase() === wrongWord.toLowerCase());
+    if (wi !== -1) { const trail = currentWords[wi].match(/[.,!?]+$/)?.[0] || ''; currentWords[wi] = fix + trail; }
   }
   renderLivePreview([]);
-  const steps = document.querySelectorAll(".correction-step");
-  if(steps[idx]) steps[idx].style.opacity = "0.4";
+  const steps = document.querySelectorAll('.correction-step');
+  if (steps[idx]) steps[idx].style.opacity = '0.4';
 }
 
+// ── AI checker ────────────────────────────────────────────────────────────────
 async function callAI(text) {
+  // Topic-specific focus for the AI prompt
+  const topicFocus = {
+    satzaufbau:      'Prüfe besonders: Verb steht an 2. Stelle, vollständiger Satz mit Subjekt und Verb.',
+    woertliche_rede: 'Prüfe besonders: Anführungszeichen und Doppelpunkt vor der wörtlichen Rede, Redebegleitsatz.',
+    satzarten:       'Prüfe besonders: richtiges Satzzeichen am Ende (Punkt/Fragezeichen/Ausrufezeichen), Verbstellung.',
+    adjektive:       'Prüfe besonders: Adjektive kleingeschrieben, korrekte Endungen, Nomen großgeschrieben.',
+    zeitformen:      'Prüfe besonders: korrekte Verbform der gewählten Zeitform (Präsens/Präteritum/Perfekt).',
+    nomen:           'Prüfe besonders: alle Nomen großgeschrieben, richtige Artikel.',
+    pronomen:        'Prüfe besonders: Pronomen kleingeschrieben (außer Satzanfang), Übereinstimmung mit Nomen.',
+    bindew:          'Prüfe besonders: Komma vor dem Bindewort, Verb steht nach weil/wenn/als/dass am Satzende.'
+  };
+  const t = topics.find(x => x.id === currentTopicId);
+  const topicName   = t ? t.name : 'Satzaufbau';
+  const topicHint   = topicFocus[currentTopicId] || '';
 
-  const systemPrompt = `Du bist ein präziser Deutschlehrer für Klasse 3 (Bayern LehrplanPLUS). Du findest JEDEN Fehler. Du antwortest ausschließlich mit gültigem JSON.`;
+  const systemPrompt = 'Du bist ein präziser Deutschlehrer für Klasse 3 (Bayern LehrplanPLUS). Du findest JEDEN Fehler. Du antwortest ausschließlich mit gültigem JSON.';
 
   const userPrompt = `Deine Aufgabe: Analysiere den Satz Wort für Wort und finde JEDEN Fehler.
 
-SCHRITT 1 — Gehe jeden einzelnen Punkt durch und notiere intern, ob ein Fehler vorliegt:
+AKTUELLES THEMA: ${topicName}
+${topicHint}
+Achte auf alle Fehler, besonders aber auf das aktuelle Thema.
 
 WORT-FÜR-WORT RECHTSCHREIBUNG:
-Schreibe jeden Token auf und prüfe ihn:
-- Ist die Schreibung korrekt? (leuft→läuft, Katse→Katze, spilen→spielen, gluklich→glücklich, vill→viel, mahl→Mal)
-- ei/ie verwechselt? (liebe, spielen, viel, nie — nicht: libe, spileen, vil)
-- Umlaut fehlt oder falsch? (ä/a, ö/o, ü/u — Mädchen nicht Madchen, schön nicht schon)
-- Doppelkonsonant: kurzer Vokal → doppelt (rennen, Teller, Ball); langer Vokal → einfach (laufen, spielen)
-- Dehnungs-h: fahren, Zahl, Schule, stehlen, wohnen
-- ck/k: Glück, Stück, Zucker, backen
-- tz/z: Katze, sitzen, Platz, putzen
-- ss/ß: Straße, Fuß, heißen, Fluss, dass
+- Ist die Schreibung korrekt? (leuft→läuft, Katse→Katze, spilen→spielen, gluklich→glücklich)
+- Umlaut fehlt? (Madchen→Mädchen, schon→schön, uber→über)
+- Doppelkonsonant: kurzer Vokal → doppelt (rennen, Teller); langer → einfach (laufen)
+- ck/k: Glück, Stück; tz/z: Katze, Platz; ss/ß: Straße, Fuß, dass
 
-GROSSSCHREIBUNG — jedes Wort einzeln:
+GROSSSCHREIBUNG:
 - Satzerstes Wort MUSS groß sein
-- Alle Nomen (Dinge, Tiere, Personen, Orte, abstrakte Begriffe) MÜSSEN groß sein
-  Beispiele: Hund Katze Ball Park Schule Garten Tag Haus Kind Mädchen Junge Freund Hunger
-- Verben müssen klein sein: läuft, spielt, isst, geht (außer Satzanfang)
-- Adjektive müssen klein sein: groß, klein, schön, glücklich (außer Satzanfang)
-- Pronomen klein: ich, du, er, sie, es, wir, ihr (außer Satzanfang; "Sie" Höflichkeit groß)
+- Alle Nomen (Hund Katze Ball Park Schule Garten Tag Kind Mädchen Junge) MÜSSEN groß
+- Verben, Adjektive, Pronomen (außer Satzanfang) klein
 
 SATZSTRUKTUR:
 - Gibt es ein konjugiertes Verb? Falls nicht → Fehler
-- Hauptsatz: Verb an 2. Position? (Position 1 = Subjekt oder Adverb, Position 2 = Verb)
-- Fragesatz: Verb zuerst?
+- Hauptsatz: Verb an 2. Position?
 
 ARTIKEL & KASUS:
-- Nominativ (Subjekt): der/die/das, ein/eine
-- Akkusativ (direktes Objekt): den/die/das, einen/eine/ein
-- Dativ (nach: mit, bei, nach, seit, von, aus, zu, in+Dat, an+Dat, auf+Dat): dem/der/dem, einem/einer/einem
-- Falsche Artikel: "ein großen" → "einen großen" (Akkusativ maskulin)
+- Nominativ: der/die/das, ein/eine
+- Akkusativ: den/die/das, einen/eine/ein
+- Dativ (nach mit/bei/nach/von/aus/zu/in+Dat): dem/der, einem/einer
 
 VERBKONJUGATION:
-- ich laufe/spiele/gehe | du läufst/spielst/gehst | er/sie/es läuft/spielt/geht
-- wir laufen/spielen/gehen | ihr lauft/spielt/geht | sie laufen/spielen/gehen
-- Sein: ich bin | du bist | er/sie/es ist | wir sind | ihr seid | sie sind
-- Haben: ich habe | du hast | er/sie/es hat | wir haben | ihr habt | sie haben
-- Perfekt mit haben/sein: ich habe gespielt / ich bin gelaufen
+- ich laufe | du läufst | er/sie/es läuft | wir laufen | ihr lauft | sie laufen
+- Sein: bin/bist/ist/sind/seid/sind | Haben: habe/hast/hat/haben/habt/haben
 
 ZEICHENSETZUNG:
-- Aussagesatz endet mit Punkt, Fragesatz mit ?, Ausruf mit !
-- Vor Nebensatzbindewörtern (weil, wenn, als, dass, damit, obwohl, weil) MUSS ein Komma stehen
-- Wörtliche Rede: Doppelpunkt + Anführungszeichen unten-oben
-
-NEBENSATZ (wenn vorhanden):
-- Nach weil/wenn/als/dass/damit/obwohl: Verb steht am SATZENDE
-- Komma zwischen Haupt- und Nebensatz
-
-SCHRITT 2 — Gib das Ergebnis als JSON aus.
+- Aussagesatz → Punkt | Fragesatz → ? | Ausruf → !
+- Vor weil/wenn/als/dass/damit/obwohl MUSS ein Komma stehen
+- Wörtliche Rede: Doppelpunkt + Anführungszeichen
 
 ---
-BEISPIELE für korrektes JSON-Format:
+BEISPIELE:
 
 Eingabe: "der hund leuft im park"
 Ausgabe: {"correct":false,"corrected":"Der Hund läuft im Park.","praise":null,"summary":"Großschreibung und Rechtschreibung üben.","errors":[{"type":"capital_start","word":"der","correction":"Der","message":"Satzanfang muss großgeschrieben sein.","fix":"Der","fixLabel":"Korrigieren"},{"type":"capital_noun","word":"hund","correction":"Hund","message":"Hund ist ein Nomen und muss groß sein.","fix":"Hund","fixLabel":"Groß schreiben"},{"type":"spelling","word":"leuft","correction":"läuft","message":"Richtig: läuft (mit Umlaut ä).","fix":"läuft","fixLabel":"Korrigieren"},{"type":"punctuation","word":null,"correction":null,"message":"Am Satzende fehlt ein Punkt.","fix":null,"fixLabel":"Punkt setzen"}]}
@@ -989,9 +843,6 @@ Ausgabe: {"correct":false,"corrected":"Ich habe einen großen Hund.","praise":nu
 Eingabe: "Das Madchen spielt im Garten"
 Ausgabe: {"correct":false,"corrected":"Das Mädchen spielt im Garten.","praise":null,"summary":"Umlaut üben.","errors":[{"type":"spelling","word":"Madchen","correction":"Mädchen","message":"Richtig: Mädchen (mit Umlaut ä).","fix":"Mädchen","fixLabel":"Korrigieren"},{"type":"punctuation","word":null,"correction":null,"message":"Am Satzende fehlt ein Punkt.","fix":null,"fixLabel":"Punkt setzen"}]}
 
-Eingabe: "Die Kinder spielen im Garten und sie sind gluklich"
-Ausgabe: {"correct":false,"corrected":"Die Kinder spielen im Garten und sie sind glücklich.","praise":null,"summary":"Rechtschreibung und Zeichensetzung üben.","errors":[{"type":"spelling","word":"gluklich","correction":"glücklich","message":"Richtig: glücklich (mit ü und ck).","fix":"glücklich","fixLabel":"Korrigieren"},{"type":"punctuation","word":null,"correction":null,"message":"Am Satzende fehlt ein Punkt.","fix":null,"fixLabel":"Punkt setzen"}]}
-
 Eingabe: "Der Hund läuft im Park."
 Ausgabe: {"correct":true,"corrected":"Der Hund läuft im Park.","praise":"Super! Wer, Verb und Wo sind alle richtig.","summary":null,"errors":[]}
 
@@ -1001,161 +852,150 @@ Jetzt analysiere diesen Satz:
 Eingabe: "${text}"
 Ausgabe:`;
 
-  const response = await fetch("https://api.anthropic.com/v1/messages", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
+      model: 'claude-sonnet-4-20250514',
       max_tokens: 2000,
       system: systemPrompt,
-      messages: [{ role: "user", content: userPrompt }]
+      messages: [{ role: 'user', content: userPrompt }]
     })
   });
 
-  if(!response.ok) throw new Error("API " + response.status);
-  const data = await response.json();
-  if(data.error) throw new Error(data.error.message);
+  if (!response.ok) throw new Error('API ' + response.status);
+  const apiData = await response.json();
+  if (apiData.error) throw new Error(apiData.error.message);
 
-  let raw = (data.content || []).map(b => b.text || "").join("").trim();
-
-  // Strip markdown fences
-  raw = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/i, "").trim();
-
-  // Find first { in case there is preamble
-  const j = raw.indexOf("{");
-  if(j > 0) raw = raw.slice(j);
-
-  // Find matching closing brace
+  let raw = (apiData.content || []).map(b => b.text || '').join('').trim();
+  raw = raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```\s*$/i,'').trim();
+  const j = raw.indexOf('{');
+  if (j > 0) raw = raw.slice(j);
   let depth = 0, end = -1;
-  for(let i = 0; i < raw.length; i++) {
-    if(raw[i] === "{") depth++;
-    else if(raw[i] === "}") { depth--; if(depth === 0) { end = i; break; } }
+  for (let i = 0; i < raw.length; i++) {
+    if (raw[i] === '{') depth++;
+    else if (raw[i] === '}') { depth--; if (depth === 0) { end = i; break; } }
   }
-  if(end !== -1) raw = raw.slice(0, end + 1);
+  if (end !== -1) raw = raw.slice(0, end + 1);
 
   const result = JSON.parse(raw);
-
-  if(!Array.isArray(result.errors)) result.errors = [];
-  if(result.errors.length > 0) result.correct = false;
-
+  if (!Array.isArray(result.errors)) result.errors = [];
+  if (result.errors.length > 0) result.correct = false;
   result.errors = result.errors.map(e => ({
-    type: e.type || "other",
-    word: e.word || null,
+    type:       e.type       || 'other',
+    word:       e.word       || null,
     correction: e.correction || null,
-    message: e.message || "",
-    fix: e.fix || null,
-    fixLabel: e.fixLabel || "Korrigieren"
+    message:    e.message    || '',
+    fix:        e.fix        || null,
+    fixLabel:   e.fixLabel   || 'Korrigieren'
   }));
-
   return result;
 }
 
-/* ── Fallback if API fails ── */
+// ── Fallback if API fails ─────────────────────────────────────────────────────
 function fallbackCheck(text, fb, stepsEl, preview, dot) {
-  const words = text.replace(/[.!?]+$/,"").split(/\s+/);
-  const verbs = ["läuft","rennt","geht","spielt","ist","hat","macht","sitzt","schläft","fliegt","schwimmt","liest","schreibt","singt","tanzt","springt"];
+  const words = text.replace(/[.!?]+$/,'').split(/\s+/);
+  const verbs = ['läuft','rennt','geht','spielt','ist','hat','macht','sitzt','schläft',
+                 'fliegt','schwimmt','liest','schreibt','singt','tanzt','springt',
+                 'spielte','lief','sang','malte','rannte','bellt','ruft','sagt'];
   const verbIdx = words.findIndex(w => verbs.includes(w.toLowerCase()));
   const errors = [];
+  if (words[0] && words[0][0] !== words[0][0].toUpperCase())
+    errors.push({ type:'capital', message:'Der erste Buchstabe muss groß sein.', fix:null, fixLabel:'Korrigieren' });
+  if (verbIdx === -1)
+    errors.push({ type:'verb_missing', message:'Es fehlt ein Verb (Was tun?).', fix:'rennt', fixLabel:'Verb einfügen' });
+  else if (words.length > 2 && verbIdx !== 1)
+    errors.push({ type:'verb_pos', message:'Das Verb gehört an die 2. Stelle.', fix:null, fixLabel:'Korrigieren' });
 
-  if(words[0][0] !== words[0][0].toUpperCase())
-    errors.push({ type:"capital", message:"Der erste Buchstabe muss groß sein.", fix:null, fixLabel:"Korrigieren" });
-  if(verbIdx === -1)
-    errors.push({ type:"verb_missing", message:"Es fehlt ein Verb (Was tun?).", fix:"rennt", fixLabel:"Verb einfügen" });
-  else if(words.length > 2 && verbIdx !== 1)
-    errors.push({ type:"verb_pos", message:"Das Verb gehört an die 2. Stelle.", fix:null, fixLabel:"Korrigieren" });
-
-  if(errors.length === 0) {
-    if(dot) { dot.classList.remove("tried"); dot.classList.add("correct"); }
-    fb.className = "feedback ok";
-    fb.innerHTML = `<strong>Sehr gut!</strong> Dein Satz sieht richtig aus.`;
+  if (errors.length === 0) {
+    if (dot) { dot.classList.remove('tried'); dot.classList.add('correct'); }
+    fb.className = 'feedback ok';
+    fb.innerHTML = '<strong>Sehr gut!</strong> Dein Satz sieht richtig aus.';
     launchConfetti();
   } else {
-    if(dot) dot.classList.add("tried");
+    if (dot) dot.classList.add('tried');
     attempts++;
-    fb.className = "feedback warn";
+    fb.className = 'feedback warn';
     fb.innerHTML = `<strong>${errors.length} Fehler gefunden:</strong>`;
     currentWords = [...words];
-    preview.style.display = "block";
-    preview.textContent = currentWords.join(" ");
-    stepsEl.style.display = "flex";
+    preview.style.display = 'block';
+    preview.textContent = currentWords.join(' ');
+    stepsEl.style.display = 'flex';
     stepsEl.innerHTML = errors.map((e,i) =>
-      `<div class="correction-step"><span>→ ${e.message}</span>${e.fix?`<button class="fix-btn" onclick="applyFix(${i},'${e.fix}','${e.type}')">${e.fixLabel}</button>`:""}</div>`
-    ).join("");
+      `<div class="correction-step"><span>→ ${e.message}</span>${e.fix ? `<button class="fix-btn" onclick="applyFix(${i},'${e.fix}','${e.type}')">${e.fixLabel}</button>` : ''}</div>`
+    ).join('');
   }
 }
 
-/* ── Second sentence box ── */
+// ── Second sentence box ───────────────────────────────────────────────────────
 async function checkOwn2() {
-  const text = document.getElementById("ownInput2").value.trim();
-  const fb = document.getElementById("ownFeedback2");
-  const loading = document.getElementById("aiLoading2");
-  const stepsEl2 = document.getElementById("correctionSteps2");
-  const preview2 = document.getElementById("livePreview2");
+  const text = document.getElementById('ownInput2').value.trim();
+  const fb   = document.getElementById('ownFeedback2');
+  const loading = document.getElementById('aiLoading2');
+  const stepsEl2 = document.getElementById('correctionSteps2');
+  const preview2 = document.getElementById('livePreview2');
 
-  if(!text) { fb.className="feedback warn"; fb.innerHTML="Schreibe zuerst einen Satz."; return; }
+  if (!text) { fb.className='feedback warn'; fb.innerHTML='Schreibe zuerst einen Satz.'; return; }
 
-  loading.style.display = "flex";
-  fb.className = "feedback";
-  if(stepsEl2) stepsEl2.style.display = "none";
-  if(preview2) preview2.style.display = "none";
+  loading.style.display = 'flex';
+  fb.className = 'feedback';
+  if (stepsEl2) stepsEl2.style.display = 'none';
+  if (preview2) preview2.style.display = 'none';
 
   try {
     const result = await callAI(text);
-    loading.style.display = "none";
+    loading.style.display = 'none';
 
-    if(result.correct) {
-      fb.className = "feedback ok";
+    if (result.correct) {
+      fb.className = 'feedback ok';
       fb.innerHTML = `<strong>Wunderbar!</strong> <em style="font-size:18px">${result.corrected}</em><br><span style="font-size:13px;margin-top:4px;display:block">${result.praise}</span>`;
       launchConfetti();
     } else {
-      fb.className = "feedback warn";
+      fb.className = 'feedback warn';
       const n = result.errors.length;
-      fb.innerHTML = `<strong>${n === 1 ? "1 Fehler gefunden" : n + " Fehler gefunden"}</strong>${result.summary ? `<br><span style="font-size:13px;font-weight:400">${result.summary}</span>` : ""}`;
-
-      if(preview2) {
-        preview2.style.display = "block";
-        const words2 = text.replace(/[.!?]+$/,"").split(/\s+/);
+      fb.innerHTML = `<strong>${n === 1 ? '1 Fehler gefunden' : n + ' Fehler gefunden'}</strong>${result.summary ? `<br><span style="font-size:13px;font-weight:400">${result.summary}</span>` : ''}`;
+      if (preview2) {
+        preview2.style.display = 'block';
+        const words2 = text.replace(/[.!?]+$/,'').split(/\s+/);
         const wrongWords2 = result.errors.filter(e=>e.word).map(e=>e.word.toLowerCase());
         preview2.innerHTML = words2.map(w => {
-          const clean = w.replace(/[.,!?]/g,"");
+          const clean = w.replace(/[.,!?]/g,'');
           return wrongWords2.includes(clean.toLowerCase())
             ? `<span style="background:#FCEBEB;border-bottom:2px solid #E24B4A;border-radius:3px;padding:0 2px">${w}</span>`
             : w;
-        }).join(" ");
+        }).join(' ');
       }
-
-      if(stepsEl2) {
-        stepsEl2.style.display = "flex";
-        const errHtml = result.errors.map(e => {
-          const wordTag = (e.word && e.correction)
-            ? `<span style="background:#fff3e0;border:1px solid #BA7517;border-radius:5px;padding:1px 7px;font-size:13px;margin-right:6px"><s>${e.word}</s>&nbsp;&rarr;&nbsp;<strong>${e.correction}</strong></span>`
-            : "";
-          return `<div class="correction-step"><span style="flex:1">${wordTag}${e.message}</span></div>`;
-        }).join("");
+      if (stepsEl2) {
+        stepsEl2.style.display = 'flex';
         const correctedHtml = result.corrected
           ? `<div style="margin-top:12px;padding:12px 14px;background:#E1F5EE;border:1.5px solid #1D9E75;border-radius:var(--radius-sm)"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#085041;margin-bottom:4px">Richtig so:</div><div style="font-size:18px;font-weight:700;color:#085041">${result.corrected}</div></div>`
-          : "";
-        stepsEl2.innerHTML = errHtml + correctedHtml;
+          : '';
+        stepsEl2.innerHTML = result.errors.map(e => {
+          const wordTag = (e.word && e.correction)
+            ? `<span style="background:#fff3e0;border:1px solid #BA7517;border-radius:5px;padding:1px 7px;font-size:13px;margin-right:6px"><s>${e.word}</s>&nbsp;&rarr;&nbsp;<strong>${e.correction}</strong></span>`
+            : '';
+          return `<div class="correction-step"><span style="flex:1">${wordTag}${e.message}</span></div>`;
+        }).join('') + correctedHtml;
       }
     }
   } catch(err) {
-    loading.style.display = "none";
-    fb.className = "feedback warn";
-    fb.innerHTML = "Ich konnte deinen Satz gerade nicht prüfen. Versuche es nochmal.";
+    loading.style.display = 'none';
+    fb.className = 'feedback warn';
+    fb.innerHTML = 'Ich konnte deinen Satz gerade nicht prüfen. Versuche es nochmal.';
   }
 }
 
-/* ── Confetti ── */
+// ── Confetti ──────────────────────────────────────────────────────────────────
 function launchConfetti() {
-  const canvas = document.getElementById("confetti");
-  const ctx = canvas.getContext("2d");
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const particles = Array.from({length:80}, () => ({
     x: Math.random()*canvas.width,
     y: -10 - Math.random()*100,
     r: 5 + Math.random()*6,
-    color: ["#7F77DD","#1D9E75","#D85A30","#EF9F27","#D4537E"][Math.floor(Math.random()*5)],
+    color: ['#7F77DD','#1D9E75','#D85A30','#EF9F27','#D4537E'][Math.floor(Math.random()*5)],
     vx: (Math.random()-0.5)*4,
     vy: 3 + Math.random()*4,
     rot: Math.random()*360,
@@ -1165,20 +1005,18 @@ function launchConfetti() {
   function draw() {
     ctx.clearRect(0,0,canvas.width,canvas.height);
     particles.forEach(p => {
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI/180);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*0.6);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+      ctx.fillStyle = p.color; ctx.fillRect(-p.r/2,-p.r/2,p.r,p.r*0.6);
       ctx.restore();
-      p.x += p.vx; p.y += p.vy; p.rot += p.rotV;
+      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rotV;
     });
     frame++;
-    if(frame < 90) requestAnimationFrame(draw);
+    if (frame < 90) requestAnimationFrame(draw);
     else ctx.clearRect(0,0,canvas.width,canvas.height);
   }
   draw();
 }
+
 initTopics();
 </script>
 </body>
