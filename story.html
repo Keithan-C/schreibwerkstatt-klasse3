@@ -1529,6 +1529,40 @@ const TEXTSORTEN = {
 
 let _selectedModus = null;
 
+// ── Blockwelt mission context for each Textsorte ──────────
+const MISSIONS = {
+  erzaehlung: {
+    quest:'Abenteuer-Bericht',
+    hook:'Du hast etwas Spannendes erlebt — schreib es als Geschichte!',
+    scenario:'Du bist gerade aus Blockwelt zurück. Erzähl deinen Freunden von deinem coolsten Moment — als wäre es eine echte Abenteuergeschichte.',
+    checks:['Ich habe gerade gespielt und will über einen Moment schreiben','Mein Held erlebt etwas Überraschendes','Die Geschichte hat Anfang, Mitte und Ende']
+  },
+  bericht: {
+    quest:'Gilden-Bericht',
+    hook:'Deine Gilde will wissen, was in deiner Welt passiert ist!',
+    scenario:'Du bist der Reporter deiner Gilde. Schreib einen sachlichen Bericht über das, was in deiner Blockwelt-Session passiert ist — Wer? Was? Wann? Wo? Wie?',
+    checks:['Ich erinnere mich an die wichtigsten Fakten','Ich schreibe sachlich und ohne Meinungen','Ich halte die Reihenfolge ein']
+  },
+  beschreibung: {
+    quest:'Entdecker-Bericht',
+    hook:'Du hast etwas Besonderes entdeckt — beschreib es genau!',
+    scenario:'Du bist Forscher und hast ein Biom, ein Tier, eine Höhle oder ein Bauwerk entdeckt. Schreib eine genaue Beschreibung, damit andere es auch finden und erkennen können.',
+    checks:['Ich habe etwas Interessantes in Blockwelt gesehen','Ich kann Farbe, Form und Größe beschreiben','Ich schreibe genau und in der richtigen Reihenfolge']
+  },
+  brief: {
+    quest:'Abenteuer-Brief',
+    hook:'Schreib einen Brief als dein Blockwelt-Charakter!',
+    scenario:'Dein Charakter schreibt einen Brief — an einen Freund zu Hause, an einen anderen Spieler, an einen Dorfbewohner oder an deine Schule. Was ist passiert? Was möchtest du mitteilen?',
+    checks:['Ich weiß, an wen mein Charakter schreibt','Ich habe etwas Wichtiges zu erzählen','Ich kenne die Briefform: Anrede → Text → Gruß']
+  },
+  tagebuch: {
+    quest:'Charakter-Tagebuch',
+    hook:'Schreib als dein Charakter: Was hast du heute erlebt und gefühlt?',
+    scenario:'Dein Charakter schreibt nach der Session in sein Tagebuch. Was war der wichtigste Moment? Was hat er gefühlt? Was wünscht er sich für morgen?',
+    checks:['Ich schreibe als mein Charakter (Ich-Form)','Ich erinnere mich an einen besonderen Moment','Ich kann beschreiben wie ich mich dabei gefühlt habe']
+  }
+};
+
 // ── Selector modal ───────────────────────────────────────
 function _buildModusModal() {
   const existing = document.getElementById('_modus-overlay');
@@ -1540,25 +1574,28 @@ function _buildModusModal() {
   overlay.innerHTML = `
     <div class="modus-modal">
       <div class="modus-head">
-        <span class="modus-head-title">⛏ Blockwelt Schreibabenteuer</span>
-        <p class="modus-head-sub">Was möchtest du heute schreiben? Wähle deine Textsorte:</p>
+        <span class="modus-head-title">⛏ Welche Mission heute?</span>
+        <p class="modus-head-sub">Wähle deine Schreibmission — dann fangen wir an!</p>
       </div>
       <div class="modus-grid" id="_modus-grid"></div>
       <div class="modus-footer">
-        <div id="_modus-sel-label" style="font-size:13px;color:var(--muted);flex:1;">Tippe eine Karte an, um zu beginnen.</div>
-        <button class="modus-start-btn" id="_modus-start" disabled onclick="_startModus()">Los geht's! ▶</button>
+        <div id="_modus-sel-label" style="font-size:13px;color:var(--muted);flex:1;">Tippe eine Mission an, um sie zu lesen.</div>
+        <button class="modus-start-btn" id="_modus-start" disabled onclick="_startModus()">Mission starten! ▶</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
 
   const grid = document.getElementById('_modus-grid');
-  grid.innerHTML = Object.values(TEXTSORTEN).map(m => `
+  grid.innerHTML = Object.values(TEXTSORTEN).map(m => {
+    const miss = MISSIONS[m.id] || {};
+    return `
     <button class="modus-card" id="_mc-${m.id}" onclick="_selectModus('${m.id}')">
       <span class="mc2-icon">${m.icon}</span>
-      <span class="mc2-name">${m.name}</span>
-      <span class="mc2-tag">${m.tagline}</span>
-      <span class="mc2-lp">${m.lpRef}</span>
-    </button>`).join('');
+      <span class="mc2-name">${miss.quest || m.name}</span>
+      <span class="mc2-tag" style="color:var(--amber);font-weight:700;">${miss.hook || m.tagline}</span>
+      <span class="mc2-lp">${m.name} · ${m.lpRef}</span>
+    </button>`;
+  }).join('');
 }
 
 function _selectModus(id) {
@@ -1567,8 +1604,17 @@ function _selectModus(id) {
   const card = document.getElementById('_mc-' + id);
   if (card) card.classList.add('selected');
   const m = TEXTSORTEN[id];
-  document.getElementById('_modus-sel-label').innerHTML =
-    `<strong>${m.icon} ${m.name}</strong> — ${m.intro}`;
+  const miss = (typeof MISSIONS !== 'undefined' && MISSIONS[id]) || {};
+  const checksHTML = (miss.checks||[]).map(c =>
+    `<div style="display:flex;align-items:flex-start;gap:8px;padding:4px 0;font-size:13px;color:#90caf9;line-height:1.5;">
+      <span style="color:var(--green2);flex-shrink:0;">✓</span><span>${c}</span>
+    </div>`).join('');
+  document.getElementById('_modus-sel-label').innerHTML = `
+    <div style="background:rgba(255,255,255,.08);border:1.5px solid rgba(200,255,150,.25);border-radius:10px;padding:10px 14px;margin-top:6px;">
+      <div style="font-family:var(--fp);font-size:5.5px;color:#ffd060;margin-bottom:6px;line-height:2;">🗺️ DEINE MISSION:</div>
+      <div style="font-size:13px;color:#c8f0a0;line-height:1.7;margin-bottom:8px;">${miss.scenario || m.intro}</div>
+      ${checksHTML}
+    </div>`;
   document.getElementById('_modus-start').disabled = false;
 }
 
@@ -1580,12 +1626,93 @@ function _startModus() {
   _showModusBadge(_selectedModus);
   // Now initialise the app with the correct CHAPTERS set
   init();
-  // Update play phase content to match selected modus
+  // Update play phase for the selected modus
   const m = TEXTSORTEN[_selectedModus];
+  const miss = (typeof MISSIONS !== 'undefined' && MISSIONS[_selectedModus]) || {};
+
   const playTitle = document.getElementById('play-title');
   if (playTitle) playTitle.textContent = m.playTitle || "Los geht's!";
   const playText = document.getElementById('play-text');
   if (playText) playText.innerHTML = m.playText || m.intro;
+
+  // Update the play checklist items to match the modus mission
+  if (miss.checks && miss.checks.length) {
+    const items = document.querySelectorAll('.play-check-item span');
+    miss.checks.forEach((check, i) => {
+      if (items[i]) items[i].innerHTML = check;
+    });
+  }
+
+  // Update capture quick-keyword chips to match modus
+  const qkWrap = document.getElementById('quick-keywords');
+  if (qkWrap) {
+    const kwSets = {
+      erzaehlung: ['⛏️ Mein Werkzeug','🏔️ Der Ort','😮 Die Überraschung','🏆 Was ich geschafft habe','🐾 Mein Tier / Mob','💎 Was ich gefunden habe'],
+      bericht:    ['📅 Wann es passiert ist','👥 Wer dabei war','📍 Wo es war','🔢 Was zuerst passierte','🔢 Was dann passierte','📊 Das Ergebnis'],
+      beschreibung:['📏 Größe und Form','🎨 Farbe(n)','⭐ Das Besondere','🗺️ Wo es lebt / steht','🔍 Was auffällt','💡 Interessanter Fakt'],
+      brief:      ['✉️ An wen ich schreibe','📰 Was ich berichte','❓ Meine Frage','🎁 Was ich mir wünsche','📍 Wo ich gerade bin','💬 Was ich sagen möchte'],
+      tagebuch:   ['📅 Das Datum','😊 Mein Gefühl','⭐ Der beste Moment','💭 Was ich dachte','😮 Die Überraschung','🌙 Wunsch für morgen']
+    };
+    const chips = kwSets[_selectedModus] || kwSets.erzaehlung;
+    qkWrap.innerHTML = chips.map(c =>
+      `<button class="qk-btn" onclick="quickKeyword(this)">${c}</button>`
+    ).join('');
+  }
+
+  // Update narrate prompts to match modus
+  const narratePromptSets = {
+    erzaehlung: [
+      {q:'🌍 Wo warst du?', a:'Beschreibe den Ort in Blockwelt …'},
+      {q:'😮 Was ist passiert?', a:'Das Überraschende, das Spannende …'},
+      {q:'😰 Wie hast du dich gefühlt?', a:'Ängstlich? Mutig? Aufgeregt? …'},
+      {q:'🏆 Wie hat es geendet?', a:'Was hast du erreicht oder gelernt? …'}
+    ],
+    bericht: [
+      {q:'👥 Wer war dabei?', a:'Dein Charakter, andere Spieler, Mobs …'},
+      {q:'📍 Wo ist es passiert?', a:'Welches Biom, welcher Ort in Blockwelt? …'},
+      {q:'📅 Wann ist es passiert?', a:'Zu Beginn, in der Mitte, am Ende? …'},
+      {q:'📋 Was ist der Reihe nach passiert?', a:'Zuerst … dann … danach …'}
+    ],
+    beschreibung: [
+      {q:'👁️ Wie sieht es aus?', a:'Farbe, Form, Größe …'},
+      {q:'📏 Wie groß ist es?', a:'Im Vergleich zu deinem Charakter …'},
+      {q:'⭐ Was ist besonders?', a:'Was fällt sofort auf? …'},
+      {q:'💡 Was weißt du darüber?', a:'Interessante Fakten …'}
+    ],
+    brief: [
+      {q:'✉️ An wen schreibst du?', a:'Ein Freund, ein Dorfbewohner, jemand zu Hause …'},
+      {q:'📰 Was möchtest du berichten?', a:'Was ist in Blockwelt passiert? …'},
+      {q:'❓ Was möchtest du fragen?', a:'Eine Frage an den Empfänger …'},
+      {q:'💛 Was wünschst du dir?', a:'Was erhoffst du als Antwort? …'}
+    ],
+    tagebuch: [
+      {q:'📅 Wann und wo?', a:'Datum und Ort in Blockwelt …'},
+      {q:'⭐ Was war der beste Moment?', a:'Beschreibe ihn genau …'},
+      {q:'💭 Was hast du gedacht?', a:'Was ging dir durch den Kopf? …'},
+      {q:'😊 Wie hast du dich gefühlt?', a:'Deine Gefühle als dein Charakter …'}
+    ]
+  };
+  const prompts = narratePromptSets[_selectedModus] || narratePromptSets.erzaehlung;
+  const promptCards = document.querySelectorAll('.narrate-prompts .prompt-card');
+  prompts.forEach((p, i) => {
+    if (promptCards[i]) {
+      const q = promptCards[i].querySelector('.prompt-q');
+      const a = promptCards[i].querySelector('.prompt-a');
+      if (q) q.textContent = p.q;
+      if (a) a.textContent = p.a;
+    }
+  });
+
+  // Update typed-narration placeholder
+  const narratePlaceholders = {
+    erzaehlung: 'Heute war ich in Blockwelt und plötzlich …',
+    bericht:    'Am … haben wir … gemacht. Dabei waren …',
+    beschreibung: 'Das Ding / das Tier sieht so aus: …',
+    brief:      'Liebe/r …, ich schreibe dir, weil …',
+    tagebuch:   'Heute, den … Ich war gerade in Blockwelt und …'
+  };
+  const narrTa = document.getElementById('typed-narration');
+  if (narrTa) narrTa.placeholder = narratePlaceholders[_selectedModus] || narratePlaceholders.erzaehlung;
 }
 
 function _showModusBadge(id) {
