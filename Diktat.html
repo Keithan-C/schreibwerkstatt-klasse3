@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diktat-Trainer – Klasse 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────── */
+:root {
+  --bg:        #F3F6FF;
+  --surface:   #FFFFFF;
+  --border:    #DDE3F4;
+  --border-md: #BFC8E8;
+
+  --ink:       #1C1F3A;
+  --ink2:      #3A3F6A;
+  --muted:     #7880A8;
+
+  --blue:      #3B6CF7;
+  --blue-lt:   #EEF2FF;
+  --blue-mid:  #93ADFC;
+
+  --green:     #15A056;
+  --green-lt:  #E6F7EE;
+  --green-mid: #7DD4A8;
+
+  --amber:     #C07A00;
+  --amber-lt:  #FFF8E6;
+  --amber-mid: #F5C842;
+
+  --red:       #D43030;
+  --red-lt:    #FCEAEA;
+  --red-mid:   #F4A0A0;
+
+  --purple:    #6B3FC8;
+  --purple-lt: #F0EBFF;
+
+  --r:   12px;
+  --r-lg:20px;
+  --r-sm: 8px;
+
+  --shadow:    0 2px 12px rgba(28,31,58,0.07);
+  --shadow-md: 0 4px 24px rgba(28,31,58,0.11);
+}
+
+/* ─── RESET ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ─── HEADER ──────────────────────────────────────────── */
+.site-header {
+  background: var(--blue);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 2px 10px rgba(59,108,247,0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.header-titles { flex: 1; }
+.header-title {
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+}
+.header-sub {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  margin-top: 2px;
+}
+.header-badge {
+  background: rgba(255,255,255,0.18);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ─── WRAP ────────────────────────────────────────────── */
+.wrap { max-width: 700px; margin: 0 auto; padding: 24px 16px; }
+
+/* ─── THEME SELECTOR ──────────────────────────────────── */
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.theme-btn {
+  padding: 12px 10px;
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface);
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  text-align: center;
+  transition: all 0.18s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 72px;
+  justify-content: center;
+}
+.theme-btn:hover {
+  border-color: var(--blue-mid);
+  background: var(--blue-lt);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.theme-btn.active {
+  border-color: var(--blue);
+  background: var(--blue-lt);
+  box-shadow: 0 0 0 3px rgba(59,108,247,0.15);
+}
+.theme-btn .t-emoji { font-size: 22px; line-height: 1; }
+.theme-btn .t-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1.2;
+}
+.theme-btn .t-example {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.theme-btn.active .t-name { color: var(--blue); }
+.theme-btn.active .t-example { color: var(--blue); opacity: 0.75; }
+
+/* ─── THEME RULE BOX ──────────────────────────────────── */
+.rule-box {
+  background: var(--blue-lt);
+  border: 2px solid var(--blue-mid);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  animation: fadeSlide 0.25s ease;
+}
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rule-icon { font-size: 24px; flex-shrink: 0; margin-top: 1px; }
+.rule-text { flex: 1; }
+.rule-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--blue);
+  margin-bottom: 4px;
+}
+.rule-body {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink2);
+  line-height: 1.6;
+}
+.rule-body strong { color: var(--blue); }
+.rule-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.rule-pill {
+  background: var(--surface);
+  border: 1.5px solid var(--blue-mid);
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+}
+.rule-pill mark {
+  background: none;
+  color: var(--red);
+  font-weight: 900;
+}
+
+/* ─── DIKTAT CARD ─────────────────────────────────────── */
+.diktat-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+/* sentence counter strip */
+.sentence-strip {
+  background: var(--bg);
+  border-bottom: 2px solid var(--border);
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sentence-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.s-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border-md);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+.s-dot:hover { border-color: var(--blue); color: var(--blue); }
+.s-dot.current {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  transform: scale(1.1);
+}
+.s-dot.done-correct { background: var(--green); border-color: var(--green); color: #fff; }
+.s-dot.done-wrong   { background: var(--red);   border-color: var(--red);   color: #fff; }
+.s-dot.done-skip    { background: var(--muted);  border-color: var(--muted);  color: #fff; }
+
+.sentence-progress {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ─── PLAY ZONE ───────────────────────────────────────── */
+.play-zone {
+  padding: 24px 20px 16px;
+  text-align: center;
+  border-bottom: 2px solid var(--border);
+}
+
+.play-instruction {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Big play button */
+.play-btn {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 3px solid var(--blue);
+  background: var(--blue);
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 4px 16px rgba(59,108,247,0.35);
+  position: relative;
+  margin-bottom: 12px;
+}
+.play-btn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 24px rgba(59,108,247,0.45);
+}
+.play-btn:active { transform: scale(0.97); }
+.play-btn.playing {
+  background: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 4px 16px rgba(192,122,0,0.35);
+  animation: pulse-ring 1.2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(192,122,0,0.4), 0 4px 16px rgba(192,122,0,0.35); }
+  70%  { box-shadow: 0 0 0 16px rgba(192,122,0,0), 0 4px 16px rgba(192,122,0,0.35); }
+  100% { box-shadow: 0 0 0 0 rgba(192,122,0,0), 0 4px 16px rgba(192,122,0,0.35); }
+}
+
+.play-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ctrl-btn {
+  padding: 7px 14px;
+  border: 2px solid var(--border-md);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--ink2);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.ctrl-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-lt); }
+.ctrl-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+/* Speed control */
+.speed-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 10px;
+}
+.speed-btn {
+  padding: 5px 12px;
+  border: 1.5px solid var(--border-md);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.speed-btn:hover { border-color: var(--blue); color: var(--blue); }
+.speed-btn.active { background: var(--blue-lt); border-color: var(--blue); color: var(--blue); }
+
+/* ─── WRITE ZONE ──────────────────────────────────────── */
+.write-zone { padding: 20px; }
+
+.write-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.write-label-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.diktat-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2.5px solid var(--border-md);
+  border-radius: var(--r);
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(17px, 3.5vw, 20px);
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+.diktat-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(59,108,247,0.12);
+}
+.diktat-input.state-correct {
+  border-color: var(--green);
+  background: var(--green-lt);
+  box-shadow: 0 0 0 3px rgba(21,160,86,0.12);
+}
+.diktat-input.state-wrong {
+  border-color: var(--red);
+  background: var(--red-lt);
+  box-shadow: 0 0 0 3px rgba(212,48,48,0.12);
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-check {
+  flex: 1;
+  min-width: 140px;
+  padding: 13px 20px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 3px 10px rgba(59,108,247,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 52px;
+}
+.btn-check:hover { background: #2855d6; transform: translateY(-1px); box-shadow: 0 5px 16px rgba(59,108,247,0.35); }
+.btn-check:active { transform: translateY(1px); }
+.btn-check:disabled { background: var(--border-md); color: var(--muted); cursor: default; box-shadow: none; transform: none; }
+
+.btn-skip {
+  padding: 13px 16px;
+  background: transparent;
+  color: var(--muted);
+  border: 2px solid var(--border-md);
+  border-radius: var(--r);
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s;
+  min-height: 52px;
+}
+.btn-skip:hover { border-color: var(--muted); color: var(--ink2); }
+
+/* ─── FEEDBACK ────────────────────────────────────────── */
+.feedback-box {
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-top: 12px;
+  display: none;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  animation: fadeSlide 0.2s ease;
+}
+.feedback-box.show { display: block; }
+.feedback-box.correct {
+  background: var(--green-lt);
+  border: 2px solid var(--green-mid);
+  color: var(--green);
+}
+.feedback-box.wrong {
+  background: var(--red-lt);
+  border: 2px solid var(--red-mid);
+  color: var(--red);
+}
+.feedback-box .fb-correct-text {
+  font-size: 19px;
+  font-weight: 900;
+  margin-top: 4px;
+  color: var(--ink);
+}
+.feedback-box .fb-highlight mark {
+  background: var(--amber-lt);
+  color: var(--amber);
+  border-radius: 3px;
+  padding: 0 3px;
+  font-weight: 900;
+}
+
+/* ─── NEXT BUTTON ─────────────────────────────────────── */
+.btn-next {
+  width: 100%;
+  padding: 14px;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 12px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 3px 10px rgba(21,160,86,0.3);
+  transition: all 0.2s;
+  min-height: 52px;
+}
+.btn-next.show { display: flex; }
+.btn-next:hover { background: #108f48; transform: translateY(-1px); }
+
+/* ─── RESULTS PANEL ───────────────────────────────────── */
+.results-panel {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  display: none;
+  animation: fadeSlide 0.3s ease;
+}
+.results-panel.show { display: block; }
+.results-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.results-sub {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.score-bar-wrap {
+  background: var(--border);
+  border-radius: 10px;
+  height: 14px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.score-bar {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  background: linear-gradient(90deg, var(--green), #3de88a);
+}
+.results-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--r-sm);
+  font-size: 14px;
+  font-weight: 600;
+}
+.result-row.r-correct { background: var(--green-lt); border: 1.5px solid var(--green-mid); }
+.result-row.r-wrong   { background: var(--red-lt);   border: 1.5px solid var(--red-mid); }
+.result-row.r-skip    { background: var(--bg);        border: 1.5px solid var(--border-md); color: var(--muted); }
+.result-icon { font-size: 18px; flex-shrink: 0; }
+.result-written { flex: 1; color: var(--ink); }
+.result-correct { color: var(--green); font-weight: 800; }
+.result-wrong-text { color: var(--red); text-decoration: line-through; opacity: 0.7; }
+.btn-restart {
+  width: 100%;
+  padding: 14px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(59,108,247,0.3);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+}
+.btn-restart:hover { background: #2855d6; transform: translateY(-1px); }
+
+/* ─── CONFETTI ────────────────────────────────────────── */
+.confetti-wrap {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 9999;
+}
+.c-dot {
+  position: absolute;
+  border-radius: 2px;
+  animation: cFall linear forwards;
+}
+@keyframes cFall {
+  from { opacity: 1; transform: translateY(-10px) rotate(0deg); }
+  to   { opacity: 0; transform: translateY(105vh) rotate(540deg); }
+}
+
+/* ─── HELPER TOAST ────────────────────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 200;
+  white-space: nowrap;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── HINT BOX ────────────────────────────────────────── */
+.hint-box {
+  background: var(--amber-lt);
+  border: 2px solid var(--amber-mid);
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amber);
+  margin-top: 10px;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+  animation: fadeSlide 0.2s ease;
+}
+.hint-box.show { display: flex; }
+
+/* ─── ACCESSIBLE FOCUS ────────────────────────────────── */
+button:focus-visible, input:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────── */
+@media (max-width: 480px) {
+  .play-btn { width: 76px; height: 76px; font-size: 28px; }
+  .theme-grid { grid-template-columns: repeat(auto-fill, minmax(110px,1fr)); }
+  .diktat-input { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ── HEADER ──────────────────────────────────────────── -->
+<header class="site-header">
+  <span class="header-icon">🎧</span>
+  <div class="header-titles">
+    <div class="header-title">Diktat-Trainer</div>
+    <div class="header-sub">Hören · Schreiben · Überprüfen</div>
+  </div>
+  <span class="header-badge">📚 Klasse 3 Bayern</span>
+</header>
+
+<div class="wrap">
+
+  <!-- ── THEME PICKER ─────────────────────────────────── -->
+  <div class="section-label">Wähle ein Thema:</div>
+  <div class="theme-grid" id="themeGrid"></div>
+
+  <!-- ── RULE BOX ─────────────────────────────────────── -->
+  <div class="rule-box" id="ruleBox" style="display:none"></div>
+
+  <!-- ── DIKTAT CARD ──────────────────────────────────── -->
+  <div class="diktat-card" id="diktatCard" style="display:none">
+
+    <!-- Sentence dot nav -->
+    <div class="sentence-strip">
+      <div class="sentence-dots" id="sentenceDots"></div>
+      <div class="sentence-progress" id="sentenceProgress">Satz 1 von 6</div>
+    </div>
+
+    <!-- Audio play zone -->
+    <div class="play-zone">
+      <div class="play-instruction">Drücke ▶ um den Satz zu hören</div>
+      <button class="play-btn" id="playBtn" onclick="playCurrent()" aria-label="Satz vorlesen">
+        ▶
+      </button>
+      <div class="play-controls">
+        <button class="ctrl-btn" id="repeatBtn" onclick="playCurrent()" title="Nochmal hören">
+          🔁 Nochmal
+        </button>
+        <button class="ctrl-btn" id="wordBtn" onclick="playWord()" title="Einzelne Wörter hören">
+          🔤 Wort für Wort
+        </button>
+      </div>
+      <div class="speed-row">
+        <span style="font-size:11px;font-weight:700;color:var(--muted);margin-right:4px;line-height:2.2">Tempo:</span>
+        <button class="speed-btn" onclick="setSpeed(0.65)" data-speed="0.65">🐢 Langsam</button>
+        <button class="speed-btn active" onclick="setSpeed(0.85)" data-speed="0.85">🚶 Normal</button>
+        <button class="speed-btn" onclick="setSpeed(1.0)" data-speed="1.0">🏃 Schnell</button>
+      </div>
+      <div id="api-key-bar" style="margin-top:10px;display:flex;gap:6px;justify-content:center;align-items:center;flex-wrap:wrap">
+        <span id="api-status" style="font-size:11px;font-weight:700;color:var(--muted)"></span>
+        <button class="speed-btn" onclick="changeApiKey()" style="font-size:11px">🔑 API-Schlüssel</button>
+      </div>
+    </div>
+
+    <!-- Write zone -->
+    <div class="write-zone">
+      <div class="write-label">
+        <span class="write-label-num">2</span>
+        Schreibe den Satz hier:
+      </div>
+
+      <input
+        id="diktatInput"
+        class="diktat-input"
+        type="text"
+        placeholder="Schreib den Satz ab …"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+        onkeydown="onKey(event)"
+        oninput="onInput()"
+      >
+
+      <div class="hint-box" id="hintBox">
+        <span style="font-size:18px">💡</span>
+        <span id="hintText"></span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-check" id="checkBtn" onclick="checkAnswer()">
+          ✓ Prüfen
+        </button>
+        <button class="btn-skip" onclick="skipSentence()">
+          Überspringen
+        </button>
+      </div>
+
+      <div class="feedback-box" id="feedbackBox"></div>
+      <button class="btn-next" id="nextBtn" onclick="nextSentence()">
+        Weiter →
+      </button>
+    </div>
+  </div>
+
+  <!-- ── RESULTS ───────────────────────────────────────── -->
+  <div class="results-panel" id="resultsPanel"></div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── ELEVENLABS TTS — human German voice ──────────────────
+// Voice options (all good for German children's educational content):
+// EXAVITQu4vr4xnSDxMaL  = "Bella"  — warm, clear female
+// jsCqWAovK2LkecY7zXl4  = "Freya"  — natural female, good German
+// XrExE9yKIg1WjnnlVkGX  = "Lily"   — warm, friendly female
+// pqHfZKP75CvOlQylNhV4  = "Emily"  — calm, clear
+// Default: use "Sarah" (multilingual, very clear German)
+const EL_VOICE_ID    = 'EXAVITQu4vr4xnSDxMaL'; // Bella — warm female, excellent German
+const EL_MODEL_ID    = 'eleven_multilingual_v2'; // Best quality multilingual model
+const EL_API_URL     = 'https://api.elevenlabs.io/v1/text-to-speech/';
+
+let elApiKey = localStorage.getItem('el_api_key') || '';
+let audioCache = {};   // text → blob URL — avoid re-fetching same sentence
+let currentAudio = null;
+
+// ── API key setup ──
+function getApiKey() { return localStorage.getItem('el_api_key') || ''; }
+
+function promptForKey() {
+  const key = prompt(
+    '🔑 ElevenLabs API-Schlüssel eingeben:\n\n' +
+    '1. Gehe zu elevenlabs.io und erstelle einen kostenlosen Account\n' +
+    '2. Kopiere deinen API-Schlüssel aus "My Account"\n' +
+    '3. Füge ihn hier ein — er wird nur auf diesem Gerät gespeichert'
+  );
+  if (key && key.trim().startsWith('sk_')) {
+    localStorage.setItem('el_api_key', key.trim());
+    showToast('✅ API-Schlüssel gespeichert!');
+    return key.trim();
+  } else if (key) {
+    showToast('❌ Ungültiger Schlüssel — muss mit sk_ beginnen');
+  }
+  return null;
+}
+
+// ── Core TTS function ──
+async function speak(text, rate) {
+  let apiKey = getApiKey();
+
+  // If no key, ask once then fall back to browser TTS
+  if (!apiKey) {
+    apiKey = promptForKey();
+    if (!apiKey) {
+      speakFallback(text, rate);
+      return;
+    }
+  }
+
+  // Check cache first
+  const cacheKey = text + '|' + rate;
+  if (audioCache[cacheKey]) {
+    playAudioUrl(audioCache[cacheKey]);
+    return;
+  }
+
+  // Show loading state on play button
+  setPlayBtnState('loading');
+
+  // ElevenLabs speed: 0.7–1.2 maps to our 0.65–1.0 range
+  const elSpeed = Math.max(0.7, Math.min(1.2, (rate || currentSpeed) / 0.85));
+
+  try {
+    const resp = await fetch(EL_API_URL + EL_VOICE_ID + '?output_format=mp3_44100_128', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'xi-api-key': apiKey,
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: EL_MODEL_ID,
+        voice_settings: {
+          stability: 0.55,          // natural variation, not monotone
+          similarity_boost: 0.80,   // stay true to the voice
+          style: 0.25,              // slight expressiveness
+          use_speaker_boost: true,
+          speed: elSpeed,
+        },
+        language_code: 'de',
+      })
+    });
+
+    if (resp.status === 401) {
+      localStorage.removeItem('el_api_key');
+      showToast('❌ API-Schlüssel ungültig — bitte neu eingeben');
+      setPlayBtnState('ready');
+      speakFallback(text, rate);
+      return;
+    }
+    if (resp.status === 429) {
+      showToast('⏳ Zu viele Anfragen — kurz warten…');
+      setPlayBtnState('ready');
+      speakFallback(text, rate);
+      return;
+    }
+    if (!resp.ok) throw new Error('EL API ' + resp.status);
+
+    const blob    = await resp.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    audioCache[cacheKey] = blobUrl;
+    playAudioUrl(blobUrl);
+
+  } catch(err) {
+    console.warn('ElevenLabs TTS failed:', err.message);
+    setPlayBtnState('ready');
+    speakFallback(text, rate);
+  }
+}
+
+function playAudioUrl(url) {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.src = '';
+  }
+  const audio = new Audio(url);
+  currentAudio = audio;
+  audio.onplay  = () => setPlayBtnState('playing');
+  audio.onended = () => setPlayBtnState('ready');
+  audio.onerror = () => setPlayBtnState('ready');
+  audio.play().catch(() => setPlayBtnState('ready'));
+}
+
+function setPlayBtnState(state) {
+  const btn = document.getElementById('playBtn');
+  if (!btn) return;
+  btn.classList.remove('playing');
+  if (state === 'playing') { btn.textContent = '⏸'; btn.classList.add('playing'); }
+  else if (state === 'loading') { btn.textContent = '⏳'; }
+  else { btn.textContent = '▶'; }
+}
+
+function stopAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.src = ''; currentAudio = null; }
+  setPlayBtnState('ready');
+}
+
+// ── Fallback: browser speechSynthesis ──
+let _deVoice = null;
+function speakFallback(text, rate) {
+  if (!('speechSynthesis' in window)) return;
+  stopAudio();
+  const voices = window.speechSynthesis.getVoices();
+  if (!_deVoice) {
+    _deVoice = voices.find(v => v.lang.startsWith('de') && !v.remote)
+            || voices.find(v => v.lang.startsWith('de'))
+            || null;
+  }
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang  = 'de-DE';
+  u.rate  = rate !== undefined ? rate : currentSpeed;
+  u.pitch = 1.0;
+  if (_deVoice) u.voice = _deVoice;
+  u.onstart = () => setPlayBtnState('playing');
+  u.onend = u.onerror = () => setPlayBtnState('ready');
+  window.speechSynthesis.speak(u);
+}
+
+// ── THEME DATA ────────────────────────────────────────────
+// Bayern LehrplanPLUS Klasse 3 spelling themes
+const THEMES = [
+  {
+    id: 'tz',
+    emoji: '🐱',
+    name: 'tz / z',
+    example: 'Katze, Platz',
+    rule: 'Nach einem kurzen Vokal schreibt man <strong>tz</strong>.',
+    ruleDetail: 'Vor einem langen Vokal oder Konsonanten schreibt man nur <strong>z</strong>.',
+    examples: ['Ka<mark>tz</mark>e','si<mark>tz</mark>en','Pla<mark>tz</mark>','hei<mark>z</mark>en','Sal<mark>z</mark>'],
+    sentences: [
+      { text: 'Die Katze sitzt auf dem Platz.', hint: 'Nach kurzem a schreibt man tz — Kat·ze, Platz.' },
+      { text: 'Das Kätzchen putzt sich die Pfoten.', hint: 'Kätzchen und putzt — beide haben tz nach kurzem Vokal.' },
+      { text: 'Wir sitzen auf der Terrasse und essen Salat.', hint: 'sitzen → sit·zen, Salat → nur z, weil der Vokal lang ist.' },
+      { text: 'Der Schatz liegt in der alten Kiste.', hint: 'Schatz hat tz — das a ist kurz.' },
+      { text: 'Die Mütze liegt auf dem Tisch.', hint: 'Mütze → Müt·ze, kurzes ü → tz.' },
+      { text: 'Er schützt die Blumen vor dem Regen.', hint: 'schützt — kurzes ü → tz, dann noch ein t.' },
+    ]
+  },
+  {
+    id: 'ck',
+    emoji: '🦆',
+    name: 'ck / k',
+    example: 'Glück, backen',
+    rule: 'Nach einem kurzen Vokal schreibt man <strong>ck</strong>.',
+    ruleDetail: 'Nach einem langen Vokal oder Konsonanten schreibt man nur <strong>k</strong>.',
+    examples: ['Glü<mark>ck</mark>','ba<mark>ck</mark>en','Ze<mark>ck</mark>e','Ma<mark>k</mark>e','Ban<mark>k</mark>'],
+    sentences: [
+      { text: 'Ich backe heute einen Kuchen.', hint: 'backe → ba·cke, kurzes a → ck.' },
+      { text: 'Das Glück liegt im Rucksack der Klasse.', hint: 'Glück → Glü·ck, Rucksack → Ruck·sack — beide mit ck.' },
+      { text: 'Die Zecke steckt im Gras.', hint: 'Zecke und steckt — beide haben ck nach kurzem Vokal.' },
+      { text: 'Der Bäcker macht frische Brötchen.', hint: 'Bäcker → Bä·cker, kurzes ä → ck.' },
+      { text: 'Das Mädchen deckt den Tisch.', hint: 'deckt — kurzes e → ck.' },
+      { text: 'Er streckt sich nach dem langen Schultag.', hint: 'streckt → kurzes e → ck.' },
+    ]
+  },
+  {
+    id: 'ie',
+    emoji: '🦁',
+    name: 'ie / i',
+    example: 'Tier, spielen',
+    rule: '<strong>ie</strong> klingt lang wie in „Tier" — das e macht das i lang.',
+    ruleDetail: 'Langes i wird meist <strong>ie</strong> geschrieben. Kurzes i bleibt einfaches i.',
+    examples: ['T<mark>ie</mark>r','sp<mark>ie</mark>len','l<mark>ie</mark>ben','W<mark>ie</mark>se','K<mark>i</mark>nd'],
+    sentences: [
+      { text: 'Das Tier spielt auf der Wiese.', hint: 'Tier → T·ie·r, Wiese → W·ie·se — langes i wird ie.' },
+      { text: 'Wir spielen heute im Garten.', hint: 'spielen → sp·ie·len — langes i, deshalb ie.' },
+      { text: 'Das Kind liebt seinen kleinen Hund.', hint: 'liebt → l·ie·bt — lang, also ie. Kind → kurzes i, nur i.' },
+      { text: 'Sie schrieb einen langen Brief.', hint: 'schrieb und Brief — beide mit langem ie.' },
+      { text: 'Die Biene fliegt von Blume zu Blume.', hint: 'Biene → B·ie·ne, fliegt → fl·ie·gt — alles langes ie.' },
+      { text: 'Er riecht die frischen Blumen am Morgen.', hint: 'riecht → r·ie·cht — langes ie.' },
+    ]
+  },
+  {
+    id: 'ei_ai',
+    emoji: '🥚',
+    name: 'ei / ai',
+    example: 'Ei, Stein',
+    rule: '<strong>ei</strong> ist der häufigste Diphthong — z.B. Ei, Stein, Reihe.',
+    ruleDetail: '<strong>ai</strong> ist selten — nur in wenigen Wörtern: Mai, Mais, Kaiser, Laib.',
+    examples: ['<mark>Ei</mark>','St<mark>ei</mark>n','R<mark>ei</mark>he','M<mark>ai</mark>','K<mark>ai</mark>ser'],
+    sentences: [
+      { text: 'Das Ei liegt in der weißen Schüssel.', hint: 'Ei → klingt ei, schreibt man ei.' },
+      { text: 'Im Mai blühen viele Blumen im Garten.', hint: 'Mai → ai (seltene Ausnahme!).' },
+      { text: 'Der Stein liegt am Rande des Weges.', hint: 'Stein → St·ei·n, Weges → W·ei·g — beide ei.' },
+      { text: 'Sie geht in einer Reihe mit ihren Freunden.', hint: 'Reihe → R·ei·he, Freunden → Fr·eu·nd (anderer Diphthong!).' },
+      { text: 'Er schreibt seinen Namen auf das Papier.', hint: 'schreibt → schr·ei·bt — ei, nicht ie!' },
+      { text: 'Die Kreide liegt neben dem Schwamm.', hint: 'Kreide → Kr·ei·de — ei.' },
+    ]
+  },
+  {
+    id: 'ss_sz',
+    emoji: '🌊',
+    name: 'ss / ß',
+    example: 'Fluss, Straße',
+    rule: 'Nach einem kurzen Vokal schreibt man <strong>ss</strong>.',
+    ruleDetail: 'Nach einem langen Vokal oder Diphthong schreibt man <strong>ß</strong>.',
+    examples: ['Flu<mark>ss</mark>','da<mark>ss</mark>','Stra<mark>ß</mark>e','hei<mark>ß</mark>en','Fu<mark>ß</mark>'],
+    sentences: [
+      { text: 'Der Fluss fließt durch die Stadt.', hint: 'Fluss → kurzes u → ss. fließt → langes ie → ß.' },
+      { text: 'Ich weiß, dass das Wasser kalt ist.', hint: 'weiß → Diphthong ei → ß. dass → kurzes a → ss.' },
+      { text: 'Die Straße ist sehr breit und lang.', hint: 'Straße → langes a → ß.' },
+      { text: 'Er isst jeden Tag einen Apfel.', hint: 'isst → kurzes i → ss (Verb essen).' },
+      { text: 'Das Wasser im Brunnen ist frisch.', hint: 'Wasser → kurzes a → ss.' },
+      { text: 'Sie heißt Maria und kommt aus der Schweiz.', hint: 'heißt → Diphthong ei → ß.' },
+    ]
+  },
+  {
+    id: 'dehnungs_h',
+    emoji: '🚂',
+    name: 'Dehnungs-h',
+    example: 'fahren, Zahl',
+    rule: 'Das stille <strong>h</strong> macht den Vokal davor lang.',
+    ruleDetail: 'Merke-Wörter: fa<strong>h</strong>ren, Za<strong>h</strong>l, wo<strong>h</strong>nen, se<strong>h</strong>en, ge<strong>h</strong>en.',
+    examples: ['fa<mark>h</mark>ren','Za<mark>h</mark>l','wo<mark>h</mark>nen','se<mark>h</mark>en','ge<mark>h</mark>en'],
+    sentences: [
+      { text: 'Wir fahren morgen mit dem Zug in die Stadt.', hint: 'fahren → fa·h·ren — das h macht das a lang.' },
+      { text: 'Die Zahl sieben bringt Glück.', hint: 'Zahl → Za·h·l — Dehnungs-h nach a.' },
+      { text: 'Er wohnt in einem großen Haus am See.', hint: 'wohnt → wo·h·nt — h nach o.' },
+      { text: 'Sie sieht den Vogel auf dem Dach sitzen.', hint: 'sieht → s·ie·ht — h nach ie (Dehnung).' },
+      { text: 'Das Mädchen geht jeden Morgen zur Schule.', hint: 'geht → ge·h·t — stilles h.' },
+      { text: 'Er erzählt gerne Geschichten am Abend.', hint: 'erzählt → zä·h·lt — h nach ä.' },
+    ]
+  },
+  {
+    id: 'nomen',
+    emoji: '🏷️',
+    name: 'Nomen groß',
+    example: 'Hund, Schule',
+    rule: 'Alle Nomen (Dinge, Tiere, Personen, Orte) werden <strong>großgeschrieben</strong>.',
+    ruleDetail: 'Tipp: Stelle „der / die / das" davor — wenn es passt, ist es ein Nomen!',
+    examples: ['der <mark>H</mark>und','die <mark>S</mark>chule','das <mark>K</mark>ind','ein <mark>B</mark>uch','der <mark>T</mark>ag'],
+    sentences: [
+      { text: 'Der Hund läuft durch den Garten.', hint: 'Hund → der Hund → Nomen → groß.' },
+      { text: 'Das Mädchen liest ein Buch in der Schule.', hint: 'Mädchen, Buch, Schule — alle Nomen, alle groß.' },
+      { text: 'Im Sommer fahren wir ans Meer.', hint: 'Sommer und Meer sind Nomen → groß.' },
+      { text: 'Die Lehrerin schreibt die Aufgaben an die Tafel.', hint: 'Lehrerin, Aufgaben, Tafel — alle drei groß.' },
+      { text: 'Meine Schwester hat am Freitag Geburtstag.', hint: 'Schwester, Freitag, Geburtstag — Nomen → groß.' },
+      { text: 'Der Hase springt über die Wiese im Wald.', hint: 'Hase, Wiese, Wald — drei Nomen, alle groß.' },
+    ]
+  },
+  {
+    id: 'doppelkonsonant',
+    emoji: '🥁',
+    name: 'Doppelkonsonant',
+    example: 'rennen, Ball',
+    rule: 'Nach einem kurzen betonten Vokal wird der Konsonant <strong>doppelt</strong> geschrieben.',
+    ruleDetail: 'Klopf-Methode: sprich das Wort laut — klingt der Vokal kurz? → Konsonant verdoppeln!',
+    examples: ['ren<mark>n</mark>en','Ba<mark>ll</mark>','Tel<mark>l</mark>er','kna<mark>pp</mark>','hei<mark>ss</mark>'],
+    sentences: [
+      { text: 'Der Ball rollt über den Hof.', hint: 'Ball → Ba·ll — kurzes a, Doppel-l.' },
+      { text: 'Wir rennen schnell zur Schule.', hint: 'rennen → ren·nen — kurzes e, Doppel-n.' },
+      { text: 'Der Teller liegt auf dem Tisch.', hint: 'Teller → Tel·ler — kurzes e, Doppel-l.' },
+      { text: 'Sie kann gut schwimmen und tauchen.', hint: 'kann → kan·n, schwimmen → schw·imm·en — beide verdoppelt.' },
+      { text: 'Das Fell des Kaninchens ist weich.', hint: 'Fell → Fe·ll — kurzes e, Doppel-l.' },
+      { text: 'Er kommt immer pünktlich in die Schule.', hint: 'kommt → ko·mm·t — kurzes o, Doppel-m.' },
+    ]
+  },
+];
+
+// ── STATE ─────────────────────────────────────────────────
+let currentTheme    = null;
+let currentSentIdx  = 0;
+let currentSpeed    = 0.85;
+let wordMode        = false;
+let wordIdx         = 0;
+let results         = []; // {sentence, written, correct, skipped}
+let checked         = false;
+let wordPlayTimeout = null;
+
+// ── INIT ──────────────────────────────────────────────────
+function changeApiKey() {
+  localStorage.removeItem('el_api_key');
+  audioCache = {};
+  const key = promptForKey();
+  if (key) updateApiStatus();
+}
+
+function updateApiStatus() {
+  const bar = document.getElementById('api-status');
+  if (!bar) return;
+  const key = getApiKey();
+  if (key) {
+    bar.textContent = '✅ ElevenLabs aktiv';
+    bar.style.color = 'var(--green)';
+  } else {
+    bar.textContent = '⚠️ Kein Schlüssel — Browser-Stimme wird verwendet';
+    bar.style.color = 'var(--amber)';
+  }
+}
+
+function init() {
+  buildThemeGrid();
+  updateApiStatus();
+}
+
+function buildThemeGrid() {
+  const grid = document.getElementById('themeGrid');
+  grid.innerHTML = THEMES.map(t => `
+    <button class="theme-btn" id="tb-${t.id}" onclick="selectTheme('${t.id}')" aria-label="${t.name}">
+      <span class="t-emoji">${t.emoji}</span>
+      <span class="t-name">${t.name}</span>
+      <span class="t-example">${t.example}</span>
+    </button>
+  `).join('');
+}
+
+function selectTheme(id) {
+  currentTheme = THEMES.find(t => t.id === id);
+  if (!currentTheme) return;
+
+  // Update button states
+  document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('tb-' + id);
+  if (btn) btn.classList.add('active');
+
+  // Show rule box
+  const ruleBox = document.getElementById('ruleBox');
+  ruleBox.style.display = 'flex';
+  ruleBox.innerHTML = `
+    <span class="rule-icon">${currentTheme.emoji}</span>
+    <div class="rule-text">
+      <div class="rule-title">${currentTheme.name} — Die Regel</div>
+      <div class="rule-body">${currentTheme.rule}<br><span style="font-weight:600;opacity:.85">${currentTheme.ruleDetail}</span></div>
+      <div class="rule-examples">
+        ${currentTheme.examples.map(e => `<span class="rule-pill">${e}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  ruleBox.style.animation = 'none';
+  void ruleBox.offsetWidth;
+  ruleBox.style.animation = '';
+
+  // Start diktat
+  startDiktat();
+}
+
+function startDiktat() {
+  currentSentIdx = 0;
+  results = currentTheme.sentences.map(() => null);
+  checked = false;
+
+  document.getElementById('resultsPanel').classList.remove('show');
+  document.getElementById('diktatCard').style.display = 'block';
+
+  buildDots();
+  loadSentence(0);
+}
+
+// ── SENTENCE NAVIGATION ───────────────────────────────────
+function buildDots() {
+  const wrap = document.getElementById('sentenceDots');
+  wrap.innerHTML = currentTheme.sentences.map((_, i) =>
+    `<div class="s-dot" id="dot-${i}" onclick="jumpTo(${i})">${i+1}</div>`
+  ).join('');
+  updateDots();
+}
+
+function updateDots() {
+  currentTheme.sentences.forEach((_, i) => {
+    const dot = document.getElementById('dot-' + i);
+    if (!dot) return;
+    dot.className = 's-dot';
+    if (i === currentSentIdx) { dot.classList.add('current'); return; }
+    const r = results[i];
+    if (r === null) return; // not yet attempted
+    if (r === 'skip')    { dot.classList.add('done-skip'); return; }
+    dot.classList.add(r.correct ? 'done-correct' : 'done-wrong');
+  });
+  document.getElementById('sentenceProgress').textContent =
+    `Satz ${currentSentIdx + 1} von ${currentTheme.sentences.length}`;
+}
+
+function jumpTo(i) {
+  // Only allow jumping to done sentences or the current one
+  if (i <= currentSentIdx || results[i] !== null) {
+    currentSentIdx = i;
+    loadSentence(i);
+  } else {
+    showToast('Schreibe zuerst die vorherigen Sätze!');
+  }
+}
+
+function loadSentence(i) {
+  window.speechSynthesis.cancel();
+  wordMode = false; wordIdx = 0;
+  checked = false;
+
+  const input = document.getElementById('diktatInput');
+  input.value = '';
+  input.className = 'diktat-input';
+  input.disabled = false;
+  input.placeholder = 'Schreib den Satz ab …';
+
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('nextBtn').className = 'btn-next';
+  document.getElementById('hintBox').className = 'hint-box';
+  document.getElementById('checkBtn').disabled = false;
+
+  updateDots();
+
+  // Auto-play after a short pause (calm, predictable behaviour)
+  setTimeout(() => { playCurrent(); }, 400);
+
+  input.focus();
+}
+
+// ── AUDIO ─────────────────────────────────────────────────
+function playCurrent() {
+  if (!currentTheme) return;
+  stopAudio();
+  clearTimeout(wordPlayTimeout);
+  wordMode = false; wordIdx = 0;
+  const s = currentTheme.sentences[currentSentIdx];
+  speak(s.text, currentSpeed);
+}
+
+function playWord() {
+  if (!currentTheme) return;
+  stopAudio();
+  clearTimeout(wordPlayTimeout);
+  const s  = currentTheme.sentences[currentSentIdx];
+  const words = s.text.split(/\s+/);
+  wordIdx = 0;
+  wordMode = true;
+  // Play words sequentially — each word waits for EL response so we chain via onended
+  playNextWordEl(words);
+}
+
+function playNextWordEl(words) {
+  if (wordIdx >= words.length) { wordMode = false; return; }
+  const w = words[wordIdx].replace(/[.,!?]/g, '');
+  wordIdx++;
+  // After this word finishes, schedule the next one
+  const prevOnEnded = null;
+  const onThisWordDone = () => {
+    wordPlayTimeout = setTimeout(() => { playNextWordEl(words); }, 400);
+  };
+  // Patch the audio onended for word mode
+  speak(w, currentSpeed * 0.88);
+  // Override the onended set inside speak() to chain words
+  wordPlayTimeout = setTimeout(() => {
+    if (currentAudio) {
+      const orig = currentAudio.onended;
+      currentAudio.onended = () => { if(orig) orig(); onThisWordDone(); };
+    } else {
+      // Fallback: just use fixed timing
+      onThisWordDone();
+    }
+  }, 80);
+}
+
+function setSpeed(rate) {
+  currentSpeed = rate;
+  document.querySelectorAll('.speed-btn').forEach(b => {
+    b.classList.toggle('active', parseFloat(b.dataset.speed) === rate);
+  });
+}
+
+// ── ANSWER CHECKING ───────────────────────────────────────
+function onKey(e) {
+  if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+}
+
+function onInput() {
+  // Remove any previous state while typing
+  const input = document.getElementById('diktatInput');
+  input.className = 'diktat-input';
+  document.getElementById('hintBox').className = 'hint-box';
+}
+
+function normalise(str) {
+  return str.trim().toLowerCase()
+    .replace(/[.,!?;:]/g, '')      // strip punctuation
+    .replace(/\s+/g, ' ');         // normalise spaces
+}
+
+function checkAnswer() {
+  if (checked) return;
+  const input = document.getElementById('diktatInput');
+  const written = input.value.trim();
+  if (!written) { showToast('Schreibe zuerst etwas!'); return; }
+
+  const sentence = currentTheme.sentences[currentSentIdx];
+  const correct = normalise(written) === normalise(sentence.text);
+  checked = true;
+
+  // Store result
+  results[currentSentIdx] = { sentence: sentence.text, written, correct };
+  updateDots();
+
+  const fb = document.getElementById('feedbackBox');
+  input.disabled = true;
+
+  if (correct) {
+    input.className = 'diktat-input state-correct';
+    fb.className = 'feedback-box correct show';
+    fb.innerHTML = `<div>✅ Richtig! Super gemacht!</div>`;
+    launchConfetti();
+  } else {
+    input.className = 'diktat-input state-wrong';
+    // Diff-highlight the correct sentence
+    const highlighted = diffHighlight(sentence.text, written);
+    fb.className = 'feedback-box wrong show';
+    fb.innerHTML = `
+      <div>❌ Noch nicht ganz richtig.</div>
+      <div class="fb-correct-text">${highlighted}</div>
+      <div style="font-size:12px;font-weight:600;margin-top:6px;opacity:.8">
+        💡 ${sentence.hint}
+      </div>
+    `;
+  }
+
+  // Show hint for wrong answers
+  if (!correct) {
+    const hintBox = document.getElementById('hintBox');
+    document.getElementById('hintText').textContent = sentence.hint;
+    hintBox.className = 'hint-box show';
+  }
+
+  // Show next button
+  document.getElementById('checkBtn').disabled = true;
+  const isLast = currentSentIdx === currentTheme.sentences.length - 1;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.className = 'btn-next show';
+  nextBtn.textContent = isLast ? '📊 Ergebnis anzeigen →' : 'Weiter →';
+  nextBtn.innerHTML = isLast
+    ? '<span>📊 Ergebnis anzeigen</span>'
+    : '<span>Weiter →</span>';
+}
+
+// Simple word-level diff — mark wrong words in the correct sentence
+function diffHighlight(correct, written) {
+  const cWords = correct.replace(/[.,!?]/g, '').split(/\s+/);
+  const wWords = written.replace(/[.,!?]/g, '').toLowerCase().split(/\s+/);
+  return cWords.map((cw, i) => {
+    const ww = (wWords[i] || '').toLowerCase();
+    if (ww === cw.toLowerCase()) return cw;
+    return `<mark>${cw}</mark>`;
+  }).join(' ') + (correct.match(/[.!?]$/) ? correct.slice(-1) : '');
+}
+
+function skipSentence() {
+  if (checked) return;
+  results[currentSentIdx] = 'skip';
+  checked = true;
+  updateDots();
+  const isLast = currentSentIdx === currentTheme.sentences.length - 1;
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.className = 'btn-next show';
+  nextBtn.innerHTML = isLast
+    ? '<span>📊 Ergebnis anzeigen</span>'
+    : '<span>Weiter →</span>';
+  document.getElementById('checkBtn').disabled = true;
+}
+
+function nextSentence() {
+  const isLast = currentSentIdx === currentTheme.sentences.length - 1;
+  if (isLast) { showResults(); return; }
+  currentSentIdx++;
+  loadSentence(currentSentIdx);
+}
+
+// ── RESULTS ───────────────────────────────────────────────
+function showResults() {
+  window.speechSynthesis.cancel();
+  document.getElementById('diktatCard').style.display = 'none';
+
+  const panel = document.getElementById('resultsPanel');
+  const total   = results.length;
+  const correct = results.filter(r => r && r !== 'skip' && r.correct).length;
+  const wrong   = results.filter(r => r && r !== 'skip' && !r.correct).length;
+  const skipped = results.filter(r => r === 'skip').length;
+  const pct = Math.round(correct / total * 100);
+
+  const emoji = pct === 100 ? '🏆' : pct >= 70 ? '🌟' : pct >= 50 ? '😊' : '💪';
+  const msg   = pct === 100
+    ? 'Perfekt! Alle Sätze richtig!'
+    : pct >= 70 ? 'Sehr gut gemacht!'
+    : pct >= 50 ? 'Gut versucht — weiter üben!'
+    : 'Nicht aufgeben — du schaffst das!';
+
+  const rowsHTML = results.map((r, i) => {
+    const sText = currentTheme.sentences[i].text;
+    if (r === 'skip' || r === null) {
+      return `<div class="result-row r-skip">
+        <span class="result-icon">⏭</span>
+        <span class="result-written">${sText}</span>
+        <span style="font-size:12px">übersprungen</span>
+      </div>`;
+    }
+    if (r.correct) {
+      return `<div class="result-row r-correct">
+        <span class="result-icon">✅</span>
+        <span class="result-written">${r.written}</span>
+      </div>`;
+    }
+    return `<div class="result-row r-wrong">
+      <span class="result-icon">❌</span>
+      <div style="flex:1">
+        <div class="result-wrong-text">${r.written}</div>
+        <div class="result-correct">→ ${sText}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="results-title">${emoji} Dein Ergebnis</div>
+    <div class="results-sub">${currentTheme.name} · ${correct} von ${total} richtig</div>
+    <div class="score-bar-wrap">
+      <div class="score-bar" style="width:0%" id="scoreBar"></div>
+    </div>
+    <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+      <span style="background:var(--green-lt);border:1.5px solid var(--green-mid);color:var(--green);border-radius:20px;padding:4px 14px;font-size:13px;font-weight:800">✅ ${correct} richtig</span>
+      ${wrong  ? `<span style="background:var(--red-lt);border:1.5px solid var(--red-mid);color:var(--red);border-radius:20px;padding:4px 14px;font-size:13px;font-weight:800">❌ ${wrong} falsch</span>` : ''}
+      ${skipped? `<span style="background:var(--bg);border:1.5px solid var(--border-md);color:var(--muted);border-radius:20px;padding:4px 14px;font-size:13px;font-weight:800">⏭ ${skipped} übersprungen</span>` : ''}
+    </div>
+    <div style="font-size:16px;font-weight:800;color:var(--ink);margin-bottom:16px">${msg}</div>
+    <div class="results-list">${rowsHTML}</div>
+    <button class="btn-restart" onclick="restartTheme()">
+      🔄 Nochmal üben
+    </button>
+    <button class="btn-restart" onclick="pickNewTheme()" style="background:var(--purple);box-shadow:0 3px 10px rgba(107,63,200,0.3);margin-top:8px">
+      🎯 Anderes Thema wählen
+    </button>
+  `;
+
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // Animate score bar
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const bar = document.getElementById('scoreBar');
+      if (bar) bar.style.width = pct + '%';
+    });
+  });
+
+  if (pct === 100) launchConfetti();
+}
+
+function restartTheme() {
+  document.getElementById('resultsPanel').classList.remove('show');
+  startDiktat();
+  document.getElementById('diktatCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function pickNewTheme() {
+  document.getElementById('resultsPanel').classList.remove('show');
+  document.getElementById('diktatCard').style.display = 'none';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── CONFETTI ──────────────────────────────────────────────
+function launchConfetti() {
+  const wrap = document.getElementById('confettiWrap');
+  const colors = ['#3B6CF7','#15A056','#F5C842','#D43030','#6B3FC8','#06b6d4','#f97316'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'c-dot';
+    const size = 6 + Math.random() * 8;
+    el.style.cssText = [
+      `left:${Math.random()*100}vw`,
+      `top:-12px`,
+      `width:${size}px`,
+      `height:${size}px`,
+      `background:${colors[Math.floor(Math.random()*colors.length)]}`,
+      `border-radius:${Math.random()>.5?'50%':'3px'}`,
+      `animation-duration:${2+Math.random()*2.5}s`,
+      `animation-delay:${Math.random()*.8}s`,
+    ].join(';');
+    wrap.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── BOOT ──────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
